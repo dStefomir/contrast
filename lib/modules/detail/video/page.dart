@@ -1,0 +1,73 @@
+import 'package:contrast/common/widgets/button.dart';
+import 'package:contrast/common/widgets/page.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+
+/// Renders the video details page
+class VideoDetailPage extends StatefulHookConsumerWidget {
+  /// Constraints of the page
+  final BoxConstraints constraints;
+  /// Video url
+  final String path;
+
+  const VideoDetailPage({required this.constraints, required this.path, super.key});
+
+  @override
+  ConsumerState createState() => VideoDetailPageState();
+}
+
+class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
+  /// Youtube controller
+  late YoutubePlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = YoutubePlayerController.fromVideoId(
+      videoId: widget.path,
+      autoPlay: false,
+      params: const YoutubePlayerParams(showFullscreenButton: true, showControls: true),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.close();
+  }
+
+  /// Renders the back button
+  Widget _renderBackButton() => RoundedButton(
+      constraints: widget.constraints,
+      onClick: () => Modular.to.navigate('/'),
+      color: Colors.white,
+      borderColor: Colors.black,
+      icon: 'close.svg'
+  );
+
+  @override
+  Widget build(BuildContext context) => BackgroundPage(
+    color: Colors.black,
+    child: YoutubePlayerScaffold(
+      controller: _controller,
+      aspectRatio: 16 / 9,
+      builder: (context, player) =>
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _renderBackButton(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 30),
+                child: SizedBox(
+                    width: widget.constraints.maxWidth,
+                    height: widget.constraints.maxHeight - 100,
+                    child: player
+                ),
+              ),
+            ],
+          ),
+    ),
+  );
+}
