@@ -60,14 +60,12 @@ class PhotographBoardService {
           '/files/upload_image?is_landscape=$isLandscape&is_rect=$isRect&comment=$comment&category=$category&screen_width=$screenWidth&screen_height=$screenHeight&lat=$lat&lng=$lng',
           file: file
       );
-
       return ImageWrapper.fromJson(result);
     } else {
       final result = await Session.proxy.postFile(
           '/files/upload_image?is_landscape=$isLandscape&is_rect=$isRect&comment=$comment&category=$category&screen_width=$screenWidth&screen_height=$screenHeight',
           file: file
       );
-
       return ImageWrapper.fromJson(result);
     }
   }

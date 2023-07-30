@@ -97,8 +97,7 @@ class Proxy {
           filename: path_lib.basename(file.path)));
     try {
       final response = await request.send();
-
-      return response.stream.bytesToString();
+      return jsonDecode(await response.stream.bytesToString());
     } on SocketException {
       throw NetworkException("Network Error");
     }

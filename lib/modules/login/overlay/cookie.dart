@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 /// Renders a cookie submit dialog
 class CookieWarningDialog extends StatelessWidget {
   /// What happens when the user submits the cookie form.
-  final Function onSubmit;
+  final void Function() onSubmit;
 
   const CookieWarningDialog({required this.onSubmit, super.key});
 
@@ -45,7 +45,7 @@ class CookieWarningDialog extends StatelessWidget {
                   const SizedBox(height: 10.0),
                   NormalButton(
                       widgetKey: const Key('Submit coockie'),
-                      onClick: onSubmit,
+                      onClick: () => onSubmit(),
                       text: 'Alright'
                   )
                 ],

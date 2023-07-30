@@ -52,8 +52,10 @@ class VideoBoardPage extends HookConsumerWidget {
                         constraints: constraints,
                         data: video,
                       )).then((value) {
-                        ref.read(videoServiceFetchProvider.notifier).updateItem(video, value);
-                        showSuccessTextOnSnackBar(context, "Video was successfully edited.");
+                        if(value != null) {
+                          ref.read(videoServiceFetchProvider.notifier).updateItem(video, value);
+                          showSuccessTextOnSnackBar(context, "Video was successfully edited.");
+                        }
                       });
                 }
             ),
@@ -63,9 +65,11 @@ class VideoBoardPage extends HookConsumerWidget {
                 onPressed: () => showDialog(
                     context: context,
                     builder: (context) => DeleteDialog<VideoData>(data: video,)
-                ).then((_) {
-                  ref.read(videoServiceFetchProvider.notifier).removeItem(video);
-                  showSuccessTextOnSnackBar(context, "Video was successfully deleted.");
+                ).then((value) {
+                  if(value != null) {
+                    ref.read(videoServiceFetchProvider.notifier).removeItem(video);
+                    showSuccessTextOnSnackBar(context, "Video was successfully deleted.");
+                  }
                 })
             ),
           ],

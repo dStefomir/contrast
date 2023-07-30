@@ -51,9 +51,11 @@ class PhotographBoardPage extends HookConsumerWidget {
                           data: wrapper.image
                       )
                   ).then((photograph) {
-                    final ImageWrapper updatedPhotograph = ImageWrapper(image: photograph, metadata: wrapper.metadata);
-                    ref.read(photographServiceFetchProvider.notifier).updateItem(wrapper, updatedPhotograph);
-                    showSuccessTextOnSnackBar(context, "Photograph was successfully edited.");
+                    if(photograph != null) {
+                      final ImageWrapper updatedPhotograph = ImageWrapper(image: photograph, metadata: wrapper.metadata);
+                      ref.read(photographServiceFetchProvider.notifier).updateItem(wrapper, updatedPhotograph);
+                      showSuccessTextOnSnackBar(context, "Photograph was successfully edited.");
+                    }
                   });
                 }),
             FocusedMenuItem(
@@ -63,9 +65,11 @@ class PhotographBoardPage extends HookConsumerWidget {
                   showDialog(
                       context: context,
                       builder: (context) => DeleteDialog<ImageData>(data: wrapper.image)
-                  ).then((_) {
-                    ref.read(photographServiceFetchProvider.notifier).removeItem(wrapper);
-                    showSuccessTextOnSnackBar(context, "Photograph was successfully deleted.");
+                  ).then((photograph) {
+                    if(photograph != null) {
+                      ref.read(photographServiceFetchProvider.notifier).removeItem(wrapper);
+                      showSuccessTextOnSnackBar(context, "Photograph was successfully deleted.");
+                    }
                   })
             ),
           ],

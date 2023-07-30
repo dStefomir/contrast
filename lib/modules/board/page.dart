@@ -30,9 +30,10 @@ class BoardPage extends HookConsumerWidget {
 
   /// Renders the floating action button
   Widget _buildFloatingActionButtons(BuildContext context, WidgetRef ref) => Padding(
-    padding: const EdgeInsets.all(15.0),
+    padding: EdgeInsets.all(useMobileLayout(context) ? 95 : 35.0),
     child: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
+        backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         children: [
           SpeedDialChild(
@@ -71,6 +72,32 @@ class BoardPage extends HookConsumerWidget {
         ]
     ),
   );
+
+  /// Calculates the offset for the starting animation of the board animation
+  Offset _calculateBoardStartAnimation(WidgetRef ref) {
+    final String currentTab = ref.watch(boardFooterTabProvider);
+    final String currentFilter = ref.watch(boardHeaderTabProvider);
+    double dx = -3;
+    double dy = 0;
+
+    useValueChanged(currentFilter, (_, __) async {
+      if(currentTab == 'photos') {
+        dx = 0;
+        dy = -3;
+      }
+    });
+    useValueChanged(currentTab, (_, __) async {
+      if(currentTab == 'photos') {
+        dx = -3;
+        dy = 0;
+      } else {
+        dx = 3;
+        dy = 0;
+      }
+    });
+
+    return Offset(dx, dy);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => BackgroundPage(
@@ -112,25 +139,37 @@ class BoardPage extends HookConsumerWidget {
                       : EdgeInsets.only(top: 0.2, left: ref.read<String>(boardFooterTabProvider) == 'photos' ? mobileMenuWidth : 0, bottom: mobileMenuWidth),
                     child: ref.read(boardFooterTabProvider) == 'photos'
                         ? SlideTransitionAnimation(
-                      getStart: () => ref.watch(boardFooterTabProvider) == 'photos' ? const Offset(-3, 0) : const Offset(3, 0),
+                      getStart: () => _calculateBoardStartAnimation(ref),
                       getEnd: () => const Offset(0, 0),
                       whenTo: (controller) {
                         final String currentTab = ref.watch(boardFooterTabProvider);
+                        final String currentFilter = ref.watch(boardHeaderTabProvider);
                         useValueChanged(currentTab, (_, __) async {
                           controller.reset();
                           controller.forward();
-                        });},
+                        });
+                        useValueChanged(currentFilter, (_, __) async {
+                          controller.reset();
+                          controller.forward();
+                        });
+                        },
                       controller: useAnimationController(duration: const Duration(milliseconds: 500)),
                       child: PhotographBoardPage(constraints: constraints,)
                     ) : SlideTransitionAnimation(
-                        getStart: () => ref.watch(boardFooterTabProvider) == 'photos' ? const Offset(-3, 0) : const Offset(3, 0),
+                        getStart: () => _calculateBoardStartAnimation(ref),
                         getEnd: () => const Offset(0, 0),
                         whenTo: (controller) {
                           final String currentTab = ref.watch(boardFooterTabProvider);
+                          final String currentFilter = ref.watch(boardHeaderTabProvider);
                           useValueChanged(currentTab, (_, __) async {
                             controller.reset();
                             controller.forward();
-                          });},
+                          });
+                          useValueChanged(currentFilter, (_, __) async {
+                            controller.reset();
+                            controller.forward();
+                          });
+                          },
                         controller: useAnimationController(duration: const Duration(milliseconds: 500)),
                         child: VideoBoardPage(constraints: constraints,)
                     ),
@@ -165,10 +204,10 @@ class BoardPage extends HookConsumerWidget {
             Visibility(
                 visible: Session().isLoggedIn(),
                 child: Align(
-                    alignment: Alignment.bottomRight,
+                    alignment: useMobileLayout(context) ? Alignment.bottomCenter : Alignment.bottomRight,
                     child: _buildFloatingActionButtons(context, ref)
                 )
-            )
+            ),
           ]
       )
   );
