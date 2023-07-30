@@ -19,7 +19,6 @@ class LoginPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    final Session session = ref.watch(sessionProvider);
     String user = "";
     String password = "";
 
@@ -85,10 +84,10 @@ class LoginPage extends HookConsumerWidget {
                             textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.black))
                         ),
                         onPressed: () async {
-                          FocusScope.of(context).unfocus();
                           final form = formKey.currentState;
                           if (form != null && form.validate()) {
                             ref.read(authenticationServiceProvider).login(user, password).then((value) {
+                              final Session session = ref.read(sessionProvider);
                               session.eMail = user;
                               session.token = value;
                               session.isGuest = false;

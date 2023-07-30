@@ -1,3 +1,4 @@
+import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/common/widgets/page.dart';
@@ -71,7 +72,7 @@ class BoardPage extends HookConsumerWidget {
               })
         ]
     ),
-  );
+  ).translateOnPhotoHover;
 
   /// Calculates the offset for the starting animation of the board animation
   Offset _calculateBoardStartAnimation(WidgetRef ref) {

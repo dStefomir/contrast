@@ -87,7 +87,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
       return null;
     }, []);
 
-    return LazyLoadScrollView(
+    return apiData.isNotEmpty ? LazyLoadScrollView(
       onEndOfPage: () => ref.read(serviceProvider.notifier).fetchNextPage(loadPage),
       scrollOffset: 200,
       child: RawKeyboardListener(
@@ -102,6 +102,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
             itemCount: apiData.length,
           )
       ),
-    );
+    ) : listEmptyChild;
   }
 }
