@@ -35,6 +35,27 @@ class PhotographDetailsView extends HookConsumerWidget {
   bool _isAreCoordinatesValid(double? lat, double? lng) =>
       ((lat != null && lat != 0) && (lng != null && lng != 0)) && (lat >= -90.0 && lat <= 90.0) && (lng >= -90.0 && lng <= 90.0);
 
+  /// Sets the photograph detail button asset
+  void _setPhotographDetailAsset(WidgetRef ref, ScrollController scrollController) {
+    try {
+      ref.read(photographDetailAssetProvider.notifier).setDetailAsset(scrollController.offset == 0 ? 'map.svg' : 'photo.svg');
+    } catch (e) {
+      ref.read(photographDetailAssetProvider.notifier).setDetailAsset('map.svg');
+    }
+  }
+
+  /// Handles go to photograph details and go back to photograph action
+  void _handlePhotographDetailsAction(WidgetRef ref, ScrollController scrollController) async {
+    if (scrollController.hasClients) {
+      await scrollController.animateTo(
+          scrollController.offset == 0 ? scrollController.position.maxScrollExtent : 0,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOutExpo
+      );
+      _setPhotographDetailAsset(ref, scrollController);
+    }
+  }
+
   /// Moves the map to the location where the shot was taken
   void _handlePhotographShotLocation(WidgetRef ref) {
     final int photographIndex = ref.read(photographIndexProvider(photoIndex));
@@ -70,7 +91,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   }
 
   // Handles the key events from the Focus widget and updates the page
-  void _handleKeyEvent(RawKeyEvent event, WidgetRef ref, ScrollController scrollController, PageController pageController, int currentPhotographIndex) async {
+  void _handleKeyEvent(RawKeyEvent event, WidgetRef ref, ScrollController scrollController, PageController pageController, int currentPhotographIndex) {
     if (event is RawKeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
         _goToPreviousPhotograph(ref, pageController, currentPhotographIndex);
@@ -79,21 +100,9 @@ class PhotographDetailsView extends HookConsumerWidget {
       } else if (event.logicalKey == LogicalKeyboardKey.escape) {
         Modular.to.navigate('/');
       } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-        if (scrollController.hasClients) {
-          await scrollController.animateTo(
-              scrollController.position.maxScrollExtent,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOutExpo
-          );
-        }
+        _handlePhotographDetailsAction(ref, scrollController);
       } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-        if (scrollController.hasClients) {
-          await scrollController.animateTo(
-              0,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOutExpo
-          );
-        }
+        _handlePhotographDetailsAction(ref, scrollController);
       }
     }
   }
@@ -161,25 +170,13 @@ class PhotographDetailsView extends HookConsumerWidget {
 
   /// Render the details button
   Widget _renderDetailsBtn(WidgetRef ref, BuildContext context, ScrollController scrollController) {
-    String iconAsset;
-    try {
-      iconAsset = scrollController.offset == 0 ? 'map.svg' : 'photo.svg';
-    } catch (e) {
-      iconAsset = 'map.svg';
-    }
+    final String iconAsset = ref.watch(photographDetailAssetProvider);
+
     return Align(
       alignment: Alignment.bottomCenter,
       child: RoundedButton(
           constraints: constraints,
-          onClick: () async {
-            if (scrollController.hasClients) {
-              await scrollController.animateTo(
-                  scrollController.offset == 0 ? scrollController.position.maxScrollExtent : 0,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOutExpo
-              );
-            }
-          },
+          onClick: () => _handlePhotographDetailsAction(ref, scrollController),
           color: Colors.white,
           borderColor: Colors.black,
           icon: iconAsset
@@ -227,6 +224,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.easeInOutExpo
             );
+            _setPhotographDetailAsset(ref, scrollController);
           },
           scrollDirection: Axis.horizontal,
           itemCount: images.length,
