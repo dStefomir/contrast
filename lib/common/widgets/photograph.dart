@@ -57,44 +57,57 @@ class ContrastPhotograph extends StatelessWidget {
     this.isThumbnail = false,
   }) : super(key: widgetKey);
 
+  /// Renders a widget based on the photograph state
+  Widget _renderPhotographState(BuildContext context, ExtendedImageState state) {
+    final bool isMobile = useMobileLayout(context);
+    final Widget photograph = ExtendedRawImage(
+      image: state.extendedImageInfo?.image,
+      width: width,
+      height: !isThumbnail ? height : double.infinity,
+      fit: compressed
+          ? image?.isLandscape != null && image!.isLandscape!
+          ? BoxFit.fitWidth
+          : BoxFit.fitHeight
+          : BoxFit.contain,
+    );
+    if(!isMobile && state.extendedImageLoadState == LoadState.completed) {
+      return FadeAnimation(
+          key: Key('${widgetKey.toString()}/rawImage'),
+          start: 0,
+          end: 1,
+          duration: const Duration(milliseconds: 400),
+          child: photograph
+      );
+    } else if (isMobile && state.extendedImageLoadState == LoadState.completed) {
+      return photograph;
+    }
+
+    return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget photo;
+
     if (data == null) {
       photo = ExtendedImage.network(fetch!(image!.path!),
         scale: 0.6,
         width: width,
         height: !isThumbnail ? height : double.infinity,
         border: Border.all(color: borderColor, width: borderWidth),
-        enableLoadState: false,
+        enableLoadState: !compressed,
         fit: compressed
             ? image?.isLandscape != null && image!.isLandscape!
                 ? BoxFit.fitWidth
                 : BoxFit.fitHeight
             : BoxFit.contain,
-        cache: true,
-        loadStateChanged: (ExtendedImageState state) {
-          if(state.extendedImageLoadState == LoadState.completed) {
-              return FadeAnimation(
-                  key: Key('${widgetKey.toString()}/rawImage'),
-                  start: 0,
-                  end: 1,
-                  duration: const Duration(milliseconds: 400),
-                  child: ExtendedRawImage(
-                    image: state.extendedImageInfo?.image,
-                    width: width,
-                    height: height,
-                  ),
-              );
-          }
-
-          return Container();
-        },
-        enableMemoryCache: true,
+        cache: compressed,
+        loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
+        enableMemoryCache: compressed,
         clearMemoryCacheIfFailed: true,
         clearMemoryCacheWhenDispose: false,
         filterQuality: quality,
-        isAntiAlias: compressed ? false : true,
+        isAntiAlias: !compressed,
       );
     } else {
       photo = ExtendedImage.memory(data!,
@@ -102,29 +115,13 @@ class ContrastPhotograph extends StatelessWidget {
           height: height,
           scale: 0.6,
           border: Border.all(color: borderColor, width: borderWidth),
-          loadStateChanged: (ExtendedImageState state) {
-            if(state.extendedImageLoadState == LoadState.completed) {
-              return FadeAnimation(
-                key: Key('${widgetKey.toString()}/rawImage'),
-                start: 0,
-                end: 1,
-                duration: const Duration(milliseconds: 400),
-                child: ExtendedRawImage(
-                  image: state.extendedImageInfo?.image,
-                  width: width,
-                  height: height,
-                ),
-              );
-            }
-
-            return Container();
-          },
-          enableLoadState: true,
-          enableMemoryCache: true,
+          loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
+          enableLoadState: !compressed,
+          enableMemoryCache: compressed,
           clearMemoryCacheIfFailed: true,
           clearMemoryCacheWhenDispose: false,
           filterQuality: quality,
-          isAntiAlias: true);
+          isAntiAlias: !compressed);
     }
 
     return photo;
