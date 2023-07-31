@@ -1,4 +1,4 @@
-import 'dart:html' as html;
+// import 'dart:html' as html;
 
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
@@ -35,7 +35,8 @@ class BoardPageFooter extends HookConsumerWidget {
           padding: const EdgeInsets.only(top: 35, bottom: 20, left: 20, right: 20),
           child: StyledButton(
             widgetKey: const Key('about'),
-            onClick: () => html.window.open('https://www.instagram.com/dstefomir/', '_blank'),
+            onClick: () {},
+            // onClick: () => html.window.open('https://www.instagram.com/dstefomir/', '_blank'),
             iconAsset: 'instagram.svg',
             iconHeight: 30,
             shadow: false,

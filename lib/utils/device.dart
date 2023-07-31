@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'dart:html' as html;
+// import 'dart:html' as html;
 
 
 /// Determines if the app should load a mobile or other type of layout based on calculated pixels
@@ -28,18 +28,18 @@ String getRunningPlatform(BuildContext context) {
   if(defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android) {
     return 'MOBILE';
   }
-  if (_isIpad()) {
-    return 'MOBILE';
-  }
+  // if (_isIpad()) {
+  //   return 'MOBILE';
+  // }
 
   return 'DESKTOP';
 }
 
 /// Check if the app is ran on an ipad
-bool _isIpad() {
-  final width = html.window.screen?.width;
-  final height = html.window.screen?.height;
-  final ratio = width! / height!;
-
-  return ratio <= 1.34 && ratio >= 1.32;
-}
+// bool _isIpad() {
+//   final width = html.window.screen?.width;
+//   final height = html.window.screen?.height;
+//   final ratio = width! / height!;
+//
+//   return ratio <= 1.34 && ratio >= 1.32;
+// }

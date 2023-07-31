@@ -1,4 +1,4 @@
-import 'dart:html' as html;
+// import 'dart:html' as html;
 
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/map/provider.dart';
@@ -50,9 +50,10 @@ class ContrastMap extends HookConsumerWidget {
                 height: 40,
                 point: LatLng(lat, lng),
                 builder: (ctx) => InkWell(
-                    onTap: () => html.window.open(
-                        'https://www.google.com/maps/@$lat,$lng,20.45z?entry=ttu', '_blank')
-                    ,
+                    // onTap: () => html.window.open(
+                    //     'https://www.google.com/maps/@$lat,$lng,20.45z?entry=ttu', '_blank')
+                    // ,
+                    onTap: () {},
                     child: RotatedBox(
                         quarterTurns: 2,
                         child: CustomPaint(
