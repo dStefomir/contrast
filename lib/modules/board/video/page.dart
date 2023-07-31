@@ -1,4 +1,4 @@
-// import 'dart:html' as html;
+import 'dart:html' as html;
 
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
@@ -90,10 +90,10 @@ class VideoBoardPage extends HookConsumerWidget {
       videoPath: video.path!,
       constraints: constraints,
       onClick: () => Modular.to.pushNamed('videos/details/${video.path}'),
-      // onRedirect: () => html.window.open(
-      //     'https://www.dstefomir.eu/#/videos/details/${video.path}',
-      //     '${video.id}'
-      // ),
+      onRedirect: () => html.window.open(
+          'https://www.dstefomir.eu/#/videos/details/${video.path}',
+          '${video.id}'
+      ),
     );
   }
 
