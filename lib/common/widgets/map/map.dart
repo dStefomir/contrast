@@ -51,7 +51,8 @@ class ContrastMap extends HookConsumerWidget {
                 point: LatLng(lat, lng),
                 builder: (ctx) => InkWell(
                     onTap: () => html.window.open(
-                        'https://www.google.com/maps/@$lat,$lng,20.45z?entry=ttu', '_blank'),
+                        'https://www.google.com/maps/@$lat,$lng,20.45z?entry=ttu', '_blank')
+                    ,
                     child: RotatedBox(
                         quarterTurns: 2,
                         child: CustomPaint(
@@ -60,8 +61,9 @@ class ContrastMap extends HookConsumerWidget {
                             clipper: TriangleShape(),
                           ),
                         )
-                    )
-                ).translateOnVideoHover)
+                    ).translateOnPhotoHover
+                )
+            )
           ],
         )
       ],

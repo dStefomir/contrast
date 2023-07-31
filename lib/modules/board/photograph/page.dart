@@ -107,11 +107,13 @@ class PhotographBoardPage extends HookConsumerWidget {
               _renderPhoto(ref, context, wrapper, constraints)
           ),
       onRightKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('videos'),
-      listEmptyChild: const Padding(
-        padding: EdgeInsets.all(15),
-        child: StyledText(
-          text: 'Nothing here so far',
-          color: Colors.black,
+      listEmptyChild: const Center(
+        child: Padding(
+          padding: EdgeInsets.all(15),
+          child: StyledText(
+            text: 'Nothing here so far',
+            color: Colors.black,
+          ),
         ),
       )
   );

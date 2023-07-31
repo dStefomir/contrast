@@ -312,7 +312,12 @@ class UploadImageDialog extends HookConsumerWidget {
               ),
             ),
             const Spacer(),
-            RoundedButton(constraints: constraints, onClick: () => Navigator.of(context).pop(), color: Colors.black, borderColor: Colors.white, icon: 'close.svg')
+            RoundedButton(
+                onClick: () => Navigator.of(context).pop(),
+                color: Colors.black,
+                borderColor: Colors.white,
+                icon: 'close.svg'
+            )
           ]
       ),
       const Divider(color: Colors.black,)

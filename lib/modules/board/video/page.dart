@@ -49,7 +49,6 @@ class VideoBoardPage extends HookConsumerWidget {
                   showDialog(
                       context: context,
                       builder: (context) => UploadVideoDialog(
-                        constraints: constraints,
                         data: video,
                       )).then((value) {
                         if(value != null) {

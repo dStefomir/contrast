@@ -3,7 +3,6 @@ import 'package:contrast/common/widgets/hover_provider.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
-import 'package:contrast/utils/device.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -208,8 +207,6 @@ class MenuButton extends HookConsumerWidget {
 
 /// Renders a rounded button widget
 class RoundedButton extends StatelessWidget {
-  /// Constraints of the holder page
-  final BoxConstraints constraints;
   /// What happens when the widget is clicked
   final Function() onClick;
   /// Color of the button
@@ -220,7 +217,6 @@ class RoundedButton extends StatelessWidget {
   final String icon;
 
   const RoundedButton({
-    required this.constraints,
     required this.onClick,
     required this.color,
     required this.borderColor,
@@ -230,7 +226,7 @@ class RoundedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.all(15),
+    padding: const EdgeInsets.all(10),
     child: Container(
       decoration: BoxDecoration(
           color: Colors.white,
@@ -243,9 +239,7 @@ class RoundedButton extends StatelessWidget {
           asset: icon,
           fit: BoxFit.scaleDown,
           color: Colors.black,
-          height: useMobileLayout(context)
-              ? constraints.maxHeight / 15
-              : constraints.maxHeight / 25,
+          height: 35
         ),
       ),
     ),

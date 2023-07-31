@@ -70,7 +70,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                 if (Session().isLoggedIn()) {
                   showDialog(
                       context: context,
-                      builder: (context) => UploadVideoDialog(constraints: widget.constraints)
+                      builder: (context) => UploadVideoDialog()
                   ).then((video) {
                     ref.read(videoServiceFetchProvider.notifier).addItem(video);
                     showSuccessTextOnSnackBar(context, "Video was successfully uploaded.");

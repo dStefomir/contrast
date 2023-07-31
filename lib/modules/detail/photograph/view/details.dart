@@ -136,7 +136,6 @@ class PhotographDetailsView extends HookConsumerWidget {
   Widget _renderNextBtn(WidgetRef ref, BuildContext context, PageController pageController, int currentPhotographIndex) => Align(
     alignment: Alignment.centerRight,
     child: RoundedButton(
-        constraints: constraints,
         onClick: () => _goToNextPhotograph(ref, pageController, currentPhotographIndex),
         color: Colors.white,
         borderColor: Colors.black,
@@ -148,7 +147,6 @@ class PhotographDetailsView extends HookConsumerWidget {
   Widget _renderPreviousBtn(WidgetRef ref, BuildContext context, PageController pageController, int currentPhotographIndex) => Align(
     alignment: Alignment.centerLeft,
     child: RoundedButton(
-        constraints: constraints,
         onClick: () => _goToPreviousPhotograph(ref, pageController, currentPhotographIndex),
         color: Colors.white,
         borderColor: Colors.black,
@@ -160,7 +158,6 @@ class PhotographDetailsView extends HookConsumerWidget {
   Widget _renderGoBackBtn() => Align(
     alignment: Alignment.topLeft,
     child: RoundedButton(
-        constraints: constraints,
         onClick: () => Modular.to.navigate('/'),
         color: Colors.white,
         borderColor: Colors.black,
@@ -175,7 +172,6 @@ class PhotographDetailsView extends HookConsumerWidget {
     return Align(
       alignment: Alignment.bottomCenter,
       child: RoundedButton(
-          constraints: constraints,
           onClick: () => _handlePhotographDetailsAction(ref, scrollController),
           color: Colors.white,
           borderColor: Colors.black,
@@ -269,9 +265,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                     children: [
                       SizedBox(
                           width: constraints.maxWidth,
-                          height: _isAreCoordinatesValid(image.lat, image.lng)
-                              ? constraints.maxHeight - 42
-                              : constraints.maxHeight,
+                          height: constraints.maxHeight,
                           child: _renderPhotographGallery(ref, scrollController, pageController, currentPhotographIndex, image)
                       ),
                       Visibility(

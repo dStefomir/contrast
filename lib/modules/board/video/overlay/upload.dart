@@ -14,12 +14,10 @@ const double dialogHeight = 400;
 class UploadVideoDialog extends HookConsumerWidget {
   /// Existing video data
   final VideoData? data;
-  /// Constraints of the holding page
-  final BoxConstraints constraints;
   /// Form key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  UploadVideoDialog({Key? key, required this.constraints, this.data}) : super(key: key);
+  UploadVideoDialog({Key? key, this.data}) : super(key: key);
 
   /// Renders the dialog action buttons
   List<Widget> _renderDialogActions(BuildContext context, WidgetRef ref) {
@@ -127,7 +125,6 @@ class UploadVideoDialog extends HookConsumerWidget {
             ),
             const Spacer(),
             RoundedButton(
-                constraints: constraints,
                 onClick: () => Navigator.of(context).pop(),
                 color: Colors.black,
                 borderColor: Colors.white,

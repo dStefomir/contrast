@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:contrast/common/extentions/zoom.dart';
+import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/hover_provider.dart';
 import 'package:contrast/common/widgets/icon.dart';
@@ -65,12 +66,30 @@ class ContrastPhotograph extends StatelessWidget {
         width: width,
         height: !isThumbnail ? height : double.infinity,
         border: Border.all(color: borderColor, width: borderWidth),
-        enableLoadState: true,
+        enableLoadState: false,
         fit: compressed
             ? image?.isLandscape != null && image!.isLandscape!
                 ? BoxFit.fitWidth
                 : BoxFit.fitHeight
             : BoxFit.contain,
+        cache: true,
+        loadStateChanged: (ExtendedImageState state) {
+          if(state.extendedImageLoadState == LoadState.completed) {
+              return FadeAnimation(
+                  key: Key('${widgetKey.toString()}/rawImage'),
+                  start: 0,
+                  end: 1,
+                  duration: const Duration(milliseconds: 400),
+                  child: ExtendedRawImage(
+                    image: state.extendedImageInfo?.image,
+                    width: width,
+                    height: height,
+                  ),
+              );
+          }
+
+          return Container();
+        },
         enableMemoryCache: true,
         clearMemoryCacheIfFailed: true,
         clearMemoryCacheWhenDispose: false,
@@ -83,6 +102,23 @@ class ContrastPhotograph extends StatelessWidget {
           height: height,
           scale: 0.6,
           border: Border.all(color: borderColor, width: borderWidth),
+          loadStateChanged: (ExtendedImageState state) {
+            if(state.extendedImageLoadState == LoadState.completed) {
+              return FadeAnimation(
+                key: Key('${widgetKey.toString()}/rawImage'),
+                start: 0,
+                end: 1,
+                duration: const Duration(milliseconds: 400),
+                child: ExtendedRawImage(
+                  image: state.extendedImageInfo?.image,
+                  width: width,
+                  height: height,
+                ),
+              );
+            }
+
+            return Container();
+          },
           enableLoadState: true,
           enableMemoryCache: true,
           clearMemoryCacheIfFailed: true,
