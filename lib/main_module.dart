@@ -2,9 +2,8 @@ import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/detail/photograph/view/page.dart';
 import 'package:contrast/modules/detail/video/page.dart';
 import 'package:contrast/modules/login/page.dart';
-import 'package:contrast/security/session.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:provider/provider.dart';
 
 import 'core/page.dart';
 
@@ -15,6 +14,10 @@ const String videoDetailsPageRoute = '/videos/details/:path';
 
 /// Represents the main module of the app
 class MainModule extends Module {
+
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
   // Provide a list of dependencies to inject into the project
   @override
   final List<Bind> binds = [];
@@ -26,7 +29,11 @@ class MainModule extends Module {
         transition: TransitionType.fadeIn,
         child: (_, args) => CorePage(
             pageName: 'Board',
-            render: (constraints) => BoardPage(constraints: constraints)
+            render: (constraints) => BoardPage(
+                constraints: constraints,
+                analytics: analytics,
+                observer: observer
+            )
         )
     ),
     ChildRoute(loginPageRoute,
@@ -41,9 +48,11 @@ class MainModule extends Module {
         child: (_, args) => CorePage(
             pageName: 'Photo details',
             render: (constraints) => PhotographDetailPage(
-                  constraints: constraints,
-                  id: int.parse(args.queryParams['id']!),
-                  category: args.queryParams['category']!,
+                constraints: constraints,
+                id: int.parse(args.queryParams['id']!),
+                category: args.queryParams['category']!,
+                analytics: analytics,
+                observer: observer
             )
         )
     ),
@@ -52,8 +61,10 @@ class MainModule extends Module {
         child: (_, args) => CorePage(
             pageName: 'Video details',
             render: (constraints) => VideoDetailPage(
-                  constraints: constraints,
-                  path: args.params['path'],
+                constraints: constraints,
+                path: args.params['path'],
+                analytics: analytics,
+                observer: observer
             )
         )
     ),

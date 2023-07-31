@@ -13,6 +13,7 @@ import 'package:contrast/modules/board/video/overlay/upload.dart';
 import 'package:contrast/modules/board/video/page.dart';
 import 'package:contrast/security/session.dart';
 import 'package:contrast/utils/device.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -23,11 +24,34 @@ const double desktopBottomPadding = 65;
 const double mobileMenuWidth = 65;
 const double mobileMenuIconSize = 65;
 
-class BoardPage extends HookConsumerWidget {
+class BoardPage extends StatefulHookConsumerWidget {
   /// Constraints of the page
   final BoxConstraints constraints;
+  /// Firebase plugins
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
 
-  const BoardPage({required this.constraints, super.key});
+  const BoardPage({required this.constraints, required this.analytics, required this.observer, super.key});
+
+  @override
+  ConsumerState createState() => BoardPageState();
+}
+
+class BoardPageState extends ConsumerState<BoardPage> {
+
+  @override
+  void initState() {
+    // Send analytics when the widget is first built.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.analytics.logAppOpen();
+      widget.analytics.logEvent(
+          name: 'board_page',
+          parameters: <String, dynamic>{
+            'layout': useMobileLayout(context) ? 'mobile' : 'desktop'
+          });
+    });
+    super.initState();
+  }
 
   /// Renders the floating action button
   Widget _buildFloatingActionButtons(BuildContext context, WidgetRef ref) => Padding(
@@ -46,7 +70,7 @@ class BoardPage extends HookConsumerWidget {
                 if (Session().isLoggedIn()) {
                   showDialog(
                       context: context,
-                      builder: (context) => UploadVideoDialog(constraints: constraints)
+                      builder: (context) => UploadVideoDialog(constraints: widget.constraints)
                   ).then((video) {
                     ref.read(videoServiceFetchProvider.notifier).addItem(video);
                     showSuccessTextOnSnackBar(context, "Video was successfully uploaded.");
@@ -63,7 +87,7 @@ class BoardPage extends HookConsumerWidget {
                   showDialog(
                       context: context,
                       barrierDismissible: false,
-                      builder: (context) => UploadImageDialog(constraints: constraints)
+                      builder: (context) => UploadImageDialog(constraints: widget.constraints)
                   ).then((photograph) {
                     ref.read(photographServiceFetchProvider.notifier).addItem(photograph);
                     showSuccessTextOnSnackBar(context, "Photograph was successfully uploaded.");
@@ -101,7 +125,7 @@ class BoardPage extends HookConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => BackgroundPage(
+  Widget build(BuildContext context) => BackgroundPage(
       child: Stack(
           children: [
             Visibility(
@@ -127,7 +151,7 @@ class BoardPage extends HookConsumerWidget {
                         color: Colors.black,
                         useShadow: false,
                         weight: FontWeight.bold,
-                        fontSize: constraints.maxWidth / 40,
+                        fontSize: widget.constraints.maxWidth / 40,
                       )
                   )
               ),
@@ -138,8 +162,8 @@ class BoardPage extends HookConsumerWidget {
                   padding: !useMobileLayout(context)
                       ? EdgeInsets.only(top: ref.read<String>(boardFooterTabProvider) == 'photos' ? desktopTopPadding : 0, bottom: desktopBottomPadding)
                       : EdgeInsets.only(top: 0.2, left: ref.read<String>(boardFooterTabProvider) == 'photos' ? mobileMenuWidth : 0, bottom: mobileMenuWidth),
-                    child: ref.read(boardFooterTabProvider) == 'photos'
-                        ? SlideTransitionAnimation(
+                  child: ref.read(boardFooterTabProvider) == 'photos'
+                      ? SlideTransitionAnimation(
                       getStart: () => _calculateBoardStartAnimation(ref),
                       getEnd: () => const Offset(0, 0),
                       whenTo: (controller) {
@@ -152,28 +176,25 @@ class BoardPage extends HookConsumerWidget {
                         useValueChanged(currentFilter, (_, __) async {
                           controller.reset();
                           controller.forward();
-                        });
-                        },
+                        });},
                       controller: useAnimationController(duration: const Duration(milliseconds: 500)),
-                      child: PhotographBoardPage(constraints: constraints,)
-                    ) : SlideTransitionAnimation(
-                        getStart: () => _calculateBoardStartAnimation(ref),
-                        getEnd: () => const Offset(0, 0),
-                        whenTo: (controller) {
-                          final String currentTab = ref.watch(boardFooterTabProvider);
-                          final String currentFilter = ref.watch(boardHeaderTabProvider);
-                          useValueChanged(currentTab, (_, __) async {
-                            controller.reset();
-                            controller.forward();
-                          });
-                          useValueChanged(currentFilter, (_, __) async {
-                            controller.reset();
-                            controller.forward();
-                          });
-                          },
-                        controller: useAnimationController(duration: const Duration(milliseconds: 500)),
-                        child: VideoBoardPage(constraints: constraints,)
-                    ),
+                      child: PhotographBoardPage(constraints: widget.constraints,))
+                      : SlideTransitionAnimation(getStart: () => _calculateBoardStartAnimation(ref),
+                      getEnd: () => const Offset(0, 0),
+                      whenTo: (controller) {
+                        final String currentTab = ref.watch(boardFooterTabProvider);
+                        final String currentFilter = ref.watch(boardHeaderTabProvider);
+                        useValueChanged(currentTab, (_, __) async {
+                          controller.reset();
+                          controller.forward();
+                        });
+                        useValueChanged(currentFilter, (_, __) async {
+                          controller.reset();
+                          controller.forward();
+                        });},
+                      controller: useAnimationController(duration: const Duration(milliseconds: 500)),
+                      child: VideoBoardPage(constraints: widget.constraints,)
+                  ),
                 )
             ),
             Align(
@@ -184,13 +205,13 @@ class BoardPage extends HookConsumerWidget {
                     getStart: () => ref.watch(boardFooterTabProvider) == 'photos' ? const Offset(0, -10) : Offset(0.0, ref.watch(boardFooterTabProvider) == 'videos' ? 0 : -10),
                     getEnd: () => ref.watch(boardFooterTabProvider) == 'photos' ? Offset.zero : Offset(0, ref.watch(boardFooterTabProvider) == 'videos' ? -10 : 10),
                     whenTo: (controller) {
-                      final String currentTab = ref.watch(boardFooterTabProvider);
-                      useValueChanged(currentTab, (_, __) async {
-                        controller.reset();
-                        controller.forward();
-                      });},
+                  final String currentTab = ref.watch(boardFooterTabProvider);
+                  useValueChanged(currentTab, (_, __) async {
+                    controller.reset();
+                    controller.forward();
+                  });},
                     controller: useAnimationController(duration: const Duration(milliseconds: 1200)),
-                    child: BoardPageFilter(constraints: constraints,)
+                    child: BoardPageFilter(constraints: widget.constraints,)
                 )
             ),
             Align(
