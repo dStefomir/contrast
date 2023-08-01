@@ -25,13 +25,11 @@ const double mobileMenuWidth = 65;
 const double mobileMenuIconSize = 65;
 
 class BoardPage extends StatefulHookConsumerWidget {
-  /// Constraints of the page
-  final BoxConstraints constraints;
   /// Firebase plugins
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
 
-  const BoardPage({required this.constraints, required this.analytics, required this.observer, super.key});
+  const BoardPage({required this.analytics, required this.observer, super.key});
 
   @override
   ConsumerState createState() => BoardPageState();
@@ -72,8 +70,10 @@ class BoardPageState extends ConsumerState<BoardPage> {
                       context: context,
                       builder: (context) => UploadVideoDialog()
                   ).then((video) {
-                    ref.read(videoServiceFetchProvider.notifier).addItem(video);
-                    showSuccessTextOnSnackBar(context, "Video was successfully uploaded.");
+                    if(video != null) {
+                      ref.read(videoServiceFetchProvider.notifier).addItem(video);
+                      showSuccessTextOnSnackBar(context, "Video was successfully uploaded.");
+                    }
                   });
                 }
               }),
@@ -87,10 +87,12 @@ class BoardPageState extends ConsumerState<BoardPage> {
                   showDialog(
                       context: context,
                       barrierDismissible: false,
-                      builder: (context) => UploadImageDialog(constraints: widget.constraints)
+                      builder: (context) => UploadImageDialog()
                   ).then((photograph) {
-                    ref.read(photographServiceFetchProvider.notifier).addItem(photograph);
-                    showSuccessTextOnSnackBar(context, "Photograph was successfully uploaded.");
+                    if(photograph != null) {
+                      ref.read(photographServiceFetchProvider.notifier).addItem(photograph);
+                      showSuccessTextOnSnackBar(context, "Photograph was successfully uploaded.");
+                    }
                   });
                 }
               })
@@ -146,12 +148,12 @@ class BoardPageState extends ConsumerState<BoardPage> {
                           controller.reset();
                           controller.forward();
                         });},
-                      child: StyledText(
+                      child: const StyledText(
                         text: 'C O N T R A S T',
                         color: Colors.black,
                         useShadow: false,
                         weight: FontWeight.bold,
-                        fontSize: widget.constraints.maxWidth / 40,
+                        fontSize: 60,
                       )
                   )
               ),
@@ -178,7 +180,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                           controller.forward();
                         });},
                       controller: useAnimationController(duration: const Duration(milliseconds: 500)),
-                      child: PhotographBoardPage(constraints: widget.constraints,))
+                      child: const PhotographBoardPage())
                       : SlideTransitionAnimation(getStart: () => _calculateBoardStartAnimation(ref),
                       getEnd: () => const Offset(0, 0),
                       whenTo: (controller) {
@@ -193,7 +195,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                           controller.forward();
                         });},
                       controller: useAnimationController(duration: const Duration(milliseconds: 500)),
-                      child: VideoBoardPage(constraints: widget.constraints,)
+                      child: const VideoBoardPage()
                   ),
                 )
             ),
@@ -211,7 +213,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                     controller.forward();
                   });},
                     controller: useAnimationController(duration: const Duration(milliseconds: 1200)),
-                    child: BoardPageFilter(constraints: widget.constraints,)
+                    child: const BoardPageFilter()
                 )
             ),
             Align(

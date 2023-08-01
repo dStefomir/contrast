@@ -1,8 +1,7 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
 import 'dart:html' as html;
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 /// Determines if the app should load a mobile or other type of layout based on calculated pixels
 bool useMobileLayout(BuildContext context, {int shortestSideLimit = 670}) {

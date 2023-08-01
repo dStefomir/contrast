@@ -10,8 +10,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Renders the photograph details page
 class PhotographDetailPage extends StatefulHookConsumerWidget {
-  /// Constraints of the page
-  final BoxConstraints constraints;
   /// Firebase plugins
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
@@ -21,7 +19,6 @@ class PhotographDetailPage extends StatefulHookConsumerWidget {
   final String category;
 
   const PhotographDetailPage({
-    required this.constraints,
     required this.analytics,
     required this.observer,
     required this.id,
@@ -66,7 +63,7 @@ class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
             }
           });
 
-          return PhotographDetailsView(constraints: widget.constraints, images: data, photoIndex: photoIndex);
+          return PhotographDetailsView(images: data, photoIndex: photoIndex);
         },
         error: (error, stackTrace) => Center(
             child: StyledText(

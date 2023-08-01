@@ -19,10 +19,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Renders the photographs board page
 class PhotographBoardPage extends HookConsumerWidget {
-  /// Constraints of the page
-  final BoxConstraints constraints;
 
-  const PhotographBoardPage({required this.constraints, super.key});
+  const PhotographBoardPage({super.key});
 
   /// Renders a photograph
   Widget _renderPhoto(WidgetRef ref, BuildContext context, ImageWrapper wrapper, BoxConstraints constraints) {
@@ -46,10 +44,7 @@ class PhotographBoardPage extends HookConsumerWidget {
                 onPressed: () {
                   showDialog(
                       context: context,
-                      builder: (context) => UploadImageDialog(
-                          constraints: constraints,
-                          data: wrapper.image
-                      )
+                      builder: (context) => UploadImageDialog(data: wrapper.image)
                   ).then((photograph) {
                     if(photograph != null) {
                       final ImageWrapper updatedPhotograph = ImageWrapper(image: photograph, metadata: wrapper.metadata);
@@ -101,7 +96,6 @@ class PhotographBoardPage extends HookConsumerWidget {
       serviceProvider: photographServiceFetchProvider,
       loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
       itemsPerRow: 3,
-      constraints: constraints,
       itemBuilder: (BuildContext context, int index, int dataLength, ImageWrapper wrapper) =>
           LayoutBuilder(builder: (context, constraints) =>
               _renderPhoto(ref, context, wrapper, constraints)

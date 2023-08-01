@@ -29,8 +29,7 @@ class MainModule extends Module {
         transition: TransitionType.fadeIn,
         child: (_, args) => CorePage(
             pageName: 'Board',
-            render: (constraints) => BoardPage(
-                constraints: constraints,
+            render: () => BoardPage(
                 analytics: analytics,
                 observer: observer
             )
@@ -40,15 +39,14 @@ class MainModule extends Module {
         transition: TransitionType.fadeIn,
         child: (_, args) => CorePage(
             pageName: 'Login',
-            render: (constraints) => LoginPage(constraints: constraints)
+            render: () => LoginPage()
         )
     ),
     ChildRoute(photographDetailsPageRoute,
         transition: TransitionType.fadeIn,
         child: (_, args) => CorePage(
             pageName: 'Photo details',
-            render: (constraints) => PhotographDetailPage(
-                constraints: constraints,
+            render: () => PhotographDetailPage(
                 id: int.parse(args.queryParams['id']!),
                 category: args.queryParams['category']!,
                 analytics: analytics,
@@ -60,8 +58,7 @@ class MainModule extends Module {
         transition: TransitionType.fadeIn,
         child: (_, args) => CorePage(
             pageName: 'Video details',
-            render: (constraints) => VideoDetailPage(
-                constraints: constraints,
+            render: () => VideoDetailPage(
                 path: args.params['path'],
                 analytics: analytics,
                 observer: observer

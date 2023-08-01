@@ -9,7 +9,6 @@ import 'package:contrast/modules/board/photograph/service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_size_getter/file_input.dart';
 import 'package:image_size_getter/image_size_getter.dart';
@@ -20,18 +19,16 @@ import '../../../../../common/widgets/icon.dart';
 /// Dialog width
 const double dialogWidth = 400;
 /// Dialog height
-const double dialogHeight = 550;
+const double dialogHeight = 485;
 
 /// Renders the upload image dialog
 class UploadImageDialog extends HookConsumerWidget {
   /// Existing image data
   final ImageData? data;
-  /// Constraints of the holder page
-  final BoxConstraints constraints;
   /// Form key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  UploadImageDialog({Key? key, required this.constraints, this.data,}) : super(key: key);
+  UploadImageDialog({Key? key, this.data,}) : super(key: key);
 
   /// Selects a photo for uploading from the storage of the device
   void _selectPhotograph(WidgetRef ref) async {
@@ -122,14 +119,12 @@ class UploadImageDialog extends HookConsumerWidget {
           child: LoadingIndicator()
         )
     ) :
-    Expanded(
-      child: SimpleInput(
-        widgetKey: const Key('photograph comment'),
-        labelText: 'Photograph comment',
-        controllerText: data?.comment ?? '',
-        onChange: (text) => ref.read(commentProvider.notifier).setComment(text),
-        maxLines: 10,
-      ),
+    SimpleInput(
+      widgetKey: const Key('photograph comment'),
+      labelText: 'Photograph comment',
+      controllerText: data?.comment,
+      onChange: (text) => ref.read(commentProvider.notifier).setComment(text),
+      maxLines: 4,
     );
   }
 
@@ -140,7 +135,7 @@ class UploadImageDialog extends HookConsumerWidget {
           child: SimpleInput(
             widgetKey: const Key('photograph latitude'),
             labelText: 'Latitude',
-            controllerText: data?.lat?.toString() ?? '',
+            controllerText: data?.lat?.toString(),
             onChange: (text) => ref.read(geoLatProvider(data?.lat).notifier).setLat(text),
             validator: (value) {
               if(value != null && value.isNotEmpty) {
@@ -159,7 +154,7 @@ class UploadImageDialog extends HookConsumerWidget {
           child: SimpleInput(
             widgetKey: const Key('photograph longitude'),
             labelText: 'Longitude',
-            controllerText: data?.lng?.toString() ?? '',
+            controllerText: data?.lng?.toString(),
             onChange: (text) => ref.read(geoLngProvider(data?.lng).notifier).setLng(text),
             validator: (value) {
               if(value != null && value.isNotEmpty) {
@@ -264,8 +259,8 @@ class UploadImageDialog extends HookConsumerWidget {
             onTap: () => _selectPhotograph(ref),
             onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
             child: AnimatedContainer(
-                width: isHovering ? 250 : 240,
-                height: isHovering ? 250 : 240,
+                width: isHovering ? 165 : 160,
+                height: isHovering ? 165 : 160,
                 duration: const Duration(milliseconds: 800),
                 curve: Curves.fastOutSlowIn,
                 child: IconRenderer(
@@ -286,7 +281,7 @@ class UploadImageDialog extends HookConsumerWidget {
     width: dialogWidth,
     height: dialogHeight,
     child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _renderUploadButton(context, ref, fileData),
@@ -325,17 +320,6 @@ class UploadImageDialog extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final FileData fileData = ref.watch(fileProvider);
-    // Dispose of the providers or perform any other cleanup tasks here
-    useEffect(() {
-      return () {
-        ref.read(loadingProvider.notifier).dispose();
-        ref.read(categoryProvider(data?.category).notifier).dispose();
-        ref.read(geoLatProvider(data?.lat).notifier).dispose();
-        ref.read(geoLngProvider(data?.lng).notifier).dispose();
-        ref.read(commentProvider.notifier).dispose();
-        ref.read(uploadPhotographProvider.notifier).dispose();
-      };
-    }, []);
 
     return Form(
       key: _formKey,

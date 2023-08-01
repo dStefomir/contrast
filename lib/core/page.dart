@@ -8,13 +8,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CorePage extends HookConsumerWidget {
   /// Specifies the page path
   final String pageName;
+  /// Should resize when keyboard pops
+  final bool resizeToAvoidBottomInset;
   /// Renders the holding page
-  final Widget Function(BoxConstraints) render;
+  final Widget Function() render;
 
   const CorePage({
     Key? key,
     required this.pageName,
     required this.render,
+    this.resizeToAvoidBottomInset = true,
   }) : super(key: key);
 
   /// Should the app display a cookie warning or not
@@ -43,26 +46,22 @@ class CorePage extends HookConsumerWidget {
     );
   }
 
-  /// Renders the default page content
-  Widget _renderDefaultPage(BuildContext context, WidgetRef ref) =>
-      MainScaffold(
-        body: LayoutBuilder(
-            builder: (context, constraints) =>
-                FutureBuilder<SharedPreferences>(
-                    future: SharedPreferences.getInstance(),
-                    builder: (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
-                      final List<Widget> children = [render(constraints)];
-                      if (snapshot.hasData && _shouldShowCookie(snapshot.requireData, ref)) {
-                        children.add(
-                            CookieWarningDialog(onSubmit: () => _onCookieSubmit(snapshot.requireData, ref))
-                        );
-                      }
+  /// Renders the default page widget
+  Widget _renderDefaultPage(BuildContext context, WidgetRef ref) => MainScaffold(
+    body: FutureBuilder<SharedPreferences>(
+        future: SharedPreferences.getInstance(),
+        builder: (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
+          final List<Widget> children = [render()];
+          if (snapshot.hasData && _shouldShowCookie(snapshot.requireData, ref)) {
+            children.add(
+                CookieWarningDialog(onSubmit: () => _onCookieSubmit(snapshot.requireData, ref))
+            );
+          }
 
-                      return Stack(children: children);
-                    })
-        ),
-        resizeToAvoidBottomInset: false,
-      );
+          return Stack(children: children);
+        }),
+    resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => _renderDefaultPage(context, ref);

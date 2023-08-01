@@ -12,15 +12,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Renders the header of the board page
 class BoardPageFilter extends ConsumerWidget {
-  /// Constraints of the holder page
-  final BoxConstraints constraints;
 
-  const BoardPageFilter({super.key, required this.constraints});
+  const BoardPageFilter({super.key});
 
   /// Render mobile layout
-  Widget _renderMobileLayout(WidgetRef ref) => Container(
+  Widget _renderMobileLayout(BuildContext context, WidgetRef ref) => Container(
     width: mobileMenuWidth,
-    height: constraints.maxHeight - mobileMenuWidth - 1.5,
+    height: MediaQuery.of(context).size.height - mobileMenuWidth - 1.5,
     decoration: BoxDecoration(
       color: Colors.white,
       boxShadow: [
@@ -37,7 +35,7 @@ class BoardPageFilter extends ConsumerWidget {
         asset: 'background_picture.jpg',
         color: Colors.black.withOpacity(0.1),
         fit: BoxFit.fitHeight,
-        height: constraints.maxHeight,
+        height: MediaQuery.of(context).size.height,
         width: 56,
       ),
       Align(
@@ -168,6 +166,6 @@ class BoardPageFilter extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => useMobileLayout(context)
-      ? _renderMobileLayout(ref)
+      ? _renderMobileLayout(context, ref)
       : _renderDesktopLayout(ref);
 }

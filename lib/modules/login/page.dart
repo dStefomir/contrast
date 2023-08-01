@@ -11,12 +11,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Renders the login page
 class LoginPage extends HookConsumerWidget {
-  /// Constraints of the page
-  final BoxConstraints constraints;
   /// Form key
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  LoginPage({required this.constraints, super.key});
+  LoginPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => Form(
@@ -43,7 +41,6 @@ class LoginPage extends HookConsumerWidget {
                         child: SimpleInput(
                           widgetKey: const Key('user'),
                           labelText: 'User',
-                          controllerText: '',
                           onChange: (text) => ref.read(userNameProvider.notifier).setUserName(text),
                           prefixIcon: Icons.person,
                           validator: (value) {
@@ -62,7 +59,6 @@ class LoginPage extends HookConsumerWidget {
                         child: SimpleInput(
                           widgetKey: const Key('password'),
                           labelText: 'Password',
-                          controllerText: '',
                           onChange: (text) => ref.read(userPasswordProvider.notifier).setUserPassword(text),
                           prefixIcon: Icons.password,
                           password: true,

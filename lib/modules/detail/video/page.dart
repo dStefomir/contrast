@@ -8,8 +8,6 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 /// Renders the video details page
 class VideoDetailPage extends StatefulHookConsumerWidget {
-  /// Constraints of the page
-  final BoxConstraints constraints;
   /// Firebase plugins
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
@@ -17,7 +15,6 @@ class VideoDetailPage extends StatefulHookConsumerWidget {
   final String path;
 
   const VideoDetailPage({
-    required this.constraints,
     required this.analytics,
     required this.observer,
     required this.path,
@@ -67,26 +64,28 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       );
 
   @override
-  Widget build(BuildContext context) => BackgroundPage(
-    color: Colors.black,
-    child: YoutubePlayerScaffold(
-      controller: _controller,
-      aspectRatio: 16 / 9,
-      builder: (context, player) =>
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _renderBackButton(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 30),
-                child: SizedBox(
-                    width: widget.constraints.maxWidth,
-                    height: widget.constraints.maxHeight - 100,
-                    child: player
+  Widget build(BuildContext context) => LayoutBuilder(
+      builder: (context, constraints) => BackgroundPage(
+          color: Colors.black,
+          child: YoutubePlayerScaffold(
+            controller: _controller,
+            aspectRatio: 16 / 9,
+            builder: (context, player) =>
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _renderBackButton(),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 30),
+                      child: SizedBox(
+                          width: constraints.maxWidth,
+                          height: constraints.maxHeight - 100,
+                          child: player
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-    ),
+          )
+      )
   );
 }

@@ -6,7 +6,7 @@ class SimpleInput extends StatefulHookConsumerWidget {
   /// Key of the widget
   final Key widgetKey;
   /// Simple input controller`s text
-  final String controllerText;
+  final String? controllerText;
   /// Label text for the text input
   final String labelText;
   /// Text hint for the text input
@@ -25,7 +25,7 @@ class SimpleInput extends StatefulHookConsumerWidget {
   const SimpleInput({
     required this.widgetKey,
     required this.onChange,
-    this.controllerText = '',
+    this.controllerText,
     this.labelText = '',
     this.hint = '',
     this.prefixIcon,
@@ -44,7 +44,7 @@ class SimpleInputState extends ConsumerState<SimpleInput> {
 
   @override
   void initState() {
-    _controller = TextEditingController(text: widget.controllerText);
+    _controller = TextEditingController(text: widget.controllerText ?? '');
     _controller.addListener(() => widget.onChange(_controller.text));
     super.initState();
   }
@@ -59,11 +59,11 @@ class SimpleInputState extends ConsumerState<SimpleInput> {
   @override
   Widget build(BuildContext context) => TextFormField(
       controller: _controller,
-      autofocus: false,
+      autofocus: true,
       obscureText: widget.password,
       maxLines: widget.maxLines,
       decoration: InputDecoration(
-        prefixIcon: Icon(widget.prefixIcon),
+        prefixIcon: Icon(widget.prefixIcon, color: Colors.black,),
         labelText: widget.labelText,
         hintText: widget.hint
       ),

@@ -18,18 +18,16 @@ import 'package:photo_view/photo_view_gallery.dart';
 
 /// Renders the photograph details view
 class PhotographDetailsView extends HookConsumerWidget {
-  /// Constraints of the page
-  final BoxConstraints constraints;
   /// Images list
   final List<ImageData> images;
   /// Initial selected photo index
   final int photoIndex;
 
-  const PhotographDetailsView(
-      {super.key,
-      required this.constraints,
-      required this.images,
-      required this.photoIndex});
+  const PhotographDetailsView({
+    super.key,
+    required this.images,
+    required this.photoIndex
+  });
 
   /// Are coordinates valid or not
   bool _isAreCoordinatesValid(double? lat, double? lng) =>
@@ -186,7 +184,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   }
 
   /// Renders the photograph shot location
-  Widget _renderPhotoDetails(double? lat, double? lng) =>
+  Widget _renderPhotoDetails(BoxConstraints constraints, double? lat, double? lng) =>
       _isAreCoordinatesValid(lat, lng) ?
       SizedBox(
           width: constraints.maxWidth,
@@ -195,7 +193,14 @@ class PhotographDetailsView extends HookConsumerWidget {
       ) : Container();
 
   /// Renders the photography gallery widget
-  Widget _renderPhotographGallery(WidgetRef ref, ScrollController scrollController, PageController pageController, PhotoViewScaleStateController scaleController, int currentPhotographIndex, ImageData image) {
+  Widget _renderPhotographGallery(
+      WidgetRef ref,
+      ScrollController scrollController,
+      PageController pageController,
+      PhotoViewScaleStateController scaleController,
+      int currentPhotographIndex,
+      ImageData image,
+      BoxConstraints constraints) {
     final serviceProvider = ref.watch(photographDetailsServiceProvider);
 
     return RawKeyboardListener(
@@ -253,7 +258,14 @@ class PhotographDetailsView extends HookConsumerWidget {
   }
 
   /// Render the main widget of the page
-  Widget _renderPhotographWidget(WidgetRef ref, PageController pageController, ScrollController scrollController, PhotoViewScaleStateController scaleController, int currentPhotographIndex, ImageData image) =>
+  Widget _renderPhotographWidget(
+      WidgetRef ref,
+      PageController pageController,
+      ScrollController scrollController,
+      PhotoViewScaleStateController scaleController,
+      int currentPhotographIndex,
+      ImageData image,
+      BoxConstraints constraints) =>
       Align(
           alignment: Alignment.center,
           child: FadeAnimation(
@@ -273,11 +285,11 @@ class PhotographDetailsView extends HookConsumerWidget {
                       SizedBox(
                           width: constraints.maxWidth,
                           height: constraints.maxHeight,
-                          child: _renderPhotographGallery(ref, scrollController, pageController, scaleController, currentPhotographIndex, image)
+                          child: _renderPhotographGallery(ref, scrollController, pageController, scaleController, currentPhotographIndex, image, constraints)
                       ),
                       Visibility(
                           visible: _isAreCoordinatesValid(image.lat, image.lng),
-                          child: _renderPhotoDetails(image.lng, image.lat)
+                          child: _renderPhotoDetails(constraints, image.lng, image.lat)
                       )
                     ],
                   )
@@ -294,9 +306,9 @@ class PhotographDetailsView extends HookConsumerWidget {
     final bool photographTitleVisibility = ref.watch(photographTitleVisibilityProvider);
     final ImageData image = images[currentPhotographIndex];
 
-    return Stack(
+    return LayoutBuilder(builder: (context, constraints) => Stack(
       children: [
-        _renderPhotographWidget(ref, pageController, scrollController, scaleController, currentPhotographIndex, image),
+        _renderPhotographWidget(ref, pageController, scrollController, scaleController, currentPhotographIndex, image, constraints),
         Visibility(
             visible: _isAreCoordinatesValid(image.lat, image.lng),
             child: _renderDetailsBtn(ref, context, scrollController)
@@ -314,7 +326,7 @@ class PhotographDetailsView extends HookConsumerWidget {
             visible: photographTitleVisibility,
             child: _renderPhotographTitle(context, ref, currentPhotographIndex)
         ),
-      ],
+      ])
     );
   }
 }

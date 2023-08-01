@@ -23,8 +23,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   final void Function()? onRightKeyPressed;
   /// Widget that should be displayed if the list view is empty
   final Widget listEmptyChild;
-  /// Constraints for the page
-  final BoxConstraints constraints;
 
   const RestfulAnimatedDataView({
     Key? key,
@@ -32,7 +30,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     required this.loadPage,
     required this.itemBuilder,
     required this.listEmptyChild,
-    required this.constraints,
     this.onLeftKeyPressed,
     this.onRightKeyPressed,
     this.itemsPerRow = 4,

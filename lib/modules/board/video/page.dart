@@ -22,13 +22,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Renders the video board page
 class VideoBoardPage extends HookConsumerWidget {
-  /// Constraints of the page
-  final BoxConstraints constraints;
 
-  const VideoBoardPage({required this.constraints, super.key});
+  const VideoBoardPage({super.key});
 
   /// Renders a video
-  Widget _renderVideo(BuildContext context, WidgetRef ref, VideoData video) {
+  Widget _renderVideo(BuildContext context, WidgetRef ref, VideoData video, BoxConstraints constraints) {
     final serviceProvider = ref.read(photographyBoardServiceProvider);
 
     if (Session().isLoggedIn()) {
@@ -102,9 +100,9 @@ class VideoBoardPage extends HookConsumerWidget {
       serviceProvider: videoServiceFetchProvider,
       loadPage: ref.read(videoBoardServiceProvider).getVideoBoard,
       itemsPerRow: 3,
-      constraints: constraints,
-      itemBuilder: (BuildContext context, int index, int dataLength, VideoData wrapper) =>
-          LayoutBuilder(builder: (context, constraints) => _renderVideo(context, ref, wrapper)),
+      itemBuilder: (BuildContext context, int index, int dataLength, VideoData wrapper) => LayoutBuilder(builder: (context, constraints) =>
+          _renderVideo(context, ref, wrapper, constraints)
+      ),
       onLeftKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('photos'),
       listEmptyChild: const Padding(
         padding: EdgeInsets.all(15),

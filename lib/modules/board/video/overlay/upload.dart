@@ -67,7 +67,7 @@ class UploadVideoDialog extends HookConsumerWidget {
     Expanded(
       child: SimpleInput(
         widgetKey: const Key('video comment'),
-        controllerText: data?.comment ?? '',
+        controllerText: data?.comment,
         labelText: 'Video comment',
         onChange: (text) => ref.read(commentProvider.notifier).setComment(text),
         maxLines: 10,
@@ -87,7 +87,7 @@ class UploadVideoDialog extends HookConsumerWidget {
             width: 400,
             child: SimpleInput(
               widgetKey: const Key('video url'),
-              controllerText: data?.path ?? '',
+              controllerText: data?.path,
               labelText: 'Youtube url',
               onChange: (text) => ref.read(videoUrlProvider.notifier).setUrl(text),
               prefixIcon: Icons.video_collection,
@@ -131,25 +131,15 @@ class UploadVideoDialog extends HookConsumerWidget {
   );
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // Dispose of the providers or perform any other cleanup tasks here
-    useEffect(() {
-      return () {
-        ref.read(loadingProvider.notifier).dispose();
-        ref.read(videoUrlProvider.notifier).dispose();
-        ref.read(commentProvider.notifier).dispose();
-        ref.read(uploadVideoProvider.notifier).dispose();
-      };
-    }, []);
-
-    return Form(
-      key: _formKey,
-      child: AlertDialog(
-          backgroundColor: Colors.white,
-          scrollable: true,
-          title: _renderDialogHeader(context),
-          content: _renderDialogBody(ref),
-          actions: _renderDialogActions(context, ref)),
+  Widget build(BuildContext context, WidgetRef ref) =>
+      Form(
+        key: _formKey,
+        child: AlertDialog(
+            backgroundColor: Colors.white,
+            scrollable: true,
+            title: _renderDialogHeader(context),
+            content: _renderDialogBody(ref),
+            actions: _renderDialogActions(context, ref)
+        ),
     );
-  }
 }
