@@ -75,6 +75,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     if (currentPhotographIndex >= images.length) {
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(images.length - 1);
     }
+    ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
     _handlePhotographShotLocation(ref);
   }
 
@@ -87,6 +88,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     if (currentPhotographIndex < 0) {
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(0);
     }
+    ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
     _handlePhotographShotLocation(ref);
   }
 
@@ -108,13 +110,14 @@ class PhotographDetailsView extends HookConsumerWidget {
   }
 
   /// Render the photograph title
-  Widget _renderPhotographTitle(BuildContext context, int currentPhotographIndex) => Align(
+  Widget _renderPhotographTitle(BuildContext context, WidgetRef ref, int currentPhotographIndex) => Align(
       alignment: Alignment.center,
       child: FadeAnimation(
         whenTo: (controller) => useValueChanged(currentPhotographIndex, (_, __) async {
           controller.reset();
           controller.forward();
         }),
+        onCompleted: () => ref.read(photographTitleVisibilityProvider.notifier).setVisibility(false),
         start: 1,
         end: 0,
         duration: const Duration(milliseconds: 1200),
@@ -220,6 +223,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.easeInOutExpo
             );
+            ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
             _setPhotographDetailAsset(ref, scrollController);
           },
           scrollDirection: Axis.horizontal,
@@ -280,9 +284,10 @@ class PhotographDetailsView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final PageController pageController = usePageController();
+    final PageController pageController = usePageController(initialPage: photoIndex);
     final ScrollController scrollController = useScrollController();
     final int currentPhotographIndex = ref.watch(photographIndexProvider(photoIndex));
+    final bool photographTitleVisibility = ref.watch(photographTitleVisibilityProvider);
     final ImageData image = images[currentPhotographIndex];
 
     return Stack(
@@ -301,7 +306,10 @@ class PhotographDetailsView extends HookConsumerWidget {
             visible: currentPhotographIndex != images.length - 1 && !useMobileLayout(context),
             child: _renderNextBtn(ref, context, pageController, currentPhotographIndex)
         ),
-        _renderPhotographTitle(context, currentPhotographIndex),
+        Visibility(
+            visible: photographTitleVisibility,
+            child: _renderPhotographTitle(context, ref, currentPhotographIndex)
+        ),
       ],
     );
   }

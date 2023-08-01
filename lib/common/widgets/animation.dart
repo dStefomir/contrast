@@ -29,18 +29,18 @@ class FadeAnimation extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = useAnimationController(duration: duration);
+    final animationController = useAnimationController(duration: duration);
     if (whenTo != null) {
-      whenTo!(controller);
+      whenTo!(animationController);
     }
-    controller.addStatusListener((status) {
+    animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed && onCompleted != null) {
         onCompleted!();
       }
     });
 
     return FadeTransition(
-      opacity: Tween<double>(begin: start, end: end).animate(controller..forward()),
+      opacity: Tween<double>(begin: start, end: end).animate(animationController..forward()),
       child: child,
     );
   }

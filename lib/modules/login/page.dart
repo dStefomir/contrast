@@ -13,12 +13,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class LoginPage extends HookConsumerWidget {
   /// Constraints of the page
   final BoxConstraints constraints;
+  /// Form key
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  const LoginPage({required this.constraints, super.key});
+  LoginPage({required this.constraints, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     String user = "";
     String password = "";
 
@@ -83,7 +84,7 @@ class LoginPage extends HookConsumerWidget {
                             foregroundColor: MaterialStateProperty.all(Colors.black),
                             textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.black))
                         ),
-                        onPressed: () async {
+                        onPressed: () {
                           final form = formKey.currentState;
                           if (form != null && form.validate()) {
                             ref.read(authenticationServiceProvider).login(user, password).then((value) {

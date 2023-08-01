@@ -68,23 +68,41 @@ class BoardPageFooter extends HookConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Spacer(),
-              ContrastTab(
-                  widgetKey: const Key('photos'),
-                  text: 'photos',
-                  onClick: (String tab) => ref.read(boardFooterTabProvider.notifier).switchTab(tab),
-                  isSelected: currentTab == 'photos'
-              ).translateOnPhotoHover,
-              const Spacer(),
+              Expanded(
+                child: Container(
+                  height: mobileMenuIconSize,
+                  padding: const EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    color: currentTab == 'photos' ? Colors.black: Colors.white,
+                  ),
+                  child: StyledButton(
+                      widgetKey: const Key('photos'),
+                      onlyIcon: true,
+                      shadow: false,
+                      onClick: () => ref.read(boardFooterTabProvider.notifier).switchTab('photos'),
+                      iconAsset: 'photo.svg',
+                      iconColor: currentTab == 'photos' ? Colors.white: Colors.black
+                  ),
+                ),
+              ),
               const SizedBox(width: 120),
-              const Spacer(),
-              ContrastTab(
-                  widgetKey: const Key('videos'),
-                  text: 'videos',
-                  onClick: (String tab) => ref.read(boardFooterTabProvider.notifier).switchTab(tab),
-                  isSelected: currentTab == 'videos'
-              ).translateOnPhotoHover,
-              const Spacer(),
+              Expanded(
+                child: Container(
+                  height: mobileMenuIconSize,
+                  padding: const EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    color: currentTab == 'videos' ? Colors.black: Colors.white,
+                  ),
+                  child: StyledButton(
+                      widgetKey: const Key('videos'),
+                      onlyIcon: true,
+                      shadow: false,
+                      onClick: () => ref.read(boardFooterTabProvider.notifier).switchTab('videos'),
+                      iconAsset: 'youtube.svg',
+                      iconColor: currentTab == 'videos' ? Colors.white: Colors.black
+                  ),
+                ),
+              ),
             ],
           ),
         ),

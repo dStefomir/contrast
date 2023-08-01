@@ -46,9 +46,9 @@ class PhotographScaleNotifier extends StateNotifier<PhotoViewScaleStateControlle
   PhotographScaleNotifier({required this.ref, required this.controller}) : super(controller);
 }
 
-/// Provider for scale function of the photograph
+/// Provider for photograph detail asset
 final photographDetailAssetProvider = StateNotifierProvider.autoDispose<PhotographDetailAssetNotifier, String>((ref) => PhotographDetailAssetNotifier(ref: ref));
-/// Notifier for handling photograph scale
+/// Notifier for photograph detail asset
 class PhotographDetailAssetNotifier extends StateNotifier<String> {
   /// Reference
   final Ref ref;
@@ -57,4 +57,17 @@ class PhotographDetailAssetNotifier extends StateNotifier<String> {
 
   /// Sets the current detail asset
   setDetailAsset(String asset) => state = asset;
+}
+
+/// Provider for the photograph title visibility
+final photographTitleVisibilityProvider = StateNotifierProvider.autoDispose<PhotographTitleVisibilityNotifier, bool>((ref) => PhotographTitleVisibilityNotifier(ref: ref));
+/// Notifier for photograph title visibility
+class PhotographTitleVisibilityNotifier extends StateNotifier<bool> {
+  /// Reference
+  final Ref ref;
+
+  PhotographTitleVisibilityNotifier({required this.ref}) : super(true);
+
+  /// Sets the visibility of the photograph title
+  setVisibility(bool visibility) => state = visibility;
 }

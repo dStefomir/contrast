@@ -43,7 +43,7 @@ class StyledText extends StatelessWidget {
         padding: EdgeInsets.all(padding),
         child: Text(
             text,
-            textAlign: clip ? TextAlign.center : TextAlign.start,
+            textAlign: TextAlign.center,
             style: TextStyle(
               color: color ?? Colors.black,
               overflow: clip ? TextOverflow.ellipsis : null,
