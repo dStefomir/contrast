@@ -61,7 +61,7 @@ class CorePage extends HookConsumerWidget {
                       return Stack(children: children);
                     })
         ),
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: pageName != 'Login',
       );
 
   @override

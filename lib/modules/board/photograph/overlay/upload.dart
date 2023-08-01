@@ -1,6 +1,6 @@
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/hover_provider.dart';
-import 'package:contrast/common/widgets/input/input.dart';
+import 'package:contrast/common/widgets/input.dart';
 import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/photograph.dart';
 import 'package:contrast/model/image_data.dart';
@@ -124,11 +124,10 @@ class UploadImageDialog extends HookConsumerWidget {
     ) :
     Expanded(
       child: SimpleInput(
+        widgetKey: const Key('photograph comment'),
         labelText: 'Photograph comment',
         controllerText: data?.comment ?? '',
-        isRequired: false,
         onChange: (text) => ref.read(commentProvider.notifier).setComment(text),
-        prefixIconAsset: 'assets/username.svg',
         maxLines: 10,
       ),
     );
@@ -139,6 +138,7 @@ class UploadImageDialog extends HookConsumerWidget {
     children: [
       Expanded(
           child: SimpleInput(
+            widgetKey: const Key('photograph latitude'),
             labelText: 'Latitude',
             controllerText: data?.lat?.toString() ?? '',
             onChange: (text) => ref.read(geoLatProvider(data?.lat).notifier).setLat(text),
@@ -157,6 +157,7 @@ class UploadImageDialog extends HookConsumerWidget {
       const SizedBox(width: 15),
       Expanded(
           child: SimpleInput(
+            widgetKey: const Key('photograph longitude'),
             labelText: 'Longitude',
             controllerText: data?.lng?.toString() ?? '',
             onChange: (text) => ref.read(geoLngProvider(data?.lng).notifier).setLng(text),

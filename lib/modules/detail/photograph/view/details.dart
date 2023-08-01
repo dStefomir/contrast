@@ -38,7 +38,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   /// Sets the photograph detail button asset
   void _setPhotographDetailAsset(WidgetRef ref, ScrollController scrollController) {
     try {
-      ref.read(photographDetailAssetProvider.notifier).setDetailAsset(scrollController.offset == 0 ? 'map.svg' : 'photo.svg');
+      ref.read(photographDetailAssetProvider.notifier).setDetailAsset(scrollController.offset == 0 ? 'map.svg' : 'photo_light_weight.svg');
     } catch (e) {
       ref.read(photographDetailAssetProvider.notifier).setDetailAsset('map.svg');
     }
@@ -67,7 +67,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   }
 
   /// Switches to the next photograph if there is such
-  void _goToNextPhotograph(WidgetRef ref, PageController pageController, int currentPhotographIndex) {
+  void _goToNextPhotograph(WidgetRef ref, PageController pageController, PhotoViewScaleStateController scaleController, int currentPhotographIndex) {
     if (currentPhotographIndex + 1 < images.length) {
       pageController.jumpToPage(currentPhotographIndex + 1);
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(currentPhotographIndex + 1);
@@ -75,12 +75,13 @@ class PhotographDetailsView extends HookConsumerWidget {
     if (currentPhotographIndex >= images.length) {
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(images.length - 1);
     }
+    scaleController.reset();
     ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
     _handlePhotographShotLocation(ref);
   }
 
   /// Switches to the previous photograph if there is such
-  void _goToPreviousPhotograph(WidgetRef ref, PageController pageController, int currentPhotographIndex) {
+  void _goToPreviousPhotograph(WidgetRef ref, PageController pageController, PhotoViewScaleStateController scaleController, int currentPhotographIndex) {
     if (currentPhotographIndex - 1 >= 0) {
       pageController.jumpToPage(currentPhotographIndex - 1);
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(currentPhotographIndex - 1);
@@ -88,17 +89,18 @@ class PhotographDetailsView extends HookConsumerWidget {
     if (currentPhotographIndex < 0) {
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(0);
     }
+    scaleController.reset();
     ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
     _handlePhotographShotLocation(ref);
   }
 
   // Handles the key events from the Focus widget and updates the page
-  void _handleKeyEvent(RawKeyEvent event, WidgetRef ref, ScrollController scrollController, PageController pageController, int currentPhotographIndex) {
+  void _handleKeyEvent(RawKeyEvent event, WidgetRef ref, ScrollController scrollController, PageController pageController, PhotoViewScaleStateController scaleController, int currentPhotographIndex) {
     if (event is RawKeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-        _goToPreviousPhotograph(ref, pageController, currentPhotographIndex);
+        _goToPreviousPhotograph(ref, pageController, scaleController, currentPhotographIndex);
       } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-        _goToNextPhotograph(ref, pageController, currentPhotographIndex);
+        _goToNextPhotograph(ref, pageController, scaleController, currentPhotographIndex);
       } else if (event.logicalKey == LogicalKeyboardKey.escape) {
         Modular.to.navigate('/');
       } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
@@ -136,10 +138,10 @@ class PhotographDetailsView extends HookConsumerWidget {
   );
 
   /// Render the next photograph button
-  Widget _renderNextBtn(WidgetRef ref, BuildContext context, PageController pageController, int currentPhotographIndex) => Align(
+  Widget _renderNextBtn(WidgetRef ref, BuildContext context, PageController pageController, PhotoViewScaleStateController scaleController, int currentPhotographIndex) => Align(
     alignment: Alignment.centerRight,
     child: RoundedButton(
-        onClick: () => _goToNextPhotograph(ref, pageController, currentPhotographIndex),
+        onClick: () => _goToNextPhotograph(ref, pageController, scaleController, currentPhotographIndex),
         color: Colors.white,
         borderColor: Colors.black,
         icon: 'navigate_next.svg'
@@ -147,10 +149,10 @@ class PhotographDetailsView extends HookConsumerWidget {
   );
 
   /// Render the previous photograph button
-  Widget _renderPreviousBtn(WidgetRef ref, BuildContext context, PageController pageController, int currentPhotographIndex) => Align(
+  Widget _renderPreviousBtn(WidgetRef ref, BuildContext context, PageController pageController, PhotoViewScaleStateController scaleController, int currentPhotographIndex) => Align(
     alignment: Alignment.centerLeft,
     child: RoundedButton(
-        onClick: () => _goToPreviousPhotograph(ref, pageController, currentPhotographIndex),
+        onClick: () => _goToPreviousPhotograph(ref, pageController, scaleController, currentPhotographIndex),
         color: Colors.white,
         borderColor: Colors.black,
         icon: 'navigate_before.svg'
@@ -193,14 +195,13 @@ class PhotographDetailsView extends HookConsumerWidget {
       ) : Container();
 
   /// Renders the photography gallery widget
-  Widget _renderPhotographGallery(WidgetRef ref, ScrollController scrollController, PageController pageController, int currentPhotographIndex, ImageData image) {
-    final PhotoViewScaleStateController scaleController = ref.read(photographScaleProvider);
+  Widget _renderPhotographGallery(WidgetRef ref, ScrollController scrollController, PageController pageController, PhotoViewScaleStateController scaleController, int currentPhotographIndex, ImageData image) {
     final serviceProvider = ref.watch(photographDetailsServiceProvider);
 
     return RawKeyboardListener(
       autofocus: true,
       focusNode: useFocusNode(),
-      onKey: (RawKeyEvent event) => _handleKeyEvent(event, ref, scrollController, pageController, currentPhotographIndex),
+      onKey: (RawKeyEvent event) => _handleKeyEvent(event, ref, scrollController, pageController, scaleController, currentPhotographIndex),
       child: PhotoViewGallery.builder(
           scrollPhysics: const BouncingScrollPhysics(),
           allowImplicitScrolling: true,
@@ -210,7 +211,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                 initialScale: PhotoViewComputedScale.contained,
                 filterQuality: FilterQuality.high,
                 scaleStateController: scaleController,
-                minScale: PhotoViewComputedScale.contained * 0.8,
+                minScale: PhotoViewComputedScale.contained,
                 maxScale: PhotoViewComputedScale.covered * 2,
                 heroAttributes: PhotoViewHeroAttributes(tag: index)
             );
@@ -223,6 +224,8 @@ class PhotographDetailsView extends HookConsumerWidget {
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.easeInOutExpo
             );
+            _handlePhotographShotLocation(ref);
+            scaleController.reset();
             ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
             _setPhotographDetailAsset(ref, scrollController);
           },
@@ -250,7 +253,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   }
 
   /// Render the main widget of the page
-  Widget _renderPhotographWidget(WidgetRef ref, PageController pageController, ScrollController scrollController, int currentPhotographIndex, ImageData image) =>
+  Widget _renderPhotographWidget(WidgetRef ref, PageController pageController, ScrollController scrollController, PhotoViewScaleStateController scaleController, int currentPhotographIndex, ImageData image) =>
       Align(
           alignment: Alignment.center,
           child: FadeAnimation(
@@ -270,7 +273,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                       SizedBox(
                           width: constraints.maxWidth,
                           height: constraints.maxHeight,
-                          child: _renderPhotographGallery(ref, scrollController, pageController, currentPhotographIndex, image)
+                          child: _renderPhotographGallery(ref, scrollController, pageController, scaleController, currentPhotographIndex, image)
                       ),
                       Visibility(
                           visible: _isAreCoordinatesValid(image.lat, image.lng),
@@ -286,13 +289,14 @@ class PhotographDetailsView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final PageController pageController = usePageController(initialPage: photoIndex);
     final ScrollController scrollController = useScrollController();
+    final PhotoViewScaleStateController scaleController = ref.read(photographScaleProvider);
     final int currentPhotographIndex = ref.watch(photographIndexProvider(photoIndex));
     final bool photographTitleVisibility = ref.watch(photographTitleVisibilityProvider);
     final ImageData image = images[currentPhotographIndex];
 
     return Stack(
       children: [
-        _renderPhotographWidget(ref, pageController, scrollController, currentPhotographIndex, image),
+        _renderPhotographWidget(ref, pageController, scrollController, scaleController, currentPhotographIndex, image),
         Visibility(
             visible: _isAreCoordinatesValid(image.lat, image.lng),
             child: _renderDetailsBtn(ref, context, scrollController)
@@ -300,11 +304,11 @@ class PhotographDetailsView extends HookConsumerWidget {
         _renderGoBackBtn(),
         Visibility(
             visible: currentPhotographIndex != 0 && !useMobileLayout(context),
-            child: _renderPreviousBtn(ref, context, pageController, currentPhotographIndex)
+            child: _renderPreviousBtn(ref, context, pageController, scaleController, currentPhotographIndex)
         ),
         Visibility(
             visible: currentPhotographIndex != images.length - 1 && !useMobileLayout(context),
-            child: _renderNextBtn(ref, context, pageController, currentPhotographIndex)
+            child: _renderNextBtn(ref, context, pageController, scaleController, currentPhotographIndex)
         ),
         Visibility(
             visible: photographTitleVisibility,

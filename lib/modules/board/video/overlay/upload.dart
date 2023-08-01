@@ -1,5 +1,5 @@
 import 'package:contrast/common/widgets/button.dart';
-import 'package:contrast/common/widgets/input/input.dart';
+import 'package:contrast/common/widgets/input.dart';
 import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/model/video_data.dart';
 import 'package:contrast/modules/board/video/overlay/provider.dart';
@@ -66,11 +66,10 @@ class UploadVideoDialog extends HookConsumerWidget {
     ) :
     Expanded(
       child: SimpleInput(
+        widgetKey: const Key('video comment'),
         controllerText: data?.comment ?? '',
         labelText: 'Video comment',
-        isRequired: false,
         onChange: (text) => ref.read(commentProvider.notifier).setComment(text),
-        prefixIconAsset: 'assets/username.svg',
         maxLines: 10,
       ),
     );
@@ -89,6 +88,7 @@ class UploadVideoDialog extends HookConsumerWidget {
           child: SizedBox(
               width: 400,
               child: SimpleInput(
+                widgetKey: const Key('video url'),
                 controllerText: data?.path ?? '',
                 labelText: 'Youtube url',
                 onChange: (text) => ref.read(videoUrlProvider.notifier).setUrl(text),

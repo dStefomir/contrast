@@ -98,7 +98,7 @@ class BoardPageFooter extends HookConsumerWidget {
                       onlyIcon: true,
                       shadow: false,
                       onClick: () => ref.read(boardFooterTabProvider.notifier).switchTab('videos'),
-                      iconAsset: 'youtube.svg',
+                      iconAsset: 'video.svg',
                       iconColor: currentTab == 'videos' ? Colors.white: Colors.black
                   ),
                 ),
