@@ -79,12 +79,12 @@ class MyApp extends StatelessWidget {
                 isDense: true,
                 contentPadding: EdgeInsets.all(10),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
                   borderSide: BorderSide(color: inputFieldBorderColor,),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
+                    Radius.circular(0),
                   ),
                   borderSide: BorderSide(
                     color: inputFieldErrorBorderColor,
@@ -92,7 +92,7 @@ class MyApp extends StatelessWidget {
                 ),
                 disabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
+                    Radius.circular(0),
                   ),
                   borderSide: BorderSide(
                     color: inputFieldDisabledBorderColor,
@@ -100,7 +100,7 @@ class MyApp extends StatelessWidget {
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: inputFieldFocusedBorderColor),
-                    borderRadius: BorderRadius.all(Radius.circular(15.0))
+                    borderRadius: BorderRadius.all(Radius.circular(0))
                 ),
                 filled: true,
                 fillColor: inputFieldBackgroundColor,

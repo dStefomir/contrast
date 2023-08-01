@@ -83,27 +83,24 @@ class UploadVideoDialog extends HookConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: SizedBox(
-              width: 400,
-              child: SimpleInput(
-                widgetKey: const Key('video url'),
-                controllerText: data?.path ?? '',
-                labelText: 'Youtube url',
-                onChange: (text) => ref.read(videoUrlProvider.notifier).setUrl(text),
-                prefixIcon: Icons.video_collection,
-                validator: (value) {
-                  if (value != null && value.isEmpty) {
-                    return 'This field is mandatory.';
-                  }
-                  if(value != null && value.isNotEmpty && value.length < 11) {
-                    return 'Invalid youtube prefix';
-                  }
-                  return null;
-                  },
-              )
-          ),
+        SizedBox(
+            width: 400,
+            child: SimpleInput(
+              widgetKey: const Key('video url'),
+              controllerText: data?.path ?? '',
+              labelText: 'Youtube url',
+              onChange: (text) => ref.read(videoUrlProvider.notifier).setUrl(text),
+              prefixIcon: Icons.video_collection,
+              validator: (value) {
+                if (value != null && value.isEmpty) {
+                  return 'This field is mandatory.';
+                }
+                if(value != null && value.isNotEmpty && value.length < 11) {
+                  return 'Invalid youtube prefix';
+                }
+                return null;
+                },
+            )
         ),
         const SizedBox(height: 20),
         _renderLoadingIndicator(ref)
@@ -116,12 +113,9 @@ class UploadVideoDialog extends HookConsumerWidget {
     children: [
       Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Text(
-                  data != null ? "Edit Video" : "Upload Video",
-                  style: Theme.of(context).textTheme.headlineSmall
-              ),
+            Text(
+                data != null ? "Edit Video" : "Upload Video",
+                style: Theme.of(context).textTheme.headlineSmall
             ),
             const Spacer(),
             RoundedButton(
@@ -129,7 +123,7 @@ class UploadVideoDialog extends HookConsumerWidget {
                 color: Colors.black,
                 borderColor: Colors.white,
                 icon: 'close.svg'
-            )
+            ),
           ]
       ),
       const Divider(color: Colors.black,)

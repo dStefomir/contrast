@@ -305,12 +305,9 @@ class UploadImageDialog extends HookConsumerWidget {
     children: [
       Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Text(
-                  data != null ? "Edit Photograph" : "Upload Photograph",
-                  style: Theme.of(context).textTheme.headlineSmall
-              ),
+            Text(
+                data != null ? "Edit Photograph" : "Upload Photograph",
+                style: Theme.of(context).textTheme.headlineSmall
             ),
             const Spacer(),
             RoundedButton(
@@ -318,7 +315,7 @@ class UploadImageDialog extends HookConsumerWidget {
                 color: Colors.black,
                 borderColor: Colors.white,
                 icon: 'close.svg'
-            )
+            ),
           ]
       ),
       const Divider(color: Colors.black,)
