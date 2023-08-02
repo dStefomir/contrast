@@ -69,39 +69,45 @@ class BoardPageFooter extends HookConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                child: Container(
-                  height: mobileMenuIconSize,
-                  padding: const EdgeInsets.all(15.0),
-                  decoration: BoxDecoration(
-                    color: currentTab == 'photos' ? Colors.black: Colors.white,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () => ref.read(boardFooterTabProvider.notifier).switchTab('photos'),
+                    child: Container(
+                      height: mobileMenuIconSize,
+                      padding: const EdgeInsets.all(15.0),
+                      decoration: BoxDecoration(
+                        color: currentTab == 'photos' ? Colors.black: Colors.white,
+                      ),
+                      child: IconRenderer(
+                        asset: 'photo.svg',
+                        color: currentTab == 'photos' ? Colors.white: Colors.black,
+                        height: 50,
+                      )
+                    ),
                   ),
-                  child: StyledButton(
-                      widgetKey: const Key('photos'),
-                      onlyIcon: true,
-                      shadow: false,
-                      onClick: () => ref.read(boardFooterTabProvider.notifier).switchTab('photos'),
-                      iconAsset: 'photo.svg',
-                      iconColor: currentTab == 'photos' ? Colors.white: Colors.black
-                  ),
-                ),
+                ).translateOnPhotoHover,
               ),
               const SizedBox(width: 120),
               Expanded(
-                child: Container(
-                  height: mobileMenuIconSize,
-                  padding: const EdgeInsets.all(15.0),
-                  decoration: BoxDecoration(
-                    color: currentTab == 'videos' ? Colors.black: Colors.white,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () => ref.read(boardFooterTabProvider.notifier).switchTab('videos'),
+                    child: Container(
+                      height: mobileMenuIconSize,
+                      padding: const EdgeInsets.all(15.0),
+                      decoration: BoxDecoration(
+                        color: currentTab == 'videos' ? Colors.black: Colors.white,
+                      ),
+                      child: IconRenderer(
+                          asset: 'video.svg',
+                          color: currentTab == 'videos' ? Colors.white: Colors.black,
+                          height: 50
+                      ),
+                    ),
                   ),
-                  child: StyledButton(
-                      widgetKey: const Key('videos'),
-                      onlyIcon: true,
-                      shadow: false,
-                      onClick: () => ref.read(boardFooterTabProvider.notifier).switchTab('videos'),
-                      iconAsset: 'video.svg',
-                      iconColor: currentTab == 'videos' ? Colors.white: Colors.black
-                  ),
-                ),
+                ).translateOnPhotoHover,
               ),
             ],
           ),
