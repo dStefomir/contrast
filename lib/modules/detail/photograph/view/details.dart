@@ -184,11 +184,11 @@ class PhotographDetailsView extends HookConsumerWidget {
   }
 
   /// Renders the photograph shot location
-  Widget _renderPhotoDetails(BoxConstraints constraints, double? lat, double? lng) =>
+  Widget _renderPhotoDetails(double maxWidth, maxHeight, double? lat, double? lng) =>
       _isAreCoordinatesValid(lat, lng) ?
       SizedBox(
-          width: constraints.maxWidth,
-          height: constraints.maxHeight,
+          width: maxWidth,
+          height: maxHeight,
           child: const ContrastMap()
       ) : Container();
 
@@ -200,7 +200,7 @@ class PhotographDetailsView extends HookConsumerWidget {
       PhotoViewScaleStateController scaleController,
       int currentPhotographIndex,
       ImageData image,
-      BoxConstraints constraints) {
+      double maxWidth, maxHeight) {
     final serviceProvider = ref.watch(photographDetailsServiceProvider);
 
     return RawKeyboardListener(
@@ -240,11 +240,11 @@ class PhotographDetailsView extends HookConsumerWidget {
             return Center(
               child: SizedBox(
                 width: useMobileLayout(context)
-                    ? constraints.maxHeight / 2
-                    : constraints.maxWidth / 2,
+                    ? maxHeight / 2
+                    : maxWidth / 2,
                 height: useMobileLayout(context)
-                    ? constraints.maxHeight / 2
-                    : constraints.maxWidth / 2,
+                    ? maxHeight / 2
+                    : maxWidth / 2,
                 child: CircularProgressIndicator(
                   value: event == null
                       ? 0
@@ -265,7 +265,7 @@ class PhotographDetailsView extends HookConsumerWidget {
       PhotoViewScaleStateController scaleController,
       int currentPhotographIndex,
       ImageData image,
-      BoxConstraints constraints) =>
+      double maxWidth, maxHeight) =>
       Align(
           alignment: Alignment.center,
           child: FadeAnimation(
@@ -283,13 +283,13 @@ class PhotographDetailsView extends HookConsumerWidget {
                   child: Column(
                     children: [
                       SizedBox(
-                          width: constraints.maxWidth,
-                          height: constraints.maxHeight,
-                          child: _renderPhotographGallery(ref, scrollController, pageController, scaleController, currentPhotographIndex, image, constraints)
+                          width: maxWidth,
+                          height: maxHeight,
+                          child: _renderPhotographGallery(ref, scrollController, pageController, scaleController, currentPhotographIndex, image, maxWidth, maxHeight)
                       ),
                       Visibility(
                           visible: _isAreCoordinatesValid(image.lat, image.lng),
-                          child: _renderPhotoDetails(constraints, image.lng, image.lat)
+                          child: _renderPhotoDetails(maxWidth, maxHeight, image.lng, image.lat)
                       )
                     ],
                   )
@@ -305,10 +305,12 @@ class PhotographDetailsView extends HookConsumerWidget {
     final int currentPhotographIndex = ref.watch(photographIndexProvider(photoIndex));
     final bool photographTitleVisibility = ref.watch(photographTitleVisibilityProvider);
     final ImageData image = images[currentPhotographIndex];
+    final double maxWidth = MediaQuery.of(context).size.width;
+    final double maxHeight = MediaQuery.of(context).size.height;
 
-    return LayoutBuilder(builder: (context, constraints) => Stack(
+    return Stack(
       children: [
-        _renderPhotographWidget(ref, pageController, scrollController, scaleController, currentPhotographIndex, image, constraints),
+        _renderPhotographWidget(ref, pageController, scrollController, scaleController, currentPhotographIndex, image, maxWidth, maxHeight),
         Visibility(
             visible: _isAreCoordinatesValid(image.lat, image.lng),
             child: _renderDetailsBtn(ref, context, scrollController)
@@ -326,7 +328,7 @@ class PhotographDetailsView extends HookConsumerWidget {
             visible: photographTitleVisibility,
             child: _renderPhotographTitle(context, ref, currentPhotographIndex)
         ),
-      ])
+      ]
     );
   }
 }

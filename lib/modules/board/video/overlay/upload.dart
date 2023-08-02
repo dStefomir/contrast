@@ -4,12 +4,11 @@ import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/model/video_data.dart';
 import 'package:contrast/modules/board/video/overlay/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 /// Dialog width
 const double dialogWidth = 400;
 /// Dialog height
-const double dialogHeight = 400;
+const double dialogHeight = 270;
 /// Renders the upload image dialog
 class UploadVideoDialog extends HookConsumerWidget {
   /// Existing video data
@@ -69,8 +68,9 @@ class UploadVideoDialog extends HookConsumerWidget {
         widgetKey: const Key('video comment'),
         controllerText: data?.comment,
         labelText: 'Video comment',
+        prefixIcon: Icons.comment,
         onChange: (text) => ref.read(commentProvider.notifier).setComment(text),
-        maxLines: 10,
+        maxLines: 4,
       ),
     );
   }

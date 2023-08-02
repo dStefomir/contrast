@@ -59,7 +59,6 @@ class SimpleInputState extends ConsumerState<SimpleInput> {
   @override
   Widget build(BuildContext context) => TextFormField(
       controller: _controller,
-      autofocus: true,
       obscureText: widget.password,
       maxLines: widget.maxLines,
       decoration: InputDecoration(

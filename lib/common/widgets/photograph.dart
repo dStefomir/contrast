@@ -23,6 +23,8 @@ class ContrastPhotograph extends StatelessWidget {
   final String Function(String path)? fetch;
   /// Quality of the displayed image
   final FilterQuality quality;
+  /// How the photograph should be displayed
+  final BoxFit? fit;
   /// Image data model object
   final ImageData? image;
   /// Color of the border of the image
@@ -48,6 +50,7 @@ class ContrastPhotograph extends StatelessWidget {
     required this.borderColor,
     this.fetch,
     this.shouldPinchZoom = false,
+    this.fit,
     this.image,
     this.compressed = true,
     this.width,
@@ -64,11 +67,11 @@ class ContrastPhotograph extends StatelessWidget {
       image: state.extendedImageInfo?.image,
       width: width,
       height: !isThumbnail ? height : double.infinity,
-      fit: compressed
+      fit: fit ?? (compressed
           ? image?.isLandscape != null && image!.isLandscape!
           ? BoxFit.fitWidth
           : BoxFit.fitHeight
-          : BoxFit.contain,
+          : BoxFit.contain),
     );
     if(!isMobile && state.extendedImageLoadState == LoadState.completed) {
       return FadeAnimation(
@@ -96,11 +99,11 @@ class ContrastPhotograph extends StatelessWidget {
         height: !isThumbnail ? height : double.infinity,
         border: Border.all(color: borderColor, width: borderWidth),
         enableLoadState: !compressed,
-        fit: compressed
+        fit: fit ?? (compressed
             ? image?.isLandscape != null && image!.isLandscape!
                 ? BoxFit.fitWidth
                 : BoxFit.fitHeight
-            : BoxFit.contain,
+            : BoxFit.contain),
         cache: compressed,
         loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
         enableMemoryCache: compressed,
@@ -117,6 +120,7 @@ class ContrastPhotograph extends StatelessWidget {
           border: Border.all(color: borderColor, width: borderWidth),
           loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
           enableLoadState: !compressed,
+          fit: fit ?? BoxFit.contain,
           enableMemoryCache: compressed,
           clearMemoryCacheIfFailed: true,
           clearMemoryCacheWhenDispose: false,

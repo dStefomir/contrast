@@ -64,8 +64,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
               labelBackgroundColor: Colors.white,
               child: const Icon(Icons.video_call),
               label: "Upload Video",
-              onTap: () async {
-                if (Session().isLoggedIn()) {
+              onTap: () async =>
                   showDialog(
                       context: context,
                       builder: (context) => UploadVideoDialog()
@@ -74,16 +73,14 @@ class BoardPageState extends ConsumerState<BoardPage> {
                       ref.read(videoServiceFetchProvider.notifier).addItem(video);
                       showSuccessTextOnSnackBar(context, "Video was successfully uploaded.");
                     }
-                  });
-                }
-              }),
+                  })
+          ),
           SpeedDialChild(
               foregroundColor: Colors.black,
               labelBackgroundColor: Colors.white,
               child: const Icon(Icons.photo_filter_sharp),
               label: "Upload Photograph",
-              onTap: () async {
-                if (Session().isLoggedIn()) {
+              onTap: () async =>
                   showDialog(
                       context: context,
                       barrierDismissible: false,
@@ -93,9 +90,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                       ref.read(photographServiceFetchProvider.notifier).addItem(photograph);
                       showSuccessTextOnSnackBar(context, "Photograph was successfully uploaded.");
                     }
-                  });
-                }
-              })
+                  })
+          )
         ]
     ),
   ).translateOnPhotoHover;

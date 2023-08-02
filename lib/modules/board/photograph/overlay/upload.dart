@@ -1,11 +1,12 @@
+import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/hover_provider.dart';
 import 'package:contrast/common/widgets/input.dart';
 import 'package:contrast/common/widgets/load.dart';
-import 'package:contrast/common/widgets/photograph.dart';
+import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/model/image_data.dart';
 import 'package:contrast/modules/board/photograph/overlay/provider.dart';
-import 'package:contrast/modules/board/photograph/service.dart';
+import 'package:contrast/utils/device.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ import '../../../../../common/widgets/icon.dart';
 /// Dialog width
 const double dialogWidth = 400;
 /// Dialog height
-const double dialogHeight = 485;
+const double dialogHeight = 270;
 
 /// Renders the upload image dialog
 class UploadImageDialog extends HookConsumerWidget {
@@ -104,7 +105,7 @@ class UploadImageDialog extends HookConsumerWidget {
                   });
                 }
               }
-            }),
+            }).translateOnPhotoHover,
       )
     ];
   }
@@ -124,6 +125,7 @@ class UploadImageDialog extends HookConsumerWidget {
       labelText: 'Photograph comment',
       controllerText: data?.comment,
       onChange: (text) => ref.read(commentProvider.notifier).setComment(text),
+      prefixIcon: Icons.comment,
       maxLines: 4,
     );
   }
@@ -137,6 +139,7 @@ class UploadImageDialog extends HookConsumerWidget {
             labelText: 'Latitude',
             controllerText: data?.lat?.toString(),
             onChange: (text) => ref.read(geoLatProvider(data?.lat).notifier).setLat(text),
+            prefixIcon: Icons.location_on,
             validator: (value) {
               if(value != null && value.isNotEmpty) {
                 try {
@@ -156,6 +159,7 @@ class UploadImageDialog extends HookConsumerWidget {
             labelText: 'Longitude',
             controllerText: data?.lng?.toString(),
             onChange: (text) => ref.read(geoLngProvider(data?.lng).notifier).setLng(text),
+            prefixIcon: Icons.location_on,
             validator: (value) {
               if(value != null && value.isNotEmpty) {
                 try {
@@ -205,43 +209,15 @@ class UploadImageDialog extends HookConsumerWidget {
     );
   }
 
-  /// Renders the selected image
-  Widget _renderSelectedImage(BuildContext context, WidgetRef ref, FileData fileData) {
-    bool isLandscape = data != null ? data!.isLandscape! : fileData.isLandscape!;
-    bool isRect = data != null ? data!.isRect! : fileData.isRect!;
-
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: const Offset(0, 3), // changes position of shadow
-          ),
-        ],
-      ),
-      child: ContrastPhotograph(
-        widgetKey: const Key('selectedPhotograph'),
-        compressed: true,
-        quality: FilterQuality.low,
-        image: data,
-        fetch: (path) => ref.read(photographyBoardServiceProvider).getCompressedPhotograph(context, path, false),
-        borderColor: Colors.transparent,
-        data: fileData.bytes,
-        width: (isLandscape && isRect)
-            ? 165
-            : isLandscape
-            ? 250
-            : 165,
-        height: (isLandscape && isRect)
-            ? 165
-            : isLandscape
-            ? 180
-            : 245,
-      ),
-    );
-  }
+  /// Renders the selected image name
+  Widget _renderSelectedImageName(FileData fileData) =>
+      fileData.isFileSelected() || data != null?
+        Center(
+            child: StyledText(
+                text: data != null ? data!.path! : fileData.fileName!,
+                decoration: TextDecoration.underline,
+            )
+        ) : Container();
 
   /// Renders the image upload button or if its in edit mode - the existing image
   Widget _renderUploadButton(BuildContext context, WidgetRef ref, FileData fileData) {
@@ -249,48 +225,59 @@ class UploadImageDialog extends HookConsumerWidget {
     final bool isHovering = ref.watch(hoverProvider(widgetKey));
 
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: data != null || fileData.isFileSelected()
-            ? _renderSelectedImage(context, ref, fileData)
-            : Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () => _selectPhotograph(ref),
-            onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
-            child: AnimatedContainer(
-                width: isHovering ? 165 : 160,
-                height: isHovering ? 165 : 160,
-                duration: const Duration(milliseconds: 800),
-                curve: Curves.fastOutSlowIn,
-                child: IconRenderer(
-                  asset: 'upload.svg',
-                  color: Colors.black,
-                  width: isHovering ? 250 : 240 - 20,
-                  height: isHovering ? 250 : 240 - 20,
-                )
+      child: Column(
+        children: [
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => _selectPhotograph(ref),
+              onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
+              child: AnimatedContainer(
+                  width: isHovering ? 165 : 160,
+                  height: isHovering ? 165 : 160,
+                  duration: const Duration(milliseconds: 800),
+                  curve: Curves.fastOutSlowIn,
+                  child: IconRenderer(
+                    asset: 'upload.svg',
+                    color: Colors.black,
+                    width: isHovering ? 250 : 240 - 20,
+                    height: isHovering ? 250 : 240 - 20,
+                  )
+              ),
             ),
           ),
-        ),
+          const StyledText(text: 'Select an image')
+        ],
       ),
     );
   }
 
   /// Renders the dialog body
   Widget _renderDialogBody(BuildContext context, WidgetRef ref, FileData fileData) => SizedBox(
-    width: dialogWidth,
-    height: dialogHeight,
+    width: useMobileLayout(context) ? MediaQuery.of(context).size.width : dialogWidth,
+    height: useMobileLayout(context) ? MediaQuery.of(context).size.height :dialogHeight,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _renderUploadButton(context, ref, fileData),
-        const SizedBox(height: 20),
-        _renderCategorySelector(ref),
-        const SizedBox(height: 20),
-        _renderGeoForm(ref),
-        const SizedBox(height: 20),
-        _renderLoadingIndicator(ref)
+        Visibility(
+            visible: !fileData.isFileSelected() && data == null,
+            child: _renderUploadButton(context, ref, fileData)
+        ),
+        Visibility(
+          visible: fileData.isFileSelected() || data != null,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _renderSelectedImageName(fileData),
+              _renderCategorySelector(ref),
+              const SizedBox(height: 10),
+              _renderGeoForm(ref),
+              const SizedBox(height: 10),
+              _renderLoadingIndicator(ref),
+          ]),
+        )
       ],
     ),
   );
@@ -326,6 +313,7 @@ class UploadImageDialog extends HookConsumerWidget {
       child: AlertDialog(
           backgroundColor: Colors.white,
           scrollable: true,
+          insetPadding: EdgeInsets.zero,
           title: _renderDialogHeader(context),
           content: _renderDialogBody(context, ref, fileData),
           actions: _renderDialogActions(context, ref)),
