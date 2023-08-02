@@ -72,7 +72,7 @@ class ContrastVideo extends HookConsumerWidget {
                             shouldHaveBorderRadius: true,
                             child: Icon(Icons.play_arrow,
                                 color: Colors.white,
-                                size: constraints.maxHeight / 15
+                                size: constraints.maxHeight / 4
                             ),
                           )
                       ),

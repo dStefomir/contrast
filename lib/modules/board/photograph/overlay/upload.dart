@@ -254,8 +254,8 @@ class UploadImageDialog extends HookConsumerWidget {
 
   /// Renders the dialog body
   Widget _renderDialogBody(BuildContext context, WidgetRef ref, FileData fileData) => SizedBox(
-    width: useMobileLayout(context) ? MediaQuery.of(context).size.width : dialogWidth,
-    height: useMobileLayout(context) ? MediaQuery.of(context).size.height :dialogHeight,
+    width: dialogWidth,
+    height: dialogHeight,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,7 +313,6 @@ class UploadImageDialog extends HookConsumerWidget {
       child: AlertDialog(
           backgroundColor: Colors.white,
           scrollable: true,
-          insetPadding: EdgeInsets.zero,
           title: _renderDialogHeader(context),
           content: _renderDialogBody(context, ref, fileData),
           actions: _renderDialogActions(context, ref)),

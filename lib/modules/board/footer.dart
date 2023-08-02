@@ -75,7 +75,7 @@ class BoardPageFooter extends HookConsumerWidget {
                     onTap: () => ref.read(boardFooterTabProvider.notifier).switchTab('photos'),
                     child: Container(
                       height: mobileMenuIconSize,
-                      padding: const EdgeInsets.all(15.0),
+                      padding: const EdgeInsets.all(18.0),
                       decoration: BoxDecoration(
                         color: currentTab == 'photos' ? Colors.black: Colors.white,
                       ),
@@ -96,7 +96,7 @@ class BoardPageFooter extends HookConsumerWidget {
                     onTap: () => ref.read(boardFooterTabProvider.notifier).switchTab('videos'),
                     child: Container(
                       height: mobileMenuIconSize,
-                      padding: const EdgeInsets.all(15.0),
+                      padding: const EdgeInsets.all(18.0),
                       decoration: BoxDecoration(
                         color: currentTab == 'videos' ? Colors.black: Colors.white,
                       ),

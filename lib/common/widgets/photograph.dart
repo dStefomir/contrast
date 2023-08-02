@@ -62,7 +62,6 @@ class ContrastPhotograph extends StatelessWidget {
 
   /// Renders a widget based on the photograph state
   Widget _renderPhotographState(BuildContext context, ExtendedImageState state) {
-    final bool isMobile = useMobileLayout(context);
     final Widget photograph = ExtendedRawImage(
       image: state.extendedImageInfo?.image,
       width: width,
@@ -73,7 +72,7 @@ class ContrastPhotograph extends StatelessWidget {
           : BoxFit.fitHeight
           : BoxFit.contain),
     );
-    if(!isMobile && state.extendedImageLoadState == LoadState.completed) {
+    if(state.extendedImageLoadState == LoadState.completed) {
       return FadeAnimation(
           key: Key('${widgetKey.toString()}/rawImage'),
           start: 0,
@@ -81,8 +80,6 @@ class ContrastPhotograph extends StatelessWidget {
           duration: const Duration(milliseconds: 400),
           child: photograph
       );
-    } else if (isMobile && state.extendedImageLoadState == LoadState.completed) {
-      return photograph;
     }
 
     return Container();

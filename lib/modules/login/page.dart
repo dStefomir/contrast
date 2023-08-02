@@ -1,3 +1,5 @@
+import 'package:contrast/common/extentions/zoom.dart';
+import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/input.dart';
 import 'package:contrast/common/widgets/page.dart';
@@ -22,6 +24,11 @@ class LoginPage extends HookConsumerWidget {
     child: BackgroundPage(
         child: Stack(
           children: [
+            IconRenderer(
+                asset: 'background.svg',
+                fit: BoxFit.cover,
+                color: Colors.black.withOpacity(0.05)
+            ),
             const Align(
               alignment: Alignment.topCenter,
               child: Padding(
@@ -73,10 +80,10 @@ class LoginPage extends HookConsumerWidget {
                   ),
                   OutlinedButton(
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.white),
+                        backgroundColor: MaterialStateProperty.all(Colors.black),
                         elevation: MaterialStateProperty.all(2),
-                        foregroundColor: MaterialStateProperty.all(Colors.black),
-                        textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.black))
+                        foregroundColor: MaterialStateProperty.all(Colors.white),
+                        textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
                     ),
                     onPressed: () {
                       final form = formKey.currentState;
@@ -95,26 +102,17 @@ class LoginPage extends HookConsumerWidget {
                         });
                       }},
                     child: const Text('Log In'),
-                  ),
+                  ).translateOnPhotoHover,
                 ],
               ),
             ),
             Align(
               alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: IconTheme(
-                  data: const IconThemeData(),
-                  child: IconButton(
-                      onPressed: () => Modular.to.navigate("/"),
-                      icon: const IconRenderer(
-                        asset: 'close.svg',
-                        width: 20,
-                        height: 20,
-                        color: Colors.grey,
-                      )
-                  ),
-                ),
+              child: RoundedButton(
+                  onClick: () => Modular.to.navigate("/"),
+                  color: Colors.black,
+                  borderColor: Colors.black,
+                  icon: 'close.svg'
               ),
             ),
           ],

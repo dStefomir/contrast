@@ -18,7 +18,7 @@ class BoardPageFilter extends ConsumerWidget {
   /// Render mobile layout
   Widget _renderMobileLayout(BuildContext context, WidgetRef ref) => Container(
     width: mobileMenuWidth,
-    height: MediaQuery.of(context).size.height - mobileMenuWidth - 1.5,
+    height: MediaQuery.of(context).size.height - mobileMenuWidth,
     decoration: BoxDecoration(
       color: Colors.white,
       boxShadow: [
