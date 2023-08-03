@@ -27,18 +27,14 @@ class HouseShadowPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final Path path = Path();
     path
-      ..moveTo(size.width / 2, 0)
-      ..lineTo(size.width, size.height * .25)
-      ..lineTo(size.width, size.height)
-      ..lineTo(size.width * .5, size.height)
-      ..lineTo(0, size.height)
-      ..lineTo(0, size.height * .25)
+      ..moveTo(size.width / 2 + 1, -1)
+      ..lineTo(size.width + 1, size.height * .25 -1)
+      ..lineTo(size.width + 1, size.height -1)
+      ..lineTo(0, size.height -1)
+      ..lineTo(0, size.height * .23 -1)
       ..close();
 
     canvas.drawShadow(path, Colors.black, 2, true);
-    canvas.drawShadow(path, Colors.black, 3, true);
-    canvas.drawShadow(path, Colors.white, 1, true);
-    canvas.drawShadow(path, Colors.white, 1, true);
   }
 
   @override
@@ -73,10 +69,6 @@ class TriangleShadowPainter extends CustomPainter {
     path.lineTo(size.width / 2, 0);
     path.close();
 
-    canvas.drawShadow(path, Colors.white, 2, true);
-    canvas.drawShadow(path, Colors.white, 3, true);
-    canvas.drawShadow(path, Colors.white, 1, true);
-    canvas.drawShadow(path, Colors.white, 1, true);
     canvas.drawPath(path, paint);
   }
 
