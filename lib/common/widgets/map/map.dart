@@ -59,6 +59,7 @@ class ContrastMap extends HookConsumerWidget {
                           painter: TriangleShadowPainter(),
                           child: ClipPath(
                             clipper: TriangleShape(),
+                            child: Container(color: Colors.white,),
                           ),
                         )
                     ).translateOnPhotoHover
