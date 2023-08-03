@@ -35,20 +35,23 @@ class ContrastTab extends HookConsumerWidget {
           onTap: () => !disabled ? onClick(text) : null,
           hoverColor: isHovering ? Colors.black : Colors.white,
           onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
-          child: StyledText(
-              text: text,
-              color: !isHovering ? Colors.black : Colors.white,
-              weight: isSelected ? FontWeight.bold : FontWeight.normal,
-              useShadow: isSelected ? true : false,
-              shadow: isSelected
-                  ? <Shadow>[
-                      Shadow(
-                        offset: const Offset(0, 0),
-                        blurRadius: 2.0,
-                        color: Colors.black.withOpacity(0.5),
-                      ),
-                    ]
-                  : null
+          child: Container(
+            color: isSelected ? Colors.black : Colors.transparent,
+            child: StyledText(
+                text: text,
+                color: isSelected ? Colors.white : !isHovering ? Colors.black : Colors.white,
+                weight: isSelected ? FontWeight.bold : FontWeight.normal,
+                useShadow: isSelected ? true : false,
+                shadow: isSelected
+                    ? <Shadow>[
+                        Shadow(
+                          offset: const Offset(0, 0),
+                          blurRadius: 2.0,
+                          color: Colors.black.withOpacity(0.5),
+                        ),
+                      ]
+                    : null
+            ),
           )
       ),
     );

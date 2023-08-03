@@ -6,7 +6,6 @@ import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/model/image_data.dart';
 import 'package:contrast/modules/board/photograph/overlay/provider.dart';
-import 'package:contrast/utils/device.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
