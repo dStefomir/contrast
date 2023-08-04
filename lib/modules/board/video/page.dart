@@ -1,5 +1,3 @@
-import 'dart:html' as html;
-
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/common/widgets/photograph.dart';
@@ -14,11 +12,13 @@ import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/board/video/overlay/upload.dart';
 import 'package:contrast/modules/board/video/service.dart';
 import 'package:contrast/security/session.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Renders the video board page
 class VideoBoardPage extends HookConsumerWidget {
@@ -84,14 +84,16 @@ class VideoBoardPage extends HookConsumerWidget {
     }
 
     return ContrastVideo(
-      widgetKey: Key('${video.id}'),
-      videoPath: video.path!,
-      constraints: constraints,
-      onClick: () => Modular.to.pushNamed('videos/details/${video.path}'),
-      onRedirect: () => html.window.open(
-          'https://www.dstefomir.eu/#/videos/details/${video.path}',
-          '${video.id}'
-      ),
+        widgetKey: Key('${video.id}'),
+        videoPath: video.path!,
+        constraints: constraints,
+        onClick: () => Modular.to.pushNamed('videos/details/${video.path}'),
+        onRedirect: kIsWeb ? () async {
+          final Uri url = Uri.parse('https://www.dstefomir.eu/#/videos/details/${video.path}');
+          if (await canLaunchUrl(url)) {
+            await launchUrl(url);
+          }
+        } : null
     );
   }
 

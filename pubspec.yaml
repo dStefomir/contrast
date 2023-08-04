@@ -44,6 +44,8 @@ dependencies:
   flutter_riverpod: ^2.3.6
   hooks_riverpod: ^2.3.7
   flutter_hooks: ^0.20.0
+  # url launching library
+  url_launcher: ^6.1.12
   # handling floating action button
   flutter_speed_dial: ^7.0.0
   # context menu library

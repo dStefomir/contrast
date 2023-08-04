@@ -1,5 +1,3 @@
-import 'dart:html' as html;
-
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/common/widgets/photograph.dart';
@@ -11,11 +9,13 @@ import 'package:contrast/modules/board/photograph/overlay/upload.dart';
 import 'package:contrast/modules/board/photograph/service.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/security/session.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Renders the photographs board page
 class PhotographBoardPage extends HookConsumerWidget {
@@ -79,15 +79,17 @@ class PhotographBoardPage extends HookConsumerWidget {
     }
 
     return ContrastPhotographMeta(
-      widgetKey: Key('${wrapper.image.id}'),
-      fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
-      wrapper: wrapper,
-      constraints: constraints,
-      onClick: () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$selectedFilter'),
-      onRedirect: () => html.window.open(
-          'https://www.dstefomir.eu/#/photos/details?id=${wrapper.image.id}&category=$selectedFilter',
-          '${wrapper.image.id}'
-      )
+        widgetKey: Key('${wrapper.image.id}'),
+        fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
+        wrapper: wrapper,
+        constraints: constraints,
+        onClick: () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$selectedFilter'),
+        onRedirect: kIsWeb ? () async {
+          final Uri url = Uri.parse('https://www.dstefomir.eu/#/photos/details?id=${wrapper.image.id}&category=$selectedFilter');
+          if (await canLaunchUrl(url)) {
+            await launchUrl(url);
+          }
+        } : null
     );
   }
 

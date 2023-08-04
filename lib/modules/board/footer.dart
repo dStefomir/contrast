@@ -1,5 +1,3 @@
-import 'dart:html' as html;
-
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/icon.dart';
@@ -9,8 +7,10 @@ import 'package:contrast/common/widgets/tab.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Renders the footer of the board page
 class BoardPageFooter extends HookConsumerWidget {
@@ -35,7 +35,12 @@ class BoardPageFooter extends HookConsumerWidget {
           padding: const EdgeInsets.only(top: 35, bottom: 20, left: 20, right: 20),
           child: StyledButton(
             widgetKey: const Key('about'),
-            onClick: () => html.window.open('https://www.instagram.com/dstefomir/', '_blank'),
+            onClick: () async {
+              final Uri url = Uri.parse('https://www.instagram.com/dstefomir/');
+              if (await canLaunchUrl(url)) {
+                await launchUrl(url);
+              }
+            },
             iconAsset: 'instagram.svg',
             iconHeight: 30,
             shadow: false,

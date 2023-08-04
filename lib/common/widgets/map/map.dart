@@ -1,5 +1,3 @@
-import 'dart:html' as html;
-
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/map/provider.dart';
 import 'package:contrast/common/widgets/shape.dart';
@@ -8,6 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Default zoom of the map
 const double mapDefaultZoom = 13.0;
@@ -50,9 +49,12 @@ class ContrastMap extends HookConsumerWidget {
                 height: 40,
                 point: LatLng(lat, lng),
                 builder: (ctx) => InkWell(
-                    onTap: () => html.window.open(
-                        'https://www.google.com/maps/@$lat,$lng,20.45z?entry=ttu', '_blank')
-                    ,
+                    onTap: () async {
+                      final Uri url = Uri.parse('https://www.google.com/maps/@$lat,$lng,20.45z?entry=ttu');
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url);
+                      }
+                    },
                     child: RotatedBox(
                         quarterTurns: 2,
                         child: CustomPaint(
