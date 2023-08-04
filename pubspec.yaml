@@ -36,15 +36,14 @@ dependencies:
     sdk: flutter
 
   # Modular library
-  flutter_modular: ^5.0.3
+  flutter_modular: ^6.0.1
   # in memory file creation
   file: ^6.0.0
   # Change notifier
   provider: ^6.0.5
   flutter_riverpod: ^2.3.6
-  hooks_riverpod: ^2.3.6
-  flutter_hooks: ^0.18.0
-  equatable: ^2.0.5
+  hooks_riverpod: ^2.3.7
+  flutter_hooks: ^0.20.0
   # handling floating action button
   flutter_speed_dial: ^7.0.0
   # context menu library
@@ -66,7 +65,7 @@ dependencies:
   # accessing image size
   image_size_getter: ^2.1.2
   # use native file explorer to pick single or multiple absolute file paths
-  file_picker: ^5.3.2
+  file_picker: ^5.3.3
   # youtube video player
   youtube_player_iframe: ^4.0.4
   # shared prefs library
@@ -77,8 +76,6 @@ dependencies:
   firebase_core: ^2.15.0
   firebase_analytics: ^10.4.4
   firebase_messaging: ^14.6.5
-
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

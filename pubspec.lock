@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  auto_injector:
+    dependency: transitive
+    description:
+      name: auto_injector
+      sha256: da17c99bd1ea92fb2ed442f76812792cdb5de914d74b276a00add42b1e561251
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0+4"
   boolean_selector:
     dependency: transitive
     description:
@@ -105,14 +113,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  equatable:
-    dependency: "direct main"
-    description:
-      name: equatable
-      sha256: c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.5"
   extended_image:
     dependency: "direct main"
     description:
@@ -242,10 +242,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_hooks
-      sha256: "6a126f703b89499818d73305e4ce1e3de33b4ae1c5512e3b8eab4b986f46774c"
+      sha256: "9eab8fd7aa752c3c1c0a364f9825851d410eb935243411682f4b1b0a4c569d71"
       url: "https://pub.dev"
     source: hosted
-    version: "0.18.6"
+    version: "0.20.0"
   flutter_launcher_icons:
     dependency: "direct main"
     description:
@@ -274,18 +274,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_modular
-      sha256: "061f0bcc8f8c438d4c82f4ff70a9e61f109961c92b4e1eaf1bbfab75f577fe0e"
+      sha256: "8352a967b58e876a3272acfd7c7bd8c64c73ec7d47b1e6ecad2a5879afefc2a5"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.3"
-  flutter_modular_annotations:
-    dependency: transitive
-    description:
-      name: flutter_modular_annotations
-      sha256: "65971655bdd30816a6a66651c801f4ceba6c8ba265f0866cc51ad038332c9a71"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.2"
+    version: "6.0.1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -492,18 +484,10 @@ packages:
     dependency: transitive
     description:
       name: modular_core
-      sha256: "84cfe65d2ab15b0265a5bdb07a7a0408b06f8d92fee6fb94a3c85e97cbc2d6af"
+      sha256: "4b2580a8a44ad72886fa7f348e65b36df098b082bb6f561919a8623cd489f3b0"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.3+1"
-  modular_interfaces:
-    dependency: transitive
-    description:
-      name: modular_interfaces
-      sha256: "89db18038048d63de80871189ddc52363814e8181615459e5d88ed0a921acc1f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.2"
+    version: "3.0.1+1"
   nested:
     dependency: transitive
     description:
@@ -640,6 +624,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.5"
+  result_dart:
+    dependency: transitive
+    description:
+      name: result_dart
+      sha256: f28a171d55e2e1c1753b41d4d8edcaff886f103e73c575d14764913907e57928
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   riverpod:
     dependency: transitive
     description:

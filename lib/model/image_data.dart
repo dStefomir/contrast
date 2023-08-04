@@ -1,7 +1,7 @@
 import 'package:contrast/model/image_meta_data.dart';
-import 'package:equatable/equatable.dart';
+
 /// Image wrapper. Contains the photograph and its meta details
-class ImageWrapper extends Equatable {
+class ImageWrapper {
   final ImageData image;
   final ImageMetaData metadata;
 
@@ -14,10 +14,6 @@ class ImageWrapper extends Equatable {
     image: ImageData.fromJson(json[0]),
     metadata: ImageMetaData.fromJson(json[1])
   );
-
-  @override
-  // TODO: implement props
-  List<Object?> get props => [image.id];
 }
 
 /// Image data model

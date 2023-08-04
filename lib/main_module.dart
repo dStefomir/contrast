@@ -20,50 +20,53 @@ class MainModule extends Module {
 
   // Provide a list of dependencies to inject into the project
   @override
-  final List<Bind> binds = [];
-
-// Provide all the routes for the module
+  void binds(i) {}
+  // Provide all the routes for the module
   @override
-  final List<ModularRoute> routes = [
-    ChildRoute(boardPageRoute,
+  void routes(r) {
+    r.child(
+        boardPageRoute,
         transition: TransitionType.fadeIn,
-        child: (_, args) => CorePage(
+        child: (_) => CorePage(
             pageName: 'Board',
             render: () => BoardPage(
                 analytics: analytics,
                 observer: observer
             )
         )
-    ),
-    ChildRoute(loginPageRoute,
-        transition: TransitionType.fadeIn,
-        child: (_, args) => CorePage(
+    );
+    r.child(
+        loginPageRoute,
+        transition: TransitionType.downToUp,
+        child: (_) => CorePage(
             pageName: 'Login',
             render: () => LoginPage()
         )
-    ),
-    ChildRoute(photographDetailsPageRoute,
-        transition: TransitionType.fadeIn,
-        child: (_, args) => CorePage(
-            pageName: 'Photo details',
+    );
+    r.child(
+        photographDetailsPageRoute,
+        transition: TransitionType.scale,
+        child: (_) => CorePage(
+            pageName: 'Photograph details',
             render: () => PhotographDetailPage(
-                id: int.parse(args.queryParams['id']!),
-                category: args.queryParams['category']!,
+                id: int.parse(r.args.queryParams['id']!),
+                category: r.args.queryParams['category']!,
                 analytics: analytics,
                 observer: observer
             )
         )
-    ),
-    ChildRoute(videoDetailsPageRoute,
-        transition: TransitionType.fadeIn,
-        child: (_, args) => CorePage(
+    );
+    r.child(
+        videoDetailsPageRoute,
+        transition: TransitionType.scale,
+        child: (_) => CorePage(
             pageName: 'Video details',
             render: () => VideoDetailPage(
-                path: args.params['path'],
+                path: r.args.params['path'],
                 analytics: analytics,
                 observer: observer
             )
         )
-    ),
-  ];
+    );
+  }
 }
