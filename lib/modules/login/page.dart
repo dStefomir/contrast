@@ -108,7 +108,7 @@ class LoginPage extends HookConsumerWidget {
             ),
             Align(
               alignment: Alignment.topLeft,
-              child: RoundedButton(
+              child: DefaultButton(
                   onClick: () => Modular.to.navigate("/"),
                   color: Colors.black,
                   borderColor: Colors.black,

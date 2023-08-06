@@ -63,7 +63,7 @@ class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
             }
           });
 
-          return PhotographDetailsView(images: data, photoIndex: photoIndex);
+          return PhotographDetailsView(images: data, photoIndex: photoIndex, category: widget.category);
         },
         error: (error, stackTrace) => Center(
             child: StyledText(

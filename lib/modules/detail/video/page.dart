@@ -56,7 +56,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
 
   /// Renders the back button
   Widget _renderBackButton() =>
-      RoundedButton(
+      DefaultButton(
           onClick: () => Modular.to.navigate('/'),
           color: Colors.white,
           borderColor: Colors.black,

@@ -291,7 +291,7 @@ class UploadImageDialog extends HookConsumerWidget {
                 style: Theme.of(context).textTheme.headlineSmall
             ),
             const Spacer(),
-            RoundedButton(
+            DefaultButton(
                 onClick: () => Navigator.of(context).pop(),
                 color: Colors.black,
                 borderColor: Colors.white,

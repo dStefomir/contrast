@@ -206,7 +206,7 @@ class MenuButton extends HookConsumerWidget {
 }
 
 /// Renders a rounded button widget
-class RoundedButton extends StatelessWidget {
+class DefaultButton extends StatelessWidget {
   /// What happens when the widget is clicked
   final Function() onClick;
   /// Color of the button
@@ -215,12 +215,18 @@ class RoundedButton extends StatelessWidget {
   final Color borderColor;
   /// Icon asset
   final String icon;
+  /// Shape of the button
+  final BoxShape shape;
+  /// Width of the border
+  final double borderWidth;
 
-  const RoundedButton({
+  const DefaultButton({
     required this.onClick,
     required this.color,
     required this.borderColor,
     required this.icon,
+    this.shape = BoxShape.circle,
+    this.borderWidth = 1,
     super.key
   });
 
@@ -230,8 +236,8 @@ class RoundedButton extends StatelessWidget {
     child: Container(
       decoration: BoxDecoration(
           color: Colors.white,
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.black, width: 1)
+          shape: shape,
+          border: borderWidth == 0 ? null : Border.all(color: Colors.black, width: borderWidth)
       ),
       child: InkWell(
         onTap: onClick,

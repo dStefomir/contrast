@@ -1,3 +1,5 @@
+import 'dart:html' as html;
+
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/map/map.dart';
@@ -22,11 +24,14 @@ class PhotographDetailsView extends HookConsumerWidget {
   final List<ImageData> images;
   /// Initial selected photo index
   final int photoIndex;
+  /// Current selected photograph category
+  final String category;
 
   const PhotographDetailsView({
     super.key,
     required this.images,
-    required this.photoIndex
+    required this.photoIndex,
+    required this.category
   });
 
   /// Are coordinates valid or not
@@ -43,10 +48,10 @@ class PhotographDetailsView extends HookConsumerWidget {
   }
 
   /// Handles go to photograph details and go back to photograph action
-  void _handlePhotographDetailsAction(WidgetRef ref, ScrollController scrollController) async {
+  void _handlePhotographDetailsAction(WidgetRef ref, ScrollController scrollController, double scrollOffset) async {
     if (scrollController.hasClients) {
       await scrollController.animateTo(
-          scrollController.offset == 0 ? scrollController.position.maxScrollExtent : 0,
+          scrollOffset,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOutExpo
       );
@@ -69,6 +74,8 @@ class PhotographDetailsView extends HookConsumerWidget {
     if (currentPhotographIndex + 1 < images.length) {
       pageController.jumpToPage(currentPhotographIndex + 1);
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(currentPhotographIndex + 1);
+
+      html.window.history.pushState(null, 'photograph_details', '#/photos/details?id=${images[currentPhotographIndex + 1].id}&category=$category');
     }
     if (currentPhotographIndex >= images.length) {
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(images.length - 1);
@@ -83,6 +90,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     if (currentPhotographIndex - 1 >= 0) {
       pageController.jumpToPage(currentPhotographIndex - 1);
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(currentPhotographIndex - 1);
+      html.window.history.pushState(null, 'photograph_details', '#/photos/details?id=${images[currentPhotographIndex - 1].id}&category=$category');
     }
     if (currentPhotographIndex < 0) {
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(0);
@@ -102,9 +110,9 @@ class PhotographDetailsView extends HookConsumerWidget {
       } else if (event.logicalKey == LogicalKeyboardKey.escape) {
         Modular.to.navigate('/');
       } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-        _handlePhotographDetailsAction(ref, scrollController);
+        _handlePhotographDetailsAction(ref, scrollController, scrollController.position.maxScrollExtent);
       } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-        _handlePhotographDetailsAction(ref, scrollController);
+        _handlePhotographDetailsAction(ref, scrollController, 0);
       }
     }
   }
@@ -138,7 +146,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   /// Render the next photograph button
   Widget _renderNextBtn(WidgetRef ref, BuildContext context, PageController pageController, PhotoViewScaleStateController scaleController, int currentPhotographIndex) => Align(
     alignment: Alignment.centerRight,
-    child: RoundedButton(
+    child: DefaultButton(
         onClick: () => _goToNextPhotograph(ref, pageController, scaleController, currentPhotographIndex),
         color: Colors.white,
         borderColor: Colors.black,
@@ -149,7 +157,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   /// Render the previous photograph button
   Widget _renderPreviousBtn(WidgetRef ref, BuildContext context, PageController pageController, PhotoViewScaleStateController scaleController, int currentPhotographIndex) => Align(
     alignment: Alignment.centerLeft,
-    child: RoundedButton(
+    child: DefaultButton(
         onClick: () => _goToPreviousPhotograph(ref, pageController, scaleController, currentPhotographIndex),
         color: Colors.white,
         borderColor: Colors.black,
@@ -160,7 +168,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   /// Render the go to previous page button
   Widget _renderGoBackBtn() => Align(
     alignment: Alignment.topLeft,
-    child: RoundedButton(
+    child: DefaultButton(
         onClick: () => Modular.to.navigate('/'),
         color: Colors.white,
         borderColor: Colors.black,
@@ -174,8 +182,12 @@ class PhotographDetailsView extends HookConsumerWidget {
 
     return Align(
       alignment: Alignment.bottomCenter,
-      child: RoundedButton(
-          onClick: () => _handlePhotographDetailsAction(ref, scrollController),
+      child: DefaultButton(
+          onClick: () => _handlePhotographDetailsAction(
+              ref,
+              scrollController,
+              scrollController.offset == 0 ? scrollController.position.maxScrollExtent : 0
+          ),
           color: Colors.white,
           borderColor: Colors.black,
           icon: iconAsset

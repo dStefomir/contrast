@@ -40,39 +40,3 @@ class HouseShadowPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
-/// Custom widget that renders a triangle
-class TriangleShape extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    path.moveTo(0, size.height * 1.5);
-    path.lineTo(size.width, size.height * 1.5);
-    path.lineTo(size.width / 2, 0);
-    path.close();
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
-/// Custom shadow of the triangle widget
-class TriangleShadowPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.fill;
-    final path = Path();
-    path.moveTo(0, size.height * 1.5);
-    path.lineTo(size.width, size.height * 1.5);
-    path.lineTo(size.width / 2, 0);
-    path.close();
-
-    canvas.drawShadow(path, Colors.white, 10, false);
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => true;
-}

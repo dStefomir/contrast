@@ -71,15 +71,21 @@ class ContrastPhotograph extends StatelessWidget {
           ? BoxFit.fitWidth
           : BoxFit.fitHeight
           : BoxFit.contain),
+      isAntiAlias: true,
+      filterQuality: quality,
     );
     if(state.extendedImageLoadState == LoadState.completed) {
-      return FadeAnimation(
-          key: Key('${widgetKey.toString()}/rawImage'),
-          start: 0,
-          end: 1,
-          duration: const Duration(milliseconds: 400),
-          child: photograph
-      );
+     if(!useMobileLayout(context)) {
+       return FadeAnimation(
+           key: Key('${widgetKey.toString()}/rawImage'),
+           start: 0,
+           end: 1,
+           duration: const Duration(milliseconds: 400),
+           child: photograph
+       );
+     } else {
+       return photograph;
+     }
     }
 
     return Container();
@@ -107,7 +113,7 @@ class ContrastPhotograph extends StatelessWidget {
         clearMemoryCacheIfFailed: true,
         clearMemoryCacheWhenDispose: false,
         filterQuality: quality,
-        isAntiAlias: !compressed,
+        isAntiAlias: true,
       );
     } else {
       photo = ExtendedImage.memory(data!,
@@ -122,7 +128,7 @@ class ContrastPhotograph extends StatelessWidget {
           clearMemoryCacheIfFailed: true,
           clearMemoryCacheWhenDispose: false,
           filterQuality: quality,
-          isAntiAlias: !compressed);
+          isAntiAlias: true);
     }
 
     return photo;
