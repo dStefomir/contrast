@@ -23,7 +23,13 @@ double getScaledPixels(BuildContext context, double pixels) {
 /// Gets the running platform based on the layout of the device
 String getRunningPlatform(BuildContext context) {
   if(defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android) {
-    return 'MOBILE';
+    /// Checks the layout if its a mobile platform because for bigger devices
+    /// like tables we need to show DESKTOP variant of photographs
+    if(useMobileLayout(context)) {
+      return 'MOBILE';
+    } else {
+      return 'DESKTOP';
+    }
   }
 
   return 'DESKTOP';

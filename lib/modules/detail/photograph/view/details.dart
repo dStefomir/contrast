@@ -1,5 +1,4 @@
-import 'dart:html' as html;
-
+import "package:universal_html/html.dart" as html;
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/map/map.dart';
@@ -70,43 +69,40 @@ class PhotographDetailsView extends HookConsumerWidget {
   }
 
   /// Switches to the next photograph if there is such
-  void _goToNextPhotograph(WidgetRef ref, PageController pageController, PhotoViewScaleStateController scaleController, int currentPhotographIndex) {
+  void _goToNextPhotograph(WidgetRef ref, PageController pageController, int currentPhotographIndex) {
     if (currentPhotographIndex + 1 < images.length) {
       pageController.jumpToPage(currentPhotographIndex + 1);
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(currentPhotographIndex + 1);
-
+      ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
+      _handlePhotographShotLocation(ref);
       html.window.history.pushState(null, 'photograph_details', '#/photos/details?id=${images[currentPhotographIndex + 1].id}&category=$category');
     }
     if (currentPhotographIndex >= images.length) {
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(images.length - 1);
     }
-    scaleController.reset();
-    ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
-    _handlePhotographShotLocation(ref);
   }
 
   /// Switches to the previous photograph if there is such
-  void _goToPreviousPhotograph(WidgetRef ref, PageController pageController, PhotoViewScaleStateController scaleController, int currentPhotographIndex) {
+  void _goToPreviousPhotograph(WidgetRef ref, PageController pageController, int currentPhotographIndex) {
     if (currentPhotographIndex - 1 >= 0) {
       pageController.jumpToPage(currentPhotographIndex - 1);
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(currentPhotographIndex - 1);
+      ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
+      _handlePhotographShotLocation(ref);
       html.window.history.pushState(null, 'photograph_details', '#/photos/details?id=${images[currentPhotographIndex - 1].id}&category=$category');
     }
     if (currentPhotographIndex < 0) {
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(0);
     }
-    scaleController.reset();
-    ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
-    _handlePhotographShotLocation(ref);
   }
 
   // Handles the key events from the Focus widget and updates the page
-  void _handleKeyEvent(RawKeyEvent event, WidgetRef ref, ScrollController scrollController, PageController pageController, PhotoViewScaleStateController scaleController, int currentPhotographIndex) {
+  void _handleKeyEvent(RawKeyEvent event, WidgetRef ref, ScrollController scrollController, PageController pageController, int currentPhotographIndex) {
     if (event is RawKeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-        _goToPreviousPhotograph(ref, pageController, scaleController, currentPhotographIndex);
+        _goToPreviousPhotograph(ref, pageController, currentPhotographIndex);
       } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-        _goToNextPhotograph(ref, pageController, scaleController, currentPhotographIndex);
+        _goToNextPhotograph(ref, pageController, currentPhotographIndex);
       } else if (event.logicalKey == LogicalKeyboardKey.escape) {
         Modular.to.navigate('/');
       } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
@@ -144,36 +140,36 @@ class PhotographDetailsView extends HookConsumerWidget {
   );
 
   /// Render the next photograph button
-  Widget _renderNextBtn(WidgetRef ref, BuildContext context, PageController pageController, PhotoViewScaleStateController scaleController, int currentPhotographIndex) => Align(
-    alignment: Alignment.centerRight,
-    child: DefaultButton(
-        onClick: () => _goToNextPhotograph(ref, pageController, scaleController, currentPhotographIndex),
-        color: Colors.white,
-        borderColor: Colors.black,
-        icon: 'navigate_next.svg'
-    )
+  Widget _renderNextBtn(WidgetRef ref, BuildContext context, PageController pageController, int currentPhotographIndex) => Align(
+      alignment: Alignment.centerRight,
+      child: DefaultButton(
+          onClick: () => _goToNextPhotograph(ref, pageController, currentPhotographIndex),
+          color: Colors.white,
+          borderColor: Colors.black,
+          icon: 'navigate_next.svg'
+      )
   );
 
   /// Render the previous photograph button
-  Widget _renderPreviousBtn(WidgetRef ref, BuildContext context, PageController pageController, PhotoViewScaleStateController scaleController, int currentPhotographIndex) => Align(
-    alignment: Alignment.centerLeft,
-    child: DefaultButton(
-        onClick: () => _goToPreviousPhotograph(ref, pageController, scaleController, currentPhotographIndex),
-        color: Colors.white,
-        borderColor: Colors.black,
-        icon: 'navigate_before.svg'
-    )
+  Widget _renderPreviousBtn(WidgetRef ref, BuildContext context, PageController pageController, int currentPhotographIndex) => Align(
+      alignment: Alignment.centerLeft,
+      child: DefaultButton(
+          onClick: () => _goToPreviousPhotograph(ref, pageController, currentPhotographIndex),
+          color: Colors.white,
+          borderColor: Colors.black,
+          icon: 'navigate_before.svg'
+      )
   );
 
   /// Render the go to previous page button
   Widget _renderGoBackBtn() => Align(
-    alignment: Alignment.topLeft,
-    child: DefaultButton(
-        onClick: () => Modular.to.navigate('/'),
-        color: Colors.white,
-        borderColor: Colors.black,
-        icon: 'close.svg'
-    )
+      alignment: Alignment.topLeft,
+      child: DefaultButton(
+          onClick: () => Modular.to.navigate('/'),
+          color: Colors.white,
+          borderColor: Colors.black,
+          icon: 'close.svg'
+      )
   );
 
   /// Render the details button
@@ -181,17 +177,17 @@ class PhotographDetailsView extends HookConsumerWidget {
     final String iconAsset = ref.watch(photographDetailAssetProvider);
 
     return Align(
-      alignment: Alignment.bottomCenter,
-      child: DefaultButton(
-          onClick: () => _handlePhotographDetailsAction(
-              ref,
-              scrollController,
-              scrollController.offset == 0 ? scrollController.position.maxScrollExtent : 0
-          ),
-          color: Colors.white,
-          borderColor: Colors.black,
-          icon: iconAsset
-      )
+        alignment: Alignment.bottomCenter,
+        child: DefaultButton(
+            onClick: () => _handlePhotographDetailsAction(
+                ref,
+                scrollController,
+                scrollController.offset == 0 ? scrollController.position.maxScrollExtent : 0
+            ),
+            color: Colors.white,
+            borderColor: Colors.black,
+            icon: iconAsset
+        )
     );
   }
 
@@ -209,16 +205,16 @@ class PhotographDetailsView extends HookConsumerWidget {
       WidgetRef ref,
       ScrollController scrollController,
       PageController pageController,
-      PhotoViewScaleStateController scaleController,
       int currentPhotographIndex,
       ImageData image,
       double maxWidth, maxHeight) {
     final serviceProvider = ref.watch(photographDetailsServiceProvider);
+    final photoViewController = ref.watch(photographViewProvider);
 
     return RawKeyboardListener(
       autofocus: true,
       focusNode: useFocusNode(),
-      onKey: (RawKeyEvent event) => _handleKeyEvent(event, ref, scrollController, pageController, scaleController, currentPhotographIndex),
+      onKey: (RawKeyEvent event) => _handleKeyEvent(event, ref, scrollController, pageController, currentPhotographIndex),
       child: PhotoViewGallery.builder(
           scrollPhysics: const BouncingScrollPhysics(),
           allowImplicitScrolling: true,
@@ -227,14 +223,16 @@ class PhotographDetailsView extends HookConsumerWidget {
                 imageProvider: ExtendedNetworkImageProvider(serviceProvider.getPhotograph(context, image.path!)),
                 initialScale: PhotoViewComputedScale.contained,
                 filterQuality: FilterQuality.high,
-                scaleStateController: scaleController,
                 minScale: PhotoViewComputedScale.contained,
                 maxScale: PhotoViewComputedScale.covered * 2,
-                heroAttributes: PhotoViewHeroAttributes(tag: index)
+                heroAttributes: PhotoViewHeroAttributes(tag: index),
+                controller: photoViewController
             );
           },
           pageController: pageController,
           onPageChanged: (int page) async {
+            photoViewController.position = Offset.zero;
+            photoViewController.scale = photoViewController.initial.scale;
             ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(page);
             await scrollController.animateTo(
                 0,
@@ -242,7 +240,6 @@ class PhotographDetailsView extends HookConsumerWidget {
                 curve: Curves.easeInOutExpo
             );
             _handlePhotographShotLocation(ref);
-            scaleController.reset();
             ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
             _setPhotographDetailAsset(ref, scrollController);
           },
@@ -274,7 +271,6 @@ class PhotographDetailsView extends HookConsumerWidget {
       WidgetRef ref,
       PageController pageController,
       ScrollController scrollController,
-      PhotoViewScaleStateController scaleController,
       int currentPhotographIndex,
       ImageData image,
       double maxWidth, maxHeight) =>
@@ -297,7 +293,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                       SizedBox(
                           width: maxWidth,
                           height: maxHeight,
-                          child: _renderPhotographGallery(ref, scrollController, pageController, scaleController, currentPhotographIndex, image, maxWidth, maxHeight)
+                          child: _renderPhotographGallery(ref, scrollController, pageController, currentPhotographIndex, image, maxWidth, maxHeight)
                       ),
                       Visibility(
                           visible: _isAreCoordinatesValid(image.lat, image.lng),
@@ -313,7 +309,6 @@ class PhotographDetailsView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final PageController pageController = usePageController(initialPage: photoIndex);
     final ScrollController scrollController = useScrollController();
-    final PhotoViewScaleStateController scaleController = ref.read(photographScaleProvider);
     final int currentPhotographIndex = ref.watch(photographIndexProvider(photoIndex));
     final bool photographTitleVisibility = ref.watch(photographTitleVisibilityProvider);
     final ImageData image = images[currentPhotographIndex];
@@ -321,26 +316,26 @@ class PhotographDetailsView extends HookConsumerWidget {
     final double maxHeight = MediaQuery.of(context).size.height;
 
     return Stack(
-      children: [
-        _renderPhotographWidget(ref, pageController, scrollController, scaleController, currentPhotographIndex, image, maxWidth, maxHeight),
-        Visibility(
-            visible: _isAreCoordinatesValid(image.lat, image.lng),
-            child: _renderDetailsBtn(ref, context, scrollController)
-        ),
-        _renderGoBackBtn(),
-        Visibility(
-            visible: currentPhotographIndex != 0 && !useMobileLayout(context),
-            child: _renderPreviousBtn(ref, context, pageController, scaleController, currentPhotographIndex)
-        ),
-        Visibility(
-            visible: currentPhotographIndex != images.length - 1 && !useMobileLayout(context),
-            child: _renderNextBtn(ref, context, pageController, scaleController, currentPhotographIndex)
-        ),
-        Visibility(
-            visible: photographTitleVisibility,
-            child: _renderPhotographTitle(context, ref, currentPhotographIndex)
-        ),
-      ]
+        children: [
+          _renderPhotographWidget(ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
+          Visibility(
+              visible: _isAreCoordinatesValid(image.lat, image.lng),
+              child: _renderDetailsBtn(ref, context, scrollController)
+          ),
+          _renderGoBackBtn(),
+          Visibility(
+              visible: currentPhotographIndex != 0 && !useMobileLayout(context),
+              child: _renderPreviousBtn(ref, context, pageController, currentPhotographIndex)
+          ),
+          Visibility(
+              visible: currentPhotographIndex != images.length - 1 && !useMobileLayout(context),
+              child: _renderNextBtn(ref, context, pageController, currentPhotographIndex)
+          ),
+          Visibility(
+              visible: photographTitleVisibility,
+              child: _renderPhotographTitle(context, ref, currentPhotographIndex)
+          ),
+        ]
     );
   }
 }

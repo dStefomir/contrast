@@ -4,7 +4,7 @@ import 'package:contrast/common/widgets/photograph.dart';
 import 'package:contrast/common/widgets/snack.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/model/image_data.dart';
-import 'package:contrast/modules/board/overlay/delete.dart';
+import 'package:contrast/modules/board/overlay/delete/delete.dart';
 import 'package:contrast/modules/board/photograph/overlay/upload.dart';
 import 'package:contrast/modules/board/photograph/service.dart';
 import 'package:contrast/modules/board/provider.dart';

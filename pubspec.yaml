@@ -44,6 +44,10 @@ dependencies:
   flutter_riverpod: ^2.3.6
   hooks_riverpod: ^2.3.7
   flutter_hooks: ^0.20.0
+  # html cross platform library
+  universal_html: ^2.2.3
+  # qr code library
+  qr_flutter: ^4.1.0
   # url launching library
   url_launcher: ^6.1.12
   # handling floating action button

@@ -6,7 +6,7 @@ import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/common/widgets/video.dart';
 import 'package:contrast/model/image_data.dart';
 import 'package:contrast/model/video_data.dart';
-import 'package:contrast/modules/board/overlay/delete.dart';
+import 'package:contrast/modules/board/overlay/delete/delete.dart';
 import 'package:contrast/modules/board/photograph/service.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/board/video/overlay/upload.dart';

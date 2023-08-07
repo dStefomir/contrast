@@ -1,7 +1,7 @@
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/model/image_data.dart';
 import 'package:contrast/model/video_data.dart';
-import 'package:contrast/modules/board/overlay/provider.dart';
+import 'package:contrast/modules/board/overlay/delete/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

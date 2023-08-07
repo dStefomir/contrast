@@ -28,22 +28,22 @@ class PhotographIndexNotifier extends StateNotifier<int> {
 }
 
 /// Provider for scale function of the photograph
-final photographScaleProvider = StateNotifierProvider.autoDispose<PhotographScaleNotifier, PhotoViewScaleStateController>((ref) {
+final photographViewProvider = StateNotifierProvider.autoDispose<PhotographViewNotifier, PhotoViewController>((ref) {
   ref.keepAlive();
-  final PhotoViewScaleStateController controller = PhotoViewScaleStateController();
+  final PhotoViewController controller = PhotoViewController();
   ref.onDispose(() => controller.dispose());
 
-  return PhotographScaleNotifier(ref: ref, controller: controller);
+  return PhotographViewNotifier(ref: ref, controller: controller);
 });
 /// Notifier for handling photograph scale
-class PhotographScaleNotifier extends StateNotifier<PhotoViewScaleStateController> {
+class PhotographViewNotifier extends StateNotifier<PhotoViewController> {
   /// Reference
   final Ref ref;
 
   /// Scale controller
-  final PhotoViewScaleStateController controller;
+  final PhotoViewController controller;
 
-  PhotographScaleNotifier({required this.ref, required this.controller}) : super(controller);
+  PhotographViewNotifier({required this.ref, required this.controller}) : super(controller);
 }
 
 /// Provider for photograph detail asset

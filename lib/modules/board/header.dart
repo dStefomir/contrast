@@ -4,6 +4,7 @@ import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/tab.dart';
 import 'package:contrast/common/widgets/text.dart';
+import 'package:contrast/modules/board/overlay/qr_code/qr_code.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
@@ -51,6 +52,17 @@ class BoardPageFilter extends ConsumerWidget {
                 useShadow: false,
               ),
             ),
+            MenuButton(
+                widgetKey: const Key('qr_code'),
+                iconPath: 'qr_code.svg',
+                disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                selected: false,
+                size: mobileMenuIconSize,
+                onClick: () => showDialog(
+                    context: context,
+                    builder: (context) => const QrCodeDialog()
+                )
+            ).translateOnPhotoHover,
             const Spacer(),
             MenuButton(
                 widgetKey: const Key('all'),
