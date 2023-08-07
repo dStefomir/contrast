@@ -1,6 +1,5 @@
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
-import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/tab.dart';
 import 'package:contrast/common/widgets/text.dart';
@@ -32,12 +31,17 @@ class BoardPageFilter extends ConsumerWidget {
       ],
     ),
     child: Stack(children: [
-      IconRenderer(
-        asset: 'background_picture.jpg',
-        color: Colors.black.withOpacity(0.1),
-        fit: BoxFit.fitHeight,
-        height: MediaQuery.of(context).size.height,
-        width: 56,
+      Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.black.withOpacity(0.0),
+              Colors.black.withOpacity(0.1),
+            ],
+          ),
+        ),
       ),
       Align(
         alignment: Alignment.topLeft,
@@ -119,13 +123,17 @@ class BoardPageFilter extends ConsumerWidget {
       height: desktopTopPadding,
       child: Stack(
         children: [
-          Align(
-              alignment: Alignment.center,
-              child: IconRenderer(
-                  asset: 'background_picture.jpg',
-                  fit: BoxFit.cover,
-                  color: Colors.black.withOpacity(0.05)
-              )
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withOpacity(0.0),
+                  Colors.black.withOpacity(0.1),
+                ],
+              ),
+            ),
           ),
           Align(
             alignment: Alignment.center,

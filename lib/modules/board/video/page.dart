@@ -102,6 +102,7 @@ class VideoBoardPage extends HookConsumerWidget {
       serviceProvider: videoServiceFetchProvider,
       loadPage: ref.read(videoBoardServiceProvider).getVideoBoard,
       itemsPerRow: 3,
+      dimHeight: MediaQuery.of(context).size.height / 2,
       itemBuilder: (BuildContext context, int index, int dataLength, VideoData wrapper) => LayoutBuilder(builder: (context, constraints) =>
           _renderVideo(context, ref, wrapper, constraints)
       ),

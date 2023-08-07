@@ -15,6 +15,8 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   final Future<PagedList<T>> Function(int page, String filter) loadPage;
   /// How many items per row should be shown in the grid view
   final int itemsPerRow;
+  /// Height of the dim effect
+  final double dimHeight;
   /// Renders each row of the list view
   final Widget Function(BuildContext context, int index, int dataLenght, T item) itemBuilder;
   /// What happens when the left arrow key is pressed
@@ -33,6 +35,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     this.onLeftKeyPressed,
     this.onRightKeyPressed,
     this.itemsPerRow = 4,
+    this.dimHeight = 0
   }) : super(key: key);
 
   /// Handles the keyboard key up and down for scrolling
@@ -84,21 +87,42 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
       return null;
     }, []);
 
-    return apiData.isNotEmpty ? LazyLoadScrollView(
-      onEndOfPage: () => ref.read(serviceProvider.notifier).fetchNextPage(loadPage),
-      scrollOffset: 200,
-      child: RawKeyboardListener(
-          autofocus: true,
-          focusNode: useFocusNode(),
-          onKey: (event) => _handleKeyEvent(event, controller),
-          child: GridView.builder(
-            controller: controller,
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
-            itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
-            itemCount: apiData.length,
-          )
-      ),
+    return apiData.isNotEmpty ? Stack(
+      alignment: Alignment.center,
+      children: [
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            height: dimHeight,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withOpacity(0.0),
+                  Colors.black.withOpacity(0.8),
+                ],
+              ),
+            ),
+          ),
+        ),
+        LazyLoadScrollView(
+          onEndOfPage: () => ref.read(serviceProvider.notifier).fetchNextPage(loadPage),
+          scrollOffset: 200,
+          child: RawKeyboardListener(
+              autofocus: true,
+              focusNode: useFocusNode(),
+              onKey: (event) => _handleKeyEvent(event, controller),
+              child: GridView.builder(
+                controller: controller,
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
+                itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
+                itemCount: apiData.length,
+              )
+          ),
+        ),
+      ],
     ) : listEmptyChild;
   }
 }

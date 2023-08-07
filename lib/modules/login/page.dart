@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/icon.dart';
@@ -24,10 +26,13 @@ class LoginPage extends HookConsumerWidget {
     child: BackgroundPage(
         child: Stack(
           children: [
-            IconRenderer(
-                asset: 'background.svg',
-                fit: BoxFit.cover,
-                color: Colors.black.withOpacity(0.05)
+            ImageFiltered(
+              imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: IconRenderer(
+                  asset: 'background.svg',
+                  fit: BoxFit.cover,
+                  color: Colors.black.withOpacity(0.1)
+              ),
             ),
             const Align(
               alignment: Alignment.topCenter,

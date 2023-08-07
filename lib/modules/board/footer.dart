@@ -7,7 +7,6 @@ import 'package:contrast/common/widgets/tab.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -138,16 +137,17 @@ class BoardPageFooter extends HookConsumerWidget {
             color: Colors.white,
             child: Stack(
               children: [
-                Align(
-                    alignment: Alignment.center,
-                    child: RotatedBox(
-                        quarterTurns: 2,
-                        child: IconRenderer(
-                            asset: 'background_picture.jpg',
-                            fit: BoxFit.cover,
-                            color: Colors.black.withOpacity(0.05)
-                        )
-                    )
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        Colors.black.withOpacity(0.0),
+                        Colors.black.withOpacity(0.1),
+                      ],
+                    ),
+                  ),
                 ),
                 Align(
                   alignment: Alignment.center,
