@@ -209,7 +209,6 @@ class PhotographDetailsView extends HookConsumerWidget {
       ImageData image,
       double maxWidth, maxHeight) {
     final serviceProvider = ref.watch(photographDetailsServiceProvider);
-    final photoViewController = ref.watch(photographViewProvider);
 
     return RawKeyboardListener(
       autofocus: true,
@@ -226,13 +225,10 @@ class PhotographDetailsView extends HookConsumerWidget {
                 minScale: PhotoViewComputedScale.contained,
                 maxScale: PhotoViewComputedScale.covered * 2,
                 heroAttributes: PhotoViewHeroAttributes(tag: index),
-                controller: photoViewController
             );
           },
           pageController: pageController,
           onPageChanged: (int page) async {
-            photoViewController.position = Offset.zero;
-            photoViewController.scale = photoViewController.initial.scale;
             ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(page);
             await scrollController.animateTo(
                 0,
