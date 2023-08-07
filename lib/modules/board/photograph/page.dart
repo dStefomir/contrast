@@ -99,7 +99,7 @@ class PhotographBoardPage extends HookConsumerWidget {
       serviceProvider: photographServiceFetchProvider,
       loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
       itemsPerRow: 3,
-      dimHeight: useMobileLayout(context) ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height / 3,
+      dimHeight: MediaQuery.of(context).size.height / 2.5,
       itemBuilder: (BuildContext context, int index, int dataLength, ImageWrapper wrapper) =>
           LayoutBuilder(builder: (context, constraints) =>
               _renderPhoto(ref, context, wrapper, constraints)
