@@ -9,6 +9,7 @@ import 'package:contrast/modules/board/photograph/overlay/upload.dart';
 import 'package:contrast/modules/board/photograph/service.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/security/session.dart';
+import 'package:contrast/utils/device.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -98,7 +99,7 @@ class PhotographBoardPage extends HookConsumerWidget {
       serviceProvider: photographServiceFetchProvider,
       loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
       itemsPerRow: 3,
-      dimHeight: MediaQuery.of(context).size.height / 4,
+      dimHeight: useMobileLayout(context) ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height / 3,
       itemBuilder: (BuildContext context, int index, int dataLength, ImageWrapper wrapper) =>
           LayoutBuilder(builder: (context, constraints) =>
               _renderPhoto(ref, context, wrapper, constraints)

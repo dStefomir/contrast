@@ -12,6 +12,7 @@ import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/board/video/overlay/upload.dart';
 import 'package:contrast/modules/board/video/service.dart';
 import 'package:contrast/security/session.dart';
+import 'package:contrast/utils/device.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -102,7 +103,7 @@ class VideoBoardPage extends HookConsumerWidget {
       serviceProvider: videoServiceFetchProvider,
       loadPage: ref.read(videoBoardServiceProvider).getVideoBoard,
       itemsPerRow: 3,
-      dimHeight: MediaQuery.of(context).size.height / 2,
+      dimHeight: useMobileLayout(context) ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height / 3,
       itemBuilder: (BuildContext context, int index, int dataLength, VideoData wrapper) => LayoutBuilder(builder: (context, constraints) =>
           _renderVideo(context, ref, wrapper, constraints)
       ),
