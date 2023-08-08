@@ -8,6 +8,7 @@ const double dialogWidth = 300;
 /// Dialog height
 const double dialogHeight = 360;
 
+/// Renders a Qr code dialog for sharing the website
 class QrCodeDialog extends StatelessWidget {
 
   const QrCodeDialog({super.key});

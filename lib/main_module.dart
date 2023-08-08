@@ -27,6 +27,7 @@ class MainModule extends Module {
     r.child(
         boardPageRoute,
         transition: TransitionType.fadeIn,
+        duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
             pageName: 'Board',
             render: () => BoardPage(
@@ -38,6 +39,7 @@ class MainModule extends Module {
     r.child(
         loginPageRoute,
         transition: TransitionType.downToUp,
+        duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
             pageName: 'Login',
             render: () => LoginPage()
@@ -46,6 +48,7 @@ class MainModule extends Module {
     r.child(
         photographDetailsPageRoute,
         transition: TransitionType.scale,
+        duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
             pageName: 'Photograph details',
             render: () => PhotographDetailPage(
@@ -59,6 +62,7 @@ class MainModule extends Module {
     r.child(
         videoDetailsPageRoute,
         transition: TransitionType.scale,
+        duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
             pageName: 'Video details',
             render: () => VideoDetailPage(

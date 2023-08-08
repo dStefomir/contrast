@@ -26,12 +26,16 @@ class LoginPage extends HookConsumerWidget {
     child: BackgroundPage(
         child: Stack(
           children: [
-            ImageFiltered(
-              imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-              child: IconRenderer(
-                  asset: 'background.svg',
-                  fit: BoxFit.cover,
-                  color: Colors.black.withOpacity(0.1)
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withOpacity(0.0),
+                    Colors.black.withOpacity(0.2),
+                  ],
+                ),
               ),
             ),
             const Align(
