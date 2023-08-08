@@ -56,64 +56,68 @@ class BoardPageFooter extends HookConsumerWidget {
     children: [
       Align(
         alignment: Alignment.bottomCenter,
-        child: Container(
-          height: mobileMenuWidth,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.5),
-                spreadRadius: 1,
-                blurRadius: 1,
-                offset: const Offset(0, 1),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () => ref.read(boardFooterTabProvider.notifier).switchTab('photos'),
-                    child: Container(
-                      height: mobileMenuIconSize,
-                      padding: const EdgeInsets.all(18.0),
-                      decoration: BoxDecoration(
-                        color: currentTab == 'photos' ? Colors.black: Colors.white,
-                      ),
-                      child: IconRenderer(
-                        asset: 'photo.svg',
-                        color: currentTab == 'photos' ? Colors.white: Colors.black,
-                        height: 50,
-                      )
-                    ),
-                  ),
-                ).translateOnPhotoHover,
-              ),
-              const SizedBox(width: 120),
-              Expanded(
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () => ref.read(boardFooterTabProvider.notifier).switchTab('videos'),
-                    child: Container(
-                      height: mobileMenuIconSize,
-                      padding: const EdgeInsets.all(18.0),
-                      decoration: BoxDecoration(
-                        color: currentTab == 'videos' ? Colors.black: Colors.white,
-                      ),
-                      child: IconRenderer(
-                          asset: 'video.svg',
-                          color: currentTab == 'videos' ? Colors.white: Colors.black,
-                          height: 50
+        child: ShadowWidget(
+          offset: const Offset(0, -2),
+          blurRadius: 2,
+          child: Container(
+            height: mobileMenuWidth,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 1,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => ref.read(boardFooterTabProvider.notifier).switchTab('photos'),
+                      child: Container(
+                        height: mobileMenuIconSize,
+                        padding: const EdgeInsets.all(18.0),
+                        decoration: BoxDecoration(
+                          color: currentTab == 'photos' ? Colors.black: Colors.white,
+                        ),
+                        child: IconRenderer(
+                          asset: 'photo.svg',
+                          color: currentTab == 'photos' ? Colors.white: Colors.black,
+                          height: 50,
+                        )
                       ),
                     ),
-                  ),
-                ).translateOnPhotoHover,
-              ),
-            ],
+                  ).translateOnPhotoHover,
+                ),
+                const SizedBox(width: 120),
+                Expanded(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => ref.read(boardFooterTabProvider.notifier).switchTab('videos'),
+                      child: Container(
+                        height: mobileMenuIconSize,
+                        padding: const EdgeInsets.all(18.0),
+                        decoration: BoxDecoration(
+                          color: currentTab == 'videos' ? Colors.black: Colors.white,
+                        ),
+                        child: IconRenderer(
+                            asset: 'video.svg',
+                            color: currentTab == 'videos' ? Colors.white: Colors.black,
+                            height: 50
+                        ),
+                      ),
+                    ),
+                  ).translateOnPhotoHover,
+                ),
+              ],
+            ),
           ),
         ),
       ),

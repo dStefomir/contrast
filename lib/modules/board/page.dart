@@ -196,6 +196,15 @@ class BoardPageState extends ConsumerState<BoardPage> {
                 )
             ),
             Align(
+                alignment: Alignment.bottomCenter,
+                child: SlideTransitionAnimation(
+                    getStart: () => const Offset(0.0, 1),
+                    getEnd: () => Offset.zero,
+                    controller: useAnimationController(duration: const Duration(milliseconds: 1200)),
+                    child: const BoardPageFooter()
+                )
+            ),
+            Align(
                 alignment: useMobileLayout(context)
                     ? Alignment.topLeft
                     : Alignment.topCenter,
@@ -210,15 +219,6 @@ class BoardPageState extends ConsumerState<BoardPage> {
                   });},
                     controller: useAnimationController(duration: const Duration(milliseconds: 1200)),
                     child: const BoardPageFilter()
-                )
-            ),
-            Align(
-                alignment: Alignment.bottomCenter,
-                child: SlideTransitionAnimation(
-                    getStart: () => const Offset(0.0, 1),
-                    getEnd: () => Offset.zero,
-                    controller: useAnimationController(duration: const Duration(milliseconds: 1200)),
-                    child: const BoardPageFooter()
                 )
             ),
             Visibility(

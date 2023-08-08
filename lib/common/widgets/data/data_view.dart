@@ -99,7 +99,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.black.withOpacity(0.0),
+                  Colors.white,
                   Colors.black.withOpacity(0.8),
                 ],
               ),

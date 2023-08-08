@@ -9,7 +9,6 @@ import 'package:contrast/modules/board/photograph/overlay/upload.dart';
 import 'package:contrast/modules/board/photograph/service.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/security/session.dart';
-import 'package:contrast/utils/device.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
