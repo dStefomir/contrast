@@ -3,7 +3,6 @@ import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/tab.dart';
 import 'package:contrast/common/widgets/text.dart';
-import 'package:contrast/modules/board/overlay/qr_code/qr_code.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
@@ -55,10 +54,7 @@ class BoardPageFilter extends ConsumerWidget {
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: false,
                   size: mobileMenuIconSize,
-                  onClick: () => showDialog(
-                      context: context,
-                      builder: (context) => const QrCodeDialog()
-                  )
+                  onClick: () => ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(true)
               ).translateOnPhotoHover,
               const Spacer(),
               MenuButton(

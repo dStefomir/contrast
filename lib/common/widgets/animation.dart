@@ -50,7 +50,7 @@ class FadeAnimation extends HookConsumerWidget {
 class SlideTransitionAnimation extends HookConsumerWidget {
   /// Child widget
   final Widget child;
-  /// When the animation should be executred
+  /// When the animation should be executed
   final void Function(AnimationController)? whenTo;
   /// Gets the start of the animation
   final Offset Function() getStart;

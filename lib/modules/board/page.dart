@@ -6,6 +6,7 @@ import 'package:contrast/common/widgets/snack.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/footer.dart';
 import 'package:contrast/modules/board/header.dart';
+import 'package:contrast/modules/board/overlay/qr_code/qr_code.dart';
 import 'package:contrast/modules/board/photograph/overlay/upload.dart';
 import 'package:contrast/modules/board/photograph/page.dart';
 import 'package:contrast/modules/board/provider.dart';
@@ -123,112 +124,147 @@ class BoardPageState extends ConsumerState<BoardPage> {
   }
 
   @override
-  Widget build(BuildContext context) => BackgroundPage(
-      child: Stack(
-          children: [
-            Visibility(
-              visible: !useMobileLayout(context),
-              child: Align(
+  Widget build(BuildContext context) {
+    final bool? shouldShowQrCodeDialog = ref.watch(overlayVisibilityProvider(const Key('qr_code')));
+
+    return BackgroundPage(
+        child: Stack(
+            children: [
+              Visibility(
+                visible: !useMobileLayout(context),
+                child: Align(
+                    alignment: Alignment.center,
+                    child: FadeAnimation(
+                        start: 1,
+                        end: 0,
+                        whenTo: (controller) {
+                          final String currentTab = ref.watch(boardFooterTabProvider);
+                          final String currentFilter = ref.watch(boardHeaderTabProvider);
+                          useValueChanged(currentTab, (_, __) async {
+                            controller.reset();
+                            controller.forward();
+                          });
+                          useValueChanged(currentFilter, (_, __) async {
+                            controller.reset();
+                            controller.forward();
+                          });
+                        },
+                        child: const StyledText(
+                          text: 'C O N T R A S T',
+                          color: Colors.black,
+                          useShadow: false,
+                          weight: FontWeight.bold,
+                          fontSize: 60,
+                        )
+                    )
+                ),
+              ),
+              Align(
                   alignment: Alignment.center,
-                  child: FadeAnimation(
-                      start: 1,
-                      end: 0,
-                      whenTo: (controller) {
-                        final String currentTab = ref.watch(boardFooterTabProvider);
-                        final String currentFilter = ref.watch(boardHeaderTabProvider);
-                        useValueChanged(currentTab, (_, __) async {
-                          controller.reset();
-                          controller.forward();
-                        });
-                        useValueChanged(currentFilter, (_, __) async {
-                          controller.reset();
-                          controller.forward();
-                        });},
-                      child: const StyledText(
-                        text: 'C O N T R A S T',
-                        color: Colors.black,
-                        useShadow: false,
-                        weight: FontWeight.bold,
-                        fontSize: 60,
-                      )
+                  child: Padding(
+                    padding: !useMobileLayout(context)
+                        ? EdgeInsets.only(top: ref.read<String>(boardFooterTabProvider) == 'photos' ? desktopTopPadding : 0, bottom: desktopBottomPadding)
+                        : EdgeInsets.only(top: 0.2, left: ref.read<String>(boardFooterTabProvider) == 'photos' ? mobileMenuWidth : 0, bottom: mobileMenuWidth),
+                    child: ref.read(boardFooterTabProvider) == 'photos'
+                        ? SlideTransitionAnimation(
+                        getStart: () => _calculateBoardStartAnimation(ref),
+                        getEnd: () => const Offset(0, 0),
+                        whenTo: (controller) {
+                          final String currentTab = ref.watch(
+                              boardFooterTabProvider);
+                          final String currentFilter = ref.watch(
+                              boardHeaderTabProvider);
+                          useValueChanged(currentTab, (_, __) async {
+                            controller.reset();
+                            controller.forward();
+                          });
+                          useValueChanged(currentFilter, (_, __) async {
+                            controller.reset();
+                            controller.forward();
+                          });
+                        },
+                        controller: useAnimationController(duration: const Duration(milliseconds: 500)),
+                        child: const PhotographBoardPage())
+                        : SlideTransitionAnimation(
+                        getStart: () => _calculateBoardStartAnimation(ref),
+                        getEnd: () => const Offset(0, 0),
+                        whenTo: (controller) {
+                          final String currentTab = ref.watch(boardFooterTabProvider);
+                          final String currentFilter = ref.watch(boardHeaderTabProvider);
+                          useValueChanged(currentTab, (_, __) async {
+                            controller.reset();
+                            controller.forward();
+                          });
+                          useValueChanged(currentFilter, (_, __) async {
+                            controller.reset();
+                            controller.forward();
+                          });
+                        },
+                        controller: useAnimationController(duration: const Duration(milliseconds: 500)),
+                        child: const VideoBoardPage()
+                    ),
                   )
               ),
-            ),
-            Align(
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: !useMobileLayout(context)
-                      ? EdgeInsets.only(top: ref.read<String>(boardFooterTabProvider) == 'photos' ? desktopTopPadding : 0, bottom: desktopBottomPadding)
-                      : EdgeInsets.only(top: 0.2, left: ref.read<String>(boardFooterTabProvider) == 'photos' ? mobileMenuWidth : 0, bottom: mobileMenuWidth),
-                  child: ref.read(boardFooterTabProvider) == 'photos'
-                      ? SlideTransitionAnimation(
-                      getStart: () => _calculateBoardStartAnimation(ref),
-                      getEnd: () => const Offset(0, 0),
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SlideTransitionAnimation(
+                      getStart: () => const Offset(0.0, 1),
+                      getEnd: () => Offset.zero,
+                      controller: useAnimationController(duration: const Duration(milliseconds: 1200)),
+                      child: const BoardPageFooter()
+                  )
+              ),
+              Align(
+                  alignment: useMobileLayout(context)
+                      ? Alignment.topLeft
+                      : Alignment.topCenter,
+                  child: SlideTransitionAnimation(
+                      duration: const Duration(milliseconds: 1000),
+                      getStart: () =>
+                      ref.watch(boardFooterTabProvider) == 'photos'
+                          ? const Offset(0, -10)
+                          : Offset(0.0, ref.watch(boardFooterTabProvider) == 'videos' ? 0 : -10),
+                      getEnd: () =>
+                      ref.watch(boardFooterTabProvider) == 'photos'
+                          ? Offset.zero
+                          : Offset(0, ref.watch(boardFooterTabProvider) == 'videos' ? -10 : 10),
                       whenTo: (controller) {
                         final String currentTab = ref.watch(boardFooterTabProvider);
-                        final String currentFilter = ref.watch(boardHeaderTabProvider);
                         useValueChanged(currentTab, (_, __) async {
                           controller.reset();
                           controller.forward();
                         });
-                        useValueChanged(currentFilter, (_, __) async {
-                          controller.reset();
-                          controller.forward();
-                        });},
-                      controller: useAnimationController(duration: const Duration(milliseconds: 500)),
-                      child: const PhotographBoardPage())
-                      : SlideTransitionAnimation(getStart: () => _calculateBoardStartAnimation(ref),
-                      getEnd: () => const Offset(0, 0),
-                      whenTo: (controller) {
-                        final String currentTab = ref.watch(boardFooterTabProvider);
-                        final String currentFilter = ref.watch(boardHeaderTabProvider);
-                        useValueChanged(currentTab, (_, __) async {
-                          controller.reset();
-                          controller.forward();
-                        });
-                        useValueChanged(currentFilter, (_, __) async {
-                          controller.reset();
-                          controller.forward();
-                        });},
-                      controller: useAnimationController(duration: const Duration(milliseconds: 500)),
-                      child: const VideoBoardPage()
-                  ),
-                )
-            ),
-            Align(
+                      },
+                      controller: useAnimationController(duration: const Duration(milliseconds: 1200)),
+                      child: const BoardPageFilter()
+                  )
+              ),
+              Visibility(
+                  visible: Session().isLoggedIn(),
+                  child: Align(
+                      alignment: useMobileLayout(context)
+                          ? Alignment.bottomCenter
+                          : Alignment.bottomRight,
+                      child: _buildFloatingActionButtons(context, ref)
+                  )
+              ),
+              shouldShowQrCodeDialog != null ? Align(
                 alignment: Alignment.bottomCenter,
                 child: SlideTransitionAnimation(
-                    getStart: () => const Offset(0.0, 1),
-                    getEnd: () => Offset.zero,
-                    controller: useAnimationController(duration: const Duration(milliseconds: 1200)),
-                    child: const BoardPageFooter()
-                )
-            ),
-            Align(
-                alignment: useMobileLayout(context)
-                    ? Alignment.topLeft
-                    : Alignment.topCenter,
-                child: SlideTransitionAnimation(duration: const Duration(milliseconds: 1000),
-                    getStart: () => ref.watch(boardFooterTabProvider) == 'photos' ? const Offset(0, -10) : Offset(0.0, ref.watch(boardFooterTabProvider) == 'videos' ? 0 : -10),
-                    getEnd: () => ref.watch(boardFooterTabProvider) == 'photos' ? Offset.zero : Offset(0, ref.watch(boardFooterTabProvider) == 'videos' ? -10 : 10),
+                    duration: const Duration(milliseconds: 1000),
+                    getStart: () => shouldShowQrCodeDialog ? const Offset(0, 1) : const Offset(0, 0),
+                    getEnd: () => shouldShowQrCodeDialog ? const Offset(0, 0) : const Offset(0, 10),
                     whenTo: (controller) {
-                  final String currentTab = ref.watch(boardFooterTabProvider);
-                  useValueChanged(currentTab, (_, __) async {
-                    controller.reset();
-                    controller.forward();
-                  });},
-                    controller: useAnimationController(duration: const Duration(milliseconds: 1200)),
-                    child: const BoardPageFilter()
-                )
-            ),
-            Visibility(
-                visible: Session().isLoggedIn(),
-                child: Align(
-                    alignment: useMobileLayout(context) ? Alignment.bottomCenter : Alignment.bottomRight,
-                    child: _buildFloatingActionButtons(context, ref)
-                )
-            ),
-          ]
-      )
-  );
+                      useValueChanged(shouldShowQrCodeDialog, (_, __) async {
+                        controller.reset();
+                        controller.forward();
+                      });
+                    },
+                    child: const QrCodeDialog()
+                ),
+              ) : Container()
+            ]
+        )
+    );
+  }
 }
