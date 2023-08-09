@@ -115,15 +115,11 @@ class BoardPageState extends ConsumerState<BoardPage> {
   Widget build(BuildContext context) {
     final bool? shouldShowQrCodeDialog = ref.watch(overlayVisibilityProvider(const Key('qr_code')));
     final bool? shouldShowDeletePhotographDialog = ref.watch(overlayVisibilityProvider(const Key('delete_image')));
-    final ImageData? imageToBeDeleted = ref.watch(deleteImageProvider);
     final bool? shouldShowDeleteVideoDialog = ref.watch(overlayVisibilityProvider(const Key('delete_video')));
-    final VideoData? videoToBeDeleted = ref.watch(deleteVideoProvider);
     final bool? shouldShowUploadPhotographDialog = ref.watch(overlayVisibilityProvider(const Key('upload_image')));
     final bool? shouldShowEditPhotographDialog = ref.watch(overlayVisibilityProvider(const Key('edit_image')));
-    final ImageData? imageToBeEdited = ref.watch(photographEditProvider);
     final bool? shouldShowUploadVideoDialog = ref.watch(overlayVisibilityProvider(const Key('upload_video')));
     final bool? shouldShowEditVideoDialog = ref.watch(overlayVisibilityProvider(const Key('edit_video')));
-    final VideoData? videoToBeEdited = ref.watch(videoEditProvider);
 
     return BackgroundPage(
         child: Stack(
@@ -181,7 +177,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                             controller.forward();
                           });
                         },
-                        controller: useAnimationController(duration: const Duration(milliseconds: 500)),
+                        duration: const Duration(milliseconds: 500),
                         child: const PhotographBoardPage())
                         : SlideTransitionAnimation(
                         getStart: () => _calculateBoardStartAnimation(ref),
@@ -198,7 +194,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                             controller.forward();
                           });
                         },
-                        controller: useAnimationController(duration: const Duration(milliseconds: 500)),
+                        duration: const Duration(milliseconds: 500),
                         child: const VideoBoardPage()
                     ),
                   )
@@ -208,7 +204,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                   child: SlideTransitionAnimation(
                       getStart: () => const Offset(0.0, 1),
                       getEnd: () => Offset.zero,
-                      controller: useAnimationController(duration: const Duration(milliseconds: 1200)),
+                      duration: const Duration(milliseconds: 1200),
                       child: const BoardPageFooter()
                   )
               ),
@@ -217,7 +213,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                       ? Alignment.topLeft
                       : Alignment.topCenter,
                   child: SlideTransitionAnimation(
-                      duration: const Duration(milliseconds: 1000),
+                      duration: const Duration(milliseconds: 1200),
                       getStart: () =>
                       ref.watch(boardFooterTabProvider) == 'photos'
                           ? const Offset(0, -10)
@@ -233,7 +229,6 @@ class BoardPageState extends ConsumerState<BoardPage> {
                           controller.forward();
                         });
                       },
-                      controller: useAnimationController(duration: const Duration(milliseconds: 1200)),
                       child: const BoardPageFilter()
                   )
               ),
@@ -246,7 +241,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                       child: _buildFloatingActionButtons(context, ref)
                   )
               ),
-              shouldShowDeletePhotographDialog != null && imageToBeDeleted != null ? Align(
+              shouldShowDeletePhotographDialog != null ? Align(
                 alignment: Alignment.bottomCenter,
                 child: SlideTransitionAnimation(
                   duration: const Duration(milliseconds: 1000),
@@ -258,20 +253,27 @@ class BoardPageState extends ConsumerState<BoardPage> {
                       controller.forward();
                     });
                   },
+                  onCompleted: () {
+                    if(!shouldShowDeletePhotographDialog) {
+                      ref.read(deleteImageProvider.notifier).setDeleteImage(null);
+                    }
+                  },
                   child: DeleteDialog<ImageData>(
-                      data: imageToBeDeleted,
+                    data: ref.read(deleteImageProvider),
                     onSubmit: (image) {
+                      if (image != null) {
                         ref.read(photographServiceFetchProvider.notifier).removeItem(
                             ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == image.id)
                         );
                         ref.read(deleteImageProvider.notifier).setDeleteImage(null);
                         ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
                         showSuccessTextOnSnackBar(context, "Photograph was successfully deleted.");
+                      }
                     },
                   ),
                 ),
               ) : Container(),
-              shouldShowDeleteVideoDialog != null && videoToBeDeleted != null ? Align(
+              shouldShowDeleteVideoDialog != null ? Align(
                 alignment: Alignment.bottomCenter,
                 child: SlideTransitionAnimation(
                   duration: const Duration(milliseconds: 1000),
@@ -283,20 +285,27 @@ class BoardPageState extends ConsumerState<BoardPage> {
                       controller.forward();
                     });
                   },
+                  onCompleted: () {
+                    if(!shouldShowDeleteVideoDialog) {
+                      ref.read(deleteImageProvider.notifier).setDeleteImage(null);
+                    }
+                  },
                   child: DeleteDialog<VideoData>(
-                    data: videoToBeDeleted,
+                    data: ref.read(deleteVideoProvider),
                     onSubmit: (video) {
-                      ref.read(videoServiceFetchProvider.notifier).removeItem(
-                          ref.read(videoServiceFetchProvider).firstWhere((element) => element.id == video.id)
-                      );
-                      ref.read(deleteVideoProvider.notifier).setDeleteVideo(null);
-                      ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
-                      showSuccessTextOnSnackBar(context, "Video was successfully deleted.");
+                      if (video != null) {
+                        ref.read(videoServiceFetchProvider.notifier).removeItem(
+                            ref.read(videoServiceFetchProvider).firstWhere((element) => element.id == video.id)
+                        );
+                        ref.read(deleteVideoProvider.notifier).setDeleteVideo(null);
+                        ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
+                        showSuccessTextOnSnackBar(context, "Video was successfully deleted.");
+                      }
                     },
                   ),
                 ),
               ) : Container(),
-              shouldShowEditPhotographDialog != null && imageToBeEdited != null ? Align(
+              shouldShowEditPhotographDialog != null ? Align(
                 alignment: Alignment.bottomCenter,
                 child: SlideTransitionAnimation(
                   duration: const Duration(milliseconds: 1000),
@@ -308,8 +317,13 @@ class BoardPageState extends ConsumerState<BoardPage> {
                       controller.forward();
                     });
                   },
+                  onCompleted: () {
+                    if(!shouldShowEditPhotographDialog) {
+                      ref.read(photographEditProvider.notifier).setEditImage(null);
+                    }
+                  },
                   child: UploadImageDialog(
-                    data: imageToBeEdited,
+                    data: ref.read(photographEditProvider),
                     onSubmit: (image) {
                       ImageMetaData meta = ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == element.image.id).metadata;
                       ref.read(photographServiceFetchProvider.notifier).removeItem(
@@ -365,7 +379,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                   ),
                 ),
               ) : Container(),
-              shouldShowEditVideoDialog != null && videoToBeEdited != null ? Align(
+              shouldShowEditVideoDialog != null ? Align(
                 alignment: Alignment.bottomCenter,
                 child: SlideTransitionAnimation(
                   duration: const Duration(milliseconds: 1000),
@@ -377,8 +391,13 @@ class BoardPageState extends ConsumerState<BoardPage> {
                       controller.forward();
                     });
                   },
+                  onCompleted: () {
+                    if(!shouldShowEditVideoDialog) {
+                      ref.read(videoEditProvider.notifier).setEditVideo(null);
+                    }
+                  },
                   child: UploadVideoDialog(
-                    data: videoToBeEdited,
+                    data: ref.read(videoEditProvider),
                     onSubmit: (video) {
                       ref.read(videoServiceFetchProvider.notifier).removeItem(
                           ref.read(videoServiceFetchProvider).firstWhere((element) => element.id == video.id)

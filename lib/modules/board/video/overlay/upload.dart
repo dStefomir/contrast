@@ -2,13 +2,14 @@ import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/input.dart';
 import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/shadow.dart';
+import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/model/video_data.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/board/video/overlay/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 /// Dialog height
-const double dialogHeight = 400;
+const double dialogHeight = 450;
 /// Renders the upload image dialog
 class UploadVideoDialog extends HookConsumerWidget {
   /// Existing video data
@@ -105,16 +106,15 @@ class UploadVideoDialog extends HookConsumerWidget {
         padding: const EdgeInsets.all(10.0),
         child: Row(
             children: [
-              Text(
-                  data != null ? "Edit Video" : "Upload Video",
-                  style: Theme.of(context).textTheme.headlineSmall
+              StyledText(
+                  text: data != null ? "Edit Video" : "Upload Video",
+                  weight: FontWeight.bold
               ),
               const Spacer(),
               DefaultButton(
                   onClick: () {
                     if(data != null) {
-                      ref.read(overlayVisibilityProvider(const Key("upload_video")).notifier).setOverlayVisibility(false);
-                      ref.read(videoEditProvider.notifier).setEditVideo(null);
+                      ref.read(overlayVisibilityProvider(const Key("edit_video")).notifier).setOverlayVisibility(false);
                     } else {
                       ref.read(overlayVisibilityProvider(const Key("upload_video")).notifier).setOverlayVisibility(false);
                     }
@@ -134,7 +134,11 @@ class UploadVideoDialog extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) =>
       WillPopScope(
         onWillPop: () async {
-
+          if(data != null) {
+            ref.read(overlayVisibilityProvider(const Key("edit_video")).notifier).setOverlayVisibility(false);
+          } else {
+            ref.read(overlayVisibilityProvider(const Key("upload_video")).notifier).setOverlayVisibility(false);
+          }
           return true;
         },
         child: Form(

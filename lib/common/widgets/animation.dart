@@ -52,12 +52,12 @@ class SlideTransitionAnimation extends HookConsumerWidget {
   final Widget child;
   /// When the animation should be executed
   final void Function(AnimationController)? whenTo;
+  /// Gets triggered when animation is completed
+  final void Function()? onCompleted;
   /// Gets the start of the animation
   final Offset Function() getStart;
   /// Gets the end of the animation
   final Offset Function() getEnd;
-  /// Controller for the animation
-  final AnimationController? controller;
   /// Duration of the animation
   final Duration duration;
 
@@ -66,19 +66,23 @@ class SlideTransitionAnimation extends HookConsumerWidget {
     required this.child,
     required this.getStart,
     required this.getEnd,
-    this.controller,
     this.whenTo,
+    this.onCompleted,
     this.duration = const Duration(microseconds: 500)
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AnimationController? animationController;
-    if (controller == null) {
-      animationController = useAnimationController(duration: duration);
-    }
+    AnimationController? animationController = useAnimationController(duration: duration);
     if (whenTo != null) {
-      whenTo!(controller ?? animationController!);
+      whenTo!(animationController);
+    }
+    if(onCompleted != null) {
+      animationController.addStatusListener((status) {
+        if (status == AnimationStatus.completed && onCompleted != null) {
+          onCompleted!();
+        }
+      });
     }
 
     return SlideTransition(
@@ -87,7 +91,7 @@ class SlideTransitionAnimation extends HookConsumerWidget {
           end: getEnd(),
         ).animate(
             CurvedAnimation(
-              parent: controller ?? animationController!..forward(),
+              parent: animationController..forward(),
               curve: Curves.ease,
             )
         ),

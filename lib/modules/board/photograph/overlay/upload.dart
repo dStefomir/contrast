@@ -20,7 +20,7 @@ import 'dart:io';
 import '../../../../../common/widgets/icon.dart';
 
 /// Dialog height
-const double dialogHeight = 400;
+const double dialogHeight = 450;
 
 /// Renders the upload image dialog
 class UploadImageDialog extends HookConsumerWidget {
@@ -284,16 +284,15 @@ class UploadImageDialog extends HookConsumerWidget {
         padding: const EdgeInsets.all(10.0),
         child: Row(
             children: [
-              Text(
-                  data != null ? "Edit Photograph" : "Upload Photograph",
-                  style: Theme.of(context).textTheme.headlineSmall
+              StyledText(
+                  text: data != null ? "Edit Photograph" : "Upload Photograph",
+                  weight: FontWeight.bold
               ),
               const Spacer(),
               DefaultButton(
                   onClick: () {
                     if(data != null) {
                       ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(false);
-                      ref.read(photographEditProvider.notifier).setEditImage(null);
                     } else {
                       ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
                     }
@@ -313,26 +312,37 @@ class UploadImageDialog extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final FileData fileData = ref.watch(fileProvider);
 
-    return Form(
-      key: _formKey,
-      child: ShadowWidget(
-       offset: const Offset(0, 0),
-       blurRadius: 4,
-       child: Container(
-         color: Colors.white,
-         height: dialogHeight,
-         child: Column(
-           children: [
-             _renderDialogHeader(context, ref),
-             Padding(
-               padding: const EdgeInsets.all(10.0),
-               child: _renderDialogBody(context, ref, fileData),
-             ),
-             _renderDialogActions(context, ref),
-           ],
+    return WillPopScope(
+      onWillPop: () async {
+        if(data != null) {
+          ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(false);
+        } else {
+          ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
+        }
+
+        return true;
+      },
+      child: Form(
+        key: _formKey,
+        child: ShadowWidget(
+         offset: const Offset(0, 0),
+         blurRadius: 4,
+         child: Container(
+           color: Colors.white,
+           height: dialogHeight,
+           child: Column(
+             children: [
+               _renderDialogHeader(context, ref),
+               Padding(
+                 padding: const EdgeInsets.all(10.0),
+                 child: _renderDialogBody(context, ref, fileData),
+               ),
+               _renderDialogActions(context, ref),
+             ],
+           ),
          ),
-       ),
-      )
+        )
+      ),
     );
   }
 }

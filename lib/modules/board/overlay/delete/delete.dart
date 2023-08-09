@@ -8,36 +8,42 @@ import 'package:contrast/modules/board/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 /// Dialog height
-const double dialogHeight = 250;
+const double dialogHeight = 350;
 /// Renders a delete item dialog
 class DeleteDialog<T> extends HookConsumerWidget {
   // Image Entity is passed for deleting
-  final T data;
+  final T? data;
   /// Function which updates the board
-  final void Function(T entry) onSubmit;
+  final void Function(T? entry) onSubmit;
 
   const DeleteDialog({Key? key, required this.data, required this.onSubmit}) : super(key: key);
 
   /// What happens when the user agrees to delete an item
   void _onDelete(WidgetRef ref) async {
-    final deleteProvider = ref.read(deleteEntriesProvider.notifier);
-    if(_isImage()) {
-      final ImageData photograph = await deleteProvider.deletePhotograph(data as ImageData);
-      onSubmit(photograph as T);
-    } else {
-      final VideoData video = await deleteProvider.deleteVideo(data as VideoData);
-      onSubmit(video as T);
+    if(data != null) {
+      final deleteProvider = ref.read(deleteEntriesProvider.notifier);
+      if(_isImage()) {
+        final ImageData photograph = await deleteProvider.deletePhotograph(data as ImageData);
+        onSubmit(photograph as T);
+      } else {
+        final VideoData video = await deleteProvider.deleteVideo(data as VideoData);
+        onSubmit(video as T);
+      }
     }
   }
 
   // Checks if dta is actually ImageData or VideoData
-  bool _isImage() => data is ImageData;
+  bool _isImage() => data != null && data is ImageData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return WillPopScope(
       onWillPop: () async {
-        ref.read(overlayVisibilityProvider(Key(_isImage() ? 'delete_image' : 'delete_photograph')).notifier).setOverlayVisibility(false);
+        if(_isImage()) {
+          ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
+        } else {
+          ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
+        }
 
         return true;
       },
@@ -58,7 +64,13 @@ class DeleteDialog<T> extends HookConsumerWidget {
                             const StyledText(text: "Warning", weight: FontWeight.bold),
                             const Spacer(),
                             DefaultButton(
-                                onClick: () => ref.read(overlayVisibilityProvider(Key(_isImage() ? 'delete_image' : 'delete_photograph')).notifier).setOverlayVisibility(false),
+                                onClick: () {
+                                  if(_isImage()) {
+                                    ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
+                                  } else {
+                                    ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
+                                  }
+                                },
                                 color: Colors.black,
                                 borderColor: Colors.white,
                                 icon: 'close.svg'
