@@ -80,3 +80,16 @@ class VideoServiceNotifier extends StateNotifier<AsyncValue<String>> {
     return video;
   }
 }
+
+/// Provider for editing an video
+final videoEditProvider = StateNotifierProvider<EditVideoNotifier, VideoData?>((ref) => EditVideoNotifier(ref: ref));
+/// Notifier for editing an video
+class EditVideoNotifier extends StateNotifier<VideoData?> {
+  /// Reference
+  final Ref ref;
+
+  EditVideoNotifier({required this.ref}) : super(null);
+
+  /// Sets a selected video for edit
+  void setEditVideo(VideoData? video) => state = video;
+}

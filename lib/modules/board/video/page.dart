@@ -1,18 +1,16 @@
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/common/widgets/photograph.dart';
-import 'package:contrast/common/widgets/snack.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/common/widgets/video.dart';
 import 'package:contrast/model/image_data.dart';
 import 'package:contrast/model/video_data.dart';
-import 'package:contrast/modules/board/overlay/delete/delete.dart';
+import 'package:contrast/modules/board/overlay/delete/provider.dart';
 import 'package:contrast/modules/board/photograph/service.dart';
 import 'package:contrast/modules/board/provider.dart';
-import 'package:contrast/modules/board/video/overlay/upload.dart';
+import 'package:contrast/modules/board/video/overlay/provider.dart';
 import 'package:contrast/modules/board/video/service.dart';
 import 'package:contrast/security/session.dart';
-import 'package:contrast/utils/device.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -45,30 +43,17 @@ class VideoBoardPage extends HookConsumerWidget {
                 title: const Text("Edit Video"),
                 trailingIcon: const Icon(Icons.edit),
                 onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => UploadVideoDialog(
-                        data: video,
-                      )).then((value) {
-                        if(value != null) {
-                          ref.read(videoServiceFetchProvider.notifier).updateItem(video, value);
-                          showSuccessTextOnSnackBar(context, "Video was successfully edited.");
-                        }
-                      });
+                  ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(true);
+                  ref.read(videoEditProvider.notifier).setEditVideo(video);
                 }
             ),
             FocusedMenuItem(
                 title: const Text("Delete Video"),
                 trailingIcon: const Icon(Icons.delete),
-                onPressed: () => showDialog(
-                    context: context,
-                    builder: (context) => DeleteDialog<VideoData>(data: video,)
-                ).then((value) {
-                  if(value != null) {
-                    ref.read(videoServiceFetchProvider.notifier).removeItem(video);
-                    showSuccessTextOnSnackBar(context, "Video was successfully deleted.");
-                  }
-                })
+                onPressed: () {
+                  ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(true);
+                  ref.read(deleteVideoProvider.notifier).setDeleteVideo(video);
+                }
             ),
           ],
           child: ContrastPhotograph(

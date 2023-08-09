@@ -169,3 +169,16 @@ class FileServiceNotifier extends StateNotifier<AsyncValue<String>> {
     return result;
   }
 }
+
+/// Provider for editing an image
+final photographEditProvider = StateNotifierProvider<EditImageNotifier, ImageData?>((ref) => EditImageNotifier(ref: ref));
+/// Notifier for editing an image
+class EditImageNotifier extends StateNotifier<ImageData?> {
+  /// Reference
+  final Ref ref;
+
+  EditImageNotifier({required this.ref}) : super(null);
+
+  /// Sets a selected image for edit
+  void setEditImage(ImageData? image) => state = image;
+}

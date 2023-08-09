@@ -1,11 +1,10 @@
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/common/widgets/photograph.dart';
-import 'package:contrast/common/widgets/snack.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/model/image_data.dart';
-import 'package:contrast/modules/board/overlay/delete/delete.dart';
-import 'package:contrast/modules/board/photograph/overlay/upload.dart';
+import 'package:contrast/modules/board/overlay/delete/provider.dart';
+import 'package:contrast/modules/board/photograph/overlay/provider.dart';
 import 'package:contrast/modules/board/photograph/service.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/security/session.dart';
@@ -42,30 +41,16 @@ class PhotographBoardPage extends HookConsumerWidget {
                 title: const Text("Edit Photograph"),
                 trailingIcon: const Icon(Icons.edit),
                 onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => UploadImageDialog(data: wrapper.image)
-                  ).then((photograph) {
-                    if(photograph != null) {
-                      final ImageWrapper updatedPhotograph = ImageWrapper(image: photograph, metadata: wrapper.metadata);
-                      ref.read(photographServiceFetchProvider.notifier).updateItem(wrapper, updatedPhotograph);
-                      showSuccessTextOnSnackBar(context, "Photograph was successfully edited.");
-                    }
-                  });
+                  ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(true);
+                  ref.read(photographEditProvider.notifier).setEditImage(wrapper.image);
                 }),
             FocusedMenuItem(
                 title: const Text("Delete Photograph"),
                 trailingIcon: const Icon(Icons.delete),
-                onPressed: () =>
-                  showDialog(
-                      context: context,
-                      builder: (context) => DeleteDialog<ImageData>(data: wrapper.image)
-                  ).then((photograph) {
-                    if(photograph != null) {
-                      ref.read(photographServiceFetchProvider.notifier).removeItem(wrapper);
-                      showSuccessTextOnSnackBar(context, "Photograph was successfully deleted.");
-                    }
-                  })
+                onPressed: () {
+                  ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(true);
+                  ref.read(deleteImageProvider.notifier).setDeleteImage(wrapper.image);
+                }
             ),
           ],
           child: ContrastPhotograph(

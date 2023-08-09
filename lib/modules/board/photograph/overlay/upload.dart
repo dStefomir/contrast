@@ -3,9 +3,12 @@ import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/hover_provider.dart';
 import 'package:contrast/common/widgets/input.dart';
 import 'package:contrast/common/widgets/load.dart';
+import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/model/image_data.dart';
+import 'package:contrast/model/image_meta_data.dart';
 import 'package:contrast/modules/board/photograph/overlay/provider.dart';
+import 'package:contrast/modules/board/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,19 +19,19 @@ import 'dart:io';
 
 import '../../../../../common/widgets/icon.dart';
 
-/// Dialog width
-const double dialogWidth = 400;
 /// Dialog height
-const double dialogHeight = 270;
+const double dialogHeight = 400;
 
 /// Renders the upload image dialog
 class UploadImageDialog extends HookConsumerWidget {
   /// Existing image data
   final ImageData? data;
+  /// Function which updates the board
+  final void Function(ImageWrapper) onSubmit;
   /// Form key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  UploadImageDialog({Key? key, this.data,}) : super(key: key);
+  UploadImageDialog({Key? key, this.data, required this.onSubmit}) : super(key: key);
 
   /// Selects a photo for uploading from the storage of the device
   void _selectPhotograph(WidgetRef ref) async {
@@ -71,11 +74,11 @@ class UploadImageDialog extends HookConsumerWidget {
   }
 
   /// Renders the dialog action buttons
-  List<Widget> _renderDialogActions(BuildContext context, WidgetRef ref) {
+  Widget _renderDialogActions(BuildContext context, WidgetRef ref) {
     final bool isLoading = ref.watch(loadingProvider);
     final String selectedCategory = ref.watch(categoryProvider(data?.category));
 
-    return [
+    return
       Visibility(
         visible: (data != null || ref.watch(fileProvider).isFileSelected()) && !isLoading,
         child: OutlinedButton(
@@ -95,18 +98,17 @@ class UploadImageDialog extends HookConsumerWidget {
                 if (data != null) {
                   ref.read(uploadPhotographProvider.notifier).editFile(data!, selectedCategory, selectedLat, selectedLng).then((value) {
                     ref.read(loadingProvider.notifier).setLoading(false);
-                    Navigator.of(context).pop(value);
+                    onSubmit(ImageWrapper(image: value, metadata: ImageMetaData()));
                   });
                 } else {
                   ref.read(uploadPhotographProvider.notifier).postFile(selectedCategory, selectedLat, selectedLng).then((image) {
                     ref.read(loadingProvider.notifier).setLoading(false);
-                    Navigator.of(context).pop(image);
+                    onSubmit(image);
                   });
                 }
               }
             }).translateOnPhotoHover,
-      )
-    ];
+      );
   }
 
   /// Renders the loading indicator or an error if there is one
@@ -223,81 +225,85 @@ class UploadImageDialog extends HookConsumerWidget {
     const Key widgetKey = Key('upload');
     final bool isHovering = ref.watch(hoverProvider(widgetKey));
 
-    return Center(
-      child: Column(
-        children: [
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () => _selectPhotograph(ref),
-              onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
-              child: AnimatedContainer(
-                  width: isHovering ? 165 : 160,
-                  height: isHovering ? 165 : 160,
-                  duration: const Duration(milliseconds: 800),
-                  curve: Curves.fastOutSlowIn,
-                  child: IconRenderer(
-                    asset: 'upload.svg',
-                    color: Colors.black,
-                    width: isHovering ? 250 : 240 - 20,
-                    height: isHovering ? 250 : 240 - 20,
-                  )
-              ),
+    return Column(
+      children: [
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () => _selectPhotograph(ref),
+            onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
+            child: AnimatedContainer(
+                width: isHovering ? 165 : 160,
+                height: isHovering ? 165 : 160,
+                duration: const Duration(milliseconds: 800),
+                curve: Curves.fastOutSlowIn,
+                child: IconRenderer(
+                  asset: 'upload.svg',
+                  color: Colors.black,
+                  width: isHovering ? 250 : 240 - 20,
+                  height: isHovering ? 250 : 240 - 20,
+                )
             ),
           ),
-          const StyledText(text: 'Select an image')
-        ],
-      ),
+        ),
+        const StyledText(text: 'Select an image')
+      ],
     );
   }
 
   /// Renders the dialog body
-  Widget _renderDialogBody(BuildContext context, WidgetRef ref, FileData fileData) => SizedBox(
-    width: dialogWidth,
-    height: dialogHeight,
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Visibility(
-            visible: !fileData.isFileSelected() && data == null,
-            child: _renderUploadButton(context, ref, fileData)
-        ),
-        Visibility(
-          visible: fileData.isFileSelected() || data != null,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _renderSelectedImageName(fileData),
-              _renderCategorySelector(ref),
-              const SizedBox(height: 10),
-              _renderGeoForm(ref),
-              const SizedBox(height: 10),
-              _renderLoadingIndicator(ref),
-          ]),
-        )
-      ],
-    ),
+  Widget _renderDialogBody(BuildContext context, WidgetRef ref, FileData fileData) => Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Visibility(
+          visible: !fileData.isFileSelected() && data == null,
+          child: _renderUploadButton(context, ref, fileData)
+      ),
+      Visibility(
+        visible: fileData.isFileSelected() || data != null,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _renderSelectedImageName(fileData),
+            _renderCategorySelector(ref),
+            const SizedBox(height: 10),
+            _renderGeoForm(ref),
+            const SizedBox(height: 10),
+            _renderLoadingIndicator(ref),
+        ]),
+      )
+    ],
   );
 
   /// Renders the dialog header
-  Widget _renderDialogHeader(BuildContext context) => Column(
+  Widget _renderDialogHeader(BuildContext context, WidgetRef ref) => Column(
     children: [
-      Row(
-          children: [
-            Text(
-                data != null ? "Edit Photograph" : "Upload Photograph",
-                style: Theme.of(context).textTheme.headlineSmall
-            ),
-            const Spacer(),
-            DefaultButton(
-                onClick: () => Navigator.of(context).pop(),
-                color: Colors.black,
-                borderColor: Colors.white,
-                icon: 'close.svg'
-            ),
-          ]
+      Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+            children: [
+              Text(
+                  data != null ? "Edit Photograph" : "Upload Photograph",
+                  style: Theme.of(context).textTheme.headlineSmall
+              ),
+              const Spacer(),
+              DefaultButton(
+                  onClick: () {
+                    if(data != null) {
+                      ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(false);
+                      ref.read(photographEditProvider.notifier).setEditImage(null);
+                    } else {
+                      ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
+                    }
+                  },
+                  color: Colors.black,
+                  borderColor: Colors.white,
+                  icon: 'close.svg'
+              ),
+            ]
+        ),
       ),
       const Divider(color: Colors.black,)
     ],
@@ -309,12 +315,24 @@ class UploadImageDialog extends HookConsumerWidget {
 
     return Form(
       key: _formKey,
-      child: AlertDialog(
-          backgroundColor: Colors.white,
-          scrollable: true,
-          title: _renderDialogHeader(context),
-          content: _renderDialogBody(context, ref, fileData),
-          actions: _renderDialogActions(context, ref)),
+      child: ShadowWidget(
+       offset: const Offset(0, 0),
+       blurRadius: 4,
+       child: Container(
+         color: Colors.white,
+         height: dialogHeight,
+         child: Column(
+           children: [
+             _renderDialogHeader(context, ref),
+             Padding(
+               padding: const EdgeInsets.all(10.0),
+               child: _renderDialogBody(context, ref, fileData),
+             ),
+             _renderDialogActions(context, ref),
+           ],
+         ),
+       ),
+      )
     );
   }
 }

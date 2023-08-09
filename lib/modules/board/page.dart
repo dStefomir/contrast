@@ -4,12 +4,19 @@ import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/common/widgets/page.dart';
 import 'package:contrast/common/widgets/snack.dart';
 import 'package:contrast/common/widgets/text.dart';
+import 'package:contrast/model/image_data.dart';
+import 'package:contrast/model/image_meta_data.dart';
+import 'package:contrast/model/video_data.dart';
 import 'package:contrast/modules/board/footer.dart';
 import 'package:contrast/modules/board/header.dart';
+import 'package:contrast/modules/board/overlay/delete/delete.dart';
+import 'package:contrast/modules/board/overlay/delete/provider.dart';
 import 'package:contrast/modules/board/overlay/qr_code/qr_code.dart';
+import 'package:contrast/modules/board/photograph/overlay/provider.dart';
 import 'package:contrast/modules/board/photograph/overlay/upload.dart';
 import 'package:contrast/modules/board/photograph/page.dart';
 import 'package:contrast/modules/board/provider.dart';
+import 'package:contrast/modules/board/video/overlay/provider.dart';
 import 'package:contrast/modules/board/video/overlay/upload.dart';
 import 'package:contrast/modules/board/video/page.dart';
 import 'package:contrast/security/session.dart';
@@ -65,33 +72,14 @@ class BoardPageState extends ConsumerState<BoardPage> {
               labelBackgroundColor: Colors.white,
               child: const Icon(Icons.video_call),
               label: "Upload Video",
-              onTap: () async =>
-                  showDialog(
-                      context: context,
-                      builder: (context) => UploadVideoDialog()
-                  ).then((video) {
-                    if(video != null) {
-                      ref.read(videoServiceFetchProvider.notifier).addItem(video);
-                      showSuccessTextOnSnackBar(context, "Video was successfully uploaded.");
-                    }
-                  })
+              onTap: () => ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(true)
           ),
           SpeedDialChild(
               foregroundColor: Colors.black,
               labelBackgroundColor: Colors.white,
               child: const Icon(Icons.photo_filter_sharp),
               label: "Upload Photograph",
-              onTap: () async =>
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (context) => UploadImageDialog()
-                  ).then((photograph) {
-                    if(photograph != null) {
-                      ref.read(photographServiceFetchProvider.notifier).addItem(photograph);
-                      showSuccessTextOnSnackBar(context, "Photograph was successfully uploaded.");
-                    }
-                  })
+              onTap: () => ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(true)
           )
         ]
     ),
@@ -126,6 +114,16 @@ class BoardPageState extends ConsumerState<BoardPage> {
   @override
   Widget build(BuildContext context) {
     final bool? shouldShowQrCodeDialog = ref.watch(overlayVisibilityProvider(const Key('qr_code')));
+    final bool? shouldShowDeletePhotographDialog = ref.watch(overlayVisibilityProvider(const Key('delete_image')));
+    final ImageData? imageToBeDeleted = ref.watch(deleteImageProvider);
+    final bool? shouldShowDeleteVideoDialog = ref.watch(overlayVisibilityProvider(const Key('delete_video')));
+    final VideoData? videoToBeDeleted = ref.watch(deleteVideoProvider);
+    final bool? shouldShowUploadPhotographDialog = ref.watch(overlayVisibilityProvider(const Key('upload_image')));
+    final bool? shouldShowEditPhotographDialog = ref.watch(overlayVisibilityProvider(const Key('edit_image')));
+    final ImageData? imageToBeEdited = ref.watch(photographEditProvider);
+    final bool? shouldShowUploadVideoDialog = ref.watch(overlayVisibilityProvider(const Key('upload_video')));
+    final bool? shouldShowEditVideoDialog = ref.watch(overlayVisibilityProvider(const Key('edit_video')));
+    final VideoData? videoToBeEdited = ref.watch(videoEditProvider);
 
     return BackgroundPage(
         child: Stack(
@@ -248,6 +246,151 @@ class BoardPageState extends ConsumerState<BoardPage> {
                       child: _buildFloatingActionButtons(context, ref)
                   )
               ),
+              shouldShowDeletePhotographDialog != null && imageToBeDeleted != null ? Align(
+                alignment: Alignment.bottomCenter,
+                child: SlideTransitionAnimation(
+                  duration: const Duration(milliseconds: 1000),
+                  getStart: () => shouldShowDeletePhotographDialog ? const Offset(0, 1) : const Offset(0, 0),
+                  getEnd: () => shouldShowDeletePhotographDialog ? const Offset(0, 0) : const Offset(0, 10),
+                  whenTo: (controller) {
+                    useValueChanged(shouldShowDeletePhotographDialog, (_, __) async {
+                      controller.reset();
+                      controller.forward();
+                    });
+                  },
+                  child: DeleteDialog<ImageData>(
+                      data: imageToBeDeleted,
+                    onSubmit: (image) {
+                        ref.read(photographServiceFetchProvider.notifier).removeItem(
+                            ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == image.id)
+                        );
+                        ref.read(deleteImageProvider.notifier).setDeleteImage(null);
+                        ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
+                        showSuccessTextOnSnackBar(context, "Photograph was successfully deleted.");
+                    },
+                  ),
+                ),
+              ) : Container(),
+              shouldShowDeleteVideoDialog != null && videoToBeDeleted != null ? Align(
+                alignment: Alignment.bottomCenter,
+                child: SlideTransitionAnimation(
+                  duration: const Duration(milliseconds: 1000),
+                  getStart: () => shouldShowDeleteVideoDialog ? const Offset(0, 1) : const Offset(0, 0),
+                  getEnd: () => shouldShowDeleteVideoDialog ? const Offset(0, 0) : const Offset(0, 10),
+                  whenTo: (controller) {
+                    useValueChanged(shouldShowDeleteVideoDialog, (_, __) async {
+                      controller.reset();
+                      controller.forward();
+                    });
+                  },
+                  child: DeleteDialog<VideoData>(
+                    data: videoToBeDeleted,
+                    onSubmit: (video) {
+                      ref.read(videoServiceFetchProvider.notifier).removeItem(
+                          ref.read(videoServiceFetchProvider).firstWhere((element) => element.id == video.id)
+                      );
+                      ref.read(deleteVideoProvider.notifier).setDeleteVideo(null);
+                      ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
+                      showSuccessTextOnSnackBar(context, "Video was successfully deleted.");
+                    },
+                  ),
+                ),
+              ) : Container(),
+              shouldShowEditPhotographDialog != null && imageToBeEdited != null ? Align(
+                alignment: Alignment.bottomCenter,
+                child: SlideTransitionAnimation(
+                  duration: const Duration(milliseconds: 1000),
+                  getStart: () => shouldShowEditPhotographDialog ? const Offset(0, 1) : const Offset(0, 0),
+                  getEnd: () => shouldShowEditPhotographDialog ? const Offset(0, 0) : const Offset(0, 10),
+                  whenTo: (controller) {
+                    useValueChanged(shouldShowEditPhotographDialog, (_, __) async {
+                      controller.reset();
+                      controller.forward();
+                    });
+                  },
+                  child: UploadImageDialog(
+                    data: imageToBeEdited,
+                    onSubmit: (image) {
+                      ImageMetaData meta = ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == element.image.id).metadata;
+                      ref.read(photographServiceFetchProvider.notifier).removeItem(
+                          ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == image.image.id)
+                      );
+                      ref.read(photographServiceFetchProvider.notifier).addItem(ImageWrapper(image: image.image, metadata: meta));
+                      ref.read(photographEditProvider.notifier).setEditImage(null);
+                      ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(false);
+                      showSuccessTextOnSnackBar(context, "Photograph was successfully edited.");
+                    },
+                  ),
+                ),
+              ) : Container(),
+              shouldShowUploadPhotographDialog != null ? Align(
+                alignment: Alignment.bottomCenter,
+                child: SlideTransitionAnimation(
+                  duration: const Duration(milliseconds: 1000),
+                  getStart: () => shouldShowUploadPhotographDialog ? const Offset(0, 1) : const Offset(0, 0),
+                  getEnd: () => shouldShowUploadPhotographDialog ? const Offset(0, 0) : const Offset(0, 10),
+                  whenTo: (controller) {
+                    useValueChanged(shouldShowUploadPhotographDialog, (_, __) async {
+                      controller.reset();
+                      controller.forward();
+                    });
+                  },
+                  child: UploadImageDialog(
+                    onSubmit: (image) {
+                      ref.read(photographServiceFetchProvider.notifier).addItem(image);
+                      ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
+                      showSuccessTextOnSnackBar(context, "Photograph was successfully uploaded.");
+                    },
+                  ),
+                ),
+              ) : Container(),
+              shouldShowUploadVideoDialog != null ? Align(
+                alignment: Alignment.bottomCenter,
+                child: SlideTransitionAnimation(
+                  duration: const Duration(milliseconds: 1000),
+                  getStart: () => shouldShowUploadVideoDialog ? const Offset(0, 1) : const Offset(0, 0),
+                  getEnd: () => shouldShowUploadVideoDialog ? const Offset(0, 0) : const Offset(0, 10),
+                  whenTo: (controller) {
+                    useValueChanged(shouldShowUploadVideoDialog, (_, __) async {
+                      controller.reset();
+                      controller.forward();
+                    });
+                  },
+                  child: UploadVideoDialog(
+                    onSubmit: (video) {
+                      ref.read(videoServiceFetchProvider.notifier).addItem(video);
+                      ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(false);
+                      showSuccessTextOnSnackBar(context, "Video was successfully uploaded.");
+                    },
+                  ),
+                ),
+              ) : Container(),
+              shouldShowEditVideoDialog != null && videoToBeEdited != null ? Align(
+                alignment: Alignment.bottomCenter,
+                child: SlideTransitionAnimation(
+                  duration: const Duration(milliseconds: 1000),
+                  getStart: () => shouldShowEditVideoDialog ? const Offset(0, 1) : const Offset(0, 0),
+                  getEnd: () => shouldShowEditVideoDialog ? const Offset(0, 0) : const Offset(0, 10),
+                  whenTo: (controller) {
+                    useValueChanged(shouldShowEditVideoDialog, (_, __) async {
+                      controller.reset();
+                      controller.forward();
+                    });
+                  },
+                  child: UploadVideoDialog(
+                    data: videoToBeEdited,
+                    onSubmit: (video) {
+                      ref.read(videoServiceFetchProvider.notifier).removeItem(
+                          ref.read(videoServiceFetchProvider).firstWhere((element) => element.id == video.id)
+                      );
+                      ref.read(videoServiceFetchProvider.notifier).addItem(video);
+                      ref.read(videoEditProvider.notifier).setEditVideo(null);
+                      ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(false);
+                      showSuccessTextOnSnackBar(context, "Video was successfully edited.");
+                    },
+                  ),
+                ),
+              ) : Container(),
               shouldShowQrCodeDialog != null ? Align(
                 alignment: Alignment.bottomCenter,
                 child: SlideTransitionAnimation(
