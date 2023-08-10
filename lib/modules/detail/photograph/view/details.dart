@@ -1,4 +1,5 @@
 import "package:universal_html/html.dart" as html;
+import 'package:flutter_map/flutter_map.dart';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/map/map.dart';
@@ -192,12 +193,12 @@ class PhotographDetailsView extends HookConsumerWidget {
   }
 
   /// Renders the photograph shot location
-  Widget _renderPhotoDetails(double maxWidth, maxHeight, double? lat, double? lng) =>
+  Widget _renderPhotoDetails(BuildContext context, double maxWidth, maxHeight, double? lat, double? lng) =>
       _isAreCoordinatesValid(lat, lng) ?
       SizedBox(
           width: maxWidth,
           height: maxHeight,
-          child: const ContrastMap()
+          child: ContrastMap(mapInteraction: getRunningPlatform(context) == 'MOBILE' ? InteractiveFlag.pinchZoom : InteractiveFlag.all)
       ) : Container();
 
   /// Renders the photography gallery widget
@@ -264,6 +265,7 @@ class PhotographDetailsView extends HookConsumerWidget {
 
   /// Render the main widget of the page
   Widget _renderPhotographWidget(
+      BuildContext context,
       WidgetRef ref,
       PageController pageController,
       ScrollController scrollController,
@@ -293,7 +295,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                       ),
                       Visibility(
                           visible: _isAreCoordinatesValid(image.lat, image.lng),
-                          child: _renderPhotoDetails(maxWidth, maxHeight, image.lng, image.lat)
+                          child: _renderPhotoDetails(context, maxWidth, maxHeight, image.lng, image.lat)
                       )
                     ],
                   )
@@ -313,7 +315,18 @@ class PhotographDetailsView extends HookConsumerWidget {
 
     return Stack(
         children: [
-          _renderPhotographWidget(ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
+          getRunningPlatform(context) == 'MOBILE'
+              ? GestureDetector(
+              onVerticalDragUpdate: (details) {
+                const sensitivity = 2000.0;
+                final deltaY = details.delta.dy * sensitivity;
+                if (deltaY > 0) {
+                  _handlePhotographDetailsAction(ref, scrollController, 0);
+                } else {
+                  _handlePhotographDetailsAction(ref, scrollController, scrollController.position.maxScrollExtent);
+                }},
+              child: _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight)
+          ) : _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
           Visibility(
               visible: _isAreCoordinatesValid(image.lat, image.lng),
               child: _renderDetailsBtn(ref, context, scrollController)

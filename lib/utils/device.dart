@@ -1,3 +1,4 @@
+import "package:universal_html/html.dart" as html;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +26,18 @@ String getRunningPlatform(BuildContext context) {
   if(defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android) {
     return 'MOBILE';
   }
+  if(_isIpad()) {
+    return 'MOBILE';
+  }
 
   return 'DESKTOP';
+}
+
+/// Check if the app is ran on an ipad
+bool _isIpad() {
+  final width = html.window.screen?.width;
+  final height = html.window.screen?.height;
+  final ratio = width! / height!;
+
+  return ratio <= 1.34 && ratio >= 1.32;
 }

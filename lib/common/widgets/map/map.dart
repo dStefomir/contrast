@@ -14,8 +14,10 @@ const double mapDefaultZoom = 13.0;
 const double mapMaxZoom = 17.0;
 /// Renders a map
 class ContrastMap extends HookConsumerWidget {
+  /// Flag for handling the map interaction
+  final int mapInteraction;
 
-  const ContrastMap({super.key});
+  const ContrastMap({super.key, this.mapInteraction = InteractiveFlag.all});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,7 +37,8 @@ class ContrastMap extends HookConsumerWidget {
           center: LatLng(lat, lng),
           zoom: mapDefaultZoom,
           enableScrollWheel: true,
-          maxZoom: mapMaxZoom
+          maxZoom: mapMaxZoom,
+          interactiveFlags: mapInteraction
       ),
       children: [
         TileLayer(
