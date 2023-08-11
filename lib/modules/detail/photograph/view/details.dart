@@ -178,7 +178,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     final String iconAsset = ref.watch(photographDetailAssetProvider);
 
     return Align(
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.topRight,
         child: DefaultButton(
             onClick: () => _handlePhotographDetailsAction(
                 ref,
