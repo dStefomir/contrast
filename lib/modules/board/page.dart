@@ -62,13 +62,13 @@ class BoardPageState extends ConsumerState<BoardPage> {
 
   /// What happens when the user performs an action
   void _onAction(WidgetRef ref, Function? action) {
-    ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
-    ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
-    ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
-    ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
-    ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(false);
-    ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(false);
-    ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(false);
+    ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(null);
+    ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(null);
+    ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(null);
+    ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(null);
+    ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(null);
+    ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(null);
+    ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(null);
     if(action != null) {
       action();
     }

@@ -11,7 +11,7 @@ class OverlayVisibilityNotifier extends StateNotifier<bool?> {
   OverlayVisibilityNotifier({required this.ref}) : super(null);
 
   /// Changes the overlay visibility
-  setOverlayVisibility(bool visibility) => state = visibility;
+  setOverlayVisibility(bool? visibility) => state = visibility;
 }
 
 /// Provider for the data view animation

@@ -51,29 +51,3 @@ class PhotographTitleVisibilityNotifier extends StateNotifier<bool> {
   /// Sets the visibility of the photograph title
   setVisibility(bool visibility) => state = visibility;
 }
-
-/// Provider for the rendering widget on top in a stack
-final widgetOnTopProvider = StateNotifierProvider.autoDispose<WidgetOnTopNotifier, String>((ref) => WidgetOnTopNotifier(ref: ref));
-/// Notifier for the rendering widget on top in a stack
-class WidgetOnTopNotifier extends StateNotifier<String> {
-  /// Reference
-  final Ref ref;
-
-  WidgetOnTopNotifier({required this.ref}) : super('PHOTOGRAPH');
-
-  /// Sets the widget to be on top in a stack
-  setWidgetOnTop(String widget) => state = widget;
-}
-
-/// Provider for the rendering the opacity for the photograph
-final photographOpacityProvider = StateNotifierProvider.autoDispose<PhotographOpacityNotifier, double>((ref) => PhotographOpacityNotifier(ref: ref));
-/// Notifier for the rendering the opacity for the photograph
-class PhotographOpacityNotifier extends StateNotifier<double> {
-  /// Reference
-  final Ref ref;
-
-  PhotographOpacityNotifier({required this.ref}) : super(0);
-
-  /// Sets the opacity for the photograph
-  setOpacity(double opacity) => state = opacity;
-}
