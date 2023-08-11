@@ -178,7 +178,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     final String iconAsset = ref.watch(photographDetailAssetProvider);
 
     return Align(
-        alignment: Alignment.topRight,
+        alignment: Alignment.topLeft,
         child: DefaultButton(
             onClick: () => _handlePhotographDetailsAction(
                 ref,
@@ -217,9 +217,7 @@ class PhotographDetailsView extends HookConsumerWidget {
       child: PhotoViewGallery.builder(
           scrollPhysics: const BouncingScrollPhysics(),
           allowImplicitScrolling: true,
-          backgroundDecoration: const BoxDecoration(
-            color: Colors.black
-          ),
+          backgroundDecoration: const BoxDecoration(color: Colors.black),
           builder: (BuildContext context, int index) {
             return PhotoViewGalleryPageOptions(
                 imageProvider: ExtendedNetworkImageProvider(serviceProvider.getPhotograph(context, image.path!)),
@@ -313,7 +311,7 @@ class PhotographDetailsView extends HookConsumerWidget {
           Visibility(
               visible: _isAreCoordinatesValid(image.lat, image.lng),
               child: Padding(
-                padding: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.only(left: 60.0, top: 5.0,),
                 child: _renderDetailsBtn(ref, context, scrollController),
               )
           ),
