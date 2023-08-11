@@ -202,7 +202,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                               controller.forward();
                             });
                           },
-                          duration: const Duration(milliseconds: 500),
+                          duration: const Duration(milliseconds: 800),
                           child: PhotographBoardPage(onUserAction: _onAction))
                           : SlideTransitionAnimation(
                           getStart: () => _calculateBoardStartAnimation(ref),
@@ -219,7 +219,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                               controller.forward();
                             });
                           },
-                          duration: const Duration(milliseconds: 500),
+                          duration: const Duration(milliseconds: 800),
                           child: VideoBoardPage(onUserAction: _onAction)
                       ),
                     )
