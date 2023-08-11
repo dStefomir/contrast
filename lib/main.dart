@@ -1,6 +1,7 @@
 import 'package:contrast/firebase_options.dart';
 import 'package:contrast/main_module.dart';
 import 'package:contrast/security/session.dart';
+import 'package:contrast/utils/scroll_behavior.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
           title: "Contrast",
           routeInformationParser: Modular.routeInformationParser,
           routerDelegate: Modular.routerDelegate,
+          scrollBehavior: NoThumbScrollBehavior().copyWith(scrollbars: false),
           supportedLocales: const [
             Locale('en', '')
           ],

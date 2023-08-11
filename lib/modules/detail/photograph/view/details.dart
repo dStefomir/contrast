@@ -1,3 +1,361 @@
+// import 'package:contrast/common/widgets/shadow.dart';
+// import "package:universal_html/html.dart" as html;
+// import 'package:flutter_map/flutter_map.dart';
+// import 'package:contrast/common/widgets/animation.dart';
+// import 'package:contrast/common/widgets/button.dart';
+// import 'package:contrast/common/widgets/map/map.dart';
+// import 'package:contrast/common/widgets/map/provider.dart';
+// import 'package:contrast/common/widgets/text.dart';
+// import 'package:contrast/model/image_data.dart';
+// import 'package:contrast/modules/detail/photograph/provider.dart';
+// import 'package:contrast/modules/detail/photograph/service.dart';
+// import 'package:contrast/utils/device.dart';
+// import 'package:extended_image/extended_image.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+// import 'package:flutter_hooks/flutter_hooks.dart';
+// import 'package:flutter_modular/flutter_modular.dart';
+// import 'package:hooks_riverpod/hooks_riverpod.dart';
+// import 'package:photo_view/photo_view.dart';
+// import 'package:photo_view/photo_view_gallery.dart';
+//
+// /// Renders the photograph details view
+// class PhotographDetailsView extends HookConsumerWidget {
+//   /// Images list
+//   final List<ImageData> images;
+//   /// Initial selected photo index
+//   final int photoIndex;
+//   /// Current selected photograph category
+//   final String category;
+//
+//   const PhotographDetailsView({
+//     super.key,
+//     required this.images,
+//     required this.photoIndex,
+//     required this.category
+//   });
+//
+//   /// Are coordinates valid or not
+//   bool _isAreCoordinatesValid(double? lat, double? lng) =>
+//       ((lat != null && lat != 0) && (lng != null && lng != 0)) && (lat >= -90.0 && lat <= 90.0) && (lng >= -90.0 && lng <= 90.0);
+//
+//   /// Sets the photograph detail button asset
+//   void _setPhotographDetailAsset(WidgetRef ref, ScrollController scrollController) {
+//     try {
+//       ref.read(photographDetailAssetProvider.notifier).setDetailAsset(scrollController.offset == 0 ? 'map.svg' : 'photo_light_weight.svg');
+//     } catch (e) {
+//       ref.read(photographDetailAssetProvider.notifier).setDetailAsset('map.svg');
+//     }
+//   }
+//
+//   /// Handles go to photograph details and go back to photograph action
+//   void _handlePhotographDetailsAction(WidgetRef ref, ScrollController scrollController, double scrollOffset) async {
+//     if (scrollController.hasClients) {
+//       await scrollController.animateTo(
+//           scrollOffset,
+//           duration: const Duration(milliseconds: 500),
+//           curve: Curves.easeInOutExpo
+//       );
+//       _setPhotographDetailAsset(ref, scrollController);
+//     }
+//   }
+//
+//   /// Moves the map to the location where the shot was taken
+//   void _handlePhotographShotLocation(WidgetRef ref) {
+//     final int photographIndex = ref.read(photographIndexProvider(photoIndex));
+//     final ImageData image = images[photographIndex];
+//     if (image.lat != null && image.lng != null) {
+//       ref.read(mapLatProvider.notifier).setCurrentLat(image.lat!);
+//       ref.read(mapLngProvider.notifier).setCurrentLng(image.lng!);
+//     }
+//   }
+//
+//   /// Switches to the next photograph if there is such
+//   void _goToNextPhotograph(WidgetRef ref, PageController pageController, int currentPhotographIndex) {
+//     if (currentPhotographIndex + 1 < images.length) {
+//       pageController.jumpToPage(currentPhotographIndex + 1);
+//       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(currentPhotographIndex + 1);
+//       ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
+//       _handlePhotographShotLocation(ref);
+//       html.window.history.pushState(null, 'photograph_details', '#/photos/details?id=${images[currentPhotographIndex + 1].id}&category=$category');
+//     }
+//     if (currentPhotographIndex >= images.length) {
+//       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(images.length - 1);
+//     }
+//   }
+//
+//   /// Switches to the previous photograph if there is such
+//   void _goToPreviousPhotograph(WidgetRef ref, PageController pageController, int currentPhotographIndex) {
+//     if (currentPhotographIndex - 1 >= 0) {
+//       pageController.jumpToPage(currentPhotographIndex - 1);
+//       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(currentPhotographIndex - 1);
+//       ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
+//       _handlePhotographShotLocation(ref);
+//       html.window.history.pushState(null, 'photograph_details', '#/photos/details?id=${images[currentPhotographIndex - 1].id}&category=$category');
+//     }
+//     if (currentPhotographIndex < 0) {
+//       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(0);
+//     }
+//   }
+//
+//   // Handles the key events from the Focus widget and updates the page
+//   void _handleKeyEvent(RawKeyEvent event, WidgetRef ref, ScrollController scrollController, PageController pageController, int currentPhotographIndex) {
+//     if (event is RawKeyDownEvent) {
+//       if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+//         _goToPreviousPhotograph(ref, pageController, currentPhotographIndex);
+//       } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+//         _goToNextPhotograph(ref, pageController, currentPhotographIndex);
+//       } else if (event.logicalKey == LogicalKeyboardKey.escape) {
+//         Modular.to.navigate('/');
+//       } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+//         _handlePhotographDetailsAction(ref, scrollController, scrollController.position.maxScrollExtent);
+//       } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+//         _handlePhotographDetailsAction(ref, scrollController, 0);
+//       }
+//     }
+//   }
+//
+//   /// Render the photograph title
+//   Widget _renderPhotographTitle(BuildContext context, WidgetRef ref, int currentPhotographIndex) => Align(
+//       alignment: Alignment.center,
+//       child: FadeAnimation(
+//         whenTo: (controller) => useValueChanged(currentPhotographIndex, (_, __) async {
+//           controller.reset();
+//           controller.forward();
+//         }),
+//         onCompleted: () => ref.read(photographTitleVisibilityProvider.notifier).setVisibility(false),
+//         start: 1,
+//         end: 0,
+//         duration: const Duration(milliseconds: 1200),
+//         child: StyledText(
+//           text: images[currentPhotographIndex].comment != null
+//               ? images[currentPhotographIndex].comment!
+//               : '',
+//           color: Colors.white,
+//           useShadow: true,
+//           fontSize: useMobileLayout(context) ? 25 : 62,
+//           clip: false,
+//           italic: true,
+//           weight: FontWeight.w100,
+//         ),
+//       )
+//   );
+//
+//   /// Render the next photograph button
+//   Widget _renderNextBtn(WidgetRef ref, BuildContext context, PageController pageController, int currentPhotographIndex) => Align(
+//       alignment: Alignment.centerRight,
+//       child: DefaultButton(
+//           onClick: () => _goToNextPhotograph(ref, pageController, currentPhotographIndex),
+//           color: Colors.white,
+//           borderColor: Colors.black,
+//           icon: 'navigate_next.svg'
+//       )
+//   );
+//
+//   /// Render the previous photograph button
+//   Widget _renderPreviousBtn(WidgetRef ref, BuildContext context, PageController pageController, int currentPhotographIndex) => Align(
+//       alignment: Alignment.centerLeft,
+//       child: DefaultButton(
+//           onClick: () => _goToPreviousPhotograph(ref, pageController, currentPhotographIndex),
+//           color: Colors.white,
+//           borderColor: Colors.black,
+//           icon: 'navigate_before.svg'
+//       )
+//   );
+//
+//   /// Render the go to previous page button
+//   Widget _renderGoBackBtn() => Align(
+//       alignment: Alignment.topLeft,
+//       child: DefaultButton(
+//           onClick: () => Modular.to.navigate('/'),
+//           color: Colors.white,
+//           borderColor: Colors.black,
+//           icon: 'close.svg'
+//       )
+//   );
+//
+//   /// Render the details button
+//   Widget _renderDetailsBtn(WidgetRef ref, BuildContext context, ScrollController scrollController) {
+//     final String iconAsset = ref.watch(photographDetailAssetProvider);
+//
+//     return Align(
+//         alignment: Alignment.bottomCenter,
+//         child: DefaultButton(
+//             onClick: () => _handlePhotographDetailsAction(
+//                 ref,
+//                 scrollController,
+//                 scrollController.offset == 0 ? scrollController.position.maxScrollExtent : 0
+//             ),
+//             color: Colors.white,
+//             borderColor: Colors.black,
+//             icon: iconAsset
+//         )
+//     );
+//   }
+//
+//   /// Renders the photograph shot location
+//   Widget _renderPhotoDetails(BuildContext context, double maxWidth, maxHeight, double? lat, double? lng) =>
+//       _isAreCoordinatesValid(lat, lng) ?
+//       SizedBox(
+//           width: maxWidth,
+//           height: maxHeight,
+//           child: ContrastMap(mapInteraction: getRunningPlatform(context) == 'MOBILE' ? InteractiveFlag.pinchZoom : InteractiveFlag.all)
+//       ) : Container();
+//
+//   /// Renders the photography gallery widget
+//   Widget _renderPhotographGallery(
+//       WidgetRef ref,
+//       ScrollController scrollController,
+//       PageController pageController,
+//       int currentPhotographIndex,
+//       ImageData image) {
+//     final serviceProvider = ref.watch(photographDetailsServiceProvider);
+//
+//     return RawKeyboardListener(
+//       autofocus: true,
+//       focusNode: useFocusNode(),
+//       onKey: (RawKeyEvent event) => _handleKeyEvent(event, ref, scrollController, pageController, currentPhotographIndex),
+//       child: PhotoViewGallery.builder(
+//           scrollPhysics: const BouncingScrollPhysics(),
+//           allowImplicitScrolling: true,
+//           backgroundDecoration: const BoxDecoration(
+//               image: DecorationImage(
+//                 isAntiAlias: false,
+//                 filterQuality: FilterQuality.low,
+//                 image: ExactAssetImage('assets/texture_light.jpg'),
+//                 fit: BoxFit.cover,
+//               )
+//           ),
+//           builder: (BuildContext context, int index) {
+//             return PhotoViewGalleryPageOptions(
+//                 imageProvider: ExtendedNetworkImageProvider(serviceProvider.getPhotograph(context, image.path!)),
+//                 // initialScale: PhotoViewComputedScale.contained,
+//                 filterQuality: FilterQuality.high,
+//                 minScale: PhotoViewComputedScale.contained,
+//                 maxScale: PhotoViewComputedScale.covered * 2,
+//                 heroAttributes: PhotoViewHeroAttributes(tag: index),
+//             );
+//           },
+//           pageController: pageController,
+//           onPageChanged: (int page) async {
+//             ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(page);
+//             await scrollController.animateTo(
+//                 0,
+//                 duration: const Duration(milliseconds: 500),
+//                 curve: Curves.easeInOutExpo
+//             );
+//             _handlePhotographShotLocation(ref);
+//             ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
+//             _setPhotographDetailAsset(ref, scrollController);
+//           },
+//           scrollDirection: Axis.horizontal,
+//           itemCount: images.length,
+//       ),
+//     );
+//   }
+//
+//   /// Render the main widget of the page
+//   Widget _renderPhotographWidget(
+//       BuildContext context,
+//       WidgetRef ref,
+//       PageController pageController,
+//       ScrollController scrollController,
+//       int currentPhotographIndex,
+//       ImageData image,
+//       double maxWidth, maxHeight) =>
+//       Align(
+//           alignment: Alignment.center,
+//           child: FadeAnimation(
+//               start: 0,
+//               end: 1,
+//               whenTo: (controller) =>
+//                   useValueChanged(currentPhotographIndex, (_, __) async {
+//                     controller.reset();
+//                     controller.forward();
+//                   }),
+//               child: SingleChildScrollView(
+//                   controller: scrollController,
+//                   physics: const NeverScrollableScrollPhysics(),
+//                   scrollDirection: Axis.vertical,
+//                   child: Column(
+//                     children: [
+//                       SizedBox(
+//                           width: maxWidth,
+//                           height: maxHeight - 35,
+//                           child: ShadowWidget(
+//                               child: _renderPhotographGallery(ref, scrollController, pageController, currentPhotographIndex, image)
+//                           )
+//                       ),
+//                       Visibility(
+//                           visible: _isAreCoordinatesValid(image.lat, image.lng),
+//                           child: _renderPhotoDetails(context, maxWidth, maxHeight, image.lng, image.lat)
+//                       )
+//                     ],
+//                   )
+//               )
+//           )
+//       );
+//
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     final PageController pageController = usePageController(initialPage: photoIndex);
+//     final ScrollController scrollController = useScrollController();
+//     final int currentPhotographIndex = ref.watch(photographIndexProvider(photoIndex));
+//     final bool photographTitleVisibility = ref.watch(photographTitleVisibilityProvider);
+//     final ImageData image = images[currentPhotographIndex];
+//     final double maxWidth = MediaQuery.of(context).size.width;
+//     final double maxHeight = MediaQuery.of(context).size.height;
+//
+//     return Stack(
+//         children: [
+//           getRunningPlatform(context) == 'MOBILE' ?
+//           GestureDetector(
+//               onVerticalDragUpdate: (details) {
+//                 const sensitivity = 2000.0;
+//                 final deltaY = details.delta.dy * sensitivity;
+//                 if (deltaY > 0) {
+//                   _handlePhotographDetailsAction(ref, scrollController, 0);
+//                 } else {
+//                   _handlePhotographDetailsAction(ref, scrollController, scrollController.position.maxScrollExtent);
+//                 }},
+//               child: _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight)
+//           ) :
+//           _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
+//           Visibility(
+//               visible: _isAreCoordinatesValid(image.lat, image.lng),
+//               child: Padding(
+//                 padding: const EdgeInsets.all(5.0),
+//                 child: _renderDetailsBtn(ref, context, scrollController),
+//               )
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.all(5.0),
+//             child: _renderGoBackBtn(),
+//           ),
+//           Visibility(
+//               visible: currentPhotographIndex != 0 && !useMobileLayout(context),
+//               child: Padding(
+//                 padding: const EdgeInsets.all(5.0),
+//                 child: _renderPreviousBtn(ref, context, pageController, currentPhotographIndex),
+//               )
+//           ),
+//           Visibility(
+//               visible: currentPhotographIndex != images.length - 1 && !useMobileLayout(context),
+//               child: Padding(
+//                 padding: const EdgeInsets.all(5.0),
+//                 child: _renderNextBtn(ref, context, pageController, currentPhotographIndex),
+//               )
+//           ),
+//           Visibility(
+//               visible: photographTitleVisibility,
+//               child: _renderPhotographTitle(context, ref, currentPhotographIndex)
+//           ),
+//         ]
+//     );
+//   }
+// }
+
+import 'package:contrast/common/widgets/load.dart';
 import "package:universal_html/html.dart" as html;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:contrast/common/widgets/animation.dart';
@@ -39,24 +397,16 @@ class PhotographDetailsView extends HookConsumerWidget {
       ((lat != null && lat != 0) && (lng != null && lng != 0)) && (lat >= -90.0 && lat <= 90.0) && (lng >= -90.0 && lng <= 90.0);
 
   /// Sets the photograph detail button asset
-  void _setPhotographDetailAsset(WidgetRef ref, ScrollController scrollController) {
-    try {
-      ref.read(photographDetailAssetProvider.notifier).setDetailAsset(scrollController.offset == 0 ? 'map.svg' : 'photo_light_weight.svg');
-    } catch (e) {
-      ref.read(photographDetailAssetProvider.notifier).setDetailAsset('map.svg');
-    }
+  void _setPhotographDetailAsset(WidgetRef ref, String widgetOnTop) {
+    ref.read(photographDetailAssetProvider.notifier).setDetailAsset(widgetOnTop == 'MAP' ? 'map.svg' : 'photo_light_weight.svg');
   }
 
   /// Handles go to photograph details and go back to photograph action
-  void _handlePhotographDetailsAction(WidgetRef ref, ScrollController scrollController, double scrollOffset) async {
-    if (scrollController.hasClients) {
-      await scrollController.animateTo(
-          scrollOffset,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOutExpo
-      );
-      _setPhotographDetailAsset(ref, scrollController);
+  void _handlePhotographDetailsAction(WidgetRef ref, ImageData image, String widgetOnTop) async {
+    if(_isAreCoordinatesValid(image.lat, image.lng)) {
+      ref.read(widgetOnTopProvider.notifier).setWidgetOnTop(widgetOnTop == 'PHOTOGRAPH' ? 'MAP' : 'PHOTOGRAPH');
     }
+    _setPhotographDetailAsset(ref, widgetOnTop);
   }
 
   /// Moves the map to the location where the shot was taken
@@ -98,7 +448,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   }
 
   // Handles the key events from the Focus widget and updates the page
-  void _handleKeyEvent(RawKeyEvent event, WidgetRef ref, ScrollController scrollController, PageController pageController, int currentPhotographIndex) {
+  void _handleKeyEvent(RawKeyEvent event, WidgetRef ref, String widgetOnTop, ImageData image, PageController pageController, int currentPhotographIndex) {
     if (event is RawKeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
         _goToPreviousPhotograph(ref, pageController, currentPhotographIndex);
@@ -106,10 +456,10 @@ class PhotographDetailsView extends HookConsumerWidget {
         _goToNextPhotograph(ref, pageController, currentPhotographIndex);
       } else if (event.logicalKey == LogicalKeyboardKey.escape) {
         Modular.to.navigate('/');
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-        _handlePhotographDetailsAction(ref, scrollController, scrollController.position.maxScrollExtent);
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-        _handlePhotographDetailsAction(ref, scrollController, 0);
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowDown && widgetOnTop == 'MAP') {
+        _handlePhotographDetailsAction(ref, image, 'MAP');
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowUp && widgetOnTop == 'PHOTOGRAPH') {
+        _handlePhotographDetailsAction(ref, image, 'PHOTOGRAPH');
       }
     }
   }
@@ -174,17 +524,13 @@ class PhotographDetailsView extends HookConsumerWidget {
   );
 
   /// Render the details button
-  Widget _renderDetailsBtn(WidgetRef ref, BuildContext context, ScrollController scrollController) {
+  Widget _renderDetailsBtn(WidgetRef ref, BuildContext context, ImageData image, String widgetOnTop) {
     final String iconAsset = ref.watch(photographDetailAssetProvider);
 
     return Align(
         alignment: Alignment.bottomCenter,
         child: DefaultButton(
-            onClick: () => _handlePhotographDetailsAction(
-                ref,
-                scrollController,
-                scrollController.offset == 0 ? scrollController.position.maxScrollExtent : 0
-            ),
+            onClick: () => _handlePhotographDetailsAction(ref, image, widgetOnTop),
             color: Colors.white,
             borderColor: Colors.black,
             icon: iconAsset
@@ -204,62 +550,44 @@ class PhotographDetailsView extends HookConsumerWidget {
   /// Renders the photography gallery widget
   Widget _renderPhotographGallery(
       WidgetRef ref,
-      ScrollController scrollController,
+      String widgetOnTop,
       PageController pageController,
       int currentPhotographIndex,
-      ImageData image,
-      double maxWidth, maxHeight) {
+      ImageData image) {
     final serviceProvider = ref.watch(photographDetailsServiceProvider);
 
     return RawKeyboardListener(
       autofocus: true,
       focusNode: useFocusNode(),
-      onKey: (RawKeyEvent event) => _handleKeyEvent(event, ref, scrollController, pageController, currentPhotographIndex),
+      onKey: (RawKeyEvent event) => _handleKeyEvent(event, ref, widgetOnTop, image, pageController, currentPhotographIndex),
       child: PhotoViewGallery.builder(
-          scrollPhysics: const BouncingScrollPhysics(),
-          allowImplicitScrolling: true,
-          builder: (BuildContext context, int index) {
-            return PhotoViewGalleryPageOptions(
-                imageProvider: ExtendedNetworkImageProvider(serviceProvider.getPhotograph(context, image.path!)),
-                initialScale: PhotoViewComputedScale.contained,
-                filterQuality: FilterQuality.high,
-                minScale: PhotoViewComputedScale.contained,
-                maxScale: PhotoViewComputedScale.covered * 2,
-                heroAttributes: PhotoViewHeroAttributes(tag: index),
-            );
-          },
-          pageController: pageController,
-          onPageChanged: (int page) async {
-            ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(page);
-            await scrollController.animateTo(
-                0,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOutExpo
-            );
-            _handlePhotographShotLocation(ref);
-            ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
-            _setPhotographDetailAsset(ref, scrollController);
-          },
-          scrollDirection: Axis.horizontal,
-          itemCount: images.length,
-          loadingBuilder: (context, event) {
-            return Center(
-              child: SizedBox(
-                width: useMobileLayout(context)
-                    ? maxHeight / 2
-                    : maxWidth / 2,
-                height: useMobileLayout(context)
-                    ? maxHeight / 2
-                    : maxWidth / 2,
-                child: CircularProgressIndicator(
-                  value: event == null
-                      ? 0
-                      : event.cumulativeBytesLoaded / event.expectedTotalBytes!,
-                  color: Colors.white,
-                ),
-              ),
-            );
-          }),
+        scrollPhysics: const BouncingScrollPhysics(),
+        allowImplicitScrolling: true,
+        backgroundDecoration: BoxDecoration(
+          color: _isAreCoordinatesValid(image.lat, image.lng) ? Colors.transparent : Colors.black
+        ),
+        builder: (BuildContext context, int index) {
+          return PhotoViewGalleryPageOptions(
+            imageProvider: ExtendedNetworkImageProvider(serviceProvider.getPhotograph(context, image.path!)),
+            // initialScale: PhotoViewComputedScale.contained,
+            filterQuality: FilterQuality.high,
+            minScale: PhotoViewComputedScale.contained,
+            maxScale: PhotoViewComputedScale.covered * 2,
+            heroAttributes: PhotoViewHeroAttributes(tag: index),
+          );
+        },
+        pageController: pageController,
+        onPageChanged: (int page) async {
+          ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(page);
+          _handlePhotographShotLocation(ref);
+          ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
+          _setPhotographDetailAsset(ref, widgetOnTop);
+          ref.read(widgetOnTopProvider.notifier).setWidgetOnTop('PHOTOGRAPH');
+        },
+        scrollDirection: Axis.horizontal,
+        itemCount: images.length,
+        loadingBuilder: (context, chunk) => const LoadingIndicator(color: Colors.white),
+      ),
     );
   }
 
@@ -268,7 +596,7 @@ class PhotographDetailsView extends HookConsumerWidget {
       BuildContext context,
       WidgetRef ref,
       PageController pageController,
-      ScrollController scrollController,
+      String widgetOnTop,
       int currentPhotographIndex,
       ImageData image,
       double maxWidth, maxHeight) =>
@@ -282,23 +610,30 @@ class PhotographDetailsView extends HookConsumerWidget {
                     controller.reset();
                     controller.forward();
                   }),
-              child: SingleChildScrollView(
-                  controller: scrollController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                          width: maxWidth,
-                          height: maxHeight,
-                          child: _renderPhotographGallery(ref, scrollController, pageController, currentPhotographIndex, image, maxWidth, maxHeight)
-                      ),
-                      Visibility(
-                          visible: _isAreCoordinatesValid(image.lat, image.lng),
-                          child: _renderPhotoDetails(context, maxWidth, maxHeight, image.lng, image.lat)
-                      )
-                    ],
-                  )
+              child: Stack(
+                children: [
+                  _isAreCoordinatesValid(image.lat, image.lng) ? _renderPhotoDetails(context, maxWidth, maxHeight, image.lng, image.lat) : Container(),
+                  SlideTransitionAnimation(
+                    getStart: () => widgetOnTop == 'PHOTOGRAPH' ? const Offset(0, -1) : const Offset(0, 0),
+                    getEnd: () => widgetOnTop == 'PHOTOGRAPH' ? const Offset(0, 0) : const Offset(0, -1),
+                    duration: const Duration(milliseconds: 800),
+                    whenTo: (controller) =>
+                      useValueChanged(widgetOnTop, (_, __) async {
+                        controller.reset();
+                        controller.forward();
+                      }),
+                    child: FadeAnimation(
+                        start: widgetOnTop == 'PHOTOGRAPH' ? 0 : 1,
+                        end: widgetOnTop == 'PHOTOGRAPH' ? 1 : 0,
+                        whenTo: (controller) =>
+                            useValueChanged(widgetOnTop, (_, __) async {
+                              controller.reset();
+                              controller.forward();
+                            }),
+                        child: _renderPhotographGallery(ref, widgetOnTop, pageController, currentPhotographIndex, image)
+                    )
+                  ),
+                ],
               )
           )
       );
@@ -306,32 +641,39 @@ class PhotographDetailsView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final PageController pageController = usePageController(initialPage: photoIndex);
-    final ScrollController scrollController = useScrollController();
     final int currentPhotographIndex = ref.watch(photographIndexProvider(photoIndex));
     final bool photographTitleVisibility = ref.watch(photographTitleVisibilityProvider);
+    final String widgetOnTop = ref.watch(widgetOnTopProvider);
     final ImageData image = images[currentPhotographIndex];
     final double maxWidth = MediaQuery.of(context).size.width;
     final double maxHeight = MediaQuery.of(context).size.height;
 
     return Stack(
         children: [
-          getRunningPlatform(context) == 'MOBILE'
-              ? GestureDetector(
+          getRunningPlatform(context) == 'MOBILE' ?
+          GestureDetector(
               onVerticalDragUpdate: (details) {
                 const sensitivity = 2000.0;
                 final deltaY = details.delta.dy * sensitivity;
                 if (deltaY > 0) {
-                  _handlePhotographDetailsAction(ref, scrollController, 0);
+                  _handlePhotographDetailsAction(ref, image, 'MAP');
                 } else {
-                  _handlePhotographDetailsAction(ref, scrollController, scrollController.position.maxScrollExtent);
+                  _handlePhotographDetailsAction(ref, image, 'PHOTOGRAPH');
                 }},
-              child: _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight)
-          ) : _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
+              child: _renderPhotographWidget(context, ref, pageController, widgetOnTop, currentPhotographIndex, image, maxWidth, maxHeight)
+          ) :
+          _renderPhotographWidget(context, ref, pageController, widgetOnTop, currentPhotographIndex, image, maxWidth, maxHeight),
           Visibility(
               visible: _isAreCoordinatesValid(image.lat, image.lng),
-              child: _renderDetailsBtn(ref, context, scrollController)
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: _renderDetailsBtn(ref, context, image, widgetOnTop),
+              )
           ),
-          _renderGoBackBtn(),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: _renderGoBackBtn(),
+          ),
           Visibility(
               visible: currentPhotographIndex != 0 && !useMobileLayout(context),
               child: _renderPreviousBtn(ref, context, pageController, currentPhotographIndex)

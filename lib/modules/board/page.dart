@@ -60,16 +60,24 @@ class BoardPageState extends ConsumerState<BoardPage> {
     super.initState();
   }
 
+  /// What happens when the user performs an action
+  void _onAction(WidgetRef ref, Function? action) {
+    ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
+    ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
+    ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
+    ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
+    ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(false);
+    ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(false);
+    ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(false);
+    if(action != null) {
+      action();
+    }
+  }
+
   /// Handles the escape key of the keyboard
   void _handleKeyEvent(RawKeyEvent event) {
       if (event is RawKeyDownEvent && event.logicalKey == LogicalKeyboardKey.escape) {
-        ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
-        ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
-        ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
-        ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
-        ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(false);
-        ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(false);
-        ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(false);
+        _onAction(ref, null);
     }
   }
 
@@ -86,14 +94,14 @@ class BoardPageState extends ConsumerState<BoardPage> {
               labelBackgroundColor: Colors.white,
               child: const Icon(Icons.video_call),
               label: "Upload Video",
-              onTap: () => ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(true)
+              onTap: () => _onAction(ref, () => ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(true))
           ),
           SpeedDialChild(
               foregroundColor: Colors.black,
               labelBackgroundColor: Colors.white,
               child: const Icon(Icons.photo_filter_sharp),
               label: "Upload Photograph",
-              onTap: () => ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(true)
+              onTap: () => _onAction(ref, () => ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(true))
           )
         ]
     ),
@@ -195,7 +203,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                             });
                           },
                           duration: const Duration(milliseconds: 500),
-                          child: const PhotographBoardPage())
+                          child: PhotographBoardPage(onUserAction: _onAction))
                           : SlideTransitionAnimation(
                           getStart: () => _calculateBoardStartAnimation(ref),
                           getEnd: () => const Offset(0, 0),
@@ -212,7 +220,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                             });
                           },
                           duration: const Duration(milliseconds: 500),
-                          child: const VideoBoardPage()
+                          child: VideoBoardPage(onUserAction: _onAction)
                       ),
                     )
                 ),

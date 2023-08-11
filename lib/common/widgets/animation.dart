@@ -54,6 +54,8 @@ class SlideTransitionAnimation extends HookConsumerWidget {
   final void Function(AnimationController)? whenTo;
   /// Gets triggered when animation is completed
   final void Function()? onCompleted;
+  /// Gets triggered when animation is running
+  final void Function()? onAnimating;
   /// Gets the start of the animation
   final Offset Function() getStart;
   /// Gets the end of the animation
@@ -68,7 +70,8 @@ class SlideTransitionAnimation extends HookConsumerWidget {
     required this.getEnd,
     this.whenTo,
     this.onCompleted,
-    this.duration = const Duration(microseconds: 500)
+    this.onAnimating,
+    this.duration = const Duration(microseconds: 500),
   });
 
   @override
@@ -76,6 +79,9 @@ class SlideTransitionAnimation extends HookConsumerWidget {
     AnimationController? animationController = useAnimationController(duration: duration);
     if (whenTo != null) {
       whenTo!(animationController);
+    }
+    if(onAnimating != null) {
+      animationController.addListener(() => onAnimating!());
     }
     if(onCompleted != null) {
       animationController.addStatusListener((status) {

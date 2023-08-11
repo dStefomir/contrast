@@ -18,8 +18,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// Renders the photographs board page
 class PhotographBoardPage extends HookConsumerWidget {
+  /// What happens when the user performs an action
+  final Function(WidgetRef ref, Function? action) onUserAction;
 
-  const PhotographBoardPage({super.key});
+  const PhotographBoardPage({super.key, required this.onUserAction});
 
   /// Renders a photograph
   Widget _renderPhoto(WidgetRef ref, BuildContext context, ImageWrapper wrapper, BoxConstraints constraints) {
@@ -35,22 +37,22 @@ class PhotographBoardPage extends HookConsumerWidget {
           animateMenuItems: true,
           blurBackgroundColor: Colors.black,
           openWithTap: false,
-          onPressed: () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$selectedFilter'),
+          onPressed: () => onUserAction(ref, () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$selectedFilter')),
           menuItems: <FocusedMenuItem>[
             FocusedMenuItem(
                 title: const Text("Edit Photograph"),
                 trailingIcon: const Icon(Icons.edit),
-                onPressed: () {
+                onPressed: () => onUserAction(ref, () {
                   ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(true);
                   ref.read(photographEditProvider.notifier).setEditImage(wrapper.image);
-                }),
+                })),
             FocusedMenuItem(
                 title: const Text("Delete Photograph"),
                 trailingIcon: const Icon(Icons.delete),
-                onPressed: () {
+                onPressed: () => onUserAction(ref, () {
                   ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(true);
                   ref.read(deleteImageProvider.notifier).setDeleteImage(wrapper.image);
-                }
+                })
             ),
           ],
           child: ContrastPhotograph(
@@ -68,13 +70,13 @@ class PhotographBoardPage extends HookConsumerWidget {
         fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
         wrapper: wrapper,
         constraints: constraints,
-        onClick: () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$selectedFilter'),
-        onRedirect: kIsWeb ? () async {
+        onClick: () => onUserAction(ref, () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$selectedFilter')),
+        onRedirect: kIsWeb ? () => onUserAction(ref, () async {
           final Uri url = Uri.parse('https://www.dstefomir.eu/#/photos/details?id=${wrapper.image.id}&category=$selectedFilter');
           if (await canLaunchUrl(url)) {
             await launchUrl(url);
           }
-        } : null
+        }) : null
     );
   }
 

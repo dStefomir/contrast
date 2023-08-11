@@ -21,8 +21,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// Renders the video board page
 class VideoBoardPage extends HookConsumerWidget {
+  /// What happens when the user performs an action
+  final Function(WidgetRef ref, Function? action) onUserAction;
 
-  const VideoBoardPage({super.key});
+  const VideoBoardPage({super.key, required this.onUserAction});
 
   /// Renders a video
   Widget _renderVideo(BuildContext context, WidgetRef ref, VideoData video, BoxConstraints constraints) {
@@ -37,23 +39,23 @@ class VideoBoardPage extends HookConsumerWidget {
           animateMenuItems: true,
           blurBackgroundColor: Colors.black,
           openWithTap: false,
-          onPressed: () => Modular.to.pushNamed('videos/details/${video.path}'),
+          onPressed: () => onUserAction(ref, () => Modular.to.pushNamed('videos/details/${video.path}')),
           menuItems: <FocusedMenuItem>[
             FocusedMenuItem(
                 title: const Text("Edit Video"),
                 trailingIcon: const Icon(Icons.edit),
-                onPressed: () {
+                onPressed: () => onUserAction(ref, () {
                   ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(true);
                   ref.read(videoEditProvider.notifier).setEditVideo(video);
-                }
+                })
             ),
             FocusedMenuItem(
                 title: const Text("Delete Video"),
                 trailingIcon: const Icon(Icons.delete),
-                onPressed: () {
+                onPressed: () => onUserAction(ref, () {
                   ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(true);
                   ref.read(deleteVideoProvider.notifier).setDeleteVideo(video);
-                }
+                })
             ),
           ],
           child: ContrastPhotograph(
@@ -73,13 +75,13 @@ class VideoBoardPage extends HookConsumerWidget {
         widgetKey: Key('${video.id}'),
         videoPath: video.path!,
         constraints: constraints,
-        onClick: () => Modular.to.pushNamed('videos/details/${video.path}'),
-        onRedirect: kIsWeb ? () async {
+        onClick: () => onUserAction(ref, () => Modular.to.pushNamed('videos/details/${video.path}')),
+        onRedirect: kIsWeb ? () => onUserAction(ref, () async {
           final Uri url = Uri.parse('https://www.dstefomir.eu/#/videos/details/${video.path}');
           if (await canLaunchUrl(url)) {
             await launchUrl(url);
           }
-        } : null
+        }) : null
     );
   }
 
