@@ -312,37 +312,26 @@ class UploadImageDialog extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final FileData fileData = ref.watch(fileProvider);
 
-    return WillPopScope(
-      onWillPop: () async {
-        if(data != null) {
-          ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(false);
-        } else {
-          ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
-        }
-
-        return true;
-      },
-      child: Form(
-        key: _formKey,
-        child: ShadowWidget(
-         offset: const Offset(0, 0),
-         blurRadius: 4,
-         child: Container(
-           color: Colors.white,
-           height: dialogHeight,
-           child: Column(
-             children: [
-               _renderDialogHeader(context, ref),
-               Padding(
-                 padding: const EdgeInsets.all(10.0),
-                 child: _renderDialogBody(context, ref, fileData),
-               ),
-               _renderDialogActions(context, ref),
-             ],
-           ),
+    return Form(
+      key: _formKey,
+      child: ShadowWidget(
+       offset: const Offset(0, 0),
+       blurRadius: 4,
+       child: Container(
+         color: Colors.white,
+         height: dialogHeight,
+         child: Column(
+           children: [
+             _renderDialogHeader(context, ref),
+             Padding(
+               padding: const EdgeInsets.all(10.0),
+               child: _renderDialogBody(context, ref, fileData),
+             ),
+             _renderDialogActions(context, ref),
+           ],
          ),
-        )
-      ),
+       ),
+      )
     );
   }
 }

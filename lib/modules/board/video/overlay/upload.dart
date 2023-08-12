@@ -132,35 +132,25 @@ class UploadVideoDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) =>
-      WillPopScope(
-        onWillPop: () async {
-          if(data != null) {
-            ref.read(overlayVisibilityProvider(const Key("edit_video")).notifier).setOverlayVisibility(false);
-          } else {
-            ref.read(overlayVisibilityProvider(const Key("upload_video")).notifier).setOverlayVisibility(false);
-          }
-          return true;
-        },
-        child: Form(
-          key: _formKey,
-          child: ShadowWidget(
-            offset: const Offset(0, 0),
-            blurRadius: 4,
-            child: Container(
-              color: Colors.white,
-              height: dialogHeight,
-              child: Column(
-                children: [
-                  _renderDialogHeader(context, ref),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: _renderDialogBody(ref),
-                  ),
-                  _renderDialogActions(context, ref)
-                ],
-              ),
+      Form(
+        key: _formKey,
+        child: ShadowWidget(
+          offset: const Offset(0, 0),
+          blurRadius: 4,
+          child: Container(
+            color: Colors.white,
+            height: dialogHeight,
+            child: Column(
+              children: [
+                _renderDialogHeader(context, ref),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: _renderDialogBody(ref),
+                ),
+                _renderDialogActions(context, ref)
+              ],
             ),
-          )
-    ),
-      );
+          ),
+        )
+    );
 }

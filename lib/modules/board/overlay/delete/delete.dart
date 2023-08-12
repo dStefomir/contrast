@@ -37,98 +37,87 @@ class DeleteDialog<T> extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return WillPopScope(
-      onWillPop: () async {
-        if(_isImage()) {
-          ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
-        } else {
-          ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
-        }
-
-        return true;
-      },
-      child: ShadowWidget(
-        offset: const Offset(0, 0),
-          blurRadius: 4,
-          child: Container(
-            color: Colors.white,
-            height: dialogHeight,
-            child: Column(
-              children: [
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                          children: [
-                            const StyledText(text: "Warning", weight: FontWeight.bold),
-                            const Spacer(),
-                            DefaultButton(
-                                onClick: () {
-                                  if(_isImage()) {
-                                    ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
-                                  } else {
-                                    ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
-                                  }
-                                },
-                                color: Colors.black,
-                                borderColor: Colors.white,
-                                icon: 'close.svg'
-                            ),
-                          ]
-                      ),
+    return ShadowWidget(
+      offset: const Offset(0, 0),
+        blurRadius: 4,
+        child: Container(
+          color: Colors.white,
+          height: dialogHeight,
+          child: Column(
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                        children: [
+                          const StyledText(text: "Warning", weight: FontWeight.bold),
+                          const Spacer(),
+                          DefaultButton(
+                              onClick: () {
+                                if(_isImage()) {
+                                  ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
+                                } else {
+                                  ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
+                                }
+                              },
+                              color: Colors.black,
+                              borderColor: Colors.white,
+                              icon: 'close.svg'
+                          ),
+                        ]
                     ),
-                    const Divider(color: Colors.black,)
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      StyledText(text: _isImage() ? 'Delete this photo' : 'Delete this video', clip: false,),
-                      StyledText(text: _isImage() ? (data as ImageData).path! : (data as VideoData).path!, clip: false,),
-                    ],
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  const Divider(color: Colors.black,)
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
                   children: [
-                    OutlinedButton(
-                        style: ButtonStyle(
-                            fixedSize: MaterialStateProperty.all(const Size(100, 30)),
-                            backgroundColor: MaterialStateProperty.all(Colors.black),
-                            elevation: MaterialStateProperty.all(2),
-                            foregroundColor: MaterialStateProperty.all(Colors.white),
-                            textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
-                        ),
-                        child: const Text("Yes"),
-                        onPressed: () => _onDelete(ref)
-                    ),
-                    const SizedBox(width: 30,),
-                    OutlinedButton(
-                        style: ButtonStyle(
-                            fixedSize: MaterialStateProperty.all(const Size(100, 30)),
-                            backgroundColor: MaterialStateProperty.all(Colors.white),
-                            elevation: MaterialStateProperty.all(2),
-                            foregroundColor: MaterialStateProperty.all(Colors.black),
-                            textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.black))
-                        ),
-                        child: const Text("No"),
-                        onPressed: () {
-                          if(_isImage()) {
-                            ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
-                          } else {
-                            ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
-                          }
-                        }
-                    ),
+                    StyledText(text: _isImage() ? 'Delete this photo' : 'Delete this video', clip: false,),
+                    StyledText(text: _isImage() ? (data as ImageData).path! : (data as VideoData).path!, clip: false,),
                   ],
-                )
-              ],
-            ),
-          )
-      ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  OutlinedButton(
+                      style: ButtonStyle(
+                          fixedSize: MaterialStateProperty.all(const Size(100, 30)),
+                          backgroundColor: MaterialStateProperty.all(Colors.black),
+                          elevation: MaterialStateProperty.all(2),
+                          foregroundColor: MaterialStateProperty.all(Colors.white),
+                          textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
+                      ),
+                      child: const Text("Yes"),
+                      onPressed: () => _onDelete(ref)
+                  ),
+                  const SizedBox(width: 30,),
+                  OutlinedButton(
+                      style: ButtonStyle(
+                          fixedSize: MaterialStateProperty.all(const Size(100, 30)),
+                          backgroundColor: MaterialStateProperty.all(Colors.white),
+                          elevation: MaterialStateProperty.all(2),
+                          foregroundColor: MaterialStateProperty.all(Colors.black),
+                          textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.black))
+                      ),
+                      child: const Text("No"),
+                      onPressed: () {
+                        if(_isImage()) {
+                          ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
+                        } else {
+                          ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
+                        }
+                      }
+                  ),
+                ],
+              )
+            ],
+          ),
+        )
     );
   }
 }

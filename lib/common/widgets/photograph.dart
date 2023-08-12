@@ -107,16 +107,18 @@ class ContrastPhotograph extends StatelessWidget {
                 ? BoxFit.fitWidth
                 : BoxFit.fitHeight
             : BoxFit.contain),
-        cache: compressed,
+        cache: true,
         loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
-        enableMemoryCache: compressed,
+        enableMemoryCache: true,
         clearMemoryCacheIfFailed: true,
-        clearMemoryCacheWhenDispose: false,
+        clearMemoryCacheWhenDispose: true,
         filterQuality: quality,
         isAntiAlias: true,
+        imageCacheName: image?.path!,
       );
     } else {
-      photo = ExtendedImage.memory(data!,
+      photo = ExtendedImage.memory(
+          data!,
           width: width,
           height: height,
           scale: 0.6,
@@ -124,11 +126,10 @@ class ContrastPhotograph extends StatelessWidget {
           loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
           enableLoadState: !compressed,
           fit: fit ?? BoxFit.contain,
-          enableMemoryCache: compressed,
-          clearMemoryCacheIfFailed: true,
-          clearMemoryCacheWhenDispose: false,
+          enableMemoryCache: false,
           filterQuality: quality,
-          isAntiAlias: true);
+          isAntiAlias: true
+      );
     }
 
     return photo;
