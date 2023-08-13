@@ -1,8 +1,10 @@
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/shadow.dart';
+import 'package:contrast/common/widgets/snack.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -13,6 +15,11 @@ const double dialogHeight = 550;
 class QrCodeDialog extends HookConsumerWidget {
 
   const QrCodeDialog({super.key});
+
+  void _copyToClipboard(BuildContext context) => Clipboard.setData(
+      const ClipboardData(text: 'https://www.dstefomir.eu'))
+      .then((value) => showSuccessTextOnSnackBar(context, "Copied to clipboard")
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => ShadowWidget(
@@ -29,8 +36,15 @@ class QrCodeDialog extends HookConsumerWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
                     children: [
-                      const StyledText(text: "Contrast", weight: FontWeight.bold),
+                      const StyledText(text: "Share Contrast", weight: FontWeight.bold),
                       const Spacer(),
+                      DefaultButton(
+                          onClick: () => _copyToClipboard(context),
+                          color: Colors.black,
+                          borderColor: Colors.white,
+                          padding: 5,
+                          icon: 'share.svg'
+                      ),
                       DefaultButton(
                           onClick: () => ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false),
                           color: Colors.black,

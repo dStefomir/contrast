@@ -78,6 +78,8 @@ dependencies:
   shared_preferences: ^2.2.0
   # Open street maps library
   flutter_map: ^5.0.0
+  # Share library
+  share_plus: ^7.1.0
   # Firebase libraries
   firebase_core: ^2.15.0
   firebase_analytics: ^10.4.4
