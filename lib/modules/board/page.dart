@@ -76,6 +76,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
     ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(null);
     ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(null);
     ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(null);
+    ref.read(fileProvider.notifier).setData(null, null, null, null);
     ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(null);
     ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(null);
     ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(null);

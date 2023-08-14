@@ -126,7 +126,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
               onKey: (event) => _handleKeyEvent(event, controller),
               child: GridView.builder(
                 controller: controller,
-                shrinkWrap: true,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
                 itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
                 itemCount: apiData.length,

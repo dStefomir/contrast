@@ -36,11 +36,9 @@ dependencies:
     sdk: flutter
 
   # Modular library
-  flutter_modular: ^6.0.2
+  flutter_modular: ^6.0.3
   # in memory file creation
   file: ^6.0.0
-  # Change notifier
-  provider: ^6.0.5
   flutter_riverpod: ^2.3.6
   hooks_riverpod: ^2.3.7
   flutter_hooks: ^0.20.0
@@ -78,8 +76,6 @@ dependencies:
   shared_preferences: ^2.2.0
   # Open street maps library
   flutter_map: ^5.0.0
-  # Share library
-  share_plus: ^7.1.0
   # Firebase libraries
   firebase_core: ^2.15.0
   firebase_analytics: ^10.4.4

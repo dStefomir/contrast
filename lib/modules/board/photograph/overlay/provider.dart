@@ -35,7 +35,7 @@ class UploadDataNotifier extends StateNotifier<FileData> {
   UploadDataNotifier({required this.ref}) : super(const FileData());
 
   /// Sets the selected data
-  setData(Uint8List data, String fileName, bool isLandscape, bool isRect) =>
+  setData(Uint8List? data, String? fileName, bool? isLandscape, bool? isRect) =>
       state = FileData(
           bytes: data,
           fileName: fileName,

@@ -42,7 +42,6 @@ class QrCodeDialog extends HookConsumerWidget {
                           onClick: () => _copyToClipboard(context),
                           color: Colors.black,
                           borderColor: Colors.white,
-                          padding: 5,
                           icon: 'share.svg'
                       ),
                       DefaultButton(

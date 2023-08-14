@@ -219,8 +219,8 @@ class DefaultButton extends StatelessWidget {
   final BoxShape shape;
   /// Width of the border
   final double borderWidth;
-  /// Icon padding
-  final double padding;
+  /// Icon height
+  final double height;
 
   const DefaultButton({
     required this.onClick,
@@ -229,7 +229,7 @@ class DefaultButton extends StatelessWidget {
     required this.icon,
     this.shape = BoxShape.circle,
     this.borderWidth = 1,
-    this.padding = 0,
+    this.height = 35,
     super.key
   });
 
@@ -244,14 +244,11 @@ class DefaultButton extends StatelessWidget {
       ),
       child: InkWell(
         onTap: onClick,
-        child: Padding(
-          padding: EdgeInsets.all(padding),
-          child: IconRenderer(
-            asset: icon,
-            fit: BoxFit.scaleDown,
-            color: Colors.black,
-            height: 35
-          ),
+        child: IconRenderer(
+          asset: icon,
+          fit: BoxFit.scaleDown,
+          color: Colors.black,
+          height: height
         ),
       ),
     ),

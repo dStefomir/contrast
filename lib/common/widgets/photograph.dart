@@ -207,7 +207,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
                 widgetKey: Key("${widgetKey.toString()}/photograph/redirect"),
                 constraints: constraints,
                 onRedirect: onRedirect!,
-                height: useMobileLayout(context) ? 30 : 40,
+                height: constraints.maxHeight / 6.1,
               )
           ) : Container(),
         ],
