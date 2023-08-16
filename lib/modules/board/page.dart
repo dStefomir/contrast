@@ -166,34 +166,34 @@ class BoardPageState extends ConsumerState<BoardPage> {
             onKey: _handleKeyEvent,
             child: Stack(
                 children: [
-                  Visibility(
-                    visible: !useMobileLayout(context),
-                    child: Align(
-                        alignment: Alignment.center,
-                        child: FadeAnimation(
-                            start: 1,
-                            end: 0,
-                            whenTo: (controller) {
-                              final String currentTab = ref.watch(boardFooterTabProvider);
-                              final String currentFilter = ref.watch(boardHeaderTabProvider);
-                              useValueChanged(currentTab, (_, __) async {
-                                controller.reset();
-                                controller.forward();
-                              });
-                              useValueChanged(currentFilter, (_, __) async {
-                                controller.reset();
-                                controller.forward();
-                              });
-                            },
+                  Align(
+                      alignment: Alignment.center,
+                      child: FadeAnimation(
+                          start: 1,
+                          end: 0,
+                          whenTo: (controller) {
+                            final String currentTab = ref.watch(boardFooterTabProvider);
+                            final String currentFilter = ref.watch(boardHeaderTabProvider);
+                            useValueChanged(currentTab, (_, __) async {
+                              controller.reset();
+                              controller.forward();
+                            });
+                            useValueChanged(currentFilter, (_, __) async {
+                              controller.reset();
+                              controller.forward();
+                            });
+                          },
+                          child: RotatedBox(
+                            quarterTurns: useMobileLayout(context) ? 3 : 0,
                             child: const StyledText(
                               text: 'C O N T R A S T',
                               color: Colors.black,
                               useShadow: false,
                               weight: FontWeight.bold,
                               fontSize: 60,
-                            )
-                        )
-                    ),
+                            ),
+                          )
+                      )
                   ),
                   Align(
                       alignment: Alignment.center,

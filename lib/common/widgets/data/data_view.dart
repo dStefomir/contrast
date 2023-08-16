@@ -91,17 +91,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
       alignment: Alignment.center,
       children: [
         Align(
-          alignment: Alignment.center,
-          child: Image.asset(
-            'assets/texture.jpg',
-            fit: BoxFit.fill,
-            filterQuality: FilterQuality.low,
-            isAntiAlias: false,
-            height: double.infinity,
-            width: double.infinity,
-          )
-        ),
-        Align(
           alignment: Alignment.bottomCenter,
           child: Container(
             height: dimHeight,

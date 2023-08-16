@@ -54,9 +54,17 @@ class BoardPageFilter extends ConsumerWidget {
                     widgetKey: const Key('qr_code'),
                     iconPath: 'qr_code.svg',
                     disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                    selected: false,
+                    selected: ref.watch(overlayVisibilityProvider(const Key('qr_code'))) == null || ref.watch(overlayVisibilityProvider(const Key('qr_code'))) == false
+                        ? false
+                        : true,
                     size: mobileMenuIconSize,
-                    onClick: () => ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(true)
+                    onClick: () {
+                      if(ref.read(overlayVisibilityProvider(const Key('qr_code'))) == true) {
+                        ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
+                      } else {
+                        ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(true);
+                      }
+                    }
                 ).translateOnPhotoHover,
                 const Spacer(),
                 MenuButton(

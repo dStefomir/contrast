@@ -108,17 +108,13 @@ class ContrastPhotograph extends StatelessWidget {
     );
 
     if(state.extendedImageLoadState == LoadState.completed) {
-      if(!useMobileLayout(context)) {
-        return FadeAnimation(
-            key: Key('${widgetKey.toString()}/rawImage'),
-            start: 0,
-            end: 1,
-            duration: const Duration(milliseconds: 400),
-            child: photograph
-        );
-      } else {
-        return photograph;
-      }
+      return FadeAnimation(
+          key: Key('${widgetKey.toString()}/rawImage'),
+          start: 0,
+          end: 1,
+          duration: const Duration(milliseconds: 400),
+          child: photograph
+      );
     } else if(state.extendedImageLoadState == LoadState.loading) {
       return LoadingIndicator(
           color: Colors.grey,
@@ -149,8 +145,10 @@ class ContrastPhotograph extends StatelessWidget {
         cache: true,
         loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
         enableMemoryCache: true,
-        clearMemoryCacheIfFailed: true,
-        clearMemoryCacheWhenDispose: true,
+        cacheRawData: true,
+        cacheKey: "${widgetKey.toString()}/cache",
+        clearMemoryCacheIfFailed: false,
+        clearMemoryCacheWhenDispose: false,
         filterQuality: quality,
         isAntiAlias: true,
         imageCacheName: image?.path!,
@@ -165,7 +163,10 @@ class ContrastPhotograph extends StatelessWidget {
           loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
           enableLoadState: !compressed,
           fit: fit ?? BoxFit.contain,
-          enableMemoryCache: false,
+          enableMemoryCache: true,
+          cacheRawData: true,
+          clearMemoryCacheIfFailed: false,
+          clearMemoryCacheWhenDispose: false,
           filterQuality: quality,
           isAntiAlias: true
       );
