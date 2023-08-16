@@ -20,6 +20,8 @@ class StyledText extends StatelessWidget {
   final double padding;
   /// Should the text be in italic style;
   final bool italic;
+  /// Aligns the text in the widget
+  final TextAlign align;
   /// Shadow
   final List<Shadow>? shadow;
 
@@ -34,6 +36,7 @@ class StyledText extends StatelessWidget {
     this.clip = true,
     this.padding = 15,
     this.italic = false,
+    this.align = TextAlign.center,
     this.shadow
   }) : super(key: key);
 
@@ -43,7 +46,7 @@ class StyledText extends StatelessWidget {
         padding: EdgeInsets.all(padding),
         child: Text(
             text,
-            textAlign: TextAlign.center,
+            textAlign: align,
             style: TextStyle(
               color: color ?? Colors.black,
               overflow: clip ? TextOverflow.ellipsis : null,

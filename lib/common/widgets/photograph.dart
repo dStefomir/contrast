@@ -181,6 +181,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
   /// Renders a photograph
   Widget _renderPhoto(BuildContext context, Widget? metadata, bool isHovering) =>
       Stack(
+        alignment: Alignment.center,
         children: [
           ContrastPhotograph(
             widgetKey: Key("${widgetKey.toString()}/photograph"),
@@ -197,7 +198,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
           ImageMetaDataDetails(
             constraints: constraints,
             metadata: wrapper.metadata,
-            scaleFactor: 15,
+            scaleFactor: 16,
           ).translateOnPhotoHover :
           Container(),
           isHovering && onRedirect != null && getRunningPlatform(context) == 'DESKTOP' ?
@@ -207,7 +208,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
                 widgetKey: Key("${widgetKey.toString()}/photograph/redirect"),
                 constraints: constraints,
                 onRedirect: onRedirect!,
-                height: constraints.maxHeight / 6.1,
+                height: constraints.maxHeight / 7,
               )
           ) : Container(),
         ],

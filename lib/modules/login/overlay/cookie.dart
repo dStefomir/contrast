@@ -40,6 +40,7 @@ class CookieWarningDialog extends StatelessWidget {
                     color: Colors.black,
                     useShadow: false,
                     fontSize: 13,
+                    align: TextAlign.start,
                     clip: false,
                   ),
                   const SizedBox(height: 10.0),

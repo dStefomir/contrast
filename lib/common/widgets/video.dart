@@ -46,38 +46,33 @@ class ContrastVideo extends HookConsumerWidget {
             onLongPress: () => ref.read(hoverProvider(widgetKey).notifier).onHover(true),
             onLongPressEnd: (details) => ref.read(hoverProvider(widgetKey).notifier).onHover(false),
             child: Stack(
+              alignment: Alignment.center,
               children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: ContrastPhotograph(
-                    widgetKey: Key('${widgetKey.toString()}/photograph'),
-                    fetch: (path) => serviceProvider.getCompressedPhotograph(context, videoPath, true),
-                    image: ImageData(path: videoPath),
-                    quality: FilterQuality.high,
-                    borderColor: Colors.black,
-                    compressed: false,
-                    isThumbnail: true,
-                    height: double.infinity,
-                  ),
+                ContrastPhotograph(
+                  widgetKey: Key('${widgetKey.toString()}/photograph'),
+                  fetch: (path) => serviceProvider.getCompressedPhotograph(context, videoPath, true),
+                  image: ImageData(path: videoPath),
+                  quality: FilterQuality.high,
+                  borderColor: Colors.black,
+                  compressed: false,
+                  isThumbnail: true,
+                  height: double.infinity,
                 ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Visibility(
-                    visible: isHovering,
-                    child: SizedBox(
-                      height: double.infinity,
-                      child: Center(
-                          child: ShadowWidget(
-                            blurRadius: 20,
-                            shouldHaveBorderRadius: true,
-                            child: Icon(Icons.play_arrow,
-                                color: Colors.white,
-                                size: constraints.maxHeight / 4
-                            ),
-                          )
-                      ),
-                    ).translateOnVideoHover,
-                  ),
+                Visibility(
+                  visible: isHovering,
+                  child: SizedBox(
+                    height: double.infinity,
+                    child: Center(
+                        child: ShadowWidget(
+                          blurRadius: 20,
+                          shouldHaveBorderRadius: true,
+                          child: Icon(Icons.play_arrow,
+                              color: Colors.white,
+                              size: constraints.maxHeight / 4
+                          ),
+                        )
+                    ),
+                  ).translateOnVideoHover,
                 ),
                 isHovering && onRedirect != null && getRunningPlatform(context) == 'DESKTOP'
                     ? Align(
@@ -86,7 +81,7 @@ class ContrastVideo extends HookConsumerWidget {
                       widgetKey: Key('$widgetKey/redirect'),
                       constraints: constraints,
                       onRedirect: onRedirect!,
-                      height: constraints.maxHeight / 6.1,
+                      height: constraints.maxHeight / 7,
                     )
                 ) : Container()
               ],
