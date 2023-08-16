@@ -60,6 +60,7 @@ class PhotographBoardPage extends HookConsumerWidget {
             quality: FilterQuality.high,
             borderColor: Colors.black,
             fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
+            constraints: constraints,
             image: wrapper.image,
           )
       );

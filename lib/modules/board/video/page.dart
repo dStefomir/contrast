@@ -62,6 +62,7 @@ class VideoBoardPage extends HookConsumerWidget {
             widgetKey: Key('${video.id}'),
             image: ImageData(path: video.path),
             fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, true),
+            constraints: constraints,
             quality: FilterQuality.high,
             borderColor: Colors.black,
             compressed: false,

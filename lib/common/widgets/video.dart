@@ -51,6 +51,7 @@ class ContrastVideo extends HookConsumerWidget {
                 ContrastPhotograph(
                   widgetKey: Key('${widgetKey.toString()}/photograph'),
                   fetch: (path) => serviceProvider.getCompressedPhotograph(context, videoPath, true),
+                  constraints: constraints,
                   image: ImageData(path: videoPath),
                   quality: FilterQuality.high,
                   borderColor: Colors.black,

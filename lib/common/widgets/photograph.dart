@@ -21,6 +21,8 @@ class ContrastPhotograph extends StatelessWidget {
   final Key widgetKey;
   /// Photograph fetch function
   final String Function(String path)? fetch;
+  /// Constraints of the holder page
+  final BoxConstraints constraints;
   /// Quality of the displayed image
   final FilterQuality quality;
   /// How the photograph should be displayed
@@ -48,6 +50,7 @@ class ContrastPhotograph extends StatelessWidget {
     required this.widgetKey,
     required this.quality,
     required this.borderColor,
+    required this.constraints,
     this.fetch,
     this.shouldPinchZoom = false,
     this.fit,
@@ -62,30 +65,59 @@ class ContrastPhotograph extends StatelessWidget {
 
   /// Renders a widget based on the photograph state
   Widget _renderPhotographState(BuildContext context, ExtendedImageState state) {
-    final Widget photograph = ExtendedRawImage(
-      image: state.extendedImageInfo?.image,
-      width: width,
-      height: !isThumbnail ? height : double.infinity,
-      fit: fit ?? (compressed
-          ? image?.isLandscape != null && image!.isLandscape!
-          ? BoxFit.fitWidth
-          : BoxFit.fitHeight
-          : BoxFit.contain),
-      isAntiAlias: true,
-      filterQuality: quality,
+    double shadowWidth = 0;
+    double shadowHeight = 0;
+    if (isThumbnail) {
+      shadowWidth = constraints.maxWidth;
+      shadowHeight = constraints.maxHeight / 1.8;
+    } else {
+      if (image!.isLandscape!) {
+        shadowWidth = constraints.maxWidth;
+        shadowHeight = constraints.maxHeight / 1.5;
+      } else {
+        shadowWidth = constraints.maxWidth / 1.5;
+        shadowHeight = constraints.maxHeight;
+      }
+    }
+
+    final Widget photograph = Stack(
+      alignment: Alignment.center,
+      children: [
+        ShadowWidget(
+            offset: const Offset(0, 0),
+            blurRadius: 2,
+            child: SizedBox(
+              width: shadowWidth,
+              height: shadowHeight,
+            )
+        ),
+        ExtendedRawImage(
+          image: state.extendedImageInfo?.image,
+          width: width,
+          height: !isThumbnail ? height : double.infinity,
+          fit: fit ?? (compressed
+              ? image?.isLandscape != null && image!.isLandscape!
+              ? BoxFit.fitWidth
+              : BoxFit.fitHeight
+              : BoxFit.contain),
+          isAntiAlias: true,
+          filterQuality: quality,
+        ),
+      ],
     );
+
     if(state.extendedImageLoadState == LoadState.completed) {
-     if(!useMobileLayout(context)) {
-       return FadeAnimation(
-           key: Key('${widgetKey.toString()}/rawImage'),
-           start: 0,
-           end: 1,
-           duration: const Duration(milliseconds: 400),
-           child: photograph
-       );
-     } else {
-       return photograph;
-     }
+      if(!useMobileLayout(context)) {
+        return FadeAnimation(
+            key: Key('${widgetKey.toString()}/rawImage'),
+            start: 0,
+            end: 1,
+            duration: const Duration(milliseconds: 400),
+            child: photograph
+        );
+      } else {
+        return photograph;
+      }
     }
 
     return Container();
@@ -97,15 +129,14 @@ class ContrastPhotograph extends StatelessWidget {
 
     if (data == null) {
       photo = ExtendedImage.network(fetch!(image!.path!),
-        scale: 0.6,
         width: width,
         height: !isThumbnail ? height : double.infinity,
         border: Border.all(color: borderColor, width: borderWidth),
         enableLoadState: !compressed,
         fit: fit ?? (compressed
             ? image?.isLandscape != null && image!.isLandscape!
-                ? BoxFit.fitWidth
-                : BoxFit.fitHeight
+            ? BoxFit.fitWidth
+            : BoxFit.fitHeight
             : BoxFit.contain),
         cache: true,
         loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
@@ -186,6 +217,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
           ContrastPhotograph(
             widgetKey: Key("${widgetKey.toString()}/photograph"),
             fetch: fetch,
+            constraints: constraints,
             quality: FilterQuality.low,
             borderColor: Colors.black,
             image: wrapper.image,
@@ -282,8 +314,8 @@ class ImageMetaDataDetails extends StatelessWidget {
         StyledText(
           text: text != null
               ? text.length > 13
-                  ? text.substring(0, 14)
-                  : text
+              ? text.substring(0, 14)
+              : text
               : '',
           color: Colors.white,
           useShadow: true,
@@ -342,3 +374,4 @@ class ImageMetaDataDetails extends StatelessWidget {
     );
   }
 }
+
