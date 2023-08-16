@@ -4,6 +4,7 @@ import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/hover_provider.dart';
 import 'package:contrast/common/widgets/icon.dart';
+import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/overlay.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
@@ -118,6 +119,13 @@ class ContrastPhotograph extends StatelessWidget {
       } else {
         return photograph;
       }
+    } else if(state.extendedImageLoadState == LoadState.loading) {
+      return LoadingIndicator(
+          color: Colors.grey,
+          stroke: 2,
+          width: constraints.maxWidth / 8,
+          height: constraints.maxHeight / 8
+      );
     }
 
     return Container();
