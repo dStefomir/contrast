@@ -1,3 +1,4 @@
+import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/page.dart';
@@ -108,14 +109,19 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                         height: constraints.maxHeight - 135,
                         child: player
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 15, bottom: 15),
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: IconRenderer(
-                          asset: 'signature.svg',
-                          color: Colors.white,
-                          height: constraints.maxHeight / 12,
+                    SlideTransitionAnimation(
+                      duration: const Duration(milliseconds: 1000),
+                      getStart: () => const Offset(0, 1),
+                      getEnd: () => const Offset(0, 0),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 15, bottom: 15),
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: IconRenderer(
+                            asset: 'signature.svg',
+                            color: Colors.white,
+                            height: constraints.maxHeight / 12,
+                          ),
                         ),
                       ),
                     ),
