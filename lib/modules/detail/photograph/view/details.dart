@@ -18,6 +18,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
+import '../../../../common/widgets/snack.dart';
+
 /// Renders the photograph details view
 class PhotographDetailsView extends HookConsumerWidget {
   /// Images list
@@ -173,6 +175,17 @@ class PhotographDetailsView extends HookConsumerWidget {
       )
   );
 
+  /// Renders the share button
+  Widget _renderShareButton(BuildContext context, int currentPhotographyIndex) =>
+      DefaultButton(
+          onClick: () => Clipboard.setData(
+              ClipboardData(text: 'https://www.dstefomir.eu/#/photos/details?id=${images[currentPhotographyIndex].id}&category=$category')
+          ).then((value) => showSuccessTextOnSnackBar(context, "Copied to clipboard")),
+          color: Colors.white,
+          borderColor: Colors.black,
+          icon: 'share.svg'
+      );
+
   /// Render the details button
   Widget _renderDetailsBtn(WidgetRef ref, BuildContext context, ScrollController scrollController) {
     final String iconAsset = ref.watch(photographDetailAssetProvider);
@@ -317,9 +330,13 @@ class PhotographDetailsView extends HookConsumerWidget {
           Visibility(
               visible: _isAreCoordinatesValid(image.lat, image.lng),
               child: Padding(
-                padding: const EdgeInsets.only(left: 60.0, top: 5.0,),
+                padding: const EdgeInsets.only(left: 115.0, top: 5.0,),
                 child: _renderDetailsBtn(ref, context, scrollController),
               )
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 60.0, top: 5.0,),
+            child: _renderShareButton(context, currentPhotographIndex),
           ),
           Padding(
             padding: const EdgeInsets.all(5.0),

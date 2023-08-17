@@ -2,9 +2,12 @@ import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+
+import '../../../common/widgets/snack.dart';
 
 /// Renders the video details page
 class VideoDetailPage extends StatefulHookConsumerWidget {
@@ -54,6 +57,17 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
     _controller.close();
   }
 
+  /// Renders the share button
+  Widget _renderShareButton() =>
+      DefaultButton(
+          onClick: () => Clipboard.setData(
+              ClipboardData(text: 'https://www.dstefomir.eu/#/videos/details/${widget.path}')
+          ).then((value) => showSuccessTextOnSnackBar(context, "Copied to clipboard")),
+          color: Colors.white,
+          borderColor: Colors.black,
+          icon: 'share.svg'
+      );
+
   /// Renders the back button
   Widget _renderBackButton() =>
       DefaultButton(
@@ -71,17 +85,27 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
             controller: _controller,
             aspectRatio: 16 / 9,
             builder: (context, player) =>
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Stack(
+                  alignment: Alignment.center,
                   children: [
-                    _renderBackButton(),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 30),
-                      child: SizedBox(
-                          width: constraints.maxWidth,
-                          height: constraints.maxHeight - 100,
-                          child: player
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: _renderBackButton(),
                       ),
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 60.0, top: 5.0,),
+                        child: _renderShareButton(),
+                      ),
+                    ),
+                    SizedBox(
+                        width: constraints.maxWidth,
+                        height: constraints.maxHeight - 135,
+                        child: player
                     ),
                   ],
                 ),
