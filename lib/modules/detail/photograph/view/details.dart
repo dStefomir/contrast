@@ -1,4 +1,6 @@
 import "package:universal_html/html.dart" as html;
+
+import 'package:contrast/common/widgets/icon.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/button.dart';
@@ -360,6 +362,25 @@ class PhotographDetailsView extends HookConsumerWidget {
               visible: photographTitleVisibility,
               child: _renderPhotographTitle(context, ref, currentPhotographIndex)
           ),
+          Visibility(
+            visible: ref.watch(photographDetailAssetProvider) == 'map.svg',
+              child: Padding(
+                padding: EdgeInsets.only(
+                    top: useMobileLayout(context) ? 0 : 60,
+                    left: useMobileLayout(context) ? 0: 15,
+                    right: useMobileLayout(context) ? 15 : 0,
+                    bottom: useMobileLayout(context) ? 15 : 0
+                ),
+                child: Align(
+                  alignment: useMobileLayout(context) ? Alignment.bottomRight : Alignment.topLeft,
+                  child: IconRenderer(
+                    asset: 'signature.svg',
+                    color: Colors.white,
+                    height: maxHeight / 10,
+                  ),
+                ),
+              )
+          )
         ]
     );
   }

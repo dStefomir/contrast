@@ -1,4 +1,5 @@
 import 'package:contrast/common/widgets/button.dart';
+import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -106,6 +107,17 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                         width: constraints.maxWidth,
                         height: constraints.maxHeight - 135,
                         child: player
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15, bottom: 15),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: IconRenderer(
+                          asset: 'signature.svg',
+                          color: Colors.white,
+                          height: constraints.maxHeight / 12,
+                        ),
+                      ),
                     ),
                   ],
                 ),
