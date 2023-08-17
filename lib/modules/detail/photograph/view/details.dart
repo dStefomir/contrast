@@ -304,6 +304,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     final ScrollController scrollController = useScrollController();
     final int currentPhotographIndex = ref.watch(photographIndexProvider(photoIndex));
     final bool photographTitleVisibility = ref.watch(photographTitleVisibilityProvider);
+    final String currentView = ref.watch(photographDetailAssetProvider);
     final ImageData image = images[currentPhotographIndex];
     final double maxWidth = MediaQuery.of(context).size.width;
     final double maxHeight = MediaQuery.of(context).size.height;
@@ -362,8 +363,16 @@ class PhotographDetailsView extends HookConsumerWidget {
               visible: photographTitleVisibility,
               child: _renderPhotographTitle(context, ref, currentPhotographIndex)
           ),
-          Visibility(
-            visible: ref.watch(photographDetailAssetProvider) == 'map.svg',
+          SlideTransitionAnimation(
+              duration: const Duration(milliseconds: 1000),
+              getStart: () => currentView == 'map.svg' ? const Offset(0, 1) : const Offset(0, 0),
+              getEnd: () => currentView == 'map.svg' ? const Offset(0, 0) : const Offset(0, 1),
+              whenTo: (controller) {
+                useValueChanged(currentView, (_, __) async {
+                  controller.reset();
+                  controller.forward();
+                });
+              },
               child: Padding(
                 padding: const EdgeInsets.only(right: 15, bottom: 15),
                 child: Align(
