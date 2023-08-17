@@ -30,12 +30,14 @@ class PhotographDetailsView extends HookConsumerWidget {
   final int photoIndex;
   /// Current selected photograph category
   final String category;
+  final html.AudioElement audio;
 
   const PhotographDetailsView({
     super.key,
     required this.images,
     required this.photoIndex,
-    required this.category
+    required this.category,
+    required this.audio
   });
 
   /// Are coordinates valid or not
@@ -176,6 +178,23 @@ class PhotographDetailsView extends HookConsumerWidget {
           icon: 'close.svg'
       )
   );
+
+  /// Renders the audio button
+  Widget _renderAudioButton(WidgetRef ref) =>
+      DefaultButton(
+          onClick: () async {
+            if(audio.paused) {
+              await audio.play();
+              ref.read(musicTriggerProvider.notifier).setPlay(true);
+            } else {
+              audio.pause();
+              ref.read(musicTriggerProvider.notifier).setPlay(false);
+            }
+          },
+          color: Colors.white,
+          borderColor: Colors.black,
+          icon: !ref.watch(musicTriggerProvider) ? 'volume_up.svg' : 'volume_off.svg'
+      );
 
   /// Renders the share button
   Widget _renderShareButton(BuildContext context, int currentPhotographyIndex) =>
@@ -330,15 +349,27 @@ class PhotographDetailsView extends HookConsumerWidget {
               child: _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight)
           ) :
           _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
-          Visibility(
-              visible: _isAreCoordinatesValid(image.lat, image.lng),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 115.0, top: 5.0,),
-                child: _renderDetailsBtn(ref, context, scrollController),
-              )
+          SlideTransitionAnimation(
+            duration: const Duration(milliseconds: 1000),
+            getStart: () => _isAreCoordinatesValid(image.lat, image.lng) ? const Offset(0, -1) : const Offset(0, 0),
+            getEnd: () => _isAreCoordinatesValid(image.lat, image.lng) ? const Offset(0, 0) : const Offset(0, -1),
+            whenTo: (controller) {
+              useValueChanged(_isAreCoordinatesValid(image.lat, image.lng), (_, __) async {
+                controller.reset();
+                controller.forward();
+              });
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 170.0, top: 5.0),
+              child: _renderDetailsBtn(ref, context, scrollController),
+            ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 60.0, top: 5.0,),
+            padding: const EdgeInsets.only(left: 115.0, top: 5.0),
+            child: _renderAudioButton(ref),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 60.0, top: 5.0),
             child: _renderShareButton(context, currentPhotographIndex),
           ),
           Padding(

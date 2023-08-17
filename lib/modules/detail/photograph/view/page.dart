@@ -1,3 +1,5 @@
+import "package:universal_html/html.dart" as html;
+
 import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/map/provider.dart';
 import 'package:contrast/common/widgets/text.dart';
@@ -31,6 +33,8 @@ class PhotographDetailPage extends StatefulHookConsumerWidget {
 }
 
 class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
+  /// Web audio player
+  late html.AudioElement audio;
 
   @override
   void initState() {
@@ -42,7 +46,21 @@ class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
             'id': widget.id,
           });
     });
+    audio = html.AudioElement()..src = 'assets/music/background_music.mp3';
+    audio.onEnded.listen((event) => _resetMusicWhenEnded());
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    audio.pause();
+    super.dispose();
+  }
+
+  /// Reset the currentTime to 0 and play music again
+  void _resetMusicWhenEnded() async {
+    audio.currentTime = 0;
+    await audio.play();
   }
 
   @override
@@ -63,7 +81,7 @@ class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
             }
           });
 
-          return PhotographDetailsView(images: data, photoIndex: photoIndex, category: widget.category);
+          return PhotographDetailsView(images: data, photoIndex: photoIndex, category: widget.category, audio: audio);
         },
         error: (error, stackTrace) => Center(
             child: StyledText(

@@ -51,3 +51,16 @@ class PhotographTitleVisibilityNotifier extends StateNotifier<bool> {
   /// Sets the visibility of the photograph title
   setVisibility(bool visibility) => state = visibility;
 }
+
+/// Provider for trigger the music play
+final musicTriggerProvider = StateNotifierProvider.autoDispose<MusicTriggerNotifier, bool>((ref) => MusicTriggerNotifier(ref: ref));
+/// Notifier for trigger the music play
+class MusicTriggerNotifier extends StateNotifier<bool> {
+  /// Reference
+  final Ref ref;
+
+  MusicTriggerNotifier({required this.ref}) : super(false);
+
+  /// Sets the music play state
+  setPlay(bool play) => state = play;
+}
