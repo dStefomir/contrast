@@ -1,24 +1,30 @@
+import 'package:contrast/common/widgets/text.dart';
 import 'package:flutter/material.dart';
 
 /// Renders an error snack bar on the screen
-void showErrorTextOnSnackBar(BuildContext context, String text) {
+void showErrorTextOnSnackBar(BuildContext context, String text) =>
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text(text),
+      content: StyledText(
+        text: text,
+        padding: 0,
+        useShadow: true,
+        color: Colors.black,
+      ),
       backgroundColor: Colors.red,
     ),
   );
-}
 
 /// Renders an successful snack bar on the screen
-void showSuccessTextOnSnackBar(BuildContext context, String text) {
+void showSuccessTextOnSnackBar(BuildContext context, String text) =>
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text(
-        text,
-        style: const TextStyle(color: Colors.black),
+      content: StyledText(
+        text: text,
+        padding: 0,
+        useShadow: true,
+        color: Colors.black,
       ),
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.grey[100],
     ),
   );
-}
