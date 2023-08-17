@@ -193,7 +193,7 @@ class PhotographDetailsView extends HookConsumerWidget {
           },
           color: Colors.white,
           borderColor: Colors.black,
-          icon: !ref.watch(musicTriggerProvider) ? 'volume_up.svg' : 'volume_off.svg'
+          icon: ref.watch(musicTriggerProvider) ? 'volume_up.svg' : 'volume_off.svg'
       );
 
   /// Renders the share button

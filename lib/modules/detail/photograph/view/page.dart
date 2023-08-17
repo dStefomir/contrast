@@ -46,7 +46,7 @@ class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
             'id': widget.id,
           });
     });
-    audio = html.AudioElement()..src = 'assets/music/background_music.mp3';
+    audio = html.AudioElement()..src = 'assets/assets/background_music.mp3';
     audio.onEnded.listen((event) => _resetMusicWhenEnded());
     super.initState();
   }
