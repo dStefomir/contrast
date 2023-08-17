@@ -183,7 +183,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                               controller.forward();
                             });
                           },
-                          child: RotatedBox(
+                          child: !useMobileLayout(context)
+                              ? RotatedBox(
                             quarterTurns: useMobileLayout(context) ? 3 : 0,
                             child: const StyledText(
                               text: 'C O N T R A S T',
@@ -191,8 +192,12 @@ class BoardPageState extends ConsumerState<BoardPage> {
                               useShadow: false,
                               weight: FontWeight.bold,
                               fontSize: 60,
-                            ),
-                          )
+                            ))
+                              : Image.asset(
+                            'assets/background.jpg',
+                            height: double.infinity,
+                            width: double.infinity,
+                            fit: BoxFit.fill)
                       )
                   ),
                   Align(
