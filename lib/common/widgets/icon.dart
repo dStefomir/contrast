@@ -32,17 +32,10 @@ class IconRenderer extends StatelessWidget {
         fit: fit,
         color: color,
         clipBehavior: Clip.antiAlias,
-      ) : Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            'assets/$asset',
-            fit: width != null ? BoxFit.fitHeight : BoxFit.fitWidth,
-            width: double.infinity,
-            height: double.infinity,
-            filterQuality: FilterQuality.low,
-          ),
-          Container(color: Colors.white.withOpacity(0.95),),
-        ],
+      ) : Image.asset(
+        'assets/$asset',
+        fit: fit,
+        width: width,
+        height: height,
       );
 }

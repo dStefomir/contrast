@@ -1,5 +1,6 @@
 import "package:universal_html/html.dart" as html;
 
+import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
@@ -193,8 +194,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                               weight: FontWeight.bold,
                               fontSize: 60,
                             ))
-                              : Image.asset(
-                            'assets/background.jpg',
+                              : const IconRenderer(
+                            asset: 'background.jpg',
                             height: double.infinity,
                             width: double.infinity,
                             fit: BoxFit.fill)
