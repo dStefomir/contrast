@@ -5,6 +5,7 @@ import 'package:contrast/common/widgets/page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
@@ -80,54 +81,63 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       );
 
   @override
-  Widget build(BuildContext context) => LayoutBuilder(
-      builder: (context, constraints) => BackgroundPage(
-          color: Colors.black,
-          child: YoutubePlayerScaffold(
-            controller: _controller,
-            aspectRatio: 16 / 9,
-            builder: (context, player) =>
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: _renderBackButton(),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 60.0, top: 5.0,),
-                        child: _renderShareButton(),
-                      ),
-                    ),
-                    SizedBox(
-                        width: constraints.maxWidth,
-                        height: constraints.maxHeight - 135,
-                        child: player
-                    ),
-                    SlideTransitionAnimation(
-                      duration: const Duration(milliseconds: 1000),
-                      getStart: () => const Offset(0, 1),
-                      getEnd: () => const Offset(0, 0),
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 15, bottom: 15),
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: IconRenderer(
-                            asset: 'signature.svg',
-                            color: Colors.white,
-                            height: constraints.maxHeight / 12,
+  Widget build(BuildContext context) =>
+      RawKeyboardListener(
+        autofocus: true,
+        focusNode: useFocusNode(),
+        onKey: (RawKeyEvent event) {
+          if (event.logicalKey == LogicalKeyboardKey.escape) {
+            Modular.to.navigate('/');
+          }},
+        child: LayoutBuilder(
+            builder: (context, constraints) => BackgroundPage(
+                color: Colors.black,
+                child: YoutubePlayerScaffold(
+                  controller: _controller,
+                  aspectRatio: 16 / 9,
+                  builder: (context, player) =>
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: _renderBackButton(),
+                            ),
                           ),
-                        ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 60.0, top: 5.0,),
+                              child: _renderShareButton(),
+                            ),
+                          ),
+                          SizedBox(
+                              width: constraints.maxWidth,
+                              height: constraints.maxHeight - 135,
+                              child: player
+                          ),
+                          SlideTransitionAnimation(
+                            duration: const Duration(milliseconds: 1000),
+                            getStart: () => const Offset(0, 1),
+                            getEnd: () => const Offset(0, 0),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 15, bottom: 15),
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: IconRenderer(
+                                  asset: 'signature.svg',
+                                  color: Colors.white,
+                                  height: constraints.maxHeight / 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-          )
-      )
-  );
+                )
+            )
+        ),
+      );
 }
