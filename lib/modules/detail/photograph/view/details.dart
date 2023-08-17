@@ -365,14 +365,9 @@ class PhotographDetailsView extends HookConsumerWidget {
           Visibility(
             visible: ref.watch(photographDetailAssetProvider) == 'map.svg',
               child: Padding(
-                padding: EdgeInsets.only(
-                    top: useMobileLayout(context) ? 0 : 60,
-                    left: useMobileLayout(context) ? 0: 15,
-                    right: useMobileLayout(context) ? 15 : 0,
-                    bottom: useMobileLayout(context) ? 15 : 0
-                ),
+                padding: const EdgeInsets.only(right: 15, bottom: 15),
                 child: Align(
-                  alignment: useMobileLayout(context) ? Alignment.bottomRight : Alignment.topLeft,
+                  alignment: Alignment.bottomRight,
                   child: IconRenderer(
                     asset: 'signature.svg',
                     color: Colors.white,
