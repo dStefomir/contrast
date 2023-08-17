@@ -108,13 +108,16 @@ class ContrastPhotograph extends StatelessWidget {
     );
 
     if(state.extendedImageLoadState == LoadState.completed) {
-      return FadeAnimation(
-          key: Key('${widgetKey.toString()}/rawImage'),
-          start: 0,
-          end: 1,
-          duration: const Duration(milliseconds: 400),
-          child: photograph
-      );
+      if(!useMobileLayout(context)) {
+        return FadeAnimation(
+            key: Key('${widgetKey.toString()}/rawImage'),
+            start: 0,
+            end: 1,
+            duration: const Duration(milliseconds: 400),
+            child: photograph
+        );
+      }
+      return photograph;
     } else if(state.extendedImageLoadState == LoadState.loading) {
       return LoadingIndicator(
           color: Colors.grey,
@@ -124,7 +127,7 @@ class ContrastPhotograph extends StatelessWidget {
       );
     }
 
-    return Container();
+    return photograph;
   }
 
   @override
@@ -146,12 +149,12 @@ class ContrastPhotograph extends StatelessWidget {
         loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
         enableMemoryCache: true,
         cacheRawData: true,
-        cacheKey: "${widgetKey.toString()}/cache",
+        cacheKey: getRunningPlatform(context) == 'DESKTOP' ? "${widgetKey.toString()}/cache" : null,
         clearMemoryCacheIfFailed: false,
         clearMemoryCacheWhenDispose: false,
         filterQuality: quality,
         isAntiAlias: true,
-        imageCacheName: image?.path!,
+        imageCacheName: getRunningPlatform(context) == 'DESKTOP' ? image?.path! : null,
       );
     } else {
       photo = ExtendedImage.memory(
