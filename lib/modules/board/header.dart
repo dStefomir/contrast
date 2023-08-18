@@ -2,7 +2,6 @@ import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/tab.dart';
-import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
@@ -18,100 +17,94 @@ class BoardPageFilter extends ConsumerWidget {
   Widget _renderMobileLayout(BuildContext context, WidgetRef ref) => ShadowWidget(
     blurRadius: 2,
     offset: const Offset(3, 0),
-    child: SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Container(
-        width: mobileMenuWidth,
-        height: MediaQuery.of(context).size.height - mobileMenuWidth,
-        color: Colors.white,
-        child: Stack(children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.black.withOpacity(0.0),
-                  Colors.black.withOpacity(0.1),
-                ],
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const RotatedBox(
-                  quarterTurns: 3,
-                  child: StyledText(
-                    text: 'C O N T R A S T',
-                    color: Colors.black,
-                    useShadow: false,
-                  ),
-                ),
-                MenuButton(
-                    widgetKey: const Key('qr_code'),
-                    iconPath: 'qr_code.svg',
-                    disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                    selected: ref.watch(overlayVisibilityProvider(const Key('qr_code'))) == null || ref.watch(overlayVisibilityProvider(const Key('qr_code'))) == false
-                        ? false
-                        : true,
-                    size: mobileMenuIconSize,
-                    onClick: () {
-                      if(ref.read(overlayVisibilityProvider(const Key('qr_code'))) == true) {
-                        ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
-                      } else {
-                        ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(true);
-                      }
-                    }
-                ).translateOnPhotoHover,
-                const Spacer(),
-                MenuButton(
-                    widgetKey: const Key('all'),
-                    iconPath: 'all.svg',
-                    disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                    selected: ref.watch(boardHeaderTabProvider) == 'all',
-                    size: mobileMenuIconSize,
-                    onClick: () => ref.read(boardHeaderTabProvider.notifier).switchTab('all')
-                ).translateOnPhotoHover,
-                MenuButton(
-                    widgetKey: const Key('landscape'),
-                    iconPath: 'landscape.svg',
-                    disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                    selected: ref.watch(boardHeaderTabProvider) == 'landscape',
-                    size: mobileMenuIconSize,
-                    onClick: () => ref.read(boardHeaderTabProvider.notifier).switchTab('landscape')
-                ).translateOnPhotoHover,
-                MenuButton(
-                    widgetKey: const Key('portraits'),
-                    iconPath: 'portraits.svg',
-                    disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                    selected: ref.watch(boardHeaderTabProvider) == 'portraits',
-                    size: mobileMenuIconSize,
-                    onClick: () => ref.read(boardHeaderTabProvider.notifier).switchTab('portraits')
-                ).translateOnPhotoHover,
-                MenuButton(
-                    widgetKey: const Key('street'),
-                    iconPath: 'street.svg',
-                    disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                    selected: ref.watch(boardHeaderTabProvider) == 'street',
-                    size: mobileMenuIconSize,
-                    onClick: () => ref.read(boardHeaderTabProvider.notifier).switchTab('street')
-                ).translateOnPhotoHover,
-                MenuButton(
-                    widgetKey: const Key('other'),
-                    iconPath: 'dog.svg',
-                    disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                    selected: ref.watch(boardHeaderTabProvider) == 'other',
-                    size: mobileMenuIconSize,
-                    onClick: () => ref.read(boardHeaderTabProvider.notifier).switchTab('other')
-                ).translateOnPhotoHover,
+    child: Container(
+      width: mobileMenuWidth,
+      height: MediaQuery.of(context).size.height - mobileMenuWidth,
+      color: Colors.white,
+      child: Stack(children: [
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black.withOpacity(0.15),
+                Colors.black.withOpacity(0.0),
               ],
             ),
-          )
-        ]),
-      ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Spacer(),
+              MenuButton(
+                  widgetKey: const Key('qr_code'),
+                  iconPath: 'qr_code.svg',
+                  disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                  selected: ref.watch(overlayVisibilityProvider(const Key('qr_code'))) == null || ref.watch(overlayVisibilityProvider(const Key('qr_code'))) == false
+                      ? false
+                      : true,
+                  size: mobileMenuIconSize,
+                  onClick: () {
+                    if(ref.read(overlayVisibilityProvider(const Key('qr_code'))) == true) {
+                      ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
+                    } else {
+                      ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(true);
+                    }
+                  }
+              ).translateOnPhotoHover,
+              const Divider(
+                  color: Colors.black,
+                  height: 0,
+                  thickness: 2
+              ),
+              MenuButton(
+                  widgetKey: const Key('all'),
+                  iconPath: 'all.svg',
+                  disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                  selected: ref.watch(boardHeaderTabProvider) == 'all',
+                  size: mobileMenuIconSize,
+                  onClick: () => ref.read(boardHeaderTabProvider.notifier).switchTab('all')
+              ).translateOnPhotoHover,
+              MenuButton(
+                  widgetKey: const Key('landscape'),
+                  iconPath: 'landscape.svg',
+                  disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                  selected: ref.watch(boardHeaderTabProvider) == 'landscape',
+                  size: mobileMenuIconSize,
+                  onClick: () => ref.read(boardHeaderTabProvider.notifier).switchTab('landscape')
+              ).translateOnPhotoHover,
+              MenuButton(
+                  widgetKey: const Key('portraits'),
+                  iconPath: 'portraits.svg',
+                  disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                  selected: ref.watch(boardHeaderTabProvider) == 'portraits',
+                  size: mobileMenuIconSize,
+                  onClick: () => ref.read(boardHeaderTabProvider.notifier).switchTab('portraits')
+              ).translateOnPhotoHover,
+              MenuButton(
+                  widgetKey: const Key('street'),
+                  iconPath: 'street.svg',
+                  disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                  selected: ref.watch(boardHeaderTabProvider) == 'street',
+                  size: mobileMenuIconSize,
+                  onClick: () => ref.read(boardHeaderTabProvider.notifier).switchTab('street')
+              ).translateOnPhotoHover,
+              MenuButton(
+                  widgetKey: const Key('other'),
+                  iconPath: 'dog.svg',
+                  disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                  selected: ref.watch(boardHeaderTabProvider) == 'other',
+                  size: mobileMenuIconSize,
+                  onClick: () => ref.read(boardHeaderTabProvider.notifier).switchTab('other')
+              ).translateOnPhotoHover,
+            ],
+          ),
+        )
+      ]),
     ),
   );
 
