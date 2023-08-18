@@ -1,6 +1,5 @@
 import "package:universal_html/html.dart" as html;
 
-import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
@@ -184,21 +183,13 @@ class BoardPageState extends ConsumerState<BoardPage> {
                               controller.forward();
                             });
                           },
-                          child: !useMobileLayout(context)
-                              ? RotatedBox(
-                            quarterTurns: useMobileLayout(context) ? 3 : 0,
-                            child: const StyledText(
-                              text: 'C O N T R A S T',
-                              color: Colors.black,
-                              useShadow: false,
-                              weight: FontWeight.bold,
-                              fontSize: 60,
-                            ))
-                              : const IconRenderer(
-                            asset: 'background.jpg',
-                            height: double.infinity,
-                            width: double.infinity,
-                            fit: BoxFit.fill)
+                          child: StyledText(
+                            text: 'C O N T R A S T',
+                            color: Colors.black,
+                            useShadow: false,
+                            weight: FontWeight.bold,
+                            fontSize: useMobileLayout(context) ? 40 : 60,
+                          )
                       )
                   ),
                   Align(
