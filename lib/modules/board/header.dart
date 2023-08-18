@@ -24,8 +24,8 @@ class BoardPageFilter extends ConsumerWidget {
     blurRadius: 2,
     offset: const Offset(3, 0),
     child: Container(
-      width: mobileMenuWidth,
-      height: MediaQuery.of(context).size.height - mobileMenuWidth,
+      width: boardPadding,
+      height: MediaQuery.of(context).size.height - boardPadding,
       color: Colors.white,
       child: Stack(children: [
         Container(
@@ -52,7 +52,7 @@ class BoardPageFilter extends ConsumerWidget {
                   selected: ref.watch(overlayVisibilityProvider(const Key('qr_code'))) == null || ref.watch(overlayVisibilityProvider(const Key('qr_code'))) == false
                       ? false
                       : true,
-                  size: mobileMenuIconSize,
+                  size: boardPadding,
                   onClick: () {
                     if(ref.read(overlayVisibilityProvider(const Key('qr_code'))) == true) {
                       ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
@@ -66,7 +66,7 @@ class BoardPageFilter extends ConsumerWidget {
                   iconPath: 'share.svg',
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: false,
-                  size: mobileMenuIconSize,
+                  size: boardPadding,
                   onClick: () =>
                       onUserAction(
                           ref,
@@ -81,7 +81,7 @@ class BoardPageFilter extends ConsumerWidget {
                   iconPath: 'all.svg',
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'all',
-                  size: mobileMenuIconSize,
+                  size: boardPadding,
                   onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('all'))
               ).translateOnPhotoHover,
               MenuButton(
@@ -89,7 +89,7 @@ class BoardPageFilter extends ConsumerWidget {
                   iconPath: 'landscape.svg',
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'landscape',
-                  size: mobileMenuIconSize,
+                  size: boardPadding,
                   onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('landscape'))
               ).translateOnPhotoHover,
               MenuButton(
@@ -97,7 +97,7 @@ class BoardPageFilter extends ConsumerWidget {
                   iconPath: 'portraits.svg',
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'portraits',
-                  size: mobileMenuIconSize,
+                  size: boardPadding,
                   onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('portraits'))
               ).translateOnPhotoHover,
               MenuButton(
@@ -105,7 +105,7 @@ class BoardPageFilter extends ConsumerWidget {
                   iconPath: 'street.svg',
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'street',
-                  size: mobileMenuIconSize,
+                  size: boardPadding,
                   onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('street'))
               ).translateOnPhotoHover,
               MenuButton(
@@ -113,7 +113,7 @@ class BoardPageFilter extends ConsumerWidget {
                   iconPath: 'dog.svg',
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'other',
-                  size: mobileMenuIconSize,
+                  size: boardPadding,
                   onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('other'))
               ).translateOnPhotoHover,
             ],
@@ -129,7 +129,7 @@ class BoardPageFilter extends ConsumerWidget {
     blurRadius: 2,
     child: Container(
       color: Colors.white,
-      height: desktopTopPadding,
+      height: boardPadding,
       child: Stack(
         children: [
           Container(

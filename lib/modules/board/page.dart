@@ -30,10 +30,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-const double desktopTopPadding = 65;
-const double desktopBottomPadding = 65;
-const double mobileMenuWidth = 65;
-const double mobileMenuIconSize = 65;
+const double boardPadding = 65;
 
 class BoardPage extends StatefulHookConsumerWidget {
   /// Firebase plugins
@@ -160,7 +157,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
       useValueChanged(ref.watch(boardHeaderTabProvider), (_, __) async {
         if (useMobileLayout(context)) {
           if (ref.watch(boardFooterTabProvider) == 'photos') {
-            titlePadding = mobileMenuWidth;
+            titlePadding = boardPadding;
           }
         }
       });
@@ -210,8 +207,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                       alignment: Alignment.center,
                       child: Padding(
                         padding: !useMobileLayout(context)
-                            ? EdgeInsets.only(top: ref.read<String>(boardFooterTabProvider) == 'photos' ? desktopTopPadding : 0, bottom: desktopBottomPadding)
-                            : EdgeInsets.only(top: 0.2, left: ref.read<String>(boardFooterTabProvider) == 'photos' ? mobileMenuWidth : 0, bottom: mobileMenuWidth),
+                            ? EdgeInsets.only(top: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding)
+                            : EdgeInsets.only(top: 0.2, left: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding),
                         child: ref.read(boardFooterTabProvider) == 'photos'
                             ? SlideTransitionAnimation(
                             getStart: () => _calculateBoardStartAnimation(ref),

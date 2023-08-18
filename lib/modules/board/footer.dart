@@ -29,7 +29,7 @@ class BoardPageFooter extends HookConsumerWidget {
             fit: BoxFit.cover,
           ),
         ),
-        height: desktopBottomPadding + 22,
+        height: boardPadding + 22,
         child: Padding(
           padding: const EdgeInsets.only(top: 35, bottom: 20, left: 20, right: 20),
           child: StyledButton(
@@ -60,7 +60,7 @@ class BoardPageFooter extends HookConsumerWidget {
           offset: const Offset(0, -2),
           blurRadius: 2,
           child: Container(
-            height: mobileMenuWidth,
+            height: boardPadding,
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -81,7 +81,7 @@ class BoardPageFooter extends HookConsumerWidget {
                     child: InkWell(
                       onTap: () => ref.read(boardFooterTabProvider.notifier).switchTab('photos'),
                       child: Container(
-                        height: mobileMenuIconSize,
+                        height: boardPadding,
                         padding: const EdgeInsets.all(18.0),
                         decoration: BoxDecoration(
                           color: currentTab == 'photos' ? Colors.black: Colors.white,
@@ -102,7 +102,7 @@ class BoardPageFooter extends HookConsumerWidget {
                     child: InkWell(
                       onTap: () => ref.read(boardFooterTabProvider.notifier).switchTab('videos'),
                       child: Container(
-                        height: mobileMenuIconSize,
+                        height: boardPadding,
                         padding: const EdgeInsets.all(18.0),
                         decoration: BoxDecoration(
                           color: currentTab == 'videos' ? Colors.black: Colors.white,
@@ -137,7 +137,7 @@ class BoardPageFooter extends HookConsumerWidget {
           offset: const Offset(0, -2),
           blurRadius: 2,
           child: Container(
-            height: desktopBottomPadding,
+            height: boardPadding,
             color: Colors.white,
             child: Stack(
               children: [
