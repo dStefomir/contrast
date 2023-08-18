@@ -120,6 +120,30 @@ class PhotographDetailsView extends HookConsumerWidget {
     }
   }
 
+  /// Renders the photograph signature
+  Widget _renderSignature(double maxHeight, String currentView) => SlideTransitionAnimation(
+      duration: const Duration(milliseconds: 500),
+      getStart: () => currentView == 'map.svg' ? const Offset(0, 1) : const Offset(0, 0),
+      getEnd: () => currentView == 'map.svg' ? const Offset(0, 0) : const Offset(0, 1),
+      whenTo: (controller) {
+        useValueChanged(currentView, (_, __) async {
+          controller.reset();
+          controller.forward();
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(right: 15, bottom: 15),
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: IconRenderer(
+            asset: 'signature.svg',
+            color: Colors.white,
+            height: maxHeight / 10,
+          ),
+        ),
+      )
+  );
+
   /// Render the photograph title
   Widget _renderPhotographTitle(BuildContext context, WidgetRef ref, int currentPhotographIndex) => Align(
       alignment: Alignment.center,
@@ -147,82 +171,111 @@ class PhotographDetailsView extends HookConsumerWidget {
   );
 
   /// Render the next photograph button
-  Widget _renderNextBtn(WidgetRef ref, BuildContext context, PageController pageController, int currentPhotographIndex) => Align(
-      alignment: Alignment.centerRight,
-      child: DefaultButton(
-          onClick: () => _goToNextPhotograph(ref, pageController, currentPhotographIndex),
-          color: Colors.white,
-          borderColor: Colors.black,
-          icon: 'navigate_next.svg'
-      )
+  Widget _renderNextBtn(WidgetRef ref, BuildContext context, PageController pageController, int currentPhotographIndex) => Padding(
+    padding: const EdgeInsets.all(5.0),
+    child: Align(
+        alignment: Alignment.centerRight,
+        child: DefaultButton(
+            onClick: () => _goToNextPhotograph(ref, pageController, currentPhotographIndex),
+            color: Colors.white,
+            borderColor: Colors.black,
+            icon: 'navigate_next.svg'
+        )
+    ),
   );
 
   /// Render the previous photograph button
-  Widget _renderPreviousBtn(WidgetRef ref, BuildContext context, PageController pageController, int currentPhotographIndex) => Align(
-      alignment: Alignment.centerLeft,
-      child: DefaultButton(
-          onClick: () => _goToPreviousPhotograph(ref, pageController, currentPhotographIndex),
-          color: Colors.white,
-          borderColor: Colors.black,
-          icon: 'navigate_before.svg'
-      )
+  Widget _renderPreviousBtn(WidgetRef ref, BuildContext context, PageController pageController, int currentPhotographIndex) => Padding(
+    padding: const EdgeInsets.all(5.0),
+    child: Align(
+        alignment: Alignment.centerLeft,
+        child: DefaultButton(
+            onClick: () => _goToPreviousPhotograph(ref, pageController, currentPhotographIndex),
+            color: Colors.white,
+            borderColor: Colors.black,
+            icon: 'navigate_before.svg'
+        )
+    ),
   );
 
   /// Render the go to previous page button
-  Widget _renderGoBackBtn() => Align(
-      alignment: Alignment.topLeft,
-      child: DefaultButton(
-          onClick: () => Modular.to.navigate('/'),
-          color: Colors.white,
-          borderColor: Colors.black,
-          icon: 'close.svg'
-      )
+  Widget _renderGoBackBtn() => Padding(
+    padding: const EdgeInsets.all(5.0),
+    child: Align(
+        alignment: Alignment.topLeft,
+        child: DefaultButton(
+            onClick: () => Modular.to.navigate('/'),
+            color: Colors.white,
+            borderColor: Colors.black,
+            icon: 'close.svg'
+        )
+    ),
   );
 
   /// Renders the audio button
   Widget _renderAudioButton(WidgetRef ref) =>
-      DefaultButton(
-          onClick: () async {
-            if(audio.paused) {
-              await audio.play();
-              ref.read(musicTriggerProvider.notifier).setPlay(true);
-            } else {
-              audio.pause();
-              ref.read(musicTriggerProvider.notifier).setPlay(false);
-            }
-          },
-          color: Colors.white,
-          borderColor: Colors.black,
-          icon: ref.watch(musicTriggerProvider) ? 'volume_up.svg' : 'volume_off.svg'
+      Padding(
+        padding: const EdgeInsets.only(left: 115.0, top: 5.0),
+        child: DefaultButton(
+            onClick: () async {
+              if(audio.paused) {
+                await audio.play();
+                ref.read(musicTriggerProvider.notifier).setPlay(true);
+              } else {
+                audio.pause();
+                ref.read(musicTriggerProvider.notifier).setPlay(false);
+              }
+            },
+            color: Colors.white,
+            borderColor: Colors.black,
+            icon: ref.watch(musicTriggerProvider) ? 'volume_up.svg' : 'volume_off.svg'
+        ),
       );
 
   /// Renders the share button
   Widget _renderShareButton(BuildContext context, int currentPhotographyIndex) =>
-      DefaultButton(
-          onClick: () => Clipboard.setData(
-              ClipboardData(text: 'https://www.dstefomir.eu/#/photos/details?id=${images[currentPhotographyIndex].id}&category=$category')
-          ).then((value) => showSuccessTextOnSnackBar(context, "Copied to clipboard")),
-          color: Colors.white,
-          borderColor: Colors.black,
-          icon: 'share.svg'
+      Padding(
+        padding: const EdgeInsets.only(left: 60.0, top: 5.0),
+        child: DefaultButton(
+            onClick: () => Clipboard.setData(
+                ClipboardData(text: 'https://www.dstefomir.eu/#/photos/details?id=${images[currentPhotographyIndex].id}&category=$category')
+            ).then((value) => showSuccessTextOnSnackBar(context, "Copied to clipboard")),
+            color: Colors.white,
+            borderColor: Colors.black,
+            icon: 'share.svg'
+        ),
       );
 
   /// Render the details button
-  Widget _renderDetailsBtn(WidgetRef ref, BuildContext context, ScrollController scrollController) {
+  Widget _renderDetailsBtn(WidgetRef ref, BuildContext context, ScrollController scrollController, ImageData image) {
     final String iconAsset = ref.watch(photographDetailAssetProvider);
 
-    return Align(
-        alignment: Alignment.topLeft,
-        child: DefaultButton(
-            onClick: () => _handlePhotographDetailsAction(
-                ref,
-                scrollController,
-                scrollController.offset == 0 ? scrollController.position.maxScrollExtent : 0
-            ),
-            color: Colors.white,
-            borderColor: Colors.black,
-            icon: iconAsset
-        )
+    return SlideTransitionAnimation(
+      duration: const Duration(milliseconds: 1000),
+      getStart: () => _isAreCoordinatesValid(image.lat, image.lng) ? const Offset(0, -1) : const Offset(0, 0),
+      getEnd: () => _isAreCoordinatesValid(image.lat, image.lng) ? const Offset(0, 0) : const Offset(0, -1),
+      whenTo: (controller) {
+        useValueChanged(_isAreCoordinatesValid(image.lat, image.lng), (_, __) async {
+          controller.reset();
+          controller.forward();
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(left: 170.0, top: 5.0),
+        child: Align(
+            alignment: Alignment.topLeft,
+            child: DefaultButton(
+                onClick: () => _handlePhotographDetailsAction(
+                    ref,
+                    scrollController,
+                    scrollController.offset == 0 ? scrollController.position.maxScrollExtent : 0
+                ),
+                color: Colors.white,
+                borderColor: Colors.black,
+                icon: iconAsset
+            )
+        ),
+      ),
     );
   }
 
@@ -255,7 +308,6 @@ class PhotographDetailsView extends HookConsumerWidget {
           builder: (BuildContext context, int index) {
             return PhotoViewGalleryPageOptions(
                 imageProvider: ExtendedNetworkImageProvider(serviceProvider.getPhotograph(context, image.path!)),
-                // initialScale: PhotoViewComputedScale.contained,
                 filterQuality: FilterQuality.high,
                 minScale: PhotoViewComputedScale.contained,
                 maxScale: PhotoViewComputedScale.covered * 2,
@@ -349,73 +401,23 @@ class PhotographDetailsView extends HookConsumerWidget {
               child: _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight)
           ) :
           _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
-          SlideTransitionAnimation(
-            duration: const Duration(milliseconds: 1000),
-            getStart: () => _isAreCoordinatesValid(image.lat, image.lng) ? const Offset(0, -1) : const Offset(0, 0),
-            getEnd: () => _isAreCoordinatesValid(image.lat, image.lng) ? const Offset(0, 0) : const Offset(0, -1),
-            whenTo: (controller) {
-              useValueChanged(_isAreCoordinatesValid(image.lat, image.lng), (_, __) async {
-                controller.reset();
-                controller.forward();
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(left: 170.0, top: 5.0),
-              child: _renderDetailsBtn(ref, context, scrollController),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 115.0, top: 5.0),
-            child: _renderAudioButton(ref),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 60.0, top: 5.0),
-            child: _renderShareButton(context, currentPhotographIndex),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: _renderGoBackBtn(),
-          ),
+          _renderDetailsBtn(ref, context, scrollController, image),
+          _renderAudioButton(ref),
+          _renderShareButton(context, currentPhotographIndex),
+          _renderGoBackBtn(),
           Visibility(
               visible: currentPhotographIndex != 0 && !useMobileLayout(context),
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: _renderPreviousBtn(ref, context, pageController, currentPhotographIndex),
-              )
+              child: _renderPreviousBtn(ref, context, pageController, currentPhotographIndex)
           ),
           Visibility(
               visible: currentPhotographIndex != images.length - 1 && !useMobileLayout(context),
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: _renderNextBtn(ref, context, pageController, currentPhotographIndex),
-              )
+              child: _renderNextBtn(ref, context, pageController, currentPhotographIndex)
           ),
           Visibility(
               visible: photographTitleVisibility,
               child: _renderPhotographTitle(context, ref, currentPhotographIndex)
           ),
-          SlideTransitionAnimation(
-              duration: const Duration(milliseconds: 1000),
-              getStart: () => currentView == 'map.svg' ? const Offset(0, 1) : const Offset(0, 0),
-              getEnd: () => currentView == 'map.svg' ? const Offset(0, 0) : const Offset(0, 1),
-              whenTo: (controller) {
-                useValueChanged(currentView, (_, __) async {
-                  controller.reset();
-                  controller.forward();
-                });
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 15, bottom: 15),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: IconRenderer(
-                    asset: 'signature.svg',
-                    color: Colors.white,
-                    height: maxHeight / 10,
-                  ),
-                ),
-              )
-          )
+          _renderSignature(maxHeight, currentView)
         ]
     );
   }
