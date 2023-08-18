@@ -153,6 +153,17 @@ class BoardPageState extends ConsumerState<BoardPage> {
     final bool? shouldShowEditPhotographDialog = ref.watch(overlayVisibilityProvider(const Key('edit_image')));
     final bool? shouldShowUploadVideoDialog = ref.watch(overlayVisibilityProvider(const Key('upload_video')));
     final bool? shouldShowEditVideoDialog = ref.watch(overlayVisibilityProvider(const Key('edit_video')));
+    double titlePadding = 0;
+    /// In mobile view we need to calculate a padding so that the title
+    /// can be in the center of the screen because of the left drawer
+    /// that the mobile view has. If its a desktop view we do nothing.
+    if (useMobileLayout(context)) {
+      useValueChanged(ref.watch(boardHeaderTabProvider), (_, __) async {
+        if (ref.watch(boardFooterTabProvider) == 'photos') {
+          titlePadding = mobileMenuWidth;
+        }
+      });
+    }
 
     return WillPopScope(
       onWillPop: () async {
@@ -183,12 +194,15 @@ class BoardPageState extends ConsumerState<BoardPage> {
                               controller.forward();
                             });
                           },
-                          child: StyledText(
-                            text: 'C O N T R A S T',
-                            color: Colors.black,
-                            useShadow: false,
-                            weight: FontWeight.bold,
-                            fontSize: useMobileLayout(context) ? 40 : 60,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: titlePadding),
+                            child: StyledText(
+                              text: 'C O N T R A S T',
+                              color: Colors.black,
+                              useShadow: false,
+                              weight: FontWeight.bold,
+                              fontSize: useMobileLayout(context) ? 30 : 60,
+                            ),
                           )
                       )
                   ),
