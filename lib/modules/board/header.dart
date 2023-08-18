@@ -39,7 +39,6 @@ class BoardPageFilter extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Spacer(),
               MenuButton(
                   widgetKey: const Key('qr_code'),
                   iconPath: 'qr_code.svg',
@@ -56,11 +55,7 @@ class BoardPageFilter extends ConsumerWidget {
                     }
                   }
               ).translateOnPhotoHover,
-              const Divider(
-                  color: Colors.black,
-                  height: 0,
-                  thickness: 2
-              ),
+              const Spacer(),
               MenuButton(
                   widgetKey: const Key('all'),
                   iconPath: 'all.svg',
