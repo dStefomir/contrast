@@ -12,6 +12,8 @@ const double dialogHeight = 550;
 /// Renders a Qr code dialog for sharing the website
 class QrCodeDialog extends HookConsumerWidget {
 
+
+
   const QrCodeDialog({super.key});
 
   @override

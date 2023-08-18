@@ -157,13 +157,13 @@ class BoardPageState extends ConsumerState<BoardPage> {
     /// In mobile view we need to calculate a padding so that the title
     /// can be in the center of the screen because of the left drawer
     /// that the mobile view has. If its a desktop view we do nothing.
-    if (useMobileLayout(context)) {
       useValueChanged(ref.watch(boardHeaderTabProvider), (_, __) async {
-        if (ref.watch(boardFooterTabProvider) == 'photos') {
-          titlePadding = mobileMenuWidth;
+        if (useMobileLayout(context)) {
+          if (ref.watch(boardFooterTabProvider) == 'photos') {
+            titlePadding = mobileMenuWidth;
+          }
         }
       });
-    }
 
     return WillPopScope(
       onWillPop: () async {
@@ -282,7 +282,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                               controller.forward();
                             });
                           },
-                          child: const BoardPageFilter()
+                          child: BoardPageFilter(onUserAction: _onAction)
                       )
                   ),
                   Visibility(

@@ -14,7 +14,10 @@ import '../../common/widgets/snack.dart';
 /// Renders the header of the board page
 class BoardPageFilter extends ConsumerWidget {
 
-  const BoardPageFilter({super.key});
+  /// What happens when the user performs an action
+  final Function(WidgetRef ref, Function? action) onUserAction;
+
+  const BoardPageFilter({super.key, required this.onUserAction});
 
   /// Render mobile layout
   Widget _renderMobileLayout(BuildContext context, WidgetRef ref) => ShadowWidget(
@@ -64,8 +67,13 @@ class BoardPageFilter extends ConsumerWidget {
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: false,
                   size: mobileMenuIconSize,
-                  onClick: () => Clipboard.setData(const ClipboardData(text: 'https://www.dstefomir.eu'))
-                      .then((value) => showSuccessTextOnSnackBar(context, "Copied to clipboard"))
+                  onClick: () =>
+                      onUserAction(
+                          ref,
+                              () => Clipboard.setData(
+                                  const ClipboardData(text: 'https://www.dstefomir.eu')
+                              ).then((_) => showSuccessTextOnSnackBar(context, "Copied to clipboard"))
+                      )
               ).translateOnPhotoHover,
               const Spacer(),
               MenuButton(
@@ -74,7 +82,7 @@ class BoardPageFilter extends ConsumerWidget {
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'all',
                   size: mobileMenuIconSize,
-                  onClick: () => ref.read(boardHeaderTabProvider.notifier).switchTab('all')
+                  onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('all'))
               ).translateOnPhotoHover,
               MenuButton(
                   widgetKey: const Key('landscape'),
@@ -82,7 +90,7 @@ class BoardPageFilter extends ConsumerWidget {
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'landscape',
                   size: mobileMenuIconSize,
-                  onClick: () => ref.read(boardHeaderTabProvider.notifier).switchTab('landscape')
+                  onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('landscape'))
               ).translateOnPhotoHover,
               MenuButton(
                   widgetKey: const Key('portraits'),
@@ -90,7 +98,7 @@ class BoardPageFilter extends ConsumerWidget {
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'portraits',
                   size: mobileMenuIconSize,
-                  onClick: () => ref.read(boardHeaderTabProvider.notifier).switchTab('portraits')
+                  onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('portraits'))
               ).translateOnPhotoHover,
               MenuButton(
                   widgetKey: const Key('street'),
@@ -98,7 +106,7 @@ class BoardPageFilter extends ConsumerWidget {
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'street',
                   size: mobileMenuIconSize,
-                  onClick: () => ref.read(boardHeaderTabProvider.notifier).switchTab('street')
+                  onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('street'))
               ).translateOnPhotoHover,
               MenuButton(
                   widgetKey: const Key('other'),
@@ -106,7 +114,7 @@ class BoardPageFilter extends ConsumerWidget {
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'other',
                   size: mobileMenuIconSize,
-                  onClick: () => ref.read(boardHeaderTabProvider.notifier).switchTab('other')
+                  onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('other'))
               ).translateOnPhotoHover,
             ],
           ),
@@ -145,35 +153,35 @@ class BoardPageFilter extends ConsumerWidget {
                 ContrastTab(
                     widgetKey: const Key('all'),
                     text: 'all',
-                    onClick: (String tab) => ref.read(boardHeaderTabProvider.notifier).switchTab(tab),
+                    onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.watch(boardHeaderTabProvider) == 'all'
                 ).translateOnPhotoHover,
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('landscape'),
                     text: 'landscape',
-                    onClick: (String tab) => ref.read(boardHeaderTabProvider.notifier).switchTab(tab),
+                    onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'landscape'
                 ).translateOnPhotoHover,
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('portraits'),
                     text: 'portraits',
-                    onClick: (String tab) => ref.read(boardHeaderTabProvider.notifier).switchTab(tab),
+                    onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'portraits'
                 ).translateOnPhotoHover,
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('street'),
                     text: 'street',
-                    onClick: (String tab) => ref.read(boardHeaderTabProvider.notifier).switchTab(tab),
+                    onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'street'
                 ).translateOnPhotoHover,
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('other'),
                     text: 'other',
-                    onClick: (String tab) => ref.read(boardHeaderTabProvider.notifier).switchTab(tab),
+                    onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'other'
                 ).translateOnPhotoHover,
                 const Spacer(),
