@@ -3,7 +3,6 @@ import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
