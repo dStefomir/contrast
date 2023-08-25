@@ -1,4 +1,4 @@
-import 'package:contrast/common/extensions/zoom.dart';
+import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/hover_provider.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';

@@ -1,6 +1,6 @@
 import "package:universal_html/html.dart" as html;
 
-import 'package:contrast/common/extensions/zoom.dart';
+import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/common/widgets/page.dart';

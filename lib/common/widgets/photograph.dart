@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:contrast/common/extensions/zoom.dart';
+import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/hover_provider.dart';
@@ -108,7 +108,7 @@ class ContrastPhotograph extends StatelessWidget {
     );
 
     if(state.extendedImageLoadState == LoadState.completed) {
-      if(getRunningPlatform(context) == 'DESKTOP') {
+      if(!useMobileLayout(context)) {
         return FadeAnimation(
             key: Key('${widgetKey.toString()}/rawImage'),
             start: 0,
@@ -117,10 +117,8 @@ class ContrastPhotograph extends StatelessWidget {
             child: photograph
         );
       }
-
       return photograph;
     } else if(state.extendedImageLoadState == LoadState.loading) {
-
       return LoadingIndicator(
           color: Colors.grey,
           stroke: 2,

@@ -1,5 +1,8 @@
-import 'package:contrast/common/extensions/zoom.dart';
+import 'dart:ui';
+
+import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
+import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/input.dart';
 import 'package:contrast/common/widgets/page.dart';
 import 'package:contrast/common/widgets/snack.dart';
