@@ -37,10 +37,10 @@ packages:
     dependency: transitive
     description:
       name: auto_injector
-      sha256: "2b0a076df2dd300ba3acfc270653f351fadf4d7889f042cd853f80ac83661af7"
+      sha256: a715862b587c518c81d7275044d4c1e6237ab1ccb921171a544dce04c6f771ca
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.0"
+    version: "2.0.0+2"
   boolean_selector:
     dependency: transitive
     description:
@@ -153,6 +153,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  fake_reflection:
+    dependency: transitive
+    description:
+      name: fake_reflection
+      sha256: "3e0fff7d8d60f0935a620904a1e6978e024df5fee8b710f37355166df00be506"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   ffi:
     dependency: transitive
     description:
@@ -229,26 +237,26 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_messaging
-      sha256: db4a38be54fd84849c21be1ae1b44f0d4637eec1069bf5c49ea95e81f582bbc0
+      sha256: "6c1a2a047d6f165b7c5f947467ac5138731a2af82c7af1c12d691dbb834f6b73"
       url: "https://pub.dev"
     source: hosted
-    version: "14.6.6"
+    version: "14.6.7"
   firebase_messaging_platform_interface:
     dependency: transitive
     description:
       name: firebase_messaging_platform_interface
-      sha256: "164119eed47ff19284e28bea9165a03da110c56ea09dd996622cfccad14d0efd"
+      sha256: bcba58d28f8cda607a323240c6d314c2c62b62ebfbb0f2d704ebefef07b52b5f
       url: "https://pub.dev"
     source: hosted
-    version: "4.5.5"
+    version: "4.5.6"
   firebase_messaging_web:
     dependency: transitive
     description:
       name: firebase_messaging_web
-      sha256: "6196d20731733834d7afb175c4345be57ddbd5daebca83cd52a430d62c2279fe"
+      sha256: "962d09ec9dfa486cbbc218258ad41e8ec7997a2eba46919049496e1cafd960c5"
       url: "https://pub.dev"
     source: hosted
-    version: "3.5.5"
+    version: "3.5.6"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -290,10 +298,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_modular
-      sha256: "0d50176ce394b792b447ee1c73e51e60c42b028a07b1974f3930f962c5f5e933"
+      sha256: "2a35a2bf4f9245d6916cde46594766398f352a6d6a3bd9a2fb8c36cd654fcf84"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.4+1"
+    version: "6.1.0+1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -508,10 +516,10 @@ packages:
     dependency: transitive
     description:
       name: modular_core
-      sha256: fbcc3683dedbe0ccd1d75636c94c057b56c5ec4e068cc0ac40cefd5ba27c109c
+      sha256: d7b41c0de48c3d3be721b6d1b4a2bcec01e13a5c04398c5d8cc2f66da491bd0a
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.3+1"
+    version: "3.1.0"
   path:
     dependency: transitive
     description:
@@ -874,6 +882,14 @@ packages:
     description:
       name: url_launcher_windows
       sha256: "7967065dd2b5fccc18c653b97958fdf839c5478c28e767c61ee879f4e7882422"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.7"
+  uuid:
+    dependency: transitive
+    description:
+      name: uuid
+      sha256: "648e103079f7c64a36dc7d39369cabb358d377078a051d6ae2ad3aa539519313"
       url: "https://pub.dev"
     source: hosted
     version: "3.0.7"

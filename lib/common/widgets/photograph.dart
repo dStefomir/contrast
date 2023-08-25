@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:contrast/common/extentions/zoom.dart';
+import 'package:contrast/common/extensions/zoom.dart';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/hover_provider.dart';
