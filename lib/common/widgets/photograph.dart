@@ -108,7 +108,7 @@ class ContrastPhotograph extends StatelessWidget {
     );
 
     if(state.extendedImageLoadState == LoadState.completed) {
-      if(!useMobileLayout(context)) {
+      if(getRunningPlatform(context) == 'DESKTOP') {
         return FadeAnimation(
             key: Key('${widgetKey.toString()}/rawImage'),
             start: 0,
@@ -117,8 +117,10 @@ class ContrastPhotograph extends StatelessWidget {
             child: photograph
         );
       }
+
       return photograph;
     } else if(state.extendedImageLoadState == LoadState.loading) {
+
       return LoadingIndicator(
           color: Colors.grey,
           stroke: 2,
