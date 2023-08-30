@@ -5,7 +5,6 @@ import 'package:contrast/utils/scroll_behavior.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

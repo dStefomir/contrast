@@ -375,7 +375,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                       child: UploadImageDialog(
                         data: ref.read(photographEditProvider),
                         onSubmit: (image) {
-                          ImageMetaData meta = ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == element.image.id).metadata;
+                          final ImageMetaData meta = ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == element.image.id).metadata;
                           ref.read(photographServiceFetchProvider.notifier).removeItem(
                               ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == image.image.id)
                           );

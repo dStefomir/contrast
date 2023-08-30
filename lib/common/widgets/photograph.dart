@@ -68,16 +68,25 @@ class ContrastPhotograph extends StatelessWidget {
   Widget _renderPhotographState(BuildContext context, ExtendedImageState state) {
     double shadowWidth = 0;
     double shadowHeight = 0;
+    double paddingTop = 0;
+    double paddingBottom = 0;
+    double paddingLeft = 0;
+    double paddingRight = 0;
+
     if (isThumbnail) {
       shadowWidth = constraints.maxWidth;
       shadowHeight = constraints.maxHeight / 1.8;
     } else {
       if (image!.isLandscape!) {
-        shadowWidth = constraints.maxWidth;
+        paddingRight = 1.5;
+        paddingLeft = 1.5;
+        shadowWidth = constraints.maxWidth - (paddingRight + paddingLeft);
         shadowHeight = constraints.maxHeight / 1.5;
       } else {
+        paddingTop = 1.5;
+        paddingBottom = 1.5;
         shadowWidth = constraints.maxWidth / 1.5;
-        shadowHeight = constraints.maxHeight;
+        shadowHeight = constraints.maxHeight - (paddingTop + paddingBottom);
       }
     }
 
@@ -92,17 +101,20 @@ class ContrastPhotograph extends StatelessWidget {
               height: shadowHeight,
             )
         ),
-        ExtendedRawImage(
-          image: state.extendedImageInfo?.image,
-          width: width,
-          height: !isThumbnail ? height : double.infinity,
-          fit: fit ?? (compressed
-              ? image?.isLandscape != null && image!.isLandscape!
-              ? BoxFit.fitWidth
-              : BoxFit.fitHeight
-              : BoxFit.contain),
-          isAntiAlias: true,
-          filterQuality: quality,
+        Padding(
+          padding: EdgeInsets.only(top: paddingTop, bottom: paddingBottom, left: paddingLeft, right: paddingRight),
+          child: ExtendedRawImage(
+            image: state.extendedImageInfo?.image,
+            width: width,
+            height: !isThumbnail ? height : double.infinity,
+            fit: fit ?? (compressed
+                ? image?.isLandscape != null && image!.isLandscape!
+                ? BoxFit.fitWidth
+                : BoxFit.fitHeight
+                : BoxFit.contain),
+            isAntiAlias: true,
+            filterQuality: quality,
+          ),
         ),
       ],
     );
