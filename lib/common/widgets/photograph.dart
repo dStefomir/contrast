@@ -60,7 +60,7 @@ class ContrastPhotograph extends StatelessWidget {
     this.width,
     this.height,
     this.data,
-    this.borderWidth = 1,
+    this.borderWidth = 1.5,
     this.isThumbnail = false,
   }) : super(key: widgetKey);
 
