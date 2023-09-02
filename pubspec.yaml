@@ -76,6 +76,8 @@ dependencies:
   shared_preferences: ^2.2.1
   # Open street maps library
   flutter_map: ^5.0.0
+  # Tooltip library
+  just_the_tooltip: ^0.0.12
   # Firebase libraries
   firebase_core: ^2.15.1
   firebase_analytics: ^10.4.5

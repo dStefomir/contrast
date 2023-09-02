@@ -65,6 +65,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
               ClipboardData(text: 'https://www.dstefomir.eu/#/videos/details/${widget.path}')
           ).then((value) => showSuccessTextOnSnackBar(context, "Copied to clipboard")),
           color: Colors.white,
+          tooltip: 'Share',
           borderColor: Colors.black,
           icon: 'share.svg'
       );
@@ -74,6 +75,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       DefaultButton(
           onClick: () => Modular.to.navigate('/'),
           color: Colors.white,
+          tooltip: 'Close',
           borderColor: Colors.black,
           icon: 'close.svg'
       );

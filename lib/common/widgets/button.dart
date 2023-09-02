@@ -3,6 +3,7 @@ import 'package:contrast/common/widgets/hover_provider.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
+import 'package:contrast/common/widgets/tooltip.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -27,19 +28,23 @@ class RedirectButton extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final bool doesHover = ref.watch(hoverProvider(widgetKey));
 
-    return Material(
-        color: Colors.transparent,
-        child: InkWell(
-            onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
-            onTap: () => onRedirect(),
-            child: Container(
-              color: doesHover ? Colors.white : Colors.black,
-              child: IconRenderer(
-                  asset: 'arrow_outward.svg',
-                  color: doesHover ? Colors.black : Colors.white,
-                  height: height ?? constraints.maxHeight / 10),
-            ).translateOnPhotoHover
-        )
+    return StyledTooltip(
+      text: 'New tab',
+      pointingPosition: AxisDirection.down,
+      child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+              onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
+              onTap: () => onRedirect(),
+              child: Container(
+                color: doesHover ? Colors.white : Colors.black,
+                child: IconRenderer(
+                    asset: 'arrow_outward.svg',
+                    color: doesHover ? Colors.black : Colors.white,
+                    height: height ?? constraints.maxHeight / 10),
+              ).translateOnPhotoHover
+          )
+      ),
     );
   }
 }
@@ -168,6 +173,8 @@ class MenuButton extends HookConsumerWidget {
   final bool selected;
   /// Icon size
   final double size;
+  /// Tooltip text
+  final String tooltip;
   /// What happens when the widget is clicked
   final void Function() onClick;
 
@@ -177,31 +184,36 @@ class MenuButton extends HookConsumerWidget {
     required this.disabled,
     required this.selected,
     required this.size,
+    required this.tooltip,
     required this.onClick
   }) : super(key: widgetKey);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) =>
-      Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            color: selected ? Colors.black : Colors.transparent,
-          ),
-          child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                  onTap: () => onClick(),
-                  onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: IconRenderer(
-                      asset: iconPath,
-                      color: selected ? Colors.white : Colors.black,
-                    ),
-                  )
-              )
-          )
+      StyledTooltip(
+        text: tooltip,
+        pointingPosition: AxisDirection.left,
+        child: Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              color: selected ? Colors.black : Colors.transparent,
+            ),
+            child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                    onTap: () => onClick(),
+                    onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: IconRenderer(
+                        asset: iconPath,
+                        color: selected ? Colors.white : Colors.black,
+                      ),
+                    )
+                )
+            )
+        ),
       );
 }
 
@@ -221,12 +233,15 @@ class DefaultButton extends StatelessWidget {
   final double borderWidth;
   /// Icon height
   final double height;
+  /// Tooltip text
+  final String? tooltip;
 
   const DefaultButton({
     required this.onClick,
     required this.color,
     required this.borderColor,
     required this.icon,
+    this.tooltip,
     this.shape = BoxShape.circle,
     this.borderWidth = 1,
     this.height = 35,
@@ -234,23 +249,27 @@ class DefaultButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.all(10),
-    child: Container(
-      decoration: BoxDecoration(
-          color: Colors.white,
-          shape: shape,
-          border: borderWidth == 0 ? null : Border.all(color: Colors.black, width: borderWidth)
-      ),
-      child: InkWell(
-        onTap: onClick,
-        child: IconRenderer(
-          asset: icon,
-          fit: BoxFit.scaleDown,
-          color: Colors.black,
-          height: height
+  Widget build(BuildContext context) {
+    final button = Padding(
+      padding: const EdgeInsets.all(10),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            shape: shape,
+            border: borderWidth == 0 ? null : Border.all(color: Colors.black, width: borderWidth)
+        ),
+        child: InkWell(
+          onTap: onClick,
+          child: IconRenderer(
+              asset: icon,
+              fit: BoxFit.scaleDown,
+              color: Colors.black,
+              height: height
+          ),
         ),
       ),
-    ),
-  ).translateOnVideoHover;
+    ).translateOnVideoHover;
+
+    return tooltip != null ? StyledTooltip(text: tooltip!, child: button) : button;
+  }
 }

@@ -52,6 +52,7 @@ class BoardPageFilter extends ConsumerWidget {
               MenuButton(
                   widgetKey: const Key('all'),
                   iconPath: 'all.svg',
+                  tooltip: 'All',
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'all',
                   size: boardPadding,
@@ -60,6 +61,7 @@ class BoardPageFilter extends ConsumerWidget {
               MenuButton(
                   widgetKey: const Key('landscape'),
                   iconPath: 'landscape.svg',
+                  tooltip: 'Landscape',
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'landscape',
                   size: boardPadding,
@@ -68,6 +70,7 @@ class BoardPageFilter extends ConsumerWidget {
               MenuButton(
                   widgetKey: const Key('portraits'),
                   iconPath: 'portraits.svg',
+                  tooltip: 'Portraits',
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'portraits',
                   size: boardPadding,
@@ -76,6 +79,7 @@ class BoardPageFilter extends ConsumerWidget {
               MenuButton(
                   widgetKey: const Key('street'),
                   iconPath: 'street.svg',
+                  tooltip: 'Street',
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'street',
                   size: boardPadding,
@@ -84,6 +88,7 @@ class BoardPageFilter extends ConsumerWidget {
               MenuButton(
                   widgetKey: const Key('other'),
                   iconPath: 'dog.svg',
+                  tooltip: 'Other',
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'other',
                   size: boardPadding,

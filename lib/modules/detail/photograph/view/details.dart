@@ -178,6 +178,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         child: DefaultButton(
             onClick: () => _goToNextPhotograph(ref, pageController, currentPhotographIndex),
             color: Colors.white,
+            tooltip: 'Next photograph',
             borderColor: Colors.black,
             icon: 'navigate_next.svg'
         )
@@ -192,6 +193,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         child: DefaultButton(
             onClick: () => _goToPreviousPhotograph(ref, pageController, currentPhotographIndex),
             color: Colors.white,
+            tooltip: 'Previous photograph',
             borderColor: Colors.black,
             icon: 'navigate_before.svg'
         )
@@ -206,6 +208,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         child: DefaultButton(
             onClick: () => Modular.to.navigate('/'),
             color: Colors.white,
+            tooltip: 'Close',
             borderColor: Colors.black,
             icon: 'close.svg'
         )
@@ -226,6 +229,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                 ref.read(musicTriggerProvider.notifier).setPlay(false);
               }
             },
+            tooltip: 'Music',
             color: Colors.white,
             borderColor: Colors.black,
             icon: ref.watch(musicTriggerProvider) ? 'volume_up.svg' : 'volume_off.svg'
@@ -240,6 +244,7 @@ class PhotographDetailsView extends HookConsumerWidget {
             onClick: () => Clipboard.setData(
                 ClipboardData(text: 'https://www.dstefomir.eu/#/photos/details?id=${images[currentPhotographyIndex].id}&category=$category')
             ).then((value) => showSuccessTextOnSnackBar(context, "Copied to clipboard")),
+            tooltip: 'Share',
             color: Colors.white,
             borderColor: Colors.black,
             icon: 'share.svg'
@@ -272,6 +277,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                 ),
                 color: Colors.white,
                 borderColor: Colors.black,
+                tooltip: 'Coordinates',
                 icon: iconAsset
             )
         ),
