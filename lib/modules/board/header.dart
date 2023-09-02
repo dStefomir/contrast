@@ -2,14 +2,13 @@ import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/tab.dart';
+import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../common/widgets/snack.dart';
 
 /// Renders the header of the board page
 class BoardPageFilter extends ConsumerWidget {
@@ -45,36 +44,10 @@ class BoardPageFilter extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              MenuButton(
-                  widgetKey: const Key('qr_code'),
-                  iconPath: 'qr_code.svg',
-                  disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                  selected: ref.watch(overlayVisibilityProvider(const Key('qr_code'))) == null || ref.watch(overlayVisibilityProvider(const Key('qr_code'))) == false
-                      ? false
-                      : true,
-                  size: boardPadding,
-                  onClick: () {
-                    if(ref.read(overlayVisibilityProvider(const Key('qr_code'))) == true) {
-                      ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
-                    } else {
-                      ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(true);
-                    }
-                  }
-              ).translateOnPhotoHover,
-              MenuButton(
-                  widgetKey: const Key('share_board'),
-                  iconPath: 'share.svg',
-                  disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                  selected: false,
-                  size: boardPadding,
-                  onClick: () =>
-                      onUserAction(
-                          ref,
-                              () => Clipboard.setData(
-                                  const ClipboardData(text: 'https://www.dstefomir.eu')
-                              ).then((_) => showSuccessTextOnSnackBar(context, "Copied to clipboard"))
-                      )
-              ).translateOnPhotoHover,
+              const RotatedBox(
+                  quarterTurns: 5,
+                child: StyledText(text: 'Contrast',),
+              ),
               const Spacer(),
               MenuButton(
                   widgetKey: const Key('all'),

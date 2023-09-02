@@ -1,5 +1,4 @@
 import 'package:contrast/common/extentions/zoom.dart';
-import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/shape.dart';
@@ -38,25 +37,18 @@ class BoardPageFooter extends HookConsumerWidget {
         ),
         height: boardPadding + 22,
         child: Padding(
-          padding: const EdgeInsets.only(top: 35, bottom: 20, left: 20, right: 20),
-          child: useMobileLayout(context) ? StyledButton(
-            widgetKey: const Key('about'),
-            onClick: () async {
-              final Uri url = Uri.parse('https://www.instagram.com/dstefomir/');
-              if (await canLaunchUrl(url)) {
-                await launchUrl(url);
-              }
-            },
-            iconAsset: 'instagram.svg',
-            iconHeight: 30,
-            shadow: false,
-            onlyIcon: true,
-            iconColor: Colors.white,
-          ) : SpeedDial(
+          padding: const EdgeInsets.all(20),
+          child: SpeedDial(
               animatedIcon: AnimatedIcons.menu_home,
               backgroundColor: Colors.transparent,
-              foregroundColor: Colors.white,
+              foregroundColor: Colors.white.withOpacity(0.5),
               animatedIconTheme: const IconThemeData(size: 50),
+              shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+              direction: SpeedDialDirection.up,
+              buttonSize: const Size(80, 0),
+              elevation: 1,
+              spacing: 5,
+              spaceBetweenChildren: 10,
               children: [
                 SpeedDialChild(
                     foregroundColor: Colors.black,
@@ -66,7 +58,8 @@ class BoardPageFooter extends HookConsumerWidget {
                       color: Colors.black,
                       height: 20,
                     ),
-                    label: "Instagram",
+                    shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+                    elevation: 1,
                     onTap: () async {
                       final Uri url = Uri.parse('https://www.instagram.com/dstefomir/');
                       if (await canLaunchUrl(url)) {
@@ -82,7 +75,8 @@ class BoardPageFooter extends HookConsumerWidget {
                       color: Colors.black,
                       height: 20,
                     ),
-                    label: "Share",
+                    shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+                    elevation: 1,
                     onTap: () => onUserAction(
                         ref,
                             () => Clipboard.setData(
@@ -91,14 +85,15 @@ class BoardPageFooter extends HookConsumerWidget {
                     )
                 ),
                 SpeedDialChild(
-                  foregroundColor: Colors.black,
-                  labelBackgroundColor: Colors.white,
-                  child: const IconRenderer(
-                    asset: 'qr_code.svg',
-                    color: Colors.black,
-                    height: 20,
-                  ),
-                  label: "Qr code",
+                    foregroundColor: Colors.black,
+                    labelBackgroundColor: Colors.white,
+                    child: const IconRenderer(
+                      asset: 'qr_code.svg',
+                      color: Colors.black,
+                      height: 20,
+                    ),
+                    shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+                    elevation: 1,
                     onTap: () {
                       if(ref.read(overlayVisibilityProvider(const Key('qr_code'))) == true) {
                         ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
