@@ -12,11 +12,17 @@ class StyledTooltip extends StatelessWidget {
   /// Where the tooltip should point to
   final AxisDirection pointingPosition;
 
-  const StyledTooltip({super.key, required this.text, required this.child, this.pointingPosition = AxisDirection.up});
+  const StyledTooltip({super.key, required this.text, required this.child, this.pointingPosition = AxisDirection.down});
 
   @override
   Widget build(BuildContext context) => JustTheTooltip(
-      content: StyledText(text: text, fontSize: 12),
+      content: StyledText(
+        text: text,
+        fontSize: 12,
+        padding: 5,
+        letterSpacing: 2,
+        weight: FontWeight.bold,
+      ),
       elevation: 1,
       offset: 2,
       borderRadius: BorderRadius.zero,

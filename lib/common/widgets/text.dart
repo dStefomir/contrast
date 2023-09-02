@@ -18,6 +18,8 @@ class StyledText extends StatelessWidget {
   final bool clip;
   /// Padding applied to the text widget
   final double padding;
+  /// Space between characters
+  final double letterSpacing;
   /// Should the text be in italic style;
   final bool italic;
   /// Aligns the text in the widget
@@ -35,6 +37,7 @@ class StyledText extends StatelessWidget {
     this.useShadow = false,
     this.clip = true,
     this.padding = 15,
+    this.letterSpacing = 4,
     this.italic = false,
     this.align = TextAlign.center,
     this.shadow
@@ -52,7 +55,7 @@ class StyledText extends StatelessWidget {
               overflow: clip ? TextOverflow.ellipsis : null,
               fontSize: fontSize,
               fontWeight: weight ?? FontWeight.normal,
-              letterSpacing: 4,
+              letterSpacing: letterSpacing,
               decoration: decoration ?? TextDecoration.none,
               fontStyle: italic ? FontStyle.italic : FontStyle.normal,
               shadows: useShadow ? shadow ??

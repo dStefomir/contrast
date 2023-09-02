@@ -229,7 +229,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                 ref.read(musicTriggerProvider.notifier).setPlay(false);
               }
             },
-            tooltip: 'Music',
+            tooltip: ref.watch(musicTriggerProvider) ? 'Stop music' : "Play music",
             color: Colors.white,
             borderColor: Colors.black,
             icon: ref.watch(musicTriggerProvider) ? 'volume_up.svg' : 'volume_off.svg'
@@ -277,7 +277,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                 ),
                 color: Colors.white,
                 borderColor: Colors.black,
-                tooltip: 'Coordinates',
+                tooltip: iconAsset == 'map.svg' ? 'Shot location' : 'Photograph',
                 icon: iconAsset
             )
         ),
