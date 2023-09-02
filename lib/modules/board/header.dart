@@ -46,7 +46,11 @@ class BoardPageFilter extends ConsumerWidget {
             children: [
               const RotatedBox(
                   quarterTurns: 5,
-                child: StyledText(text: 'Contrast',),
+                child: StyledText(
+                  text: 'Contrast',
+                  weight: FontWeight.bold,
+                  letterSpacing: 18,
+                ),
               ),
               const Spacer(),
               MenuButton(

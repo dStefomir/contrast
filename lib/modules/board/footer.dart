@@ -3,7 +3,6 @@ import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/shape.dart';
 import 'package:contrast/common/widgets/tab.dart';
-import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/common/widgets/tooltip.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
@@ -12,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/widgets/snack.dart';
@@ -50,6 +48,7 @@ class BoardPageFooter extends HookConsumerWidget {
                 animatedIconTheme: const IconThemeData(size: 50),
                 shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
                 direction: SpeedDialDirection.up,
+                animationDuration: const Duration(milliseconds: 500),
                 buttonSize: const Size(80, 0),
                 elevation: 1,
                 spacing: 5,
