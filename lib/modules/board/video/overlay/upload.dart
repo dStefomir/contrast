@@ -119,6 +119,7 @@ class UploadVideoDialog extends HookConsumerWidget {
                       ref.read(overlayVisibilityProvider(const Key("upload_video")).notifier).setOverlayVisibility(false);
                     }
                   },
+                  tooltip: 'Close',
                   color: Colors.black,
                   borderColor: Colors.white,
                   icon: 'close.svg'

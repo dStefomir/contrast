@@ -35,6 +35,7 @@ class QrCodeDialog extends HookConsumerWidget {
                       const Spacer(),
                       DefaultButton(
                           onClick: () => ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false),
+                          tooltip: 'Close',
                           color: Colors.black,
                           borderColor: Colors.white,
                           icon: 'close.svg'

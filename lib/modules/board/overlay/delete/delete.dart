@@ -61,6 +61,7 @@ class DeleteDialog<T> extends HookConsumerWidget {
                                   ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
                                 }
                               },
+                              tooltip: 'Close',
                               color: Colors.black,
                               borderColor: Colors.white,
                               icon: 'close.svg'

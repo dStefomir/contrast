@@ -121,6 +121,7 @@ class LoginPage extends HookConsumerWidget {
                   onClick: () => Modular.to.navigate("/"),
                   color: Colors.black,
                   borderColor: Colors.black,
+                  tooltip: 'Close',
                   icon: 'close.svg'
               ),
             ),

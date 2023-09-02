@@ -5,6 +5,7 @@ import 'package:contrast/common/widgets/input.dart';
 import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
+import 'package:contrast/common/widgets/tooltip.dart';
 import 'package:contrast/model/image_data.dart';
 import 'package:contrast/model/image_meta_data.dart';
 import 'package:contrast/modules/board/photograph/overlay/provider.dart';
@@ -227,22 +228,26 @@ class UploadImageDialog extends HookConsumerWidget {
 
     return Column(
       children: [
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () => _selectPhotograph(ref),
-            onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
-            child: AnimatedContainer(
-                width: isHovering ? 165 : 160,
-                height: isHovering ? 165 : 160,
-                duration: const Duration(milliseconds: 800),
-                curve: Curves.fastOutSlowIn,
-                child: IconRenderer(
-                  asset: 'upload.svg',
-                  color: Colors.black,
-                  width: isHovering ? 250 : 240 - 20,
-                  height: isHovering ? 250 : 240 - 20,
-                )
+        StyledTooltip(
+          text: 'Photograph',
+          pointingPosition: AxisDirection.right,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => _selectPhotograph(ref),
+              onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
+              child: AnimatedContainer(
+                  width: isHovering ? 165 : 160,
+                  height: isHovering ? 165 : 160,
+                  duration: const Duration(milliseconds: 800),
+                  curve: Curves.fastOutSlowIn,
+                  child: IconRenderer(
+                    asset: 'upload.svg',
+                    color: Colors.black,
+                    width: isHovering ? 250 : 240 - 20,
+                    height: isHovering ? 250 : 240 - 20,
+                  )
+              ),
             ),
           ),
         ),
@@ -297,6 +302,7 @@ class UploadImageDialog extends HookConsumerWidget {
                       ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
                     }
                   },
+                  tooltip: 'Close',
                   color: Colors.black,
                   borderColor: Colors.white,
                   icon: 'close.svg'
