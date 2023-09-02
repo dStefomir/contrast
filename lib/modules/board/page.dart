@@ -255,7 +255,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                           getStart: () => const Offset(0.0, 1),
                           getEnd: () => Offset.zero,
                           duration: const Duration(milliseconds: 1200),
-                          child: const BoardPageFooter()
+                          child: BoardPageFooter(onUserAction: _onAction)
                       )
                   ),
                   Align(

@@ -8,16 +8,23 @@ import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../common/widgets/snack.dart';
 
 /// Renders the footer of the board page
 class BoardPageFooter extends HookConsumerWidget {
 
-  const BoardPageFooter({super.key});
+  /// What happens when the user performs an action
+  final Function(WidgetRef ref, Function? action) onUserAction;
+
+  const BoardPageFooter({super.key, required this.onUserAction});
 
   /// Renders the about me in the bottom tab bar
-  Widget _renderAboutMe() => CustomPaint(
+  Widget _renderAboutMe(BuildContext context, WidgetRef ref) => CustomPaint(
     painter: HouseShadowPainter(),
     child: ClipPath(
       clipper: HouseShape(),
@@ -32,7 +39,7 @@ class BoardPageFooter extends HookConsumerWidget {
         height: boardPadding + 22,
         child: Padding(
           padding: const EdgeInsets.only(top: 35, bottom: 20, left: 20, right: 20),
-          child: StyledButton(
+          child: useMobileLayout(context) ? StyledButton(
             widgetKey: const Key('about'),
             onClick: () async {
               final Uri url = Uri.parse('https://www.instagram.com/dstefomir/');
@@ -44,15 +51,71 @@ class BoardPageFooter extends HookConsumerWidget {
             iconHeight: 30,
             shadow: false,
             onlyIcon: true,
-            iconColor: Colors.white.withOpacity(0.5),
-          ),
+            iconColor: Colors.white,
+          ) : SpeedDial(
+              animatedIcon: AnimatedIcons.menu_home,
+              backgroundColor: Colors.transparent,
+              foregroundColor: Colors.white,
+              animatedIconTheme: const IconThemeData(size: 50),
+              children: [
+                SpeedDialChild(
+                    foregroundColor: Colors.black,
+                    labelBackgroundColor: Colors.white,
+                    child: const IconRenderer(
+                      asset: 'instagram.svg',
+                      color: Colors.black,
+                      height: 20,
+                    ),
+                    label: "Instagram",
+                    onTap: () async {
+                      final Uri url = Uri.parse('https://www.instagram.com/dstefomir/');
+                      if (await canLaunchUrl(url)) {
+                      await launchUrl(url);
+                      }
+                    }
+                ),
+                SpeedDialChild(
+                    foregroundColor: Colors.black,
+                    labelBackgroundColor: Colors.white,
+                    child: const IconRenderer(
+                      asset: 'share.svg',
+                      color: Colors.black,
+                      height: 20,
+                    ),
+                    label: "Share",
+                    onTap: () => onUserAction(
+                        ref,
+                            () => Clipboard.setData(
+                                const ClipboardData(text: 'https://www.dstefomir.eu')
+                            ).then((_) => showSuccessTextOnSnackBar(context, "Copied to clipboard"))
+                    )
+                ),
+                SpeedDialChild(
+                  foregroundColor: Colors.black,
+                  labelBackgroundColor: Colors.white,
+                  child: const IconRenderer(
+                    asset: 'qr_code.svg',
+                    color: Colors.black,
+                    height: 20,
+                  ),
+                  label: "Qr code",
+                    onTap: () {
+                      if(ref.read(overlayVisibilityProvider(const Key('qr_code'))) == true) {
+                        ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
+                      } else {
+                        ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(true);
+                      }
+                    }
+                )
+              ]
+          ).translateOnPhotoHover,
         ),
       ),
     ),
   );
 
   /// Renders the mobile layout
-  Widget _renderMobileLayout(WidgetRef ref, String currentTab) => Stack(
+  Widget _renderMobileLayout(BuildContext context, WidgetRef ref, String currentTab) => Stack(
     children: [
       Align(
         alignment: Alignment.bottomCenter,
@@ -123,13 +186,13 @@ class BoardPageFooter extends HookConsumerWidget {
       ),
       Align(
         alignment: Alignment.bottomCenter,
-        child: _renderAboutMe().translateOnPhotoHover,
+        child: _renderAboutMe(context, ref).translateOnPhotoHover,
       ),
     ],
   );
 
   /// Renders the desktop layout
-  Widget _renderDesktopLayout(WidgetRef ref, String currentTab) => Stack(
+  Widget _renderDesktopLayout(BuildContext context, WidgetRef ref, String currentTab) => Stack(
     children: [
       Align(
         alignment: Alignment.bottomCenter,
@@ -185,7 +248,7 @@ class BoardPageFooter extends HookConsumerWidget {
       ),
       Align(
         alignment: Alignment.bottomCenter,
-        child: _renderAboutMe().translateOnPhotoHover,
+        child: _renderAboutMe(context, ref).translateOnPhotoHover,
       ),
     ],
   );
@@ -195,7 +258,7 @@ class BoardPageFooter extends HookConsumerWidget {
     final String currentTab = ref.watch(boardFooterTabProvider);
 
     return useMobileLayout(context)
-        ? _renderMobileLayout(ref, currentTab)
-        : _renderDesktopLayout(ref, currentTab);
+        ? _renderMobileLayout(context, ref, currentTab)
+        : _renderDesktopLayout(context, ref, currentTab);
   }
 }
