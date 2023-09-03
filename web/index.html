@@ -58,6 +58,7 @@
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("/firebase-messaging-sw.js");
       }
+
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
         serviceWorker: {

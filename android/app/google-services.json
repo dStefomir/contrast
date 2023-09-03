@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "488040137399",
+    "project_id": "contrast-6b1c8",
+    "storage_bucket": "contrast-6b1c8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:488040137399:android:b7d9e9331f14bffd118332",
+        "android_client_info": {
+          "package_name": "com.example.contrast"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "488040137399-s8olcnu4o1lneebu15mlsi9v65stiadm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAdeMv73m6t0qCJz73KG5xKmCBwUY9tyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "488040137399-s8olcnu4o1lneebu15mlsi9v65stiadm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "488040137399-b17dkbemp0v9tr6trhm5c5amudevkucc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.contrast"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
