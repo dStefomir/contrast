@@ -12,9 +12,7 @@ const String webKey = 'BLgFNQuws2vnlVfNuYDe1N2E2DnCQA0H5LxYSc2YBscxJhb_jfouU4f-h
 
 /// Subscribe the client to a fcm topic with a given token
 Future<void> _subscribeToTopic(String? token) async {
-  if(token != null) {
-    await Session.proxy.post('/auth/subscribe?token=$token');
-  }
+  await Session.proxy.post('/auth/subscribe?token=$token');
 }
 
 void main() async {
@@ -37,6 +35,10 @@ void main() async {
       /// Subscribes the token to a firebase topic
       await _subscribeToTopic(fcmToken);
     }
+  });
+  FirebaseMessaging.instance.onTokenRefresh.listen((String token) async {
+    /// Subscribes the token to a firebase topic
+    await _subscribeToTopic(token);
   });
 
   runApp(
