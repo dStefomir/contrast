@@ -1,3 +1,4 @@
+import 'package:contrast/common/widgets/page.dart';
 import "package:universal_html/html.dart" as html;
 
 import 'package:contrast/common/widgets/load.dart';
@@ -67,31 +68,34 @@ class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
   Widget build(BuildContext context) {
     final dataProvider = ref.watch(fetchBoardProvider);
 
-    return dataProvider.when(
-        data: (data) {
-          final int photoIndex = data.indexWhere((element) => element.id == widget.id);
-          // Photograph geo providers has to be initialized with with geo data if there is any.
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            final ImageData photograph = data[photoIndex];
-            if (photograph.lat != null) {
-              ref.read(mapLatProvider.notifier).setCurrentLat(photograph.lat!);
-            }
-            if (photograph.lng != null) {
-              ref.read(mapLngProvider.notifier).setCurrentLng(photograph.lng!);
-            }
-          });
+    return BackgroundPage(
+      color: Colors.black,
+      child: dataProvider.when(
+          data: (data) {
+            final int photoIndex = data.indexWhere((element) => element.id == widget.id);
+            // Photograph geo providers has to be initialized with with geo data if there is any.
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              final ImageData photograph = data[photoIndex];
+              if (photograph.lat != null) {
+                ref.read(mapLatProvider.notifier).setCurrentLat(photograph.lat!);
+              }
+              if (photograph.lng != null) {
+                ref.read(mapLngProvider.notifier).setCurrentLng(photograph.lng!);
+              }
+            });
 
-          return PhotographDetailsView(images: data, photoIndex: photoIndex, category: widget.category, audio: audio);
-        },
-        error: (error, stackTrace) => Center(
-            child: StyledText(
-              text: error.toString(),
-              color: Colors.white,
-              weight: FontWeight.bold,
-              clip: false,
-            )
-        ),
-        loading: () => const LoadingIndicator(color: Colors.white)
+            return PhotographDetailsView(images: data, photoIndex: photoIndex, category: widget.category, audio: audio);
+          },
+          error: (error, stackTrace) => Center(
+              child: StyledText(
+                text: error.toString(),
+                color: Colors.white,
+                weight: FontWeight.bold,
+                clip: false,
+              )
+          ),
+          loading: () => const LoadingIndicator(color: Colors.white)
+      ),
     );
   }
 }

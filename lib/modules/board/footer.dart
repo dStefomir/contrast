@@ -3,6 +3,7 @@ import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/shape.dart';
 import 'package:contrast/common/widgets/tab.dart';
+import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/common/widgets/tooltip.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
@@ -57,14 +58,21 @@ class BoardPageFooter extends HookConsumerWidget {
                   SpeedDialChild(
                       foregroundColor: Colors.black,
                       labelBackgroundColor: Colors.white,
-                      child: const StyledTooltip(
-                        text: 'Instagram',
-                        pointingPosition: AxisDirection.right,
-                        child: IconRenderer(
-                          asset: 'instagram.svg',
-                          color: Colors.black,
-                          height: 20,
+                      labelWidget: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                          color: Colors.white,
+                          child: const StyledText(
+                            text: 'Instagram',
+                            padding: 5,
+                            fontSize: 12,
+                          ),
                         ),
+                      ),
+                      child: const IconRenderer(
+                        asset: 'instagram.svg',
+                        color: Colors.black,
+                        height: 20,
                       ),
                       shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
                       elevation: 1,
@@ -78,14 +86,21 @@ class BoardPageFooter extends HookConsumerWidget {
                   SpeedDialChild(
                       foregroundColor: Colors.black,
                       labelBackgroundColor: Colors.white,
-                      child: const StyledTooltip(
-                        text: 'Share',
-                        pointingPosition: AxisDirection.left,
-                        child: IconRenderer(
-                          asset: 'share.svg',
-                          color: Colors.black,
-                          height: 20,
+                      labelWidget: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                          color: Colors.white,
+                          child: const StyledText(
+                            text: 'Share',
+                            padding: 5,
+                            fontSize: 12,
+                          ),
                         ),
+                      ),
+                      child: const IconRenderer(
+                        asset: 'share.svg',
+                        color: Colors.black,
+                        height: 20,
                       ),
                       shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
                       elevation: 1,
@@ -99,14 +114,21 @@ class BoardPageFooter extends HookConsumerWidget {
                   SpeedDialChild(
                       foregroundColor: Colors.black,
                       labelBackgroundColor: Colors.white,
-                      child: const StyledTooltip(
-                        text: 'Qr code',
-                        pointingPosition: AxisDirection.up,
-                        child: IconRenderer(
-                          asset: 'qr_code.svg',
-                          color: Colors.black,
-                          height: 20,
+                      labelWidget: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                          color: Colors.white,
+                          child: const StyledText(
+                            text: 'Qr code',
+                            padding: 5,
+                            fontSize: 12,
+                          ),
                         ),
+                      ),
+                      child: const IconRenderer(
+                        asset: 'qr_code.svg',
+                        color: Colors.black,
+                        height: 20,
                       ),
                       shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
                       elevation: 1,

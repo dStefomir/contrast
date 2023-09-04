@@ -311,6 +311,7 @@ class PhotographDetailsView extends HookConsumerWidget {
           scrollPhysics: const BouncingScrollPhysics(),
           allowImplicitScrolling: true,
           backgroundDecoration: const BoxDecoration(color: Colors.black),
+          loadingBuilder: (_, __) => Container(),
           builder: (BuildContext context, int index) {
             return PhotoViewGalleryPageOptions(
                 imageProvider: ExtendedNetworkImageProvider(serviceProvider.getPhotograph(context, image.path!)),
