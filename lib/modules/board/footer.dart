@@ -60,12 +60,17 @@ class BoardPageFooter extends HookConsumerWidget {
                       labelBackgroundColor: Colors.white,
                       labelWidget: Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: Container(
-                          color: Colors.white,
-                          child: const StyledText(
-                            text: 'Instagram',
-                            padding: 5,
-                            fontSize: 12,
+                        child: ShadowWidget(
+                          offset: const Offset(0, 0),
+                          blurRadius: 1,
+                          shadowSize: 0.1,
+                          child: Container(
+                            color: Colors.white,
+                            child: const StyledText(
+                              text: 'Instagram',
+                              padding: 5,
+                              fontSize: 12,
+                            ),
                           ),
                         ),
                       ),
@@ -88,12 +93,17 @@ class BoardPageFooter extends HookConsumerWidget {
                       labelBackgroundColor: Colors.white,
                       labelWidget: Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: Container(
-                          color: Colors.white,
-                          child: const StyledText(
-                            text: 'Share',
-                            padding: 5,
-                            fontSize: 12,
+                        child: ShadowWidget(
+                          offset: const Offset(0, 0),
+                          blurRadius: 1,
+                          shadowSize: 0.1,
+                          child: Container(
+                            color: Colors.white,
+                            child: const StyledText(
+                              text: 'Share',
+                              padding: 5,
+                              fontSize: 12,
+                            ),
                           ),
                         ),
                       ),
@@ -116,12 +126,17 @@ class BoardPageFooter extends HookConsumerWidget {
                       labelBackgroundColor: Colors.white,
                       labelWidget: Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: Container(
-                          color: Colors.white,
-                          child: const StyledText(
-                            text: 'Qr code',
-                            padding: 5,
-                            fontSize: 12,
+                        child: ShadowWidget(
+                          offset: const Offset(0, 0),
+                          blurRadius: 1,
+                          shadowSize: 0.1,
+                          child: Container(
+                            color: Colors.white,
+                            child: const StyledText(
+                              text: 'Qr code',
+                              padding: 5,
+                              fontSize: 12,
+                            ),
                           ),
                         ),
                       ),
