@@ -7,6 +7,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ContrastTab extends HookConsumerWidget {
   /// Widget key
   final Key widgetKey;
+  /// Key of the tab which is used to trigger the a filter
+  final String tabKey;
   /// Text as a string
   final String text;
   /// What happens when the user clicks the tab
@@ -18,6 +20,7 @@ class ContrastTab extends HookConsumerWidget {
 
   const ContrastTab({
     required this.widgetKey,
+    required this.tabKey,
     required this.text,
     required this.onClick,
     required this.isSelected,
@@ -32,7 +35,7 @@ class ContrastTab extends HookConsumerWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-          onTap: () => !disabled ? onClick(text) : null,
+          onTap: () => !disabled ? onClick(tabKey) : null,
           hoverColor: isHovering ? Colors.black : Colors.white,
           onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
           child: Container(

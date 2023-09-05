@@ -135,6 +135,7 @@ class BoardPageFilter extends ConsumerWidget {
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('all'),
+                    tabKey: 'all',
                     text: FlutterI18n.translate(context, 'all'),
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.watch(boardHeaderTabProvider) == 'all'
@@ -142,6 +143,7 @@ class BoardPageFilter extends ConsumerWidget {
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('landscape'),
+                    tabKey: 'landscape',
                     text: FlutterI18n.translate(context, 'landscape'),
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'landscape'
@@ -149,6 +151,7 @@ class BoardPageFilter extends ConsumerWidget {
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('portraits'),
+                    tabKey: 'portraits',
                     text: FlutterI18n.translate(context, 'portraits'),
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'portraits'
@@ -156,6 +159,7 @@ class BoardPageFilter extends ConsumerWidget {
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('street'),
+                    tabKey: 'portraits',
                     text: FlutterI18n.translate(context, 'street'),
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'street'
@@ -163,6 +167,7 @@ class BoardPageFilter extends ConsumerWidget {
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('other'),
+                    tabKey: 'portraits',
                     text: FlutterI18n.translate(context, 'other'),
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'other'

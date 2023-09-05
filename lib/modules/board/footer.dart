@@ -280,6 +280,7 @@ class BoardPageFooter extends HookConsumerWidget {
                       const Spacer(),
                       ContrastTab(
                           widgetKey: const Key('photos'),
+                          tabKey: 'photos',
                           text: FlutterI18n.translate(context, 'photos'),
                           onClick: (String tab) => ref.read(boardFooterTabProvider.notifier).switchTab(tab),
                           isSelected: currentTab == 'photos'
@@ -289,6 +290,7 @@ class BoardPageFooter extends HookConsumerWidget {
                       const Spacer(),
                       ContrastTab(
                           widgetKey: const Key('videos'),
+                          tabKey: 'videos',
                           text: FlutterI18n.translate(context, 'videos'),
                           onClick: (String tab) => ref.read(boardFooterTabProvider.notifier).switchTab(tab),
                           isSelected: currentTab == 'videos'
