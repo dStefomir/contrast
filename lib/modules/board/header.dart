@@ -159,7 +159,7 @@ class BoardPageFilter extends ConsumerWidget {
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('street'),
-                    tabKey: 'portraits',
+                    tabKey: 'street',
                     text: FlutterI18n.translate(context, 'street'),
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'street'
@@ -167,7 +167,7 @@ class BoardPageFilter extends ConsumerWidget {
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('other'),
-                    tabKey: 'portraits',
+                    tabKey: 'other',
                     text: FlutterI18n.translate(context, 'other'),
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'other'
