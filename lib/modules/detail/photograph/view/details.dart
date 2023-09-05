@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import "package:universal_html/html.dart" as html;
 
@@ -31,7 +32,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   final int photoIndex;
   /// Current selected photograph category
   final String category;
-  final html.AudioElement audio;
+  final AudioPlayer audio;
 
   const PhotographDetailsView({
     super.key,
@@ -222,8 +223,8 @@ class PhotographDetailsView extends HookConsumerWidget {
         padding: const EdgeInsets.only(left: 115.0, top: 5.0),
         child: DefaultButton(
             onClick: () async {
-              if(audio.paused) {
-                await audio.play();
+              if(audio.state != PlayerState.playing) {
+                await audio.play(AssetSource('background_music.mp3'), position: await audio.getCurrentPosition() ?? const Duration(seconds: 0), mode: PlayerMode.lowLatency);
                 ref.read(musicTriggerProvider.notifier).setPlay(true);
               } else {
                 audio.pause();

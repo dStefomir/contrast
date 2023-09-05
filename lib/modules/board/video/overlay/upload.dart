@@ -87,7 +87,7 @@ class UploadVideoDialog extends HookConsumerWidget {
         prefixIcon: Icons.video_collection,
         validator: (value) {
           if (value != null && value.isEmpty) {
-            return FlutterI18n.translate(context, 'This field is mandatory.');
+            return FlutterI18n.translate(context, 'This field is mandatory');
           }
           if(value != null && value.isNotEmpty && value.length < 11) {
             return FlutterI18n.translate(context, 'Invalid youtube prefix');

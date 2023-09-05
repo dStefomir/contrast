@@ -318,7 +318,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                             );
                             ref.read(deleteImageProvider.notifier).setDeleteImage(null);
                             ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
-                            showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Photograph was successfully deleted.'));
+                            showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Photograph was successfully deleted'));
                           }
                         },
                       ),
@@ -350,7 +350,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                             );
                             ref.read(deleteVideoProvider.notifier).setDeleteVideo(null);
                             ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
-                            showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Video was successfully deleted.'));
+                            showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Video was successfully deleted'));
                           }
                         },
                       ),
@@ -383,7 +383,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                           ref.read(photographServiceFetchProvider.notifier).addItem(ImageWrapper(image: image.image, metadata: meta));
                           ref.read(photographEditProvider.notifier).setEditImage(null);
                           ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(false);
-                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Photograph was successfully edited.'));
+                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Photograph was successfully edited'));
                         },
                       ),
                     ),
@@ -404,7 +404,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                         onSubmit: (image) {
                           ref.read(photographServiceFetchProvider.notifier).addItem(image);
                           ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
-                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Photograph was successfully uploaded.'));
+                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Photograph was successfully uploaded'));
                         },
                       ),
                     ),
@@ -425,7 +425,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                         onSubmit: (video) {
                           ref.read(videoServiceFetchProvider.notifier).addItem(video);
                           ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(false);
-                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Video was successfully uploaded.'));
+                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Video was successfully uploaded'));
                         },
                       ),
                     ),
@@ -456,7 +456,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                           ref.read(videoServiceFetchProvider.notifier).addItem(video);
                           ref.read(videoEditProvider.notifier).setEditVideo(null);
                           ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(false);
-                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Video was successfully edited.'));
+                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Video was successfully edited'));
                         },
                       ),
                     ),

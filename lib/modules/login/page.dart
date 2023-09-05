@@ -59,7 +59,7 @@ class LoginPage extends HookConsumerWidget {
                           prefixIcon: Icons.person,
                           validator: (value) {
                             if (value != null && value.isEmpty) {
-                              return FlutterI18n.translate(context, 'This field is mandatory.');
+                              return FlutterI18n.translate(context, 'This field is mandatory');
                             }
                             return null;
                             },
@@ -78,7 +78,7 @@ class LoginPage extends HookConsumerWidget {
                           password: true,
                           validator: (value) {
                             if (value != null && value.isEmpty) {
-                              return FlutterI18n.translate(context, 'This field is mandatory.');
+                              return FlutterI18n.translate(context, 'This field is mandatory');
                             }
                             return null;
                             },
@@ -105,7 +105,7 @@ class LoginPage extends HookConsumerWidget {
                           showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Logged in successfully'));
                           Modular.to.navigate('/', arguments: session);
                         }).onError((error, stackTrace) {
-                          showErrorTextOnSnackBar(context, FlutterI18n.translate(context, 'Wrong user or password.'));
+                          showErrorTextOnSnackBar(context, FlutterI18n.translate(context, 'Wrong user or password'));
                         });
                       }},
                     child: Text(FlutterI18n.translate(context, 'Log In')),

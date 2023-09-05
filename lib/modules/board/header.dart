@@ -6,6 +6,7 @@ import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -24,7 +25,7 @@ class BoardPageFilter extends ConsumerWidget {
     offset: const Offset(3, 0),
     child: Container(
       width: boardPadding,
-      height: MediaQuery.of(context).size.height - boardPadding,
+      height: MediaQuery.of(context).size.height - boardPadding - (kIsWeb ? 0 : 50),
       color: Colors.white,
       child: Stack(children: [
         Container(

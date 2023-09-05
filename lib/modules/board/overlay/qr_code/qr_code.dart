@@ -53,7 +53,7 @@ class QrCodeDialog extends HookConsumerWidget {
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
                   children: [
-                    StyledText(text: '"${FlutterI18n.translate(context, 'The future belongs to those who believe in the beauty of their dreams.')}",', fontSize: 10, clip: false, color: Colors.black87, padding: 0,),
+                    StyledText(text: '"${FlutterI18n.translate(context, 'The future belongs to those who believe in the beauty of their dreams')}",', fontSize: 10, clip: false, color: Colors.black87, padding: 0,),
                     Padding(
                       padding: const EdgeInsets.only(top: 8),
                       child: StyledText(text: FlutterI18n.translate(context, 'Eleanor Roosevelt'), fontSize: 10, clip: false, color: Colors.black87, weight: FontWeight.bold, padding: 0,),

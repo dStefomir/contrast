@@ -37,7 +37,7 @@ class CookieWarningDialog extends StatelessWidget {
                     weight: FontWeight.bold,
                   ),
                   StyledText(
-                    text: FlutterI18n.translate(context, 'This website uses cookies to ensure you get the best experience.'),
+                    text: FlutterI18n.translate(context, 'This website uses cookies to ensure you get the best experience'),
                     color: Colors.black,
                     useShadow: false,
                     fontSize: 13,

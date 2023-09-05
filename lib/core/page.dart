@@ -1,5 +1,7 @@
+import 'package:contrast/common/widgets/page.dart';
 import 'package:contrast/core/provider.dart';
 import 'package:contrast/modules/login/overlay/cookie.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,7 +53,15 @@ class CorePage extends HookConsumerWidget {
     body: FutureBuilder<SharedPreferences>(
         future: SharedPreferences.getInstance(),
         builder: (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
-          final List<Widget> children = [render()];
+          final List<Widget> children = [
+            kIsWeb ? render() : BackgroundPage(
+              color: Colors.black,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 50),
+                child: render(),
+              ),
+            )
+          ];
           if (snapshot.hasData && _shouldShowCookie(snapshot.requireData, ref)) {
             children.add(
                 CookieWarningDialog(onSubmit: () => _onCookieSubmit(snapshot.requireData, ref))
