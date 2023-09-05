@@ -4,6 +4,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
@@ -63,19 +64,19 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       DefaultButton(
           onClick: () => Clipboard.setData(
               ClipboardData(text: 'https://www.dstefomir.eu/#/videos/details/${widget.path}')
-          ).then((value) => showSuccessTextOnSnackBar(context, "Copied to clipboard")),
+          ).then((value) => showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Copied to clipboard'))),
           color: Colors.white,
-          tooltip: 'Share',
+          tooltip: FlutterI18n.translate(context, 'Share'),
           borderColor: Colors.black,
           icon: 'share.svg'
       );
 
   /// Renders the back button
-  Widget _renderBackButton() =>
+  Widget _renderBackButton(BuildContext context) =>
       DefaultButton(
           onClick: () => Modular.to.navigate('/'),
           color: Colors.white,
-          tooltip: 'Close',
+          tooltip: FlutterI18n.translate(context, 'Close'),
           borderColor: Colors.black,
           icon: 'close.svg'
       );
@@ -103,7 +104,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                             alignment: Alignment.topLeft,
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
-                              child: _renderBackButton(),
+                              child: _renderBackButton(context),
                             ),
                           ),
                           Align(

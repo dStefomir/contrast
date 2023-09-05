@@ -13,6 +13,7 @@ import 'package:contrast/modules/board/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_size_getter/file_input.dart';
 import 'package:image_size_getter/image_size_getter.dart';
@@ -89,7 +90,7 @@ class UploadImageDialog extends HookConsumerWidget {
                 foregroundColor: MaterialStateProperty.all(Colors.white),
                 textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
             ),
-            child: const Text("Submit"),
+            child: Text(FlutterI18n.translate(context, 'Submit')),
             onPressed: () {
               final form = _formKey.currentState;
               if (!isLoading && (form != null && form.validate())) {
@@ -113,7 +114,7 @@ class UploadImageDialog extends HookConsumerWidget {
   }
 
   /// Renders the loading indicator or an error if there is one
-  Widget _renderLoadingIndicator(WidgetRef ref) {
+  Widget _renderLoadingIndicator(BuildContext context, WidgetRef ref) {
     final bool isLoading = ref.watch(loadingProvider);
 
     return isLoading ? const Center(
@@ -124,7 +125,7 @@ class UploadImageDialog extends HookConsumerWidget {
     ) :
     SimpleInput(
       widgetKey: const Key('photograph comment'),
-      labelText: 'Photograph comment',
+      labelText: FlutterI18n.translate(context, 'Photograph comment'),
       controllerText: data?.comment,
       onChange: (text) => ref.read(commentProvider.notifier).setComment(text),
       prefixIcon: Icons.comment,
@@ -133,12 +134,12 @@ class UploadImageDialog extends HookConsumerWidget {
   }
 
   ///Renders the geo form
-  Widget _renderGeoForm(WidgetRef ref) => Row(
+  Widget _renderGeoForm(BuildContext context, WidgetRef ref) => Row(
     children: [
       Expanded(
           child: SimpleInput(
             widgetKey: const Key('photograph latitude'),
-            labelText: 'Latitude',
+            labelText: FlutterI18n.translate(context, 'Latitude'),
             controllerText: data?.lat?.toString(),
             onChange: (text) => ref.read(geoLatProvider(data?.lat).notifier).setLat(text),
             prefixIcon: Icons.location_on,
@@ -147,7 +148,7 @@ class UploadImageDialog extends HookConsumerWidget {
                 try {
                   double.parse(value);
                 } catch (e) {
-                  return 'Invalid latitude';
+                  return FlutterI18n.translate(context, 'Invalid latitude');
                 }
               }
               return null;
@@ -158,7 +159,7 @@ class UploadImageDialog extends HookConsumerWidget {
       Expanded(
           child: SimpleInput(
             widgetKey: const Key('photograph longitude'),
-            labelText: 'Longitude',
+            labelText: FlutterI18n.translate(context, 'Longitude'),
             controllerText: data?.lng?.toString(),
             onChange: (text) => ref.read(geoLngProvider(data?.lng).notifier).setLng(text),
             prefixIcon: Icons.location_on,
@@ -167,7 +168,7 @@ class UploadImageDialog extends HookConsumerWidget {
                 try {
                   double.parse(value);
                 } catch (e) {
-                  return 'Invalid longitude';
+                  return FlutterI18n.translate(context, 'Invalid longitude');
                 }
               }
               return null;
@@ -178,7 +179,7 @@ class UploadImageDialog extends HookConsumerWidget {
   );
 
   /// Renders the category selecting field
-  Widget _renderCategorySelector(WidgetRef ref) {
+  Widget _renderCategorySelector(BuildContext context, WidgetRef ref) {
     final String selectedCategory = ref.watch(categoryProvider(data?.category));
 
     return Center(
@@ -188,21 +189,21 @@ class UploadImageDialog extends HookConsumerWidget {
           onSelected: (value) => ref.read(categoryProvider(data?.category).notifier).setCategory(value),
           padding: EdgeInsets.zero,
           itemBuilder: (_) => <PopupMenuItem<String>>[
-            const PopupMenuItem<String>(
+            PopupMenuItem<String>(
                 value: 'landscape',
-                child: Text('L A N D S C A P E', style: TextStyle(fontSize: 20))
+                child: Text(FlutterI18n.translate(context, 'L A N D S C A P E'), style: const TextStyle(fontSize: 20))
             ),
-            const PopupMenuItem<String>(
+            PopupMenuItem<String>(
                 value: 'portraits',
-                child: Text('P O R T R A I T S', style: TextStyle(fontSize: 20))
+                child: Text(FlutterI18n.translate(context, 'P O R T R A I T S'), style: const TextStyle(fontSize: 20))
             ),
-            const PopupMenuItem<String>(
+            PopupMenuItem<String>(
                 value: 'street',
-                child: Text('S T R E E T', style: TextStyle(fontSize: 20))
+                child: Text(FlutterI18n.translate(context, 'S T R E E T'), style: const TextStyle(fontSize: 20))
             ),
-            const PopupMenuItem<String>(
+            PopupMenuItem<String>(
                 value: 'other',
-                child: Text('O T H E R', style: TextStyle(fontSize: 20))
+                child: Text(FlutterI18n.translate(context, 'O T H E R'), style: const TextStyle(fontSize: 20))
             ),
           ],
           child: Text(selectedCategory, style: const TextStyle(fontSize: 20)),
@@ -229,7 +230,7 @@ class UploadImageDialog extends HookConsumerWidget {
     return Column(
       children: [
         StyledTooltip(
-          text: 'Photograph',
+          text: FlutterI18n.translate(context, 'Photograph'),
           pointingPosition: AxisDirection.right,
           child: Material(
             color: Colors.transparent,
@@ -251,7 +252,7 @@ class UploadImageDialog extends HookConsumerWidget {
             ),
           ),
         ),
-        const StyledText(text: 'Select an image')
+        StyledText(text: FlutterI18n.translate(context, 'Select an image'))
       ],
     );
   }
@@ -272,11 +273,11 @@ class UploadImageDialog extends HookConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _renderSelectedImageName(fileData),
-            _renderCategorySelector(ref),
+            _renderCategorySelector(context, ref),
             const SizedBox(height: 10),
-            _renderGeoForm(ref),
+            _renderGeoForm(context, ref),
             const SizedBox(height: 10),
-            _renderLoadingIndicator(ref),
+            _renderLoadingIndicator(context, ref),
         ]),
       )
     ],
@@ -290,7 +291,7 @@ class UploadImageDialog extends HookConsumerWidget {
         child: Row(
             children: [
               StyledText(
-                  text: data != null ? "Edit Photograph" : "Upload Photograph",
+                  text: data != null ? FlutterI18n.translate(context, 'Edit Photograph') : FlutterI18n.translate(context, 'Upload Photograph'),
                   weight: FontWeight.bold
               ),
               const Spacer(),
@@ -302,7 +303,7 @@ class UploadImageDialog extends HookConsumerWidget {
                       ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
                     }
                   },
-                  tooltip: 'Close',
+                  tooltip: FlutterI18n.translate(context, 'Close'),
                   color: Colors.black,
                   borderColor: Colors.white,
                   icon: 'close.svg'

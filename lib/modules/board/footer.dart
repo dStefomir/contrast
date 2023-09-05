@@ -10,6 +10,7 @@ import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -39,7 +40,7 @@ class BoardPageFooter extends HookConsumerWidget {
         ),
         height: boardPadding + 22,
         child: StyledTooltip(
-          text: 'Menu',
+          text: FlutterI18n.translate(context, 'Menu'),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: SpeedDial(
@@ -66,8 +67,8 @@ class BoardPageFooter extends HookConsumerWidget {
                           shadowSize: 0.1,
                           child: Container(
                             color: Colors.white,
-                            child: const StyledText(
-                              text: 'Instagram',
+                            child: StyledText(
+                              text: FlutterI18n.translate(context, 'Instagram'),
                               padding: 5,
                               fontSize: 12,
                             ),
@@ -99,8 +100,8 @@ class BoardPageFooter extends HookConsumerWidget {
                           shadowSize: 0.1,
                           child: Container(
                             color: Colors.white,
-                            child: const StyledText(
-                              text: 'Share',
+                            child: StyledText(
+                              text: FlutterI18n.translate(context, 'Share'),
                               padding: 5,
                               fontSize: 12,
                             ),
@@ -118,7 +119,7 @@ class BoardPageFooter extends HookConsumerWidget {
                           ref,
                               () => Clipboard.setData(
                                   const ClipboardData(text: 'https://www.dstefomir.eu')
-                              ).then((_) => showSuccessTextOnSnackBar(context, "Copied to clipboard"))
+                              ).then((_) => showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Copied to clipboard')))
                       )
                   ),
                   SpeedDialChild(
@@ -132,8 +133,8 @@ class BoardPageFooter extends HookConsumerWidget {
                           shadowSize: 0.1,
                           child: Container(
                             color: Colors.white,
-                            child: const StyledText(
-                              text: 'Qr code',
+                            child: StyledText(
+                              text: FlutterI18n.translate(context, 'Qr code'),
                               padding: 5,
                               fontSize: 12,
                             ),
@@ -189,7 +190,7 @@ class BoardPageFooter extends HookConsumerWidget {
               children: [
                 Expanded(
                   child: StyledTooltip(
-                    text: 'Photographs',
+                    text: FlutterI18n.translate(context, 'Photographs'),
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
@@ -213,7 +214,7 @@ class BoardPageFooter extends HookConsumerWidget {
                 const SizedBox(width: 120),
                 Expanded(
                   child: StyledTooltip(
-                    text: 'Videos',
+                    text: FlutterI18n.translate(context, 'Videos'),
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
@@ -279,7 +280,7 @@ class BoardPageFooter extends HookConsumerWidget {
                       const Spacer(),
                       ContrastTab(
                           widgetKey: const Key('photos'),
-                          text: 'photos',
+                          text: FlutterI18n.translate(context, 'photos'),
                           onClick: (String tab) => ref.read(boardFooterTabProvider.notifier).switchTab(tab),
                           isSelected: currentTab == 'photos'
                       ).translateOnPhotoHover,
@@ -288,7 +289,7 @@ class BoardPageFooter extends HookConsumerWidget {
                       const Spacer(),
                       ContrastTab(
                           widgetKey: const Key('videos'),
-                          text: 'videos',
+                          text: FlutterI18n.translate(context, 'videos'),
                           onClick: (String tab) => ref.read(boardFooterTabProvider.notifier).switchTab(tab),
                           isSelected: currentTab == 'videos'
                       ).translateOnPhotoHover,

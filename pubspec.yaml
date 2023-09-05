@@ -37,6 +37,8 @@ dependencies:
 
   # Modular library
   flutter_modular: ^6.3.1
+  # Translations
+  flutter_i18n: ^0.34.0
   # in memory file creation
   file: ^6.0.0
   flutter_riverpod: ^2.3.10
@@ -110,6 +112,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/i18n/
   fonts:
     - family: Slovic
       fonts:

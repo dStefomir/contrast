@@ -13,6 +13,7 @@ import 'package:contrast/modules/board/video/service.dart';
 import 'package:contrast/security/session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
@@ -42,7 +43,7 @@ class VideoBoardPage extends HookConsumerWidget {
           onPressed: () => onUserAction(ref, () => Modular.to.pushNamed('videos/details/${video.path}')),
           menuItems: <FocusedMenuItem>[
             FocusedMenuItem(
-                title: const Text("Edit Video"),
+                title: Text(FlutterI18n.translate(context, 'Edit Video')),
                 trailingIcon: const Icon(Icons.edit),
                 onPressed: () => onUserAction(ref, () {
                   ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(true);
@@ -50,7 +51,7 @@ class VideoBoardPage extends HookConsumerWidget {
                 })
             ),
             FocusedMenuItem(
-                title: const Text("Delete Video"),
+                title: Text(FlutterI18n.translate(context, 'Delete Video')),
                 trailingIcon: const Icon(Icons.delete),
                 onPressed: () => onUserAction(ref, () {
                   ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(true);
@@ -96,10 +97,10 @@ class VideoBoardPage extends HookConsumerWidget {
           _renderVideo(context, ref, wrapper, constraints)
       ),
       onLeftKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('photos'),
-      listEmptyChild: const Padding(
-        padding: EdgeInsets.all(15),
+      listEmptyChild: Padding(
+        padding: const EdgeInsets.all(15),
         child: StyledText(
-          text: 'Nothing here so far',
+          text: FlutterI18n.translate(context, 'Nothing here so far'),
           color: Colors.black,
         ),
       )

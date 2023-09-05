@@ -1,8 +1,5 @@
-import 'dart:ui';
-
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
-import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/input.dart';
 import 'package:contrast/common/widgets/page.dart';
 import 'package:contrast/common/widgets/snack.dart';
@@ -10,6 +7,7 @@ import 'package:contrast/modules/login/provider.dart';
 import 'package:contrast/modules/login/service.dart';
 import 'package:contrast/security/session.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -38,11 +36,11 @@ class LoginPage extends HookConsumerWidget {
                 ),
               ),
             ),
-            const Align(
+            Align(
               alignment: Alignment.topCenter,
               child: Padding(
-                padding: EdgeInsets.only(top: 50),
-                child: Text('L O G I N', style: TextStyle(fontSize: 40)),
+                padding: const EdgeInsets.only(top: 50),
+                child: Text(FlutterI18n.translate(context, 'L O G I N'), style: const TextStyle(fontSize: 40)),
               ),
             ),
             Center(
@@ -56,12 +54,12 @@ class LoginPage extends HookConsumerWidget {
                         width: 400,
                         child: SimpleInput(
                           widgetKey: const Key('user'),
-                          labelText: 'User',
+                          labelText: FlutterI18n.translate(context, 'User'),
                           onChange: (text) => ref.read(userNameProvider.notifier).setUserName(text),
                           prefixIcon: Icons.person,
                           validator: (value) {
                             if (value != null && value.isEmpty) {
-                              return 'This field is mandatory.';
+                              return FlutterI18n.translate(context, 'This field is mandatory.');
                             }
                             return null;
                             },
@@ -74,13 +72,13 @@ class LoginPage extends HookConsumerWidget {
                         width: 400,
                         child: SimpleInput(
                           widgetKey: const Key('password'),
-                          labelText: 'Password',
+                          labelText: FlutterI18n.translate(context, 'Password'),
                           onChange: (text) => ref.read(userPasswordProvider.notifier).setUserPassword(text),
                           prefixIcon: Icons.password,
                           password: true,
                           validator: (value) {
                             if (value != null && value.isEmpty) {
-                              return 'This field is mandatory.';
+                              return FlutterI18n.translate(context, 'This field is mandatory.');
                             }
                             return null;
                             },
@@ -104,13 +102,13 @@ class LoginPage extends HookConsumerWidget {
                           session.eMail = userName;
                           session.token = value;
                           session.isGuest = false;
-                          showSuccessTextOnSnackBar(context, 'Logged in successfully');
+                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Logged in successfully'));
                           Modular.to.navigate('/', arguments: session);
                         }).onError((error, stackTrace) {
-                          showErrorTextOnSnackBar(context, 'Wrong user or password.');
+                          showErrorTextOnSnackBar(context, FlutterI18n.translate(context, 'Wrong user or password.'));
                         });
                       }},
-                    child: const Text('Log In'),
+                    child: Text(FlutterI18n.translate(context, 'Log In')),
                   ).translateOnPhotoHover,
                 ],
               ),
@@ -121,7 +119,7 @@ class LoginPage extends HookConsumerWidget {
                   onClick: () => Modular.to.navigate("/"),
                   color: Colors.black,
                   borderColor: Colors.black,
-                  tooltip: 'Close',
+                  tooltip: FlutterI18n.translate(context, 'Close'),
                   icon: 'close.svg'
               ),
             ),

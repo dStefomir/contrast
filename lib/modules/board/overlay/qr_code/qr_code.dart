@@ -3,6 +3,7 @@ import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -31,11 +32,11 @@ class QrCodeDialog extends HookConsumerWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
                     children: [
-                      const StyledText(text: "Share Contrast", weight: FontWeight.bold),
+                      StyledText(text: FlutterI18n.translate(context, 'Share Contrast'), weight: FontWeight.bold),
                       const Spacer(),
                       DefaultButton(
                           onClick: () => ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false),
-                          tooltip: 'Close',
+                          tooltip: FlutterI18n.translate(context, 'Close'),
                           color: Colors.black,
                           borderColor: Colors.white,
                           icon: 'close.svg'
@@ -48,14 +49,14 @@ class QrCodeDialog extends HookConsumerWidget {
           ),
           Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(15.0),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
                 child: Column(
                   children: [
-                    StyledText(text: '"The future belongs to those who believe in the beauty of their dreams.",', fontSize: 10, clip: false, color: Colors.black87, padding: 0,),
+                    StyledText(text: '"${FlutterI18n.translate(context, 'The future belongs to those who believe in the beauty of their dreams.')}",', fontSize: 10, clip: false, color: Colors.black87, padding: 0,),
                     Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: StyledText(text: 'Eleanor Roosevelt', fontSize: 10, clip: false, color: Colors.black87, weight: FontWeight.bold, padding: 0,),
+                      padding: const EdgeInsets.only(top: 8),
+                      child: StyledText(text: FlutterI18n.translate(context, 'Eleanor Roosevelt'), fontSize: 10, clip: false, color: Colors.black87, weight: FontWeight.bold, padding: 0,),
                     ),
                   ],
                 ),

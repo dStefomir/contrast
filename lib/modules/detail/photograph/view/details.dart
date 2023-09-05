@@ -1,3 +1,4 @@
+import 'package:flutter_i18n/flutter_i18n.dart';
 import "package:universal_html/html.dart" as html;
 
 import 'package:contrast/common/widgets/icon.dart';
@@ -178,7 +179,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         child: DefaultButton(
             onClick: () => _goToNextPhotograph(ref, pageController, currentPhotographIndex),
             color: Colors.white,
-            tooltip: 'Next photograph',
+            tooltip: FlutterI18n.translate(context, 'Next photograph'),
             borderColor: Colors.black,
             icon: 'navigate_next.svg'
         )
@@ -193,7 +194,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         child: DefaultButton(
             onClick: () => _goToPreviousPhotograph(ref, pageController, currentPhotographIndex),
             color: Colors.white,
-            tooltip: 'Previous photograph',
+            tooltip: FlutterI18n.translate(context, 'Previous photograph'),
             borderColor: Colors.black,
             icon: 'navigate_before.svg'
         )
@@ -201,14 +202,14 @@ class PhotographDetailsView extends HookConsumerWidget {
   );
 
   /// Render the go to previous page button
-  Widget _renderGoBackBtn() => Padding(
+  Widget _renderGoBackBtn(BuildContext context) => Padding(
     padding: const EdgeInsets.all(5.0),
     child: Align(
         alignment: Alignment.topLeft,
         child: DefaultButton(
             onClick: () => Modular.to.navigate('/'),
             color: Colors.white,
-            tooltip: 'Close',
+            tooltip: FlutterI18n.translate(context, 'Close'),
             borderColor: Colors.black,
             icon: 'close.svg'
         )
@@ -216,7 +217,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   );
 
   /// Renders the audio button
-  Widget _renderAudioButton(WidgetRef ref) =>
+  Widget _renderAudioButton(BuildContext context, WidgetRef ref) =>
       Padding(
         padding: const EdgeInsets.only(left: 115.0, top: 5.0),
         child: DefaultButton(
@@ -229,7 +230,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                 ref.read(musicTriggerProvider.notifier).setPlay(false);
               }
             },
-            tooltip: ref.watch(musicTriggerProvider) ? 'Stop music' : "Play music",
+            tooltip: ref.watch(musicTriggerProvider) ? FlutterI18n.translate(context, 'Stop music') : FlutterI18n.translate(context, 'Play music'),
             color: Colors.white,
             borderColor: Colors.black,
             icon: ref.watch(musicTriggerProvider) ? 'volume_up.svg' : 'volume_off.svg'
@@ -243,8 +244,8 @@ class PhotographDetailsView extends HookConsumerWidget {
         child: DefaultButton(
             onClick: () => Clipboard.setData(
                 ClipboardData(text: 'https://www.dstefomir.eu/#/photos/details?id=${images[currentPhotographyIndex].id}&category=$category')
-            ).then((value) => showSuccessTextOnSnackBar(context, "Copied to clipboard")),
-            tooltip: 'Share',
+            ).then((value) => showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Copied to clipboard'))),
+            tooltip: FlutterI18n.translate(context, 'Share'),
             color: Colors.white,
             borderColor: Colors.black,
             icon: 'share.svg'
@@ -277,7 +278,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                 ),
                 color: Colors.white,
                 borderColor: Colors.black,
-                tooltip: iconAsset == 'map.svg' ? 'Shot location' : 'Photograph',
+                tooltip: iconAsset == 'map.svg' ? FlutterI18n.translate(context, 'Shot location') : FlutterI18n.translate(context, 'Photograph'),
                 icon: iconAsset
             )
         ),
@@ -409,9 +410,9 @@ class PhotographDetailsView extends HookConsumerWidget {
           ) :
           _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
           _renderDetailsBtn(ref, context, scrollController, image),
-          _renderAudioButton(ref),
+          _renderAudioButton(context, ref),
           _renderShareButton(context, currentPhotographIndex),
-          _renderGoBackBtn(),
+          _renderGoBackBtn(context),
           Visibility(
               visible: currentPhotographIndex != 0 && !useMobileLayout(context),
               child: _renderPreviousBtn(ref, context, pageController, currentPhotographIndex)

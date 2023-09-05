@@ -7,7 +7,7 @@ import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Renders the header of the board page
@@ -44,10 +44,10 @@ class BoardPageFilter extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const RotatedBox(
+              RotatedBox(
                   quarterTurns: 5,
                 child: StyledText(
-                  text: 'Contrast',
+                  text: FlutterI18n.translate(context, 'Contrast'),
                   weight: FontWeight.bold,
                   letterSpacing: 18,
                 ),
@@ -56,7 +56,7 @@ class BoardPageFilter extends ConsumerWidget {
               MenuButton(
                   widgetKey: const Key('all'),
                   iconPath: 'all.svg',
-                  tooltip: 'All',
+                  tooltip: FlutterI18n.translate(context, 'All'),
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'all',
                   size: boardPadding,
@@ -65,7 +65,7 @@ class BoardPageFilter extends ConsumerWidget {
               MenuButton(
                   widgetKey: const Key('landscape'),
                   iconPath: 'landscape.svg',
-                  tooltip: 'Landscape',
+                  tooltip: FlutterI18n.translate(context, 'Landscape'),
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'landscape',
                   size: boardPadding,
@@ -74,7 +74,7 @@ class BoardPageFilter extends ConsumerWidget {
               MenuButton(
                   widgetKey: const Key('portraits'),
                   iconPath: 'portraits.svg',
-                  tooltip: 'Portraits',
+                  tooltip: FlutterI18n.translate(context, 'Portraits'),
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'portraits',
                   size: boardPadding,
@@ -83,7 +83,7 @@ class BoardPageFilter extends ConsumerWidget {
               MenuButton(
                   widgetKey: const Key('street'),
                   iconPath: 'street.svg',
-                  tooltip: 'Street',
+                  tooltip: FlutterI18n.translate(context, 'Street'),
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'street',
                   size: boardPadding,
@@ -92,7 +92,7 @@ class BoardPageFilter extends ConsumerWidget {
               MenuButton(
                   widgetKey: const Key('other'),
                   iconPath: 'dog.svg',
-                  tooltip: 'Other',
+                  tooltip: FlutterI18n.translate(context, 'Other'),
                   disabled: ref.watch(boardFooterTabProvider) == 'videos',
                   selected: ref.watch(boardHeaderTabProvider) == 'other',
                   size: boardPadding,
@@ -106,7 +106,7 @@ class BoardPageFilter extends ConsumerWidget {
   );
 
   /// Render desktop layout
-  Widget _renderDesktopLayout(WidgetRef ref) => ShadowWidget(
+  Widget _renderDesktopLayout(BuildContext context, WidgetRef ref) => ShadowWidget(
     offset: const Offset(0, 2),
     blurRadius: 2,
     child: Container(
@@ -134,35 +134,35 @@ class BoardPageFilter extends ConsumerWidget {
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('all'),
-                    text: 'all',
+                    text: FlutterI18n.translate(context, 'all'),
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.watch(boardHeaderTabProvider) == 'all'
                 ).translateOnPhotoHover,
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('landscape'),
-                    text: 'landscape',
+                    text: FlutterI18n.translate(context, 'landscape'),
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'landscape'
                 ).translateOnPhotoHover,
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('portraits'),
-                    text: 'portraits',
+                    text: FlutterI18n.translate(context, 'portraits'),
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'portraits'
                 ).translateOnPhotoHover,
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('street'),
-                    text: 'street',
+                    text: FlutterI18n.translate(context, 'street'),
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'street'
                 ).translateOnPhotoHover,
                 const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('other'),
-                    text: 'other',
+                    text: FlutterI18n.translate(context, 'other'),
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'other'
                 ).translateOnPhotoHover,
@@ -178,5 +178,5 @@ class BoardPageFilter extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => useMobileLayout(context)
       ? _renderMobileLayout(context, ref)
-      : _renderDesktopLayout(ref);
+      : _renderDesktopLayout(context, ref);
 }

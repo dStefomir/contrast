@@ -10,6 +10,7 @@ import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/security/session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
@@ -40,14 +41,14 @@ class PhotographBoardPage extends HookConsumerWidget {
           onPressed: () => onUserAction(ref, () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$selectedFilter')),
           menuItems: <FocusedMenuItem>[
             FocusedMenuItem(
-                title: const Text("Edit Photograph"),
+                title: Text(FlutterI18n.translate(context, 'Edit Photograph')),
                 trailingIcon: const Icon(Icons.edit),
                 onPressed: () => onUserAction(ref, () {
                   ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(true);
                   ref.read(photographEditProvider.notifier).setEditImage(wrapper.image);
                 })),
             FocusedMenuItem(
-                title: const Text("Delete Photograph"),
+                title: Text(FlutterI18n.translate(context, 'Delete Photograph')),
                 trailingIcon: const Icon(Icons.delete),
                 onPressed: () => onUserAction(ref, () {
                   ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(true);
@@ -92,11 +93,11 @@ class PhotographBoardPage extends HookConsumerWidget {
               _renderPhoto(ref, context, wrapper, constraints)
           ),
       onRightKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('videos'),
-      listEmptyChild: const Center(
+      listEmptyChild: Center(
         child: Padding(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           child: StyledText(
-            text: 'Nothing here so far',
+            text: FlutterI18n.translate(context, 'Nothing here so far'),
             color: Colors.black,
           ),
         ),
