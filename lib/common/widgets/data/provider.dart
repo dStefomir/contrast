@@ -43,8 +43,9 @@ class DataViewNotifier<T> extends StateNotifier<List<T>> {
 
   /// Adds an item
   void addItem(T item) {
-    state.add(item);
-    state = [...state];
+    final List<T> currentState = state;
+    currentState.insert(0, item);
+    state = [...state, ...currentState];
   }
 
   /// Removes an item
