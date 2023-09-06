@@ -1,3 +1,4 @@
+import 'package:contrast/common/widgets/shadow.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import "package:universal_html/html.dart" as html;
 
@@ -92,24 +93,64 @@ class BoardPageState extends ConsumerState<BoardPage> {
 
   /// Renders the floating action button
   Widget _buildFloatingActionButtons(BuildContext context, WidgetRef ref) => Padding(
-    padding: EdgeInsets.all(useMobileLayout(context) ? 95 : 35.0),
+    padding: EdgeInsets.all(useMobileLayout(context) ? 95 : 37.0),
     child: SpeedDial(
-        animatedIcon: AnimatedIcons.menu_close,
+        animatedIcon: AnimatedIcons.add_event,
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
+        shape: const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
+        direction: SpeedDialDirection.up,
+        animationDuration: const Duration(milliseconds: 500),
+        elevation: 1,
+        spacing: 5,
+        spaceBetweenChildren: 10,
         children: [
           SpeedDialChild(
               foregroundColor: Colors.black,
               labelBackgroundColor: Colors.white,
+              labelWidget: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ShadowWidget(
+                  offset: const Offset(0, 0),
+                  blurRadius: 1,
+                  shadowSize: 0.1,
+                  child: Container(
+                    color: Colors.white,
+                    child: StyledText(
+                      text: FlutterI18n.translate(context, 'Upload Video'),
+                      padding: 5,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ),
               child: const Icon(Icons.video_call),
-              label: FlutterI18n.translate(context, 'Upload Video'),
+              shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+              elevation: 1,
               onTap: () => _onAction(ref, () => ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(true))
           ),
           SpeedDialChild(
               foregroundColor: Colors.black,
               labelBackgroundColor: Colors.white,
+              labelWidget: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ShadowWidget(
+                  offset: const Offset(0, 0),
+                  blurRadius: 1,
+                  shadowSize: 0.1,
+                  child: Container(
+                    color: Colors.white,
+                    child: StyledText(
+                      text: FlutterI18n.translate(context, 'Upload Photograph'),
+                      padding: 5,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ),
               child: const Icon(Icons.photo_filter_sharp),
-              label: FlutterI18n.translate(context, 'Upload Photograph'),
+              shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+              elevation: 1,
               onTap: () => _onAction(ref, () => ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(true))
           )
         ]
