@@ -8,5 +8,5 @@ final photographDetailsServiceProvider = Provider<PhotographDetailsService>((ref
 /// Photograph details service
 class PhotographDetailsService {
   /// Fetch a single image
-  String getPhotograph(BuildContext context, String imagePath) => '${Session.proxy.host}/files/image?image_path=$imagePath&compressed=false&platform=${getRunningPlatform(context)}';
+  String getPhotograph(BuildContext context, String imagePath) => '${Session.proxy.host}/files/image?image_path=$imagePath&compressed=false&platform=DESKTOP';
 }

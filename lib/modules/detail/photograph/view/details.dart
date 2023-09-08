@@ -298,6 +298,7 @@ class PhotographDetailsView extends HookConsumerWidget {
 
   /// Renders the photography gallery widget
   Widget _renderPhotographGallery(
+      BuildContext context,
       WidgetRef ref,
       ScrollController scrollController,
       PageController pageController,
@@ -313,7 +314,17 @@ class PhotographDetailsView extends HookConsumerWidget {
           scrollPhysics: const BouncingScrollPhysics(),
           allowImplicitScrolling: true,
           backgroundDecoration: const BoxDecoration(color: Colors.black),
-          loadingBuilder: (_, __) => Container(),
+          loadingBuilder: (_, chunk) => Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: MediaQuery.of(context).size.height - 8),
+                child: LinearProgressIndicator(
+                  minHeight: 8,
+                  backgroundColor: Colors.grey[300],
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                  value: (chunk?.cumulativeBytesLoaded ?? 0) / 100,
+                ),
+              )
+          ),
           builder: (BuildContext context, int index) {
             return PhotoViewGalleryPageOptions(
                 imageProvider: ExtendedNetworkImageProvider(serviceProvider.getPhotograph(context, image.path!)),
@@ -369,7 +380,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                       SizedBox(
                           width: maxWidth,
                           height: maxHeight,
-                          child: _renderPhotographGallery(ref, scrollController, pageController, currentPhotographIndex, image)
+                          child: _renderPhotographGallery(context, ref, scrollController, pageController, currentPhotographIndex, image)
                       ),
                       _isAreCoordinatesValid(image.lat, image.lng) ? _renderPhotoDetails(context, maxWidth, maxHeight, image.lng, image.lat) : Container()
                     ],

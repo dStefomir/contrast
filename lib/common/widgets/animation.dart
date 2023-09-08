@@ -46,6 +46,71 @@ class FadeAnimation extends HookConsumerWidget {
   }
 }
 
+class FadeAnimationWithRiverpod extends StatefulWidget {
+  /// Child widget to be rendered
+  final Widget child;
+  /// Controller for handling the animations
+  final AnimationController? controller;
+  /// Gets triggered when animation is completed
+  final Function()? onCompleted;
+  /// From where the animation should start
+  final double start;
+  /// From where the animation should end
+  final double end;
+  /// Animation duration
+  final Duration duration;
+
+  /// VSYNC is need for the controller
+  const FadeAnimationWithRiverpod({
+    super.key,
+    required this.child,
+    this.controller,
+    this.onCompleted,
+    this.start = 1,
+    this.end = 1,
+    this.duration = const Duration(milliseconds: 500)
+  });
+
+  @override
+  State<FadeAnimationWithRiverpod> createState() => _FadeAnimationWithRiverpodState();
+}
+
+class _FadeAnimationWithRiverpodState extends State<FadeAnimationWithRiverpod> with SingleTickerProviderStateMixin {
+  /// Animation Controller
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    controller = widget.controller ?? AnimationController(duration: widget.duration, vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    /// Dispose the controller in the state widget
+    controller.dispose();
+    /// Try to dispose the controller which is passed to the holder page if not disposed there
+    if(widget.controller != null && widget.controller!.isDismissed) {
+      widget.controller!.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && widget.onCompleted != null) {
+        widget.onCompleted!();
+      }
+    });
+
+    return FadeTransition(
+      opacity: Tween<double>(begin: widget.start, end: widget.end).animate(controller..forward()),
+      child: widget.child,
+    );
+  }
+}
+
 /// Slide animation widget
 class SlideTransitionAnimation extends HookConsumerWidget {
   /// Child widget
