@@ -327,7 +327,7 @@ class PhotographDetailsView extends HookConsumerWidget {
           ),
           builder: (BuildContext context, int index) {
             return PhotoViewGalleryPageOptions(
-                imageProvider: ExtendedNetworkImageProvider(serviceProvider.getPhotograph(context, image.path!)),
+                imageProvider: ExtendedNetworkImageProvider(serviceProvider.getPhotograph(image.path!)),
                 filterQuality: FilterQuality.high,
                 minScale: PhotoViewComputedScale.contained,
                 maxScale: PhotoViewComputedScale.covered * 2,
