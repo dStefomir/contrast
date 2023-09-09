@@ -260,18 +260,6 @@ class BoardPageFooter extends HookConsumerWidget {
             color: Colors.white,
             child: Stack(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        Colors.black.withOpacity(0.0),
-                        Colors.black.withOpacity(0.1),
-                      ],
-                    ),
-                  ),
-                ),
                 IconRenderer(asset: 'background.svg', fit: BoxFit.fitWidth, width: double.infinity, color: Colors.black.withOpacity(0.05)),
                 Align(
                   alignment: Alignment.center,

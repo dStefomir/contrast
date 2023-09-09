@@ -29,18 +29,6 @@ class BoardPageFilter extends ConsumerWidget {
       height: MediaQuery.of(context).size.height - boardPadding - (kIsWeb ? 0 : 50),
       color: Colors.white,
       child: Stack(children: [
-        Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.black.withOpacity(0.15),
-                Colors.black.withOpacity(0.0),
-              ],
-            ),
-          ),
-        ),
         IconRenderer(asset: 'background.svg', fit: BoxFit.fitHeight, height: double.infinity, color: Colors.black.withOpacity(0.05)),
         Align(
           alignment: Alignment.topLeft,
@@ -117,18 +105,6 @@ class BoardPageFilter extends ConsumerWidget {
       height: boardPadding,
       child: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.black.withOpacity(0.0),
-                  Colors.black.withOpacity(0.1),
-                ],
-              ),
-            ),
-          ),
           IconRenderer(asset: 'background.svg', fit: BoxFit.fitWidth, width: double.infinity, color: Colors.black.withOpacity(0.05)),
           Align(
             alignment: Alignment.center,

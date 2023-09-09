@@ -36,13 +36,13 @@ dependencies:
     sdk: flutter
 
   # Modular library
-  flutter_modular: ^6.3.1
+  flutter_modular: ^6.3.2
   # Translations
   flutter_i18n: ^0.34.0
   # in memory file creation
   file: ^6.0.0
-  flutter_riverpod: ^2.3.10
-  hooks_riverpod: ^2.3.10
+  flutter_riverpod: ^2.4.0
+  hooks_riverpod: ^2.4.0
   flutter_hooks: ^0.20.1
   # html cross platform library
   universal_html: ^2.2.3
@@ -63,7 +63,7 @@ dependencies:
   # using http request
   http: ^1.1.0
   # image render library
-  extended_image: ^8.1.0
+  extended_image: ^8.1.1
   # zoom image library
   photo_view: ^0.14.0
   # lazy loading widget
