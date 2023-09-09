@@ -313,7 +313,7 @@ class PhotographDetailsView extends HookConsumerWidget {
       child: PhotoViewGallery.builder(
           scrollPhysics: const BouncingScrollPhysics(),
           allowImplicitScrolling: true,
-          backgroundDecoration: const BoxDecoration(color: Colors.black),
+          backgroundDecoration: const BoxDecoration(color: Colors.transparent),
           loadingBuilder: (_, chunk) => Center(
               child: Padding(
                 padding: EdgeInsets.only(top: MediaQuery.of(context).size.height - 8),
@@ -402,6 +402,7 @@ class PhotographDetailsView extends HookConsumerWidget {
 
     return Stack(
         children: [
+          IconRenderer(asset: 'background.svg', fit: BoxFit.cover, width: double.infinity, height: double.infinity, color: Colors.white.withOpacity(0.05)),
           getRunningPlatform(context) == 'MOBILE' ?
           GestureDetector(
               onVerticalDragUpdate: (details) {

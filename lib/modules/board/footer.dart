@@ -272,6 +272,7 @@ class BoardPageFooter extends HookConsumerWidget {
                     ),
                   ),
                 ),
+                IconRenderer(asset: 'background.svg', fit: BoxFit.fitWidth, width: double.infinity, color: Colors.black.withOpacity(0.05)),
                 Align(
                   alignment: Alignment.center,
                   child: Row(

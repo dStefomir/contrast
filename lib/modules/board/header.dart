@@ -1,5 +1,6 @@
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
+import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/tab.dart';
 import 'package:contrast/common/widgets/text.dart';
@@ -40,6 +41,7 @@ class BoardPageFilter extends ConsumerWidget {
             ),
           ),
         ),
+        IconRenderer(asset: 'background.svg', fit: BoxFit.fitHeight, height: double.infinity, color: Colors.black.withOpacity(0.05)),
         Align(
           alignment: Alignment.topLeft,
           child: Column(
@@ -127,6 +129,7 @@ class BoardPageFilter extends ConsumerWidget {
               ),
             ),
           ),
+          IconRenderer(asset: 'background.svg', fit: BoxFit.fitWidth, width: double.infinity, color: Colors.black.withOpacity(0.05)),
           Align(
             alignment: Alignment.center,
             child: Row(
