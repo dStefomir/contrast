@@ -13,6 +13,7 @@ import 'package:contrast/modules/board/video/service.dart';
 import 'package:contrast/security/session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:focused_menu/focused_menu.dart';
@@ -97,6 +98,14 @@ class VideoBoardPage extends HookConsumerWidget {
           _renderVideo(context, ref, wrapper, constraints)
       ),
       onLeftKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('photos'),
+      whenShouldAnimateGlass: (controller) {
+        final String currentTab = ref.watch(
+            boardFooterTabProvider);
+        useValueChanged(currentTab, (_, __) async {
+          controller.reset();
+          controller.forward();
+        });
+      },
       listEmptyChild: Padding(
         padding: const EdgeInsets.all(15),
         child: StyledText(

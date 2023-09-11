@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/paged_list.dart';
@@ -23,6 +26,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   final void Function()? onLeftKeyPressed;
   /// What happens when the right arrow key is pressed
   final void Function()? onRightKeyPressed;
+  final void Function(AnimationController)? whenShouldAnimateGlass;
   /// Widget that should be displayed if the list view is empty
   final Widget listEmptyChild;
 
@@ -34,6 +38,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     required this.listEmptyChild,
     this.onLeftKeyPressed,
     this.onRightKeyPressed,
+    this.whenShouldAnimateGlass,
     this.itemsPerRow = 4,
     this.dimHeight = 0
   }) : super(key: key);
@@ -68,6 +73,25 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
       }
     }
   }
+
+  /// Render glass effect widget
+  Widget _renderGlass({required double width, required double height}) => ClipRect(
+    child: Container(
+      decoration: BoxDecoration(
+          border: Border.all(width: 5, color: Colors.black)
+      ),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: 5,
+          sigmaY: 5,
+        ),
+        child: SizedBox(
+          width: width,
+          height: height,
+        ),
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -121,6 +145,26 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
               )
           ),
         ),
+        whenShouldAnimateGlass != null ? Align(
+            alignment: Alignment.centerLeft,
+            child: SlideTransitionAnimation(
+                getStart: () => const Offset(0, 0),
+                getEnd: () => const Offset(-10, 0),
+                duration: const Duration(milliseconds: 10000),
+                whenTo: whenShouldAnimateGlass,
+                child: _renderGlass(width: MediaQuery.of(context).size.width / 2, height: MediaQuery.of(context).size.height)
+            )
+        ) : Container(),
+        whenShouldAnimateGlass != null ? Align(
+            alignment: Alignment.centerRight,
+            child: SlideTransitionAnimation(
+                getStart: () => const Offset(0, 0),
+                getEnd: () => const Offset(10, 0),
+                duration: const Duration(milliseconds: 10000),
+                whenTo: whenShouldAnimateGlass,
+                child: _renderGlass(width: MediaQuery.of(context).size.width / 2, height: MediaQuery.of(context).size.height)
+            )
+        ) : Container(),
       ],
     ) : listEmptyChild;
   }

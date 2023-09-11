@@ -6,11 +6,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 ///----------------------------------- List all service fetching providers here -----------------------------------///
 /// Service provider for the data view
-final photographServiceFetchProvider = StateNotifierProvider<DataViewNotifier<ImageWrapper>, List<ImageWrapper>>((ref) => DataViewNotifier<ImageWrapper>(ref: ref),
-);
+final photographServiceFetchProvider = StateNotifierProvider<DataViewNotifier<ImageWrapper>, List<ImageWrapper>>((ref) => DataViewNotifier<ImageWrapper>(ref: ref));
 /// Service provider for the data view
-final videoServiceFetchProvider = StateNotifierProvider<DataViewNotifier<VideoData>, List<VideoData>>((ref) => DataViewNotifier<VideoData>(ref: ref),
-);
+final videoServiceFetchProvider = StateNotifierProvider<DataViewNotifier<VideoData>, List<VideoData>>((ref) => DataViewNotifier<VideoData>(ref: ref));
 
 ///----------------------------------------------------------------------------------------------------------------///
 
