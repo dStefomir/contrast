@@ -294,7 +294,7 @@ class PhotographDetailsView extends HookConsumerWidget {
           width: maxWidth,
           height: maxHeight,
           child: ContrastMap(mapInteraction: getRunningPlatform(context) == 'MOBILE' ? InteractiveFlag.pinchZoom : InteractiveFlag.all)
-      ) : Container();
+      ) : const SizedBox.shrink();
 
   /// Renders the photography gallery widget
   Widget _renderPhotographGallery(

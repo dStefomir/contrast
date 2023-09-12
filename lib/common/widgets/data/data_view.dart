@@ -134,6 +134,8 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
               focusNode: useFocusNode(),
               onKey: (event) => _handleKeyEvent(event, controller),
               child: GridView.builder(
+                addAutomaticKeepAlives: false,
+                addRepaintBoundaries: false,
                 controller: controller,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
                 itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),

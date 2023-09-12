@@ -17,6 +17,6 @@ class Blurrable extends StatelessWidget {
         sigmaX: strength,
         sigmaY: strength,
       ),
-      child: child ?? Container()
+      child: child ?? const SizedBox.shrink()
   );
 }

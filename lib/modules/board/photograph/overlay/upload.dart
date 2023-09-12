@@ -220,7 +220,7 @@ class UploadImageDialog extends HookConsumerWidget {
                 text: data != null ? data!.path! : fileData.fileName!,
                 decoration: TextDecoration.underline,
             )
-        ) : Container();
+        ) : const SizedBox.shrink();
 
   /// Renders the image upload button or if its in edit mode - the existing image
   Widget _renderUploadButton(BuildContext context, WidgetRef ref, FileData fileData) {
