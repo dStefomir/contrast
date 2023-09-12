@@ -245,7 +245,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                               color: Colors.black,
                               useShadow: false,
                               weight: FontWeight.bold,
-                              letterSpacing: 13,
+                              letterSpacing: 10,
                               fontSize: useMobileLayout(context) ? 30 : 60,
                             ),
                           )

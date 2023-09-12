@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' as isolate;
 import 'package:contrast/model/image_data.dart';
 import 'package:contrast/security/session.dart';
 import 'package:contrast/utils/device.dart';
@@ -14,33 +15,36 @@ class PhotographBoardService {
   /// Fetch the board images with selected filter
   Future<PagedList<ImageWrapper>> getImageBoard(int page, String selectedFilter) async {
     final result = await Session.proxy.get('/images/all?page=$page&category=$selectedFilter');
-    final List<ImageWrapper> data = [];
-    result["content"].forEach((e) => data.add(ImageWrapper.fromJson(e)));
 
-    return PagedList(data, result["totalElements"], result["totalPages"]);
+    return isolate.compute((response) {
+      final List<ImageWrapper> data = [];
+      result["content"].forEach((e) => data.add(ImageWrapper.fromJson(e)));
+
+      return PagedList(data, result["totalElements"], result["totalPages"]);
+    }, result);
   }
 
   /// Fetch the board images without any filters
   Future<List<ImageData>> getImageBoardNonFiltered(String category) async {
     final result = await Session.proxy.get('/images/all_non_filtered?category=$category');
-    final List<ImageData> data = [];
-    result.forEach((e) => data.add(ImageData.fromJson(e)));
 
-    return data;
+    return isolate.compute((response) {
+      final List<ImageData> data = [];
+      result.forEach((e) => data.add(ImageData.fromJson(e)));
+
+      return data;
+    }, result);
   }
 
   /// Fetch a single image
-  Future<Uint8List> getImage(BuildContext context, String imagePath, bool isCompressed) async {
-    final result = await Session.proxy.get('/files/image?image_path=$imagePath&compressed=$isCompressed&platform=${getRunningPlatform(context)}');
-
-    return result;
-  }
+  Future<Uint8List> getImage(BuildContext context, String imagePath, bool isCompressed) =>
+      isolate.compute((_) async => await Session.proxy.get('/files/image?image_path=$imagePath&compressed=$isCompressed&platform=${getRunningPlatform(context)}'), null);
 
   /// Edit an image
   Future<ImageData> editImage(ImageData toEdit) async {
     final result = await Session.proxy.put('/images/edit', data: toEdit.toJson());
 
-    return ImageData.fromJson(result);
+    return isolate.compute((response) => ImageData.fromJson(result), result);
   }
 
   /// Upload an image
@@ -60,13 +64,13 @@ class PhotographBoardService {
           '/files/upload_image?is_landscape=$isLandscape&is_rect=$isRect&comment=$comment&category=$category&screen_width=$screenWidth&screen_height=$screenHeight&lat=$lat&lng=$lng',
           file: file
       );
-      return ImageWrapper.fromJson(result);
+      return isolate.compute((response) => ImageWrapper.fromJson(result), result);
     } else {
       final result = await Session.proxy.postFile(
           '/files/upload_image?is_landscape=$isLandscape&is_rect=$isRect&comment=$comment&category=$category&screen_width=$screenWidth&screen_height=$screenHeight',
           file: file
       );
-      return ImageWrapper.fromJson(result);
+      return isolate.compute((response) => ImageWrapper.fromJson(result), result);
     }
   }
 
@@ -74,7 +78,7 @@ class PhotographBoardService {
   Future<ImageData> deleteImage(int id) async {
     final result = await Session.proxy.delete('/files/delete_image?id=$id');
 
-    return ImageData.fromJson(result);
+    return isolate.compute((response) => ImageData.fromJson(result), result);
   }
 
   /// Fetch a single image
