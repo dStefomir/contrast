@@ -249,15 +249,13 @@ class ContrastPhotographMeta extends HookConsumerWidget {
             height: double.infinity,
             width: double.infinity,
           ),
-          metadata ?? Container(),
-          isHovering ?
-          ImageMetaDataDetails(
+          if (metadata != null) metadata,
+          if(isHovering) ImageMetaDataDetails(
             constraints: constraints,
             metadata: wrapper.metadata,
             scaleFactor: 16,
-          ).translateOnPhotoHover :
-          Container(),
-          isHovering && onRedirect != null && getRunningPlatform(context) == 'DESKTOP' ?
+          ).translateOnPhotoHover,
+          if (isHovering && onRedirect != null && getRunningPlatform(context) == 'DESKTOP')
           Align(
               alignment: Alignment.topRight,
               child: RedirectButton(
@@ -266,7 +264,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
                 onRedirect: onRedirect!,
                 height: constraints.maxHeight / 7,
               )
-          ) : Container(),
+          ),
         ],
       );
 
@@ -346,7 +344,7 @@ class ImageMetaDataDetails extends StatelessWidget {
           fontSize: metaFontSize,
           padding: 5,
         ),
-        row ? Container() : const Spacer(),
+        if(!row)const Spacer(),
       ],
     );
   }
@@ -354,22 +352,22 @@ class ImageMetaDataDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> widgets = [
-      row ? const Spacer() : Container(),
+      if(row) const Spacer(),
       Visibility(
         visible: metadata.camera != null,
         child: _renderMetaRow(metadata.camera ?? '', 'camera.svg'),
       ),
-      row ? const Spacer() : Container(),
+      if(row) const Spacer(),
       Visibility(
         visible: metadata.fStop != null,
         child: _renderMetaRow(metadata.fStop ?? '', 'apperature.svg'),
       ),
-      row ? const Spacer() : Container(),
+      if(row) const Spacer(),
       Visibility(
         visible: metadata.exposureTime != null,
         child: _renderMetaRow(metadata.exposureTime ?? '', 'shutter_speed.svg'),
       ),
-      row ? const Spacer() : Container(),
+      if(row) const Spacer(),
       Visibility(
         visible: metadata.lens != null,
         child: _renderMetaRow(
@@ -377,7 +375,7 @@ class ImageMetaDataDetails extends StatelessWidget {
           'lens.svg',
         ),
       ),
-      row ? const Spacer() : Container(),
+      if(row) const Spacer(),
       Visibility(
         visible: metadata.dataOfCapture != null,
         child: _renderMetaRow(
@@ -386,7 +384,7 @@ class ImageMetaDataDetails extends StatelessWidget {
           'date.svg',
         ),
       ),
-      row ? const Spacer() : Container(),
+      if(row) const Spacer(),
     ];
 
     return Padding(

@@ -349,7 +349,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                           (shouldShowEditVideoDialog != null && shouldShowEditVideoDialog),
                       child: const Blurrable(strength: 10),
                   ),
-                  shouldShowDeletePhotographDialog != null ? Align(
+                  if (shouldShowDeletePhotographDialog != null) Align(
                     alignment: Alignment.bottomCenter,
                     child: SlideTransitionAnimation(
                       duration: const Duration(milliseconds: 1000),
@@ -380,8 +380,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                         },
                       ),
                     ),
-                  ) : Container(),
-                  shouldShowDeleteVideoDialog != null ? Align(
+                  ),
+                  if (shouldShowDeleteVideoDialog != null) Align(
                     alignment: Alignment.bottomCenter,
                     child: SlideTransitionAnimation(
                       duration: const Duration(milliseconds: 1000),
@@ -412,8 +412,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                         },
                       ),
                     ),
-                  ) : Container(),
-                  shouldShowEditPhotographDialog != null ? Align(
+                  ),
+                  if (shouldShowEditPhotographDialog != null) Align(
                     alignment: Alignment.bottomCenter,
                     child: SlideTransitionAnimation(
                       duration: const Duration(milliseconds: 1000),
@@ -444,8 +444,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                         },
                       ),
                     ),
-                  ) : Container(),
-                  shouldShowUploadPhotographDialog != null ? Align(
+                  ),
+                  if (shouldShowUploadPhotographDialog != null) Align(
                     alignment: Alignment.bottomCenter,
                     child: SlideTransitionAnimation(
                       duration: const Duration(milliseconds: 1000),
@@ -465,8 +465,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                         },
                       ),
                     ),
-                  ) : Container(),
-                  shouldShowUploadVideoDialog != null ? Align(
+                  ),
+                  if (shouldShowUploadVideoDialog != null) Align(
                     alignment: Alignment.bottomCenter,
                     child: SlideTransitionAnimation(
                       duration: const Duration(milliseconds: 1000),
@@ -486,8 +486,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                         },
                       ),
                     ),
-                  ) : Container(),
-                  shouldShowEditVideoDialog != null ? Align(
+                  ),
+                  if (shouldShowEditVideoDialog != null) Align(
                     alignment: Alignment.bottomCenter,
                     child: SlideTransitionAnimation(
                       duration: const Duration(milliseconds: 1000),
@@ -517,8 +517,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                         },
                       ),
                     ),
-                  ) : Container(),
-                  shouldShowQrCodeDialog != null ? Align(
+                  ),
+                  if (shouldShowQrCodeDialog != null) Align(
                     alignment: Alignment.bottomCenter,
                     child: SlideTransitionAnimation(
                         duration: const Duration(milliseconds: 1000),
@@ -532,7 +532,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                         },
                         child: const QrCodeDialog()
                     ),
-                  ) : Container()
+                  )
                 ]
             ),
           )

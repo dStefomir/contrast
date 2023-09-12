@@ -75,8 +75,8 @@ class ContrastVideo extends HookConsumerWidget {
                     ),
                   ).translateOnVideoHover,
                 ),
-                isHovering && onRedirect != null && getRunningPlatform(context) == 'DESKTOP'
-                    ? Align(
+                if (isHovering && onRedirect != null && getRunningPlatform(context) == 'DESKTOP')
+                  Align(
                     alignment: Alignment.topRight,
                     child: RedirectButton(
                       widgetKey: Key('$widgetKey/redirect'),
@@ -84,7 +84,7 @@ class ContrastVideo extends HookConsumerWidget {
                       onRedirect: onRedirect!,
                       height: constraints.maxHeight / 7,
                     )
-                ) : Container()
+                )
               ],
             ),
           ),

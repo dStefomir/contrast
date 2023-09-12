@@ -141,7 +141,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
               )
           ),
         ),
-        whenShouldAnimateGlass != null ? Align(
+        if (whenShouldAnimateGlass != null) Align(
             alignment: Alignment.centerLeft,
             child: SlideTransitionAnimation(
                 getStart: () => const Offset(0, 0),
@@ -150,8 +150,8 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                 whenTo: whenShouldAnimateGlass,
                 child: _renderGlass(width: MediaQuery.of(context).size.width / 2, height: MediaQuery.of(context).size.height)
             )
-        ) : Container(),
-        whenShouldAnimateGlass != null ? Align(
+        ),
+        if (whenShouldAnimateGlass != null) Align(
             alignment: Alignment.centerRight,
             child: SlideTransitionAnimation(
                 getStart: () => const Offset(0, 0),
@@ -160,7 +160,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                 whenTo: whenShouldAnimateGlass,
                 child: _renderGlass(width: MediaQuery.of(context).size.width / 2, height: MediaQuery.of(context).size.height)
             )
-        ) : Container(),
+        )
       ],
     ) : listEmptyChild;
   }

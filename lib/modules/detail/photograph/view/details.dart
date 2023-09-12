@@ -382,7 +382,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                           height: maxHeight,
                           child: _renderPhotographGallery(context, ref, scrollController, pageController, currentPhotographIndex, image)
                       ),
-                      _isAreCoordinatesValid(image.lat, image.lng) ? _renderPhotoDetails(context, maxWidth, maxHeight, image.lng, image.lat) : Container()
+                      if (_isAreCoordinatesValid(image.lat, image.lng)) _renderPhotoDetails(context, maxWidth, maxHeight, image.lng, image.lat)
                     ],
                   )
               )

@@ -214,7 +214,7 @@ class UploadImageDialog extends HookConsumerWidget {
 
   /// Renders the selected image name
   Widget _renderSelectedImageName(FileData fileData) =>
-      fileData.isFileSelected() || data != null?
+      fileData.isFileSelected() || data != null ?
         Center(
             child: StyledText(
                 text: data != null ? data!.path! : fileData.fileName!,
