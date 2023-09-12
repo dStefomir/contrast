@@ -34,8 +34,16 @@ class BoardPageFilter extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const IconRenderer(asset: 'icon.jpg'),
-              const Divider(color: Colors.black, thickness: 1, height: 0),
+              Container(
+                  color: Colors.white,
+                  height: 70,
+                  padding: const EdgeInsets.all(5),
+                  child: const IconRenderer(
+                    asset: 'signature.svg', 
+                    color: Colors.black,
+                    fit: BoxFit.scaleDown
+                  )
+              ),
               const Spacer(),
               MenuButton(
                   widgetKey: const Key('all'),
