@@ -236,10 +236,16 @@ class BoardPageState extends ConsumerState<BoardPage> {
                           child: Padding(
                             padding: EdgeInsets.only(left: titlePadding),
                             child: StyledText(
-                              text: FlutterI18n.translate(context, 'C O N T R A S T'),
+                              text: FlutterI18n.translate(
+                                  context,
+                                  (useMobileLayout(context) && ref.read(boardFooterTabProvider) == 'photos')
+                                      ? ref.read(boardHeaderTabProvider)
+                                      : 'CONTRAST'
+                              ),
                               color: Colors.black,
                               useShadow: false,
                               weight: FontWeight.bold,
+                              letterSpacing: 13,
                               fontSize: useMobileLayout(context) ? 30 : 60,
                             ),
                           )
