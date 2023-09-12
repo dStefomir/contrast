@@ -3,7 +3,6 @@ import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/tab.dart';
-import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
@@ -35,14 +34,8 @@ class BoardPageFilter extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              RotatedBox(
-                  quarterTurns: 5,
-                child: StyledText(
-                  text: FlutterI18n.translate(context, 'Contrast'),
-                  weight: FontWeight.bold,
-                  letterSpacing: 18,
-                ),
-              ),
+              const IconRenderer(asset: 'icon.jpg'),
+              const Divider(color: Colors.black, thickness: 1, height: 0),
               const Spacer(),
               MenuButton(
                   widgetKey: const Key('all'),

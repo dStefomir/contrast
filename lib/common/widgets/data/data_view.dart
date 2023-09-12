@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:contrast/common/widgets/animation.dart';
+import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/paged_list.dart';
@@ -80,16 +79,13 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
       decoration: BoxDecoration(
           border: Border.all(width: 5, color: Colors.black)
       ),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(
-          sigmaX: 5,
-          sigmaY: 5,
-        ),
-        child: SizedBox(
-          width: width,
-          height: height,
-        ),
-      ),
+        child: Blurrable(
+            strength: 5,
+            child: SizedBox(
+              width: width,
+              height: height,
+            )
+        )
     ),
   );
 

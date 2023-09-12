@@ -1,7 +1,7 @@
+import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import "package:universal_html/html.dart" as html;
-
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
@@ -332,6 +332,16 @@ class BoardPageState extends ConsumerState<BoardPage> {
                               : Alignment.bottomRight,
                           child: _buildFloatingActionButtons(context, ref)
                       )
+                  ),
+                  Visibility(
+                      visible: (shouldShowQrCodeDialog != null && shouldShowQrCodeDialog) ||
+                          (shouldShowDeletePhotographDialog != null && shouldShowDeletePhotographDialog) ||
+                          (shouldShowDeleteVideoDialog != null && shouldShowDeleteVideoDialog) ||
+                          (shouldShowUploadPhotographDialog != null && shouldShowUploadPhotographDialog) ||
+                          (shouldShowEditPhotographDialog != null && shouldShowEditPhotographDialog) ||
+                          (shouldShowUploadVideoDialog != null && shouldShowUploadVideoDialog) ||
+                          (shouldShowEditVideoDialog != null && shouldShowEditVideoDialog),
+                      child: const Blurrable(strength: 10),
                   ),
                   shouldShowDeletePhotographDialog != null ? Align(
                     alignment: Alignment.bottomCenter,

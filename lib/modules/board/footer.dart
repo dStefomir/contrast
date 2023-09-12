@@ -46,7 +46,7 @@ class BoardPageFooter extends HookConsumerWidget {
             child: SpeedDial(
                 animatedIcon: AnimatedIcons.menu_home,
                 backgroundColor: Colors.transparent,
-                foregroundColor: Colors.white.withOpacity(0.5),
+                foregroundColor: Colors.white,
                 animatedIconTheme: const IconThemeData(size: 50),
                 shape: const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
                 direction: SpeedDialDirection.up,
