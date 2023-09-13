@@ -1,6 +1,7 @@
 import 'package:contrast/common/widgets/page.dart';
 import 'package:contrast/core/provider.dart';
 import 'package:contrast/modules/login/overlay/cookie.dart';
+import 'package:contrast/utils/device.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -24,11 +25,7 @@ class CorePage extends HookConsumerWidget {
 
   /// Should the app display a cookie warning or not
   bool _shouldShowCookie(SharedPreferences prefs, WidgetRef ref) {
-    final bool shouldShowCookieOverlay = ref.watch(
-        corePageProvider(
-            prefs.getBool('showCookieWarning') ?? true
-        )
-    ) ?? true;
+    final bool shouldShowCookieOverlay = ref.watch(corePageProvider(prefs.getBool('showCookieWarning') ?? true)) ?? true;
 
     return shouldShowCookieOverlay;
   }
@@ -56,13 +53,13 @@ class CorePage extends HookConsumerWidget {
           final List<Widget> children = [
             kIsWeb ? render() : BackgroundPage(
               color: Colors.black,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 50),
+              child: SafeArea(
+                bottom: false,
                 child: render(),
               ),
             )
           ];
-          if (snapshot.hasData && _shouldShowCookie(snapshot.requireData, ref)) {
+          if (snapshot.hasData && kIsWeb && _shouldShowCookie(snapshot.requireData, ref)) {
             children.add(
                 CookieWarningDialog(onSubmit: () => _onCookieSubmit(snapshot.requireData, ref))
             );

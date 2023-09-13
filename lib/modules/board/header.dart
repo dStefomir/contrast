@@ -25,17 +25,28 @@ class BoardPageFilter extends ConsumerWidget {
     offset: const Offset(3, 0),
     child: Container(
       width: boardPadding,
-      height: MediaQuery.of(context).size.height - boardPadding - (kIsWeb ? 0 : 50),
+      height: MediaQuery.of(context).size.height - boardPadding - (kIsWeb ? 0 : 60),
       color: Colors.white,
       child: Stack(children: [
-        IconRenderer(asset: 'background.svg', fit: BoxFit.fitHeight, height: double.infinity, color: Colors.black.withOpacity(0.05)),
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black.withOpacity(0.10),
+                Colors.black.withOpacity(0.0),
+              ],
+            ),
+          ),
+        ),
         Align(
           alignment: Alignment.topLeft,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                  color: Colors.white,
+                  color: Colors.transparent,
                   height: 70,
                   padding: const EdgeInsets.all(5),
                   child: const IconRenderer(
