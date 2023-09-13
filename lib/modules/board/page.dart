@@ -240,7 +240,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                                   context,
                                   (useMobileLayout(context) && ref.read(boardFooterTabProvider) == 'photos')
                                       ? ref.read(boardHeaderTabProvider)
-                                      : 'CONTRAST'
+                                      : 'CONTRASTUS'
                               ),
                               color: Colors.black,
                               useShadow: false,

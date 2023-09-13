@@ -13,8 +13,6 @@ const double dialogHeight = 550;
 /// Renders a Qr code dialog for sharing the website
 class QrCodeDialog extends HookConsumerWidget {
 
-
-
   const QrCodeDialog({super.key});
 
   @override
@@ -32,7 +30,7 @@ class QrCodeDialog extends HookConsumerWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
                     children: [
-                      StyledText(text: FlutterI18n.translate(context, 'Share Contrast'), weight: FontWeight.bold),
+                      StyledText(text: FlutterI18n.translate(context, 'Share Contrastus'), weight: FontWeight.bold),
                       const Spacer(),
                       DefaultButton(
                           onClick: () => ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false),
