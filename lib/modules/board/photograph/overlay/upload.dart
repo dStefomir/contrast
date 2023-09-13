@@ -322,22 +322,22 @@ class UploadImageDialog extends HookConsumerWidget {
     return Form(
       key: _formKey,
       child: ShadowWidget(
-       offset: const Offset(0, 0),
-       blurRadius: 4,
-       child: Container(
-         color: Colors.white,
-         height: dialogHeight,
-         child: Column(
-           children: [
-             _renderDialogHeader(context, ref),
-             Padding(
-               padding: const EdgeInsets.all(10.0),
-               child: _renderDialogBody(context, ref, fileData),
-             ),
-             _renderDialogActions(context, ref),
-           ],
-         ),
-       ),
+        offset: const Offset(0, 0),
+        blurRadius: 4,
+        child: Container(
+          color: Colors.white,
+          height: dialogHeight,
+          child: Column(
+            children: [
+              _renderDialogHeader(context, ref),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: _renderDialogBody(context, ref, fileData),
+              ),
+              _renderDialogActions(context, ref),
+            ],
+          ),
+        ),
       )
     );
   }

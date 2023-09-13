@@ -21,109 +21,129 @@ class BoardPageFilter extends ConsumerWidget {
 
   /// Render mobile layout
   Widget _renderMobileLayout(BuildContext context, WidgetRef ref) => ShadowWidget(
+    key: const Key('HeaderMobileLayoutShadowWidget'),
     blurRadius: 2,
     offset: const Offset(3, 0),
     child: Container(
+      key: const Key('HeaderMobileLayoutContainer'),
       width: boardPadding,
       height: MediaQuery.of(context).size.height - boardPadding - (kIsWeb ? 0 : 60),
       color: Colors.white,
-      child: Stack(children: [
-        Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.black.withOpacity(0.10),
-                Colors.black.withOpacity(0.0),
-              ],
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                  color: Colors.transparent,
-                  height: 70,
-                  padding: const EdgeInsets.all(5),
-                  child: const IconRenderer(
-                    asset: 'signature.svg', 
-                    color: Colors.black,
-                    fit: BoxFit.scaleDown
-                  )
+      child: Stack(
+          key: const Key('HeaderMobileLayoutStack'),
+          children: [
+            Container(
+              key: const Key('HeaderMobileLayoutStackContainer'),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withOpacity(0.10),
+                    Colors.black.withOpacity(0.0),
+                  ],
+                ),
               ),
-              const Spacer(),
-              MenuButton(
-                  widgetKey: const Key('all'),
-                  iconPath: 'all.svg',
-                  tooltip: FlutterI18n.translate(context, 'All'),
-                  disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                  selected: ref.watch(boardHeaderTabProvider) == 'all',
-                  size: boardPadding,
-                  onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('all'))
-              ).translateOnPhotoHover,
-              MenuButton(
-                  widgetKey: const Key('landscape'),
-                  iconPath: 'landscape.svg',
-                  tooltip: FlutterI18n.translate(context, 'Landscape'),
-                  disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                  selected: ref.watch(boardHeaderTabProvider) == 'landscape',
-                  size: boardPadding,
-                  onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('landscape'))
-              ).translateOnPhotoHover,
-              MenuButton(
-                  widgetKey: const Key('portraits'),
-                  iconPath: 'portraits.svg',
-                  tooltip: FlutterI18n.translate(context, 'Portraits'),
-                  disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                  selected: ref.watch(boardHeaderTabProvider) == 'portraits',
-                  size: boardPadding,
-                  onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('portraits'))
-              ).translateOnPhotoHover,
-              MenuButton(
-                  widgetKey: const Key('street'),
-                  iconPath: 'street.svg',
-                  tooltip: FlutterI18n.translate(context, 'Street'),
-                  disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                  selected: ref.watch(boardHeaderTabProvider) == 'street',
-                  size: boardPadding,
-                  onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('street'))
-              ).translateOnPhotoHover,
-              MenuButton(
-                  widgetKey: const Key('other'),
-                  iconPath: 'dog.svg',
-                  tooltip: FlutterI18n.translate(context, 'Other'),
-                  disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                  selected: ref.watch(boardHeaderTabProvider) == 'other',
-                  size: boardPadding,
-                  onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('other'))
-              ).translateOnPhotoHover,
-            ],
-          ),
-        )
-      ]),
+            ),
+            Align(key: const Key('HeaderMobileLayoutStackAlignColumn'),
+              alignment: Alignment.topLeft,
+              child: Column(
+                key: const Key('HeaderMobileLayoutStackColumn'),
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                      key: const Key('HeaderMobileLayoutStackSignatureContainer'),
+                      color: Colors.transparent,
+                      height: 70,
+                      padding: const EdgeInsets.all(5),
+                      child: const IconRenderer(
+                          key: Key('HeaderMobileLayoutStackSignatureSvg'),
+                          asset: 'signature.svg',
+                          color: Colors.black,
+                          fit: BoxFit.scaleDown
+                      )
+                  ),
+                  const Spacer(key: Key('HeaderMobileLayoutStackAllSpacer')),
+                  MenuButton(
+                      widgetKey: const Key('all'),
+                      iconPath: 'all.svg',
+                      tooltip: FlutterI18n.translate(context, 'All'),
+                      disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                      selected: ref.watch(boardHeaderTabProvider) == 'all',
+                      size: boardPadding,
+                      onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('all'))
+                  ).translateOnPhotoHover,
+                  MenuButton(
+                      widgetKey: const Key('landscape'),
+                      iconPath: 'landscape.svg',
+                      tooltip: FlutterI18n.translate(context, 'Landscape'),
+                      disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                      selected: ref.watch(boardHeaderTabProvider) == 'landscape',
+                      size: boardPadding,
+                      onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('landscape'))
+                  ).translateOnPhotoHover,
+                  MenuButton(
+                      widgetKey: const Key('portraits'),
+                      iconPath: 'portraits.svg',
+                      tooltip: FlutterI18n.translate(context, 'Portraits'),
+                      disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                      selected: ref.watch(boardHeaderTabProvider) == 'portraits',
+                      size: boardPadding,
+                      onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('portraits'))
+                  ).translateOnPhotoHover,
+                  MenuButton(
+                      widgetKey: const Key('street'),
+                      iconPath: 'street.svg',
+                      tooltip: FlutterI18n.translate(context, 'Street'),
+                      disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                      selected: ref.watch(boardHeaderTabProvider) == 'street',
+                      size: boardPadding,
+                      onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('street'))
+                  ).translateOnPhotoHover,
+                  MenuButton(
+                      widgetKey: const Key('other'),
+                      iconPath: 'dog.svg',
+                      tooltip: FlutterI18n.translate(context, 'Other'),
+                      disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                      selected: ref.watch(boardHeaderTabProvider) == 'other',
+                      size: boardPadding,
+                      onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('other'))
+                  ).translateOnPhotoHover,
+                ],
+              ),
+            )
+          ]
+      ),
     ),
   );
 
   /// Render desktop layout
   Widget _renderDesktopLayout(BuildContext context, WidgetRef ref) => ShadowWidget(
+    key: const Key('HeaderDesktopLayoutShadowWidget'),
     offset: const Offset(0, 2),
     blurRadius: 2,
     child: Container(
+      key: const Key('HeaderDesktopLayoutContainer'),
       color: Colors.white,
       height: boardPadding,
       child: Stack(
+        key: const Key('HeaderDesktopLayoutStack'),
         children: [
-          IconRenderer(asset: 'background.svg', fit: BoxFit.fitWidth, width: double.infinity, color: Colors.black.withOpacity(0.05)),
+          IconRenderer(
+              key: const Key('HeaderDesktopLayoutStackBackgroundSvg'),
+              asset: 'background.svg',
+              fit: BoxFit.fitWidth,
+              width: double.infinity,
+              color: Colors.black.withOpacity(0.05)
+          ),
           Align(
+            key: const Key('HeaderDesktopLayoutStackAlign'),
             alignment: Alignment.center,
             child: Row(
+              key: const Key('HeaderDesktopLayoutRow'),
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Spacer(),
+                const Spacer(key: Key('HeaderDesktopLayoutAllSpacer')),
                 ContrastTab(
                     widgetKey: const Key('all'),
                     tabKey: 'all',
@@ -131,7 +151,7 @@ class BoardPageFilter extends ConsumerWidget {
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.watch(boardHeaderTabProvider) == 'all'
                 ).translateOnPhotoHover,
-                const Spacer(),
+                const Spacer(key: Key('HeaderDesktopLayoutLandscapeSpacer')),
                 ContrastTab(
                     widgetKey: const Key('landscape'),
                     tabKey: 'landscape',
@@ -139,7 +159,7 @@ class BoardPageFilter extends ConsumerWidget {
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'landscape'
                 ).translateOnPhotoHover,
-                const Spacer(),
+                const Spacer(key: Key('HeaderDesktopLayoutPortraitsSpacer')),
                 ContrastTab(
                     widgetKey: const Key('portraits'),
                     tabKey: 'portraits',
@@ -147,7 +167,7 @@ class BoardPageFilter extends ConsumerWidget {
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'portraits'
                 ).translateOnPhotoHover,
-                const Spacer(),
+                const Spacer(key: Key('HeaderDesktopLayoutStreetSpacer')),
                 ContrastTab(
                     widgetKey: const Key('street'),
                     tabKey: 'street',
@@ -155,7 +175,7 @@ class BoardPageFilter extends ConsumerWidget {
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'street'
                 ).translateOnPhotoHover,
-                const Spacer(),
+                const Spacer(key: Key('HeaderDesktopLayoutOtherSpacer')),
                 ContrastTab(
                     widgetKey: const Key('other'),
                     tabKey: 'other',
@@ -163,7 +183,7 @@ class BoardPageFilter extends ConsumerWidget {
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'other'
                 ).translateOnPhotoHover,
-                const Spacer(),
+                const Spacer(key: Key('HeaderDesktopLayoutEndSpacer')),
               ],
             ),
           ),

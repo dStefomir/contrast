@@ -32,6 +32,7 @@ class PhotographBoardPage extends HookConsumerWidget {
 
     if (Session().isLoggedIn()) {
       return FocusedMenuHolder(
+          key: const Key('PhotoFocusedMenu'),
           menuWidth: 300,
           blurSize: 5.0,
           menuItemExtent: 45,
@@ -85,12 +86,13 @@ class PhotographBoardPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => RestfulAnimatedDataView<ImageWrapper>(
+      key: const Key('PhotographDataView'),
       serviceProvider: photographServiceFetchProvider,
       loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
       itemsPerRow: 3,
       dimHeight: MediaQuery.of(context).size.height / 2.5,
       itemBuilder: (BuildContext context, int index, int dataLength, ImageWrapper wrapper) =>
-          LayoutBuilder(builder: (context, constraints) =>
+          LayoutBuilder(key: const Key('PhotographDataViewBuilder'), builder: (context, constraints) =>
               _renderPhoto(ref, context, wrapper, constraints)
           ),
       onRightKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('videos'),
@@ -103,9 +105,12 @@ class PhotographBoardPage extends HookConsumerWidget {
         });
       },
       listEmptyChild: Center(
+        key: const Key('PhotographDataViewCenterEmpty'),
         child: Padding(
+          key: const Key('PhotographDataViewCenterEmptyPadding'),
           padding: const EdgeInsets.all(15),
           child: StyledText(
+            key: const Key('PhotographDataViewCenterEmptyText'),
             text: FlutterI18n.translate(context, 'Nothing here so far'),
             color: Colors.black,
           ),

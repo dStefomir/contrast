@@ -39,22 +39,33 @@ class DeleteDialog<T> extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ShadowWidget(
-      offset: const Offset(0, 0),
+        key: const Key('DeleteDialogShadow'),
+        offset: const Offset(0, 0),
         blurRadius: 4,
         child: Container(
+          key: const Key('DeleteDialogTopContainer'),
           color: Colors.white,
           height: dialogHeight,
           child: Column(
+            key: const Key('DeleteDialogTopColumn'),
             children: [
               Column(
+                key: const Key('DeleteDialogInnerColumn'),
                 children: [
                   Padding(
+                    key: const Key('DeleteDialogColumnPadding'),
                     padding: const EdgeInsets.all(10.0),
                     child: Row(
+                        key: const Key('DeleteDialogColumnRow'),
                         children: [
-                          StyledText(text: FlutterI18n.translate(context, 'Warning'), weight: FontWeight.bold),
-                          const Spacer(),
+                          StyledText(
+                              key: const Key('DeleteDialogColumnRowText'),
+                              text: FlutterI18n.translate(context, 'Warning'),
+                              weight: FontWeight.bold
+                          ),
+                          const Spacer(key: Key('DeleteDialogColumnRowSpacer'),),
                           DefaultButton(
+                              key: const Key('DeleteDialogColumnRowButton'),
                               onClick: () {
                                 if(_isImage()) {
                                   ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
@@ -74,19 +85,31 @@ class DeleteDialog<T> extends HookConsumerWidget {
                 ],
               ),
               Padding(
+                key: const Key('DeleteDialogBodyPadding'),
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
+                  key: const Key('DeleteDialogBodyColumn'),
                   children: [
-                    StyledText(text: _isImage() ? FlutterI18n.translate(context, 'Delete this photo') : FlutterI18n.translate(context, 'Delete this video'), clip: false,),
-                    StyledText(text: _isImage() ? (data as ImageData).path! : (data as VideoData).path!, clip: false,),
+                    StyledText(
+                      key: const Key('DeleteDialogBodyColumnText'),
+                      text: _isImage() ? FlutterI18n.translate(context, 'Delete this photo') : FlutterI18n.translate(context, 'Delete this video'),
+                      clip: false,
+                    ),
+                    StyledText(
+                        key: const Key('DeleteDialogBodyTextPath'),
+                        text: _isImage() ? (data as ImageData).path! : (data as VideoData).path!,
+                        clip: false
+                    ),
                   ],
                 ),
               ),
               Row(
+                key: const Key('DeleteDialogBodyRow'),
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   OutlinedButton(
+                      key: const Key('DeleteDialogBodySubmitButton'),
                       style: ButtonStyle(
                           fixedSize: MaterialStateProperty.all(const Size(100, 30)),
                           backgroundColor: MaterialStateProperty.all(Colors.black),
@@ -94,11 +117,18 @@ class DeleteDialog<T> extends HookConsumerWidget {
                           foregroundColor: MaterialStateProperty.all(Colors.white),
                           textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
                       ),
-                      child: const Text("Yes"),
+                      child: Text(
+                          key: const Key('DeleteDialogBodySubmitButtonText'),
+                          FlutterI18n.translate(context, 'Yes')
+                      ),
                       onPressed: () => _onDelete(ref)
                   ),
-                  const SizedBox(width: 30,),
+                  const SizedBox(
+                      key: const Key('DeleteDialogBodyButtonSizedBox'),
+                      width: 30
+                  ),
                   OutlinedButton(
+                      key: const Key('DeleteDialogBodyCancelButton'),
                       style: ButtonStyle(
                           fixedSize: MaterialStateProperty.all(const Size(100, 30)),
                           backgroundColor: MaterialStateProperty.all(Colors.white),
@@ -106,7 +136,10 @@ class DeleteDialog<T> extends HookConsumerWidget {
                           foregroundColor: MaterialStateProperty.all(Colors.black),
                           textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.black))
                       ),
-                      child: Text(FlutterI18n.translate(context, 'No')),
+                      child: Text(
+                          key: const Key('DeleteDialogBodyCancelButtonText'),
+                          FlutterI18n.translate(context, 'No')
+                      ),
                       onPressed: () {
                         if(_isImage()) {
                           ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);

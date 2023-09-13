@@ -34,6 +34,7 @@ class VideoBoardPage extends HookConsumerWidget {
 
     if (Session().isLoggedIn()) {
       return FocusedMenuHolder(
+          key: const Key('VideoFocusedMenu'),
           menuWidth: 300,
           blurSize: 5.0,
           menuItemExtent: 45,
@@ -90,12 +91,14 @@ class VideoBoardPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => RestfulAnimatedDataView<VideoData>(
+      key: const Key('VideoDataView'),
       serviceProvider: videoServiceFetchProvider,
       loadPage: ref.read(videoBoardServiceProvider).getVideoBoard,
       itemsPerRow: 3,
       dimHeight: MediaQuery.of(context).size.height / 2.5,
-      itemBuilder: (BuildContext context, int index, int dataLength, VideoData wrapper) => LayoutBuilder(builder: (context, constraints) =>
-          _renderVideo(context, ref, wrapper, constraints)
+      itemBuilder: (BuildContext context, int index, int dataLength, VideoData wrapper) =>
+          LayoutBuilder(key: const Key('VideoDataViewBuilder'), builder: (context, constraints) =>
+              _renderVideo(context, ref, wrapper, constraints)
       ),
       onLeftKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('photos'),
       whenShouldAnimateGlass: (controller) {
@@ -106,11 +109,16 @@ class VideoBoardPage extends HookConsumerWidget {
           controller.forward();
         });
       },
-      listEmptyChild: Padding(
-        padding: const EdgeInsets.all(15),
-        child: StyledText(
-          text: FlutterI18n.translate(context, 'Nothing here so far'),
-          color: Colors.black,
+      listEmptyChild: Center(
+        key: const Key('VideoDataViewCenterEmpty'),
+        child: Padding(
+          key: const Key('VideoDataViewCenterEmptyPadding'),
+          padding: const EdgeInsets.all(15),
+          child: StyledText(
+            key: const Key('VideoDataViewCenterEmptyText'),
+            text: FlutterI18n.translate(context, 'Nothing here so far'),
+            color: Colors.black,
+          ),
         ),
       )
   );
