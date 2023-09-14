@@ -307,12 +307,18 @@ class BoardPageFooter extends HookConsumerWidget {
             child: Stack(
               key: const Key('FooterDesktopLayoutInnerStack'),
               children: [
-                IconRenderer(
-                    key: const Key('FooterDesktopLayoutBackgroundSvg'),
-                    asset: 'background.svg',
-                    fit: BoxFit.fitWidth,
-                    width: double.infinity,
-                    color: Colors.black.withOpacity(0.05)
+                Container(
+                  key: const Key('FooterDesktopLayoutBackgroundGradient'),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withOpacity(0.10),
+                        Colors.black.withOpacity(0.0),
+                      ],
+                    ),
+                  ),
                 ),
                 Align(
                   key: const Key('FooterDesktopLayoutStackInnerAlign'),

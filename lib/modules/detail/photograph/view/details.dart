@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import "package:universal_html/html.dart" as html;
 
@@ -124,6 +125,7 @@ class PhotographDetailsView extends HookConsumerWidget {
 
   /// Renders the photograph signature
   Widget _renderSignature(double maxHeight, String currentView) => SlideTransitionAnimation(
+      key: const Key('PhotographDetailsSignatureSlideAnimation'),
       duration: const Duration(milliseconds: 500),
       getStart: () => currentView == 'map.svg' ? const Offset(0, 1) : const Offset(0, 0),
       getEnd: () => currentView == 'map.svg' ? const Offset(0, 0) : const Offset(0, 1),
@@ -134,10 +136,13 @@ class PhotographDetailsView extends HookConsumerWidget {
         });
       },
       child: Padding(
+        key: const Key('PhotographDetailsSignaturePadding'),
         padding: const EdgeInsets.only(right: 15, bottom: 15),
         child: Align(
+          key: const Key('PhotographDetailsSignatureAlign'),
           alignment: Alignment.bottomRight,
           child: IconRenderer(
+            key: const Key('PhotographDetailsSignatureSvg'),
             asset: 'signature.svg',
             color: Colors.white,
             height: maxHeight / 10,
@@ -147,37 +152,47 @@ class PhotographDetailsView extends HookConsumerWidget {
   );
 
   /// Render the photograph title
-  Widget _renderPhotographTitle(BuildContext context, WidgetRef ref, int currentPhotographIndex) => Align(
-      alignment: Alignment.center,
-      child: FadeAnimation(
-        whenTo: (controller) => useValueChanged(currentPhotographIndex, (_, __) async {
-          controller.reset();
-          controller.forward();
-        }),
-        onCompleted: () => ref.read(photographTitleVisibilityProvider.notifier).setVisibility(false),
-        start: 1,
-        end: 0,
-        duration: const Duration(milliseconds: 1200),
-        child: StyledText(
-          text: images[currentPhotographIndex].comment != null
-              ? images[currentPhotographIndex].comment!
-              : '',
-          color: Colors.white,
-          useShadow: true,
-          fontSize: useMobileLayout(context) ? 25 : 62,
-          clip: false,
-          italic: true,
-          weight: FontWeight.w100,
-        ),
-      )
+  Widget _renderPhotographTitle(BuildContext context, WidgetRef ref, int currentPhotographIndex) => Padding(
+    key: const Key('PhotographDetailsTitlePadding'),
+    padding: const EdgeInsets.only(top: kIsWeb ? 0 : 60),
+    child: Align(
+        key: const Key('PhotographDetailsTitleAlign'),
+        alignment: Alignment.center,
+        child: FadeAnimation(
+          key: const Key('PhotographDetailsTitleFadeAnimation'),
+          whenTo: (controller) => useValueChanged(currentPhotographIndex, (_, __) async {
+            controller.reset();
+            controller.forward();
+          }),
+          onCompleted: () => ref.read(photographTitleVisibilityProvider.notifier).setVisibility(false),
+          start: 1,
+          end: 0,
+          duration: const Duration(milliseconds: 1200),
+          child: StyledText(
+            key: const Key('PhotographDetailsTitleText'),
+            text: images[currentPhotographIndex].comment != null
+                ? images[currentPhotographIndex].comment!
+                : '',
+            color: Colors.white,
+            useShadow: true,
+            fontSize: useMobileLayout(context) ? 25 : 62,
+            clip: false,
+            italic: true,
+            weight: FontWeight.w100,
+          ),
+        )
+    ),
   );
 
   /// Render the next photograph button
   Widget _renderNextBtn(WidgetRef ref, BuildContext context, PageController pageController, int currentPhotographIndex) => Padding(
+    key: const Key('PhotographDetailsNextButtonPadding'),
     padding: const EdgeInsets.all(5.0),
     child: Align(
+        key: const Key('PhotographDetailsNextButtonAlign'),
         alignment: Alignment.centerRight,
         child: DefaultButton(
+            key: const Key('PhotographDetailsNextButton'),
             onClick: () => _goToNextPhotograph(ref, pageController, currentPhotographIndex),
             color: Colors.white,
             tooltip: FlutterI18n.translate(context, 'Next photograph'),
@@ -189,10 +204,13 @@ class PhotographDetailsView extends HookConsumerWidget {
 
   /// Render the previous photograph button
   Widget _renderPreviousBtn(WidgetRef ref, BuildContext context, PageController pageController, int currentPhotographIndex) => Padding(
+    key: const Key('PhotographDetailsPreviousButtonPadding'),
     padding: const EdgeInsets.all(5.0),
     child: Align(
+        key: const Key('PhotographDetailsPreviousButtonAlign'),
         alignment: Alignment.centerLeft,
         child: DefaultButton(
+            key: const Key('PhotographDetailsPreviousButton'),
             onClick: () => _goToPreviousPhotograph(ref, pageController, currentPhotographIndex),
             color: Colors.white,
             tooltip: FlutterI18n.translate(context, 'Previous photograph'),
@@ -204,10 +222,13 @@ class PhotographDetailsView extends HookConsumerWidget {
 
   /// Render the go to previous page button
   Widget _renderGoBackBtn(BuildContext context) => Padding(
+    key: const Key('PhotographDetailsGoBackButtonPadding'),
     padding: const EdgeInsets.all(5.0),
     child: Align(
+        key: const Key('PhotographDetailsGoBackButtonAlign'),
         alignment: Alignment.topLeft,
         child: DefaultButton(
+            key: const Key('PhotographDetailsGoBackButton'),
             onClick: () => Modular.to.navigate('/'),
             color: Colors.white,
             tooltip: FlutterI18n.translate(context, 'Close'),
@@ -220,8 +241,10 @@ class PhotographDetailsView extends HookConsumerWidget {
   /// Renders the audio button
   Widget _renderAudioButton(BuildContext context, WidgetRef ref) =>
       Padding(
+        key: const Key('PhotographDetailsAudioButtonPadding'),
         padding: const EdgeInsets.only(left: 115.0, top: 5.0),
         child: DefaultButton(
+            key: const Key('PhotographDetailsAudioButton'),
             onClick: () async {
               if(audio.state != PlayerState.playing) {
                 await audio.play(AssetSource('background_music.mp3'), position: await audio.getCurrentPosition() ?? const Duration(seconds: 0), mode: PlayerMode.lowLatency);
@@ -241,8 +264,10 @@ class PhotographDetailsView extends HookConsumerWidget {
   /// Renders the share button
   Widget _renderShareButton(BuildContext context, int currentPhotographyIndex) =>
       Padding(
+        key: const Key('PhotographDetailsShareButtonPadding'),
         padding: const EdgeInsets.only(left: 60.0, top: 5.0),
         child: DefaultButton(
+            key: const Key('PhotographDetailsShareButton'),
             onClick: () => Clipboard.setData(
                 ClipboardData(text: 'https://www.dstefomir.eu/#/photos/details?id=${images[currentPhotographyIndex].id}&category=$category')
             ).then((value) => showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Copied to clipboard'))),
@@ -258,6 +283,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     final String iconAsset = ref.watch(photographDetailAssetProvider);
 
     return SlideTransitionAnimation(
+      key: const Key('PhotographDetailsButtonSlideAnimation'),
       duration: const Duration(milliseconds: 1000),
       getStart: () => _isAreCoordinatesValid(image.lat, image.lng) ? const Offset(0, -1) : const Offset(0, 0),
       getEnd: () => _isAreCoordinatesValid(image.lat, image.lng) ? const Offset(0, 0) : const Offset(0, -1),
@@ -268,10 +294,13 @@ class PhotographDetailsView extends HookConsumerWidget {
         });
       },
       child: Padding(
+        key: const Key('PhotographDetailsButtonPadding'),
         padding: const EdgeInsets.only(left: 170.0, top: 5.0),
         child: Align(
+            key: const Key('PhotographDetailsButtonAlign'),
             alignment: Alignment.topLeft,
             child: DefaultButton(
+                key: const Key('PhotographDetailsButton'),
                 onClick: () => _handlePhotographDetailsAction(
                     ref,
                     scrollController,
@@ -291,10 +320,14 @@ class PhotographDetailsView extends HookConsumerWidget {
   Widget _renderPhotoDetails(BuildContext context, double maxWidth, maxHeight, double? lat, double? lng) =>
       _isAreCoordinatesValid(lat, lng) ?
       SizedBox(
+          key: const Key('PhotographDetailsSizedBox'),
           width: maxWidth,
           height: maxHeight,
-          child: ContrastMap(mapInteraction: getRunningPlatform(context) == 'MOBILE' ? InteractiveFlag.pinchZoom : InteractiveFlag.all)
-      ) : const SizedBox.shrink();
+          child: ContrastMap(
+              key: const Key('PhotographDetailsMap'),
+              mapInteraction: getRunningPlatform(context) == 'MOBILE' ? InteractiveFlag.pinchZoom : InteractiveFlag.all
+          )
+      ) : const SizedBox.shrink(key: Key('PhotographDetailsMapNone'));
 
   /// Renders the photography gallery widget
   Widget _renderPhotographGallery(
@@ -307,17 +340,22 @@ class PhotographDetailsView extends HookConsumerWidget {
     final serviceProvider = ref.watch(photographDetailsServiceProvider);
 
     return RawKeyboardListener(
+      key: const Key('PhotographWidgetKeyboardListener'),
       autofocus: true,
       focusNode: useFocusNode(),
       onKey: (RawKeyEvent event) => _handleKeyEvent(event, ref, scrollController, pageController, currentPhotographIndex),
       child: PhotoViewGallery.builder(
+          key: const Key('PhotographWidgetGallery'),
           scrollPhysics: const BouncingScrollPhysics(),
           allowImplicitScrolling: true,
           backgroundDecoration: const BoxDecoration(color: Colors.transparent),
           loadingBuilder: (_, chunk) => Center(
+              key: const Key('PhotographWidgetGalleryLoadingCenter'),
               child: Padding(
+                key: const Key('PhotographWidgetGalleryLoadingPadding'),
                 padding: EdgeInsets.only(top: MediaQuery.of(context).size.height - 8),
                 child: LinearProgressIndicator(
+                  key: const Key('PhotographWidgetGalleryLoadingProgressIndicator'),
                   minHeight: 8,
                   backgroundColor: Colors.grey[300],
                   valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
@@ -327,6 +365,7 @@ class PhotographDetailsView extends HookConsumerWidget {
           ),
           builder: (BuildContext context, int index) {
             return PhotoViewGalleryPageOptions(
+              key: const Key('PhotographWidgetGalleryOptions'),
                 imageProvider: ExtendedNetworkImageProvider(serviceProvider.getPhotograph(image.path!)),
                 filterQuality: FilterQuality.high,
                 minScale: PhotoViewComputedScale.contained,
@@ -362,8 +401,10 @@ class PhotographDetailsView extends HookConsumerWidget {
       ImageData image,
       double maxWidth, maxHeight) =>
       Align(
+          key: const Key('PhotographWidgetAlign'),
           alignment: Alignment.center,
           child: FadeAnimation(
+              key: const Key('PhotographWidgetFadeAnimation'),
               start: 0,
               end: 1,
               whenTo: (controller) =>
@@ -372,12 +413,15 @@ class PhotographDetailsView extends HookConsumerWidget {
                     controller.forward();
                   }),
               child: SingleChildScrollView(
+                  key: const Key('PhotographWidgetScrollView'),
                   controller: scrollController,
                   physics: const NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   child: Column(
+                    key: const Key('PhotographWidgetColumn'),
                     children: [
                       SizedBox(
+                          key: const Key('PhotographWidgetSizedBox'),
                           width: maxWidth,
                           height: maxHeight,
                           child: _renderPhotographGallery(context, ref, scrollController, pageController, currentPhotographIndex, image)
@@ -401,10 +445,19 @@ class PhotographDetailsView extends HookConsumerWidget {
     final double maxHeight = MediaQuery.of(context).size.height;
 
     return Stack(
+        key: const Key('PhotographDetailsStack'),
         children: [
-          IconRenderer(asset: 'background.svg', fit: BoxFit.cover, width: double.infinity, height: double.infinity, color: Colors.white.withOpacity(0.05)),
+          IconRenderer(
+              key: const Key('PhotographDetailsStackBackgroundSvg'),
+              asset: 'background.svg',
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+              color: Colors.white.withOpacity(0.05)
+          ),
           getRunningPlatform(context) == 'MOBILE' ?
           GestureDetector(
+              key: const Key('PhotographDetailsStackGesture'),
               onVerticalDragUpdate: (details) {
                 const sensitivity = 2000.0;
                 final deltaY = details.delta.dy * sensitivity;
@@ -427,14 +480,17 @@ class PhotographDetailsView extends HookConsumerWidget {
           _renderShareButton(context, currentPhotographIndex),
           _renderGoBackBtn(context),
           Visibility(
+              key: const Key('PhotographDetailsPreviousVisibility'),
               visible: currentPhotographIndex != 0 && !useMobileLayout(context),
               child: _renderPreviousBtn(ref, context, pageController, currentPhotographIndex)
           ),
           Visibility(
+              key: const Key('PhotographDetailsNextVisibility'),
               visible: currentPhotographIndex != images.length - 1 && !useMobileLayout(context),
               child: _renderNextBtn(ref, context, pageController, currentPhotographIndex)
           ),
           Visibility(
+              key: const Key('PhotographDetailsTitleVisibility'),
               visible: photographTitleVisibility,
               child: _renderPhotographTitle(context, ref, currentPhotographIndex)
           ),

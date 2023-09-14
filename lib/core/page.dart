@@ -1,7 +1,6 @@
 import 'package:contrast/common/widgets/page.dart';
 import 'package:contrast/core/provider.dart';
 import 'package:contrast/modules/login/overlay/cookie.dart';
-import 'package:contrast/utils/device.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -48,12 +47,15 @@ class CorePage extends HookConsumerWidget {
   /// Renders the default page widget
   Widget _renderDefaultPage(BuildContext context, WidgetRef ref) => MainScaffold(
     body: FutureBuilder<SharedPreferences>(
+        key: const Key('CorePageFutureBuilder'),
         future: SharedPreferences.getInstance(),
         builder: (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
           final List<Widget> children = [
             kIsWeb ? render() : BackgroundPage(
+              key: const Key('CorePageBackground'),
               color: Colors.black,
               child: SafeArea(
+                key: const Key('CorePageSafeArea'),
                 bottom: false,
                 child: render(),
               ),

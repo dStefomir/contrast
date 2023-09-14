@@ -69,6 +69,7 @@ class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
     final dataProvider = ref.watch(fetchBoardProvider);
 
     return BackgroundPage(
+      key: const Key('PhotographDetailsBackground'),
       color: Colors.black,
       child: dataProvider.when(
           data: (data) {
@@ -84,17 +85,31 @@ class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
               }
             });
 
-            return PhotographDetailsView(images: data, photoIndex: photoIndex, category: widget.category, audio: player);
+            return PhotographDetailsView(
+                key: const Key('PhotographDetailsPage'),
+                images: data,
+                photoIndex: photoIndex,
+                category: widget.category,
+                audio: player
+            );
           },
           error: (error, stackTrace) => Center(
+              key: const Key('PhotographDetailsCenterError'),
               child: StyledText(
+                key: const Key('PhotographDetailsCenterErrorText'),
                 text: error.toString(),
                 color: Colors.white,
                 weight: FontWeight.bold,
                 clip: false,
               )
           ),
-          loading: () => const LoadingIndicator(color: Colors.white)
+          loading: () => const Center(
+            key: Key('PhotographDetailsCenterLoading'),
+            child: LoadingIndicator(
+                key: Key('PhotographDetailsCenterLoadingIndicator'),
+                color: Colors.white
+            ),
+          )
       ),
     );
   }

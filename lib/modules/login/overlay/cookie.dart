@@ -14,22 +14,28 @@ class CookieWarningDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       Align(
+        key: const Key('CookieDialogAlign'),
         alignment: FractionalOffset.bottomLeft,
         child: Container(
+          key: const Key('CookieDialogFormContainer'),
           margin: EdgeInsets.only(
               left: useMobileLayout(context) ? 0 : 10.0,
               bottom: useMobileLayout(context) ? 0 : 10.0
           ),
           child: Material(
+            key: const Key('CookieDialogMaterial'),
             elevation: 18.0,
             borderRadius: BorderRadius.circular(5),
             child: Container(
+              key: const Key('CookieDialogColumnContainer'),
               padding: const EdgeInsets.all(10),
               child: Column(
+                key: const Key('CookieDialogColumn'),
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   StyledText(
+                    key: const Key('CookieDialogTitleText'),
                     text: FlutterI18n.translate(context, 'Cookie Warning'),
                     color: Colors.black,
                     useShadow: false,
@@ -37,6 +43,7 @@ class CookieWarningDialog extends StatelessWidget {
                     weight: FontWeight.bold,
                   ),
                   StyledText(
+                    key: const Key('CookieDialogBodyText'),
                     text: FlutterI18n.translate(context, 'This website uses cookies to ensure you get the best experience'),
                     color: Colors.black,
                     useShadow: false,
@@ -46,7 +53,7 @@ class CookieWarningDialog extends StatelessWidget {
                   ),
                   const SizedBox(height: 10.0),
                   NormalButton(
-                      widgetKey: const Key('Submit coockie'),
+                      widgetKey: const Key('Submit cookie'),
                       onClick: () => onSubmit(),
                       text: FlutterI18n.translate(context, 'Alright')
                   )

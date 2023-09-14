@@ -27,13 +27,17 @@ class UploadVideoDialog extends HookConsumerWidget {
     final bool isLoading = ref.watch(loadingProvider);
 
     return OutlinedButton(
+        key: const Key('UploadVideoDialogSubmitButton'),
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.black),
             elevation: MaterialStateProperty.all(2),
             foregroundColor: MaterialStateProperty.all(Colors.white),
             textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
         ),
-        child: Text(FlutterI18n.translate(context, 'Submit')),
+        child: Text(
+            key: const Key('UploadVideoDialogSubmitButtonText'),
+            FlutterI18n.translate(context, 'Submit')
+        ),
         onPressed: () async {
           final form = _formKey.currentState;
           if (!isLoading && (form != null && form.validate())) {
@@ -59,9 +63,11 @@ class UploadVideoDialog extends HookConsumerWidget {
 
     return isLoading ?
     const Center(
+        key: Key('UploadVideoDialogBodyCenter'),
       child: Padding(
+          key: Key('UploadVideoDialogBodyCenterPadding'),
         padding: EdgeInsets.all(25),
-        child: LoadingIndicator()
+        child: LoadingIndicator(key: Key('UploadVideoDialogBodyCenterLoadingIndicator'),)
       )
     ) :
     SimpleInput(
@@ -76,6 +82,7 @@ class UploadVideoDialog extends HookConsumerWidget {
 
   /// Renders the dialog body
   Widget _renderDialogBody(BuildContext context, WidgetRef ref) => Column(
+    key: const Key('UploadVideoDialogBodyColumn'),
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -95,24 +102,32 @@ class UploadVideoDialog extends HookConsumerWidget {
           return null;
           },
       ),
-      const SizedBox(height: 20),
+      const SizedBox(
+          key: Key('UploadVideoDialogBodySizedBox'),
+          height: 20
+      ),
       _renderLoadingIndicator(context, ref)
     ],
   );
 
   /// Renders the dialog header
   Widget _renderDialogHeader(BuildContext context, WidgetRef ref) => Column(
+    key: const Key('UploadVideoDialogHeaderColumn'),
     children: [
       Padding(
+        key: const Key('UploadVideoDialogHeaderPadding'),
         padding: const EdgeInsets.all(10.0),
         child: Row(
+            key: const Key('UploadVideoDialogHeaderRow'),
             children: [
               StyledText(
+                  key: const Key('UploadVideoDialogHeaderTitleText'),
                   text: data != null ? FlutterI18n.translate(context, 'Edit Video') : FlutterI18n.translate(context, 'Upload Video'),
                   weight: FontWeight.bold
               ),
-              const Spacer(),
+              const Spacer(key: Key('UploadVideoDialogHeaderSpacer')),
               DefaultButton(
+                  key: const Key('UploadVideoDialogHeaderCloseButton'),
                   onClick: () {
                     if(data != null) {
                       ref.read(overlayVisibilityProvider(const Key("edit_video")).notifier).setOverlayVisibility(false);
@@ -128,7 +143,10 @@ class UploadVideoDialog extends HookConsumerWidget {
             ]
         ),
       ),
-      const Divider(color: Colors.black,)
+      const Divider(
+        key: Key('UploadVideoDialogHeaderDivider'),
+        color: Colors.black
+      )
     ],
   );
 
@@ -137,15 +155,19 @@ class UploadVideoDialog extends HookConsumerWidget {
       Form(
         key: _formKey,
         child: ShadowWidget(
+          key: const Key('UploadVideoDialogShadow'),
           offset: const Offset(0, 0),
           blurRadius: 4,
           child: Container(
+            key: const Key('UploadVideoDialogFormContainer'),
             color: Colors.white,
             height: dialogHeight,
             child: Column(
+              key: const Key('UploadVideoDialogFormColumn'),
               children: [
                 _renderDialogHeader(context, ref),
                 Padding(
+                  key: const Key('UploadVideoDialogBodyPadding'),
                   padding: const EdgeInsets.all(10.0),
                   child: _renderDialogBody(context, ref),
                 ),

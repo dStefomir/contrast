@@ -62,6 +62,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
   /// Renders the share button
   Widget _renderShareButton() =>
       DefaultButton(
+          key: const Key('VideoDetailsShareButton'),
           onClick: () => Clipboard.setData(
               ClipboardData(text: 'https://www.dstefomir.eu/#/videos/details/${widget.path}')
           ).then((value) => showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Copied to clipboard'))),
@@ -74,6 +75,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
   /// Renders the back button
   Widget _renderBackButton(BuildContext context) =>
       DefaultButton(
+          key: const Key('VideoDetailsBackButton'),
           onClick: () => Modular.to.navigate('/'),
           color: Colors.white,
           tooltip: FlutterI18n.translate(context, 'Close'),
@@ -84,6 +86,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
   @override
   Widget build(BuildContext context) =>
       RawKeyboardListener(
+        key: const Key('VideoDetailsKeyboardListener'),
         autofocus: true,
         focusNode: useFocusNode(),
         onKey: (RawKeyEvent event) {
@@ -91,30 +94,39 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
             Modular.to.navigate('/');
           }},
         child: LayoutBuilder(
+            key: const Key('VideoDetailsLayoutBuilder'),
             builder: (context, constraints) => BackgroundPage(
+                key: const Key('VideoDetailsBackgroundPage'),
                 color: Colors.black,
                 child: YoutubePlayerScaffold(
+                  key: const Key('VideoDetailsYoutubeScaffold'),
                   controller: _controller,
                   aspectRatio: 16 / 9,
                   builder: (context, player) =>
                       Stack(
+                        key: const Key('VideoDetailsStack'),
                         alignment: Alignment.center,
                         children: [
                           Align(
+                            key: const Key('VideoDetailsAlignBack'),
                             alignment: Alignment.topLeft,
                             child: Padding(
+                              key: const Key('VideoDetailsAlignBackPadding'),
                               padding: const EdgeInsets.all(5.0),
                               child: _renderBackButton(context),
                             ),
                           ),
                           Align(
+                            key: const Key('VideoDetailsAlignShare'),
                             alignment: Alignment.topLeft,
                             child: Padding(
+                              key: const Key('VideoDetailsAlignSharePadding'),
                               padding: const EdgeInsets.only(left: 60.0, top: 5.0,),
                               child: _renderShareButton(),
                             ),
                           ),
                           SizedBox(
+                              key: const Key('VideoDetailsSizedBoxPlayer'),
                               width: constraints.maxWidth,
                               height: constraints.maxHeight - 130,
                               child: player
