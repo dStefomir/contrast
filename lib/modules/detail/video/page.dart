@@ -51,12 +51,20 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       params: const YoutubePlayerParams(
           showFullscreenButton: true, showControls: true),
     );
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
   }
 
   @override
   void dispose() {
     super.dispose();
     _controller.close();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
   }
 
   /// Renders the share button

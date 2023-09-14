@@ -80,6 +80,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       MaterialApp.router(
+          debugShowCheckedModeBanner: false,
           title: "Contrast",
           routeInformationParser: Modular.routeInformationParser,
           routerDelegate: Modular.routerDelegate,
