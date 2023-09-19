@@ -23,7 +23,7 @@ const double dialogHeight = 550;
 /// Renders a delete item dialog
 class CommentDialog extends HookConsumerWidget {
   /// Form key
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  static GlobalKey<FormState> formKey = GlobalKey<FormState>();
   /// Id of the selected photograph
   final int photographId;
 
