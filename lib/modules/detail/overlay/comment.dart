@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/input.dart';
 import 'package:contrast/common/widgets/load.dart';
@@ -159,7 +161,7 @@ class CommentDialog extends HookConsumerWidget {
                               Row(
                                 children: [
                                   StyledText(
-                                    text: '${apiData[index].deviceName}',
+                                    text: utf8.decode(apiData[index].deviceName!.runes.toList()),
                                     fontSize: 15,
                                     weight: FontWeight.bold,
                                     clip: false,
@@ -211,7 +213,7 @@ class CommentDialog extends HookConsumerWidget {
                               Padding(
                                 padding: const EdgeInsets.only(top: 5),
                                 child: StyledText(
-                                  text: apiData[index].comment!,
+                                  text: utf8.decode(apiData[index].comment!.runes.toList()),
                                   fontSize: 13,
                                   clip: false,
                                   align: TextAlign.start,
