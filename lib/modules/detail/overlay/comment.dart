@@ -34,7 +34,7 @@ class CommentDialog extends HookConsumerWidget {
     final userNameController = useTextEditingController();
     final commentController = useTextEditingController();
     /// Rating controller
-    final ratingController = useValueNotifier<double>(0);
+    final ratingController = useState(0.0);
 
     // Fetch the comments of a photo when the dialog is opened.
     useEffect(() {
@@ -100,7 +100,7 @@ class CommentDialog extends HookConsumerWidget {
                     suffixWidget: Center(
                       widthFactor: 1.5,
                       child: RatingBar.builder(
-                        initialRating: 0,
+                        initialRating: ratingController.value,
                         minRating: 0,
                         wrapAlignment: WrapAlignment.center,
                         direction: Axis.horizontal,
@@ -147,7 +147,7 @@ class CommentDialog extends HookConsumerWidget {
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
                           key: const Key('CommentDialogListPadding'),
-                          padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
+                          padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
                           child: Column(
                             key: const Key('CommentDialogListColumn'),
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -184,28 +184,37 @@ class CommentDialog extends HookConsumerWidget {
                                       icon: 'close.svg'
                                   ),
                               ],),
-                              if(apiData[index].rating! > 0) RatingBar.builder(
-                                initialRating: apiData[index].rating!,
-                                minRating: 0,
-                                direction: Axis.horizontal,
-                                allowHalfRating: false,
-                                ignoreGestures: true,
-                                itemSize: 25,
-                                glow: true,
-                                itemCount: 5,
-                                itemBuilder: (context, _) => const Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
+                              if(apiData[index].rating! > 0) Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: Center(
+                                  widthFactor: 1,
+                                  child: RatingBar.builder(
+                                    initialRating: apiData[index].rating!,
+                                    minRating: 0,
+                                    direction: Axis.horizontal,
+                                    allowHalfRating: false,
+                                    ignoreGestures: true,
+                                    itemSize: 25,
+                                    glow: true,
+                                    itemCount: 5,
+                                    itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (rating) {},
+                                  ),
                                 ),
-                                onRatingUpdate: (rating) {},
                               ),
-                              StyledText(
-                                text: apiData[index].comment!,
-                                fontSize: 13,
-                                clip: false,
-                                align: TextAlign.start,
-                                color: Colors.black87,
-                                padding: 0,
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: StyledText(
+                                  text: apiData[index].comment!,
+                                  fontSize: 13,
+                                  clip: false,
+                                  align: TextAlign.start,
+                                  color: Colors.black87,
+                                  padding: 0,
+                                ),
                               ),
                             ],
                           ),
