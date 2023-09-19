@@ -1,5 +1,6 @@
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/input.dart';
+import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/snack.dart';
 import 'package:contrast/common/widgets/text.dart';
@@ -35,6 +36,8 @@ class CommentDialog extends HookConsumerWidget {
     final commentController = useTextEditingController();
     /// Rating controller
     final ratingController = useState(0.0);
+    /// Loading controller
+    final loading = useState(false);
 
     // Fetch the comments of a photo when the dialog is opened.
     useEffect(() {
@@ -240,7 +243,7 @@ class CommentDialog extends HookConsumerWidget {
                   },
                   suffixWidget: Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: DefaultButton(
+                    child: !loading.value ? DefaultButton(
                         key: const Key('CommentInputSubmitButton'),
                         onClick: () async {
                           final form = formKey.currentState;
@@ -248,12 +251,14 @@ class CommentDialog extends HookConsumerWidget {
                           final String comment = commentController.text;
                           final double rating = ratingController.value;
                           if (form!.validate() && comment.isNotEmpty) {
+                            loading.value = true;
                             ref.read(photographCommentsServiceProvider).postComment(deviceName, photographId, comment, rating).then((value) {
                               ref.read(commentsDataViewProvider.notifier).addItem(value);
                               SharedPreferences.getInstance().then((value) {
                                 value.setString('deviceName', deviceName);
                                 commentController.text = '';
                                 ratingController.value = 0;
+                                loading.value = false;
                                 showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment posted'));
                               });
                             });
@@ -262,7 +267,7 @@ class CommentDialog extends HookConsumerWidget {
                         color: Colors.white.withOpacity(0.3),
                         borderColor: Colors.white,
                         icon: 'navigate_next.svg'
-                    ),
+                    ) : const LoadingIndicator(color: Colors.white),
                   ),
                 )
               ],
