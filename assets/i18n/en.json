@@ -70,5 +70,15 @@
   "Stop music": "Stop music",
   "Play music": "Play music",
   "Copied to clipboard": "Copied to clipboard",
-  "Shot location": "Shot location"
+  "Shot location": "Shot location",
+  "Comments": "Comments",
+  "From who": "From who",
+  "Your name": "Your name",
+  "This name cannot be used": "This name cannot be used",
+  "Comment": "Comment",
+  "Type what do you think": "Type what do you think",
+  "Comment posted": "Comment posted",
+  "The comment is more than 1000 characters": "The comment is more than 1000 characters",
+  "Delete comment": "Delete comment",
+  "Comment was deleted successfully": "Comment was deleted successfully"
 }

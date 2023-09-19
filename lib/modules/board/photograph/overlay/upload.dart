@@ -29,7 +29,7 @@ class UploadImageDialog extends HookConsumerWidget {
   /// Existing image data
   final ImageData? data;
   /// Function which updates the board
-  final void Function(ImageWrapper) onSubmit;
+  final void Function(ImageBoardWrapper) onSubmit;
   /// Form key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -105,7 +105,7 @@ class UploadImageDialog extends HookConsumerWidget {
                 if (data != null) {
                   ref.read(uploadPhotographProvider.notifier).editFile(data!, selectedCategory, selectedLat, selectedLng).then((value) {
                     ref.read(loadingProvider.notifier).setLoading(false);
-                    onSubmit(ImageWrapper(image: value, metadata: ImageMetaData()));
+                    onSubmit(ImageBoardWrapper(image: value, metadata: ImageMetaData()));
                   });
                 } else {
                   ref.read(uploadPhotographProvider.notifier).postFile(selectedCategory, selectedLat, selectedLng).then((image) {
@@ -353,7 +353,7 @@ class UploadImageDialog extends HookConsumerWidget {
                     }
                   },
                   tooltip: FlutterI18n.translate(context, 'Close'),
-                  color: Colors.black,
+                  color: Colors.white,
                   borderColor: Colors.white,
                   icon: 'close.svg'
               ),

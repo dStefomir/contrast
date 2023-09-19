@@ -1,10 +1,9 @@
+import 'package:contrast/modules/board/provider.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:contrast/common/widgets/page.dart';
-
 import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/map/provider.dart';
 import 'package:contrast/common/widgets/text.dart';
-import 'package:contrast/model/image_data.dart';
 import 'package:contrast/modules/detail/photograph/provider.dart';
 import 'package:contrast/modules/detail/photograph/view/details.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -76,12 +75,11 @@ class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
             final int photoIndex = data.indexWhere((element) => element.id == widget.id);
             // Photograph geo providers has to be initialized with with geo data if there is any.
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              final ImageData photograph = data[photoIndex];
-              if (photograph.lat != null) {
-                ref.read(mapLatProvider.notifier).setCurrentLat(photograph.lat!);
+              if (data[photoIndex].lat != null) {
+                ref.read(mapLatProvider.notifier).setCurrentLat(data[photoIndex].lat!);
               }
-              if (photograph.lng != null) {
-                ref.read(mapLngProvider.notifier).setCurrentLng(photograph.lng!);
+              if (data[photoIndex].lng != null) {
+                ref.read(mapLngProvider.notifier).setCurrentLng(data[photoIndex].lng!);
               }
             });
 

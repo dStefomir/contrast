@@ -5,6 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class SimpleInput extends StatefulHookConsumerWidget {
   /// Key of the widget
   final Key widgetKey;
+  /// Simple input controller
+  final TextEditingController? controller;
   /// Simple input controller`s text
   final String? controllerText;
   /// Label text for the text input
@@ -13,24 +15,31 @@ class SimpleInput extends StatefulHookConsumerWidget {
   final String hint;
   /// Prefix icon widget
   final IconData? prefixIcon;
+  /// Sufix widget
+  final Widget? suffixWidget;
   /// Is the input widget a password field
   final bool password;
   /// Called when text changes
   final String Function(String) onChange;
   /// Lines allowed in the text input
   final int maxLines;
+  /// Color of the background of the simple input field
+  final Color backgroundColor;
   /// Validator function for the text input
   final String? Function(String?)? validator;
 
   const SimpleInput({
     required this.widgetKey,
     required this.onChange,
+    this.controller,
     this.controllerText,
     this.labelText = '',
     this.hint = '',
     this.prefixIcon,
+    this.suffixWidget,
     this.password = false,
     this.maxLines = 1,
+    this.backgroundColor = Colors.white,
     this.validator
   }) : super(key: widgetKey);
 
@@ -44,27 +53,33 @@ class SimpleInputState extends ConsumerState<SimpleInput> {
 
   @override
   void initState() {
-    _controller = TextEditingController(text: widget.controllerText ?? '');
-    _controller.addListener(() => widget.onChange(_controller.text));
+    if(widget.controller == null) {
+      _controller = TextEditingController(text: widget.controllerText ?? '');
+      _controller.addListener(() => widget.onChange(_controller.text));
+    }
     super.initState();
   }
 
   @override
   void dispose() {
-    _controller.removeListener(() => widget.onChange(_controller.text));
-    _controller.dispose();
+    if(widget.controller == null) {
+      _controller.removeListener(() => widget.onChange(_controller.text));
+      _controller.dispose();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) => TextFormField(
-      controller: _controller,
+      controller: widget.controller ?? _controller,
       obscureText: widget.password,
       maxLines: widget.maxLines,
       decoration: InputDecoration(
         prefixIcon: Icon(widget.prefixIcon, color: Colors.black,),
+        suffixIcon: widget.suffixWidget,
         labelText: widget.labelText,
-        hintText: widget.hint
+        hintText: widget.hint,
+        fillColor: widget.backgroundColor
       ),
       validator: widget.validator
   );

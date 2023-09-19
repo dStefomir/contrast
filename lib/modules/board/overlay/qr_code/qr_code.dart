@@ -46,7 +46,7 @@ class QrCodeDialog extends HookConsumerWidget {
                           key: const Key('QrCodeDialogHeaderCloseButton'),
                           onClick: () => ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false),
                           tooltip: FlutterI18n.translate(context, 'Close'),
-                          color: Colors.black,
+                          color: Colors.white,
                           borderColor: Colors.white,
                           icon: 'close.svg'
                       ),

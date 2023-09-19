@@ -7,9 +7,9 @@ import 'package:path/path.dart' as path_lib;
 /// Proxy for the restfull apis
 class Proxy {
   /// Url of the back-end
-  static const String _host = 'https://www.dstefomir.eu/api';
-  // static const String _host = 'http://127.0.0.1:8080';
-  // static const String host = 'http://192.168.100.8:8080';
+  // static const String _host = 'https://www.dstefomir.eu/api';
+  static const String _host = 'http://127.0.0.1:8080';
+  // static const String _host = 'http://192.168.100.8:8080';
 
   /// JWT token
   final String? token;

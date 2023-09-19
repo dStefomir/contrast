@@ -13,12 +13,12 @@ final photographyBoardServiceProvider = Provider<PhotographBoardService>((ref) =
 /// Board page services
 class PhotographBoardService {
   /// Fetch the board images with selected filter
-  Future<PagedList<ImageWrapper>> getImageBoard(int page, String selectedFilter) async {
+  Future<PagedList<ImageBoardWrapper>> getImageBoard(int page, String selectedFilter) async {
     final result = await Session.proxy.get('/images/all?page=$page&category=$selectedFilter');
 
     return isolate.compute((response) {
-      final List<ImageWrapper> data = [];
-      result["content"].forEach((e) => data.add(ImageWrapper.fromJson(e)));
+      final List<ImageBoardWrapper> data = [];
+      result["content"].forEach((e) => data.add(ImageBoardWrapper.fromJson(e)));
 
       return PagedList(data, result["totalElements"], result["totalPages"]);
     }, result);
@@ -27,7 +27,6 @@ class PhotographBoardService {
   /// Fetch the board images without any filters
   Future<List<ImageData>> getImageBoardNonFiltered(String category) async {
     final result = await Session.proxy.get('/images/all_non_filtered?category=$category');
-
     return isolate.compute((response) {
       final List<ImageData> data = [];
       result.forEach((e) => data.add(ImageData.fromJson(e)));
@@ -48,7 +47,7 @@ class PhotographBoardService {
   }
 
   /// Upload an image
-  Future<ImageWrapper> uploadImage({
+  Future<ImageBoardWrapper> uploadImage({
     required bool isLandscape,
     required bool isRect,
     required String comment,
@@ -64,13 +63,13 @@ class PhotographBoardService {
           '/files/upload_image?is_landscape=$isLandscape&is_rect=$isRect&comment=$comment&category=$category&screen_width=$screenWidth&screen_height=$screenHeight&lat=$lat&lng=$lng',
           file: file
       );
-      return isolate.compute((response) => ImageWrapper.fromJson(result), result);
+      return isolate.compute((response) => ImageBoardWrapper.fromJson(result), result);
     } else {
       final result = await Session.proxy.postFile(
           '/files/upload_image?is_landscape=$isLandscape&is_rect=$isRect&comment=$comment&category=$category&screen_width=$screenWidth&screen_height=$screenHeight',
           file: file
       );
-      return isolate.compute((response) => ImageWrapper.fromJson(result), result);
+      return isolate.compute((response) => ImageBoardWrapper.fromJson(result), result);
     }
   }
 

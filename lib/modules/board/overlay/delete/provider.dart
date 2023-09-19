@@ -2,7 +2,6 @@ import 'package:contrast/model/image_data.dart';
 import 'package:contrast/model/video_data.dart';
 import 'package:contrast/modules/board/photograph/service.dart';
 import 'package:contrast/modules/board/video/service.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Provider for deleting entries

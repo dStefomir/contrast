@@ -26,7 +26,7 @@ class PhotographBoardPage extends HookConsumerWidget {
   const PhotographBoardPage({super.key, required this.onUserAction});
 
   /// Renders a photograph
-  Widget _renderPhoto(WidgetRef ref, BuildContext context, ImageWrapper wrapper, BoxConstraints constraints) {
+  Widget _renderPhoto(WidgetRef ref, BuildContext context, ImageBoardWrapper wrapper, BoxConstraints constraints) {
     final String selectedFilter = ref.read(boardHeaderTabProvider);
     final serviceProvider = ref.read(photographyBoardServiceProvider);
 
@@ -85,13 +85,13 @@ class PhotographBoardPage extends HookConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => RestfulAnimatedDataView<ImageWrapper>(
+  Widget build(BuildContext context, WidgetRef ref) => RestfulAnimatedDataView<ImageBoardWrapper>(
       key: const Key('PhotographDataView'),
       serviceProvider: photographServiceFetchProvider,
       loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
       itemsPerRow: 3,
       dimHeight: MediaQuery.of(context).size.height / 2.5,
-      itemBuilder: (BuildContext context, int index, int dataLength, ImageWrapper wrapper) =>
+      itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper) =>
           LayoutBuilder(key: const Key('PhotographDataViewBuilder'), builder: (context, constraints) =>
               _renderPhoto(ref, context, wrapper, constraints)
           ),

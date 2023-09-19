@@ -1,16 +1,31 @@
+
+import 'package:contrast/model/image_comments.dart';
 import 'package:contrast/model/image_meta_data.dart';
 
+/// Image wrapper. Contains the photograph and its comments
+class ImageDetailWrapper {
+  final ImageData image;
+  final List<ImageCommentsData> comments;
+  
+  ImageDetailWrapper({required this.image, required this.comments});
+  
+  factory ImageDetailWrapper.fromJson(Map<String, dynamic> json) => ImageDetailWrapper(
+      image: ImageData.fromJson(json['image']),
+      comments: (json['comments'] as List).map((e) => ImageCommentsData.fromJson(e)).toList()
+  );
+}
+
 /// Image wrapper. Contains the photograph and its meta details
-class ImageWrapper {
+class ImageBoardWrapper {
   final ImageData image;
   final ImageMetaData metadata;
 
-  ImageWrapper({
+  ImageBoardWrapper({
     required this.image,
-    required this.metadata
+    required this.metadata,
 });
 
-  factory ImageWrapper.fromJson(List<dynamic> json) => ImageWrapper(
+  factory ImageBoardWrapper.fromJson(List<dynamic> json) => ImageBoardWrapper(
     image: ImageData.fromJson(json[0]),
     metadata: ImageMetaData.fromJson(json[1])
   );

@@ -1,4 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:contrast/common/widgets/blur.dart';
+import 'package:contrast/modules/board/provider.dart';
+import 'package:contrast/modules/detail/overlay/comment.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import "package:universal_html/html.dart" as html;
@@ -90,6 +93,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     if (currentPhotographIndex >= images.length) {
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(images.length - 1);
     }
+    ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(false);
   }
 
   /// Switches to the previous photograph if there is such
@@ -104,6 +108,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     if (currentPhotographIndex < 0) {
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(0);
     }
+    ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(false);
   }
 
   // Handles the key events from the Focus widget and updates the page
@@ -114,6 +119,7 @@ class PhotographDetailsView extends HookConsumerWidget {
       } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
         _goToNextPhotograph(ref, pageController, currentPhotographIndex);
       } else if (event.logicalKey == LogicalKeyboardKey.escape) {
+        ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(false);
         Modular.to.navigate('/');
       } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
         _handlePhotographDetailsAction(ref, scrollController, scrollController.position.maxScrollExtent);
@@ -221,7 +227,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   );
 
   /// Render the go to previous page button
-  Widget _renderGoBackBtn(BuildContext context) => Padding(
+  Widget _renderGoBackBtn(BuildContext context, WidgetRef ref) => Padding(
     key: const Key('PhotographDetailsGoBackButtonPadding'),
     padding: const EdgeInsets.all(5.0),
     child: Align(
@@ -229,7 +235,10 @@ class PhotographDetailsView extends HookConsumerWidget {
         alignment: Alignment.topLeft,
         child: DefaultButton(
             key: const Key('PhotographDetailsGoBackButton'),
-            onClick: () => Modular.to.navigate('/'),
+            onClick: () {
+              ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(false);
+              Modular.to.navigate('/');
+              },
             color: Colors.white,
             tooltip: FlutterI18n.translate(context, 'Close'),
             borderColor: Colors.black,
@@ -246,6 +255,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         child: DefaultButton(
             key: const Key('PhotographDetailsAudioButton'),
             onClick: () async {
+              ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(false);
               if(audio.state != PlayerState.playing) {
                 await audio.play(AssetSource('background_music.mp3'), position: await audio.getCurrentPosition() ?? const Duration(seconds: 0), mode: PlayerMode.lowLatency);
                 ref.read(musicTriggerProvider.notifier).setPlay(true);
@@ -262,21 +272,49 @@ class PhotographDetailsView extends HookConsumerWidget {
       );
 
   /// Renders the share button
-  Widget _renderShareButton(BuildContext context, int currentPhotographyIndex) =>
+  Widget _renderShareButton(BuildContext context, WidgetRef ref, int currentPhotographyIndex) =>
       Padding(
         key: const Key('PhotographDetailsShareButtonPadding'),
         padding: const EdgeInsets.only(left: 60.0, top: 5.0),
         child: DefaultButton(
             key: const Key('PhotographDetailsShareButton'),
-            onClick: () => Clipboard.setData(
-                ClipboardData(text: 'https://www.dstefomir.eu/#/photos/details?id=${images[currentPhotographyIndex].id}&category=$category')
-            ).then((value) => showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Copied to clipboard'))),
+            onClick: () {
+              Clipboard.setData(
+                  ClipboardData(
+                      text: 'https://www.dstefomir.eu/#/photos/details?id=${images[currentPhotographyIndex].id}&category=$category')
+              ).then((value) => showSuccessTextOnSnackBar(
+                  context,
+                  FlutterI18n.translate(context, 'Copied to clipboard')
+              ));
+              ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(false);
+              },
             tooltip: FlutterI18n.translate(context, 'Share'),
             color: Colors.white,
             borderColor: Colors.black,
             icon: 'share.svg'
         ),
       );
+
+  /// Render the comments button
+  Widget _renderCommentsBtn(WidgetRef ref, BuildContext context) {
+
+    return Padding(
+      key: const Key('PhotographCommentsButtonPadding'),
+      padding: const EdgeInsets.only(left: 170.0, top: 5.0),
+      child: Align(
+          key: const Key('PhotographCommentsButtonAlign'),
+          alignment: Alignment.topLeft,
+          child: DefaultButton(
+              key: const Key('PhotographCommentsButton'),
+              onClick: () => ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(true),
+              color: Colors.white,
+              borderColor: Colors.black,
+              tooltip: FlutterI18n.translate(context, 'Comments'),
+              icon: 'comment.svg'
+          )
+      ),
+    );
+  }
 
   /// Render the details button
   Widget _renderDetailsBtn(WidgetRef ref, BuildContext context, ScrollController scrollController, ImageData image) {
@@ -295,17 +333,20 @@ class PhotographDetailsView extends HookConsumerWidget {
       },
       child: Padding(
         key: const Key('PhotographDetailsButtonPadding'),
-        padding: const EdgeInsets.only(left: 170.0, top: 5.0),
+        padding: const EdgeInsets.only(left: 225.0, top: 5.0),
         child: Align(
             key: const Key('PhotographDetailsButtonAlign'),
             alignment: Alignment.topLeft,
             child: DefaultButton(
                 key: const Key('PhotographDetailsButton'),
-                onClick: () => _handlePhotographDetailsAction(
-                    ref,
-                    scrollController,
-                    scrollController.offset == 0 ? scrollController.position.maxScrollExtent : 0
-                ),
+                onClick: () {
+                  _handlePhotographDetailsAction(
+                      ref,
+                      scrollController,
+                      scrollController.offset == 0 ? scrollController.position.maxScrollExtent : 0
+                  );
+                  ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(false);
+                  },
                 color: Colors.white,
                 borderColor: Colors.black,
                 tooltip: iconAsset == 'map.svg' ? FlutterI18n.translate(context, 'Shot location') : FlutterI18n.translate(context, 'Photograph'),
@@ -443,6 +484,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     final ImageData image = images[currentPhotographIndex];
     final double maxWidth = MediaQuery.of(context).size.width;
     final double maxHeight = MediaQuery.of(context).size.height;
+    final bool? shouldShowCommentsDialog = ref.watch(overlayVisibilityProvider(const Key('comment_photograph')));
 
     return Stack(
         key: const Key('PhotographDetailsStack'),
@@ -476,9 +518,10 @@ class PhotographDetailsView extends HookConsumerWidget {
           ) :
           _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
           _renderDetailsBtn(ref, context, scrollController, image),
+          _renderCommentsBtn(ref, context),
           _renderAudioButton(context, ref),
-          _renderShareButton(context, currentPhotographIndex),
-          _renderGoBackBtn(context),
+          _renderShareButton(context, ref, currentPhotographIndex),
+          _renderGoBackBtn(context, ref),
           Visibility(
               key: const Key('PhotographDetailsPreviousVisibility'),
               visible: currentPhotographIndex != 0 && !useMobileLayout(context),
@@ -494,7 +537,29 @@ class PhotographDetailsView extends HookConsumerWidget {
               visible: photographTitleVisibility,
               child: _renderPhotographTitle(context, ref, currentPhotographIndex)
           ),
-          _renderSignature(maxHeight, currentView)
+          _renderSignature(maxHeight, currentView),
+          Visibility(
+            key: const Key('BlurableDetailsPageVisible'),
+            visible: shouldShowCommentsDialog != null && shouldShowCommentsDialog,
+            child: const Blurrable(key: Key('BlurableDetailsPage'), strength: 10),
+          ),
+          if (shouldShowCommentsDialog != null) Align(
+            key: const Key('CommentsDialogAlign'),
+            alignment: Alignment.bottomCenter,
+            child: SlideTransitionAnimation(
+                key: const Key('CommentsDialogSlideAnimation'),
+                duration: const Duration(milliseconds: 1000),
+                getStart: () => shouldShowCommentsDialog ? const Offset(0, 1) : const Offset(0, 0),
+                getEnd: () => shouldShowCommentsDialog ? const Offset(0, 0) : const Offset(0, 10),
+                whenTo: (controller) {
+                  useValueChanged(shouldShowCommentsDialog, (_, __) async {
+                    controller.reset();
+                    controller.forward();
+                  });
+                },
+                child: CommentDialog(key: const Key('PhotographDetailsPageCommentDialog'), photographId: image.id!)
+            ),
+          )
         ]
     );
   }

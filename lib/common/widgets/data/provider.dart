@@ -6,10 +6,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 ///----------------------------------- List all service fetching providers here -----------------------------------///
 /// Service provider for the data view
-final photographServiceFetchProvider = StateNotifierProvider<DataViewNotifier<ImageWrapper>, List<ImageWrapper>>((ref) => DataViewNotifier<ImageWrapper>(ref: ref));
+final photographServiceFetchProvider = StateNotifierProvider<DataViewNotifier<ImageBoardWrapper>, List<ImageBoardWrapper>>((ref) => DataViewNotifier<ImageBoardWrapper>(ref: ref));
 /// Service provider for the data view
 final videoServiceFetchProvider = StateNotifierProvider<DataViewNotifier<VideoData>, List<VideoData>>((ref) => DataViewNotifier<VideoData>(ref: ref));
-
 ///----------------------------------------------------------------------------------------------------------------///
 
 /// Pagination notifier for the data view
@@ -24,8 +23,7 @@ class DataViewNotifier<T> extends StateNotifier<List<T>> {
   }
 
   /// Fetches the next page of data
-  Future<void> fetchNextPage(
-      Future<PagedList<T>> Function(int, String) fetchPage) async {
+  Future<void> fetchNextPage(Future<PagedList<T>> Function(int, String) fetchPage) async {
     final String selectedFilter = ref.read(boardHeaderTabProvider);
     final nextPageItems = await fetchPage(_currentPage, selectedFilter);
     state = [...state, ...nextPageItems];
@@ -41,9 +39,8 @@ class DataViewNotifier<T> extends StateNotifier<List<T>> {
 
   /// Adds an item
   void addItem(T item) {
-    final List<T> currentState = state;
-    currentState.insert(0, item);
-    state = [...state, ...currentState];
+    state.insert(0, item);
+    state = [...state];
   }
 
   /// Removes an item

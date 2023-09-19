@@ -238,9 +238,9 @@ class DefaultButton extends StatelessWidget {
 
   const DefaultButton({
     required this.onClick,
-    required this.color,
     required this.borderColor,
     required this.icon,
+    this.color = Colors.white,
     this.tooltip,
     this.shape = BoxShape.circle,
     this.borderWidth = 1,
@@ -254,7 +254,7 @@ class DefaultButton extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: color,
             shape: shape,
             border: borderWidth == 0 ? null : Border.all(color: Colors.black, width: borderWidth)
         ),

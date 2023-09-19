@@ -82,6 +82,10 @@ dependencies:
   flutter_map: ^5.0.0
   # Tooltip library
   just_the_tooltip: ^0.0.12
+  # Device info library
+  device_info_plus: ^9.0.3
+  # Rating library
+  flutter_rating_bar: ^4.0.1
   # Firebase libraries
   firebase_core: ^2.15.1
   firebase_analytics: ^10.4.5

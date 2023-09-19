@@ -149,11 +149,11 @@ class FileServiceNotifier extends StateNotifier<AsyncValue<String>> {
   }
 
   /// Posts a file
-  Future<ImageWrapper> postFile(String selectedCategory, String lat, String lng) async {
+  Future<ImageBoardWrapper> postFile(String selectedCategory, String lat, String lng) async {
     final FileData selectedFileData = ref.read(fileProvider);
     final String comment = ref.read(commentProvider);
     final serviceProvider = ref.watch(photographyBoardServiceProvider);
-    final ImageWrapper result = await serviceProvider.uploadImage(
+    final ImageBoardWrapper result = await serviceProvider.uploadImage(
         isLandscape: selectedFileData.isLandscape!,
         isRect: selectedFileData.isRect!,
         comment: comment,

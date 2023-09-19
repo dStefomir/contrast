@@ -1,7 +1,7 @@
+import "package:universal_html/html.dart" as html;
 import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import "package:universal_html/html.dart" as html;
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
@@ -476,7 +476,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                           ref.read(photographServiceFetchProvider.notifier).removeItem(
                               ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == image.image.id)
                           );
-                          ref.read(photographServiceFetchProvider.notifier).addItem(ImageWrapper(image: image.image, metadata: meta));
+                          ref.read(photographServiceFetchProvider.notifier).addItem(ImageBoardWrapper(image: image.image, metadata: meta));
                           ref.read(photographEditProvider.notifier).setEditImage(null);
                           ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(false);
                           showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Photograph was successfully edited'));
@@ -580,7 +580,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                             controller.forward();
                           });
                         },
-                        child: const QrCodeDialog(key: Key('BoardPageQrCodeDialog'),)
+                        child: const QrCodeDialog(key: Key('BoardPageQrCodeDialog'))
                     ),
                   )
                 ]

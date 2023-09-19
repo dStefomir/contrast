@@ -25,6 +25,7 @@ class LoginPage extends HookConsumerWidget {
     child: BackgroundPage(
         key: const Key('LoginBackgroundPage'),
         child: Stack(
+          alignment: Alignment.center,
           key: const Key('LoginStack'),
           children: [
             Container(
@@ -41,10 +42,11 @@ class LoginPage extends HookConsumerWidget {
               ),
             ),
             IconRenderer(
-                key: const Key('LogicStackBackgroundSvg'),
-                asset: 'background.svg',
-                color: Colors.black.withOpacity(0.05),
-                fit: BoxFit.fill
+              key: const Key('LogicStackBackgroundSvg'),
+              asset: 'background.svg',
+              color: Colors.black.withOpacity(0.05),
+              fit: BoxFit.fitWidth,
+              width: MediaQuery.of(context).size.width,
             ),
             Align(
               key: const Key('LoginTitleAlign'),
@@ -145,7 +147,7 @@ class LoginPage extends HookConsumerWidget {
               child: DefaultButton(
                   key: const Key('LoginCloseButton'),
                   onClick: () => Modular.to.navigate("/"),
-                  color: Colors.black,
+                  color: Colors.white,
                   borderColor: Colors.black,
                   tooltip: FlutterI18n.translate(context, 'Close'),
                   icon: 'close.svg'

@@ -198,7 +198,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
   /// Photograph fetch function
   final String Function(String)? fetch;
   /// Image wrapper object
-  final ImageWrapper wrapper;
+  final ImageBoardWrapper wrapper;
   /// Constraints of the parent page
   final BoxConstraints constraints;
   /// What happens when clicked on the widget

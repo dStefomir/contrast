@@ -70,5 +70,15 @@
   "Stop music": "Спиране на музика",
   "Play music": "Пускане на музика",
   "Copied to clipboard": "Копирано в клипборда",
-  "Shot location": "Локация на заснемане"
+  "Shot location": "Локация на заснемане",
+  "Comments": "Коментари",
+  "From who": "От кого",
+  "Your name": "Вашето име",
+  "This name cannot be used": "Това име е заето",
+  "Comment": "Коментар",
+  "Type what do you think": "Напишете вашето мнение",
+  "Comment posted": "Коментара е изпратен",
+  "The comment is more than 1000 characters": "Коментара е по - дълъг от 1000 символа",
+  "Delete comment": "Изтрий коментар",
+  "Comment was deleted successfully": "Коментара беше изтрит успешно"
 }
