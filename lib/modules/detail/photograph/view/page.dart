@@ -1,4 +1,3 @@
-import 'package:contrast/modules/board/provider.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:contrast/common/widgets/page.dart';
 import 'package:contrast/common/widgets/load.dart';

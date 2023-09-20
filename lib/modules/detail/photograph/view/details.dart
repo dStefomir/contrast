@@ -538,11 +538,7 @@ class PhotographDetailsView extends HookConsumerWidget {
               child: _renderPhotographTitle(context, ref, currentPhotographIndex)
           ),
           _renderSignature(maxHeight, currentView),
-          Visibility(
-            key: const Key('BlurableDetailsPageVisible'),
-            visible: shouldShowCommentsDialog != null && shouldShowCommentsDialog,
-            child: const Blurrable(key: Key('BlurableDetailsPage'), strength: 10),
-          ),
+          if(shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(key: Key('BlurableDetailsPage'), strength: 10),
           if (shouldShowCommentsDialog != null) Align(
             key: const Key('CommentsDialogAlign'),
             alignment: Alignment.bottomCenter,

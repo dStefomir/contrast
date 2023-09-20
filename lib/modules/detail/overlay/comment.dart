@@ -27,7 +27,7 @@ class CommentDialog extends HookConsumerWidget {
   /// Id of the selected photograph
   final int photographId;
 
-  CommentDialog({Key? key, required this.photographId}) : super(key: key);
+  const CommentDialog({Key? key, required this.photographId}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
