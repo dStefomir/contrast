@@ -4,6 +4,7 @@ import 'package:contrast/security/session.dart';
 import 'package:contrast/utils/scroll_behavior.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -11,6 +12,9 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 const String webKey = 'BLgFNQuws2vnlVfNuYDe1N2E2DnCQA0H5LxYSc2YBscxJhb_jfouU4f-hryoyYmftLgWKQDG1Fsl1us4ylwRhSA';
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async => await Firebase.initializeApp();
 
 /// Subscribe the client to a fcm topic with a given token
 Future<void> _subscribeToTopic(String? token) async {
@@ -49,6 +53,9 @@ void main() async {
     /// Subscribes the token to a firebase topic
     await _subscribeToTopic(token);
   });
+  if(!kIsWeb) {
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  }
 
   runApp(
       ModularApp(
@@ -71,11 +78,40 @@ const Color buttonIconSvgColor = Colors.black;
 const Color buttonBackgroundColor = Colors.white;
 
 /// Application itself holding the theming and the app`s delegates
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
 
   final FlutterI18nDelegate flutterI18nDelegate;
 
   const MyApp({required this.flutterI18nDelegate, Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  /// Setup FCMs
+  Future<void> setupInteractedMessage() async {
+    // Get any messages which caused the application to open from a terminated state.
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+  /// Handle the received fc messages
+  void _handleMessage(RemoteMessage message) {
+    if(message.data["pageTo"] != null) {
+      Future.delayed(const Duration(seconds: 3));
+      Modular.to.navigate(message.data["pageTo"]);
+    }
+  }
+
+  @override
+  void initState() {
+    setupInteractedMessage();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) =>
@@ -86,7 +122,7 @@ class MyApp extends StatelessWidget {
           routerDelegate: Modular.routerDelegate,
           scrollBehavior: NoThumbScrollBehavior().copyWith(scrollbars: false),
           localizationsDelegates: [
-            flutterI18nDelegate,
+            widget.flutterI18nDelegate,
             GlobalCupertinoLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate

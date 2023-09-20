@@ -211,7 +211,7 @@ class CommentDialog extends HookConsumerWidget {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(top: 5),
+                                padding: EdgeInsets.only(top: apiData[index].rating! > 0 ? 5 : 0),
                                 child: StyledText(
                                   text: utf8.decode(apiData[index].comment!.runes.toList()),
                                   fontSize: 13,
