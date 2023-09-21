@@ -93,7 +93,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     if (currentPhotographIndex >= images.length) {
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(images.length - 1);
     }
-    ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(false);
+    ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
   }
 
   /// Switches to the previous photograph if there is such
@@ -108,7 +108,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     if (currentPhotographIndex < 0) {
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(0);
     }
-    ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(false);
+    ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
   }
 
   // Handles the key events from the Focus widget and updates the page
@@ -119,7 +119,7 @@ class PhotographDetailsView extends HookConsumerWidget {
       } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
         _goToNextPhotograph(ref, pageController, currentPhotographIndex);
       } else if (event.logicalKey == LogicalKeyboardKey.escape) {
-        ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(false);
+        ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
         Modular.to.navigate('/');
       } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
         _handlePhotographDetailsAction(ref, scrollController, scrollController.position.maxScrollExtent);
@@ -236,7 +236,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         child: DefaultButton(
             key: const Key('PhotographDetailsGoBackButton'),
             onClick: () {
-              ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(false);
+              ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
               Modular.to.navigate('/');
               },
             color: Colors.white,
@@ -255,7 +255,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         child: DefaultButton(
             key: const Key('PhotographDetailsAudioButton'),
             onClick: () async {
-              ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(false);
+              ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
               if(audio.state != PlayerState.playing) {
                 await audio.play(AssetSource('background_music.mp3'), position: await audio.getCurrentPosition() ?? const Duration(seconds: 0), mode: PlayerMode.lowLatency);
                 ref.read(musicTriggerProvider.notifier).setPlay(true);
@@ -286,7 +286,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                   context,
                   FlutterI18n.translate(context, 'Copied to clipboard')
               ));
-              ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(false);
+              ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
               },
             tooltip: FlutterI18n.translate(context, 'Share'),
             color: Colors.white,
@@ -345,7 +345,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                       scrollController,
                       scrollController.offset == 0 ? scrollController.position.maxScrollExtent : 0
                   );
-                  ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(false);
+                  ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
                   },
                 color: Colors.white,
                 borderColor: Colors.black,

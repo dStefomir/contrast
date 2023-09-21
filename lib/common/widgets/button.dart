@@ -233,6 +233,8 @@ class DefaultButton extends StatelessWidget {
   final double borderWidth;
   /// Icon height
   final double height;
+  /// Padding of the button
+  final double padding;
   /// Tooltip text
   final String? tooltip;
 
@@ -245,13 +247,14 @@ class DefaultButton extends StatelessWidget {
     this.shape = BoxShape.circle,
     this.borderWidth = 1,
     this.height = 35,
+    this.padding = 10,
     super.key
   });
 
   @override
   Widget build(BuildContext context) {
     final button = Padding(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(padding),
       child: Container(
         decoration: BoxDecoration(
             color: color,
