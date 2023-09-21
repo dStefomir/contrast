@@ -1,6 +1,5 @@
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
-import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/tab.dart';
 import 'package:contrast/modules/board/page.dart';
@@ -35,13 +34,13 @@ class BoardPageFilter extends ConsumerWidget {
               children: [
                 Container(
                   key: const Key('HeaderMobileLayoutStackContainer'),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Colors.black.withOpacity(0.10),
-                        Colors.black.withOpacity(0.0),
+                        Colors.black,
+                        Colors.white,
                       ],
                     ),
                   ),
@@ -52,18 +51,6 @@ class BoardPageFilter extends ConsumerWidget {
                     key: const Key('HeaderMobileLayoutStackColumn'),
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
-                          key: const Key('HeaderMobileLayoutStackSignatureContainer'),
-                          color: Colors.transparent,
-                          height: 70,
-                          padding: const EdgeInsets.all(5),
-                          child: const IconRenderer(
-                              key: Key('HeaderMobileLayoutStackSignatureSvg'),
-                              asset: 'signature.svg',
-                              color: Colors.black,
-                              fit: BoxFit.scaleDown
-                          )
-                      ),
                       const Spacer(key: Key('HeaderMobileLayoutStackAllSpacer')),
                       MenuButton(
                           widgetKey: const Key('all'),

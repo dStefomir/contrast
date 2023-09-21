@@ -84,6 +84,16 @@ class BoardPageState extends ConsumerState<BoardPage> {
     }
   }
 
+  /// Checks the state of the overlays
+  bool _checkOverlaysState(WidgetRef ref) =>
+      ref.read(overlayVisibilityProvider(const Key('qr_code'))) != null ||
+          ref.read(overlayVisibilityProvider(const Key('delete_image'))) != null ||
+          ref.read(overlayVisibilityProvider(const Key('delete_video'))) != null ||
+          ref.read(overlayVisibilityProvider(const Key('upload_image'))) != null ||
+          ref.read(overlayVisibilityProvider(const Key('edit_image'))) != null ||
+          ref.read(overlayVisibilityProvider(const Key('upload_video'))) != null ||
+          ref.read(overlayVisibilityProvider(const Key('edit_video'))) != null;
+
   /// Handles the escape key of the keyboard
   void _handleKeyEvent(RawKeyEvent event) {
       if (event is RawKeyDownEvent && event.logicalKey == LogicalKeyboardKey.escape) {
@@ -218,9 +228,13 @@ class BoardPageState extends ConsumerState<BoardPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        _onAction(ref, null);
+        if(_checkOverlaysState(ref)) {
+          _onAction(ref, null);
 
-        return false;
+          return false;
+        }
+
+        return true;
       },
       child: BackgroundPage(
           key: const Key('BoardPageBackground'),

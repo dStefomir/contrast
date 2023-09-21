@@ -38,8 +38,12 @@ class CommentDialog extends HookConsumerWidget {
     final commentController = useTextEditingController();
     /// Rating controller
     final ratingController = useState(0.0);
+    /// Text input focus nodes
+    final deviceNameFocusNode = useFocusNode();
+    final commentFocusNode = useFocusNode();
     /// Loading controller
     final loading = useState(false);
+
 
     // Fetch the comments of a photo when the dialog is opened.
     useEffect(() {
@@ -52,7 +56,7 @@ class CommentDialog extends HookConsumerWidget {
       SharedPreferences.getInstance().then((value) => userNameController.text = value.getString('deviceName') ?? '');
 
       return null;
-    }, [ref.watch(overlayVisibilityProvider(const Key('comment_photograph')))]);
+    }, [ref.watch(overlayVisibilityProvider(const Key('comment_photograph'))) == true]);
 
     return Form(
       key: formKey,
@@ -96,43 +100,40 @@ class CommentDialog extends HookConsumerWidget {
                   ],
                 ),
                 SimpleInput(
-                    widgetKey: const Key('CommentInputDeviceName'),
-                    backgroundColor: Colors.white.withOpacity(0.3),
-                    controller: userNameController,
-                    labelText: FlutterI18n.translate(context, 'From who'),
-                    hint: FlutterI18n.translate(context, 'Your name'),
-                    onChange: (e) => e,
-                    suffixWidget: Center(
-                      widthFactor: 1.5,
-                      child: RatingBar.builder(
-                        initialRating: ratingController.value,
-                        minRating: 0,
-                        wrapAlignment: WrapAlignment.center,
-                        direction: Axis.horizontal,
-                        allowHalfRating: false,
-                        itemSize: 25,
-                        glow: true,
-                        itemCount: 5,
-                        itemBuilder: (_, __) => const Icon(Icons.star, color: Colors.amber,),
-                        onRatingUpdate: (rating) => ratingController.value = rating,
-                      ),
+                  widgetKey: const Key('CommentInputDeviceName'),
+                  backgroundColor: Colors.white.withOpacity(0.3),
+                  controller: userNameController,
+                  focusNode: deviceNameFocusNode,
+                  labelText: FlutterI18n.translate(context, 'From who'),
+                  onChange: (e) => e,
+                  suffixWidget: Center(
+                    widthFactor: 1.5,
+                    child: RatingBar.builder(
+                      initialRating: ratingController.value,
+                      minRating: 0,
+                      wrapAlignment: WrapAlignment.center,
+                      direction: Axis.horizontal,
+                      allowHalfRating: false,
+                      itemSize: 25,
+                      glow: true,
+                      itemCount: 5,
+                      itemBuilder: (_, __) => const Icon(Icons.star, color: Colors.amber,),
+                      onRatingUpdate: (rating) => ratingController.value = rating,
                     ),
-                    validator: (e) {
-                      if(e != null && e.isEmpty) {
-                        return FlutterI18n.translate(context, 'This field is mandatory');
-                      }
-                      if(e != null && !Session().isLoggedIn() && (
-                          e.toLowerCase().contains('dstefomir') ||
-                              e.toLowerCase().contains('stefomir') ||
-                              e.toLowerCase().contains('stefomird') ||
-                              e.toLowerCase().contains('dstefko') ||
-                              e.toLowerCase().contains('stefkod'
-                              )
-                      )) {
-                        return FlutterI18n.translate(context, 'This name cannot be used');
-                      }
+                  ),
+                  validator: (e) {
+                    if(e != null && !Session().isLoggedIn() && (
+                        e.toLowerCase().contains('dstefomir') ||
+                            e.toLowerCase().contains('stefomir') ||
+                            e.toLowerCase().contains('stefomird') ||
+                            e.toLowerCase().contains('dstefko') ||
+                            e.toLowerCase().contains('stefkod'
+                            )
+                    )) {
+                      return FlutterI18n.translate(context, 'This name cannot be used');
+                    }
 
-                      return null;
+                    return null;
                     },
                 ),
                 apiData.isEmpty ? Expanded(
@@ -230,9 +231,9 @@ class CommentDialog extends HookConsumerWidget {
                   widgetKey: const Key('CommentInput'),
                   backgroundColor: Colors.white.withOpacity(0.3),
                   controller: commentController,
+                  focusNode: commentFocusNode,
                   onChange: (e) => e,
                   labelText: FlutterI18n.translate(context, 'Comment'),
-                  hint: FlutterI18n.translate(context, 'Type what do you think'),
                   validator: (e) {
                     if (e != null && e.isEmpty) {
                       return FlutterI18n.translate(context, 'This field is mandatory');
@@ -249,19 +250,22 @@ class CommentDialog extends HookConsumerWidget {
                         key: const Key('CommentInputSubmitButton'),
                         onClick: () async {
                           final form = formKey.currentState;
-                          final String deviceName = userNameController.text;
+                          final String deviceName = userNameController.text.isNotEmpty ? userNameController.text : 'Anonymous';
                           final String comment = commentController.text;
                           final double rating = ratingController.value;
+                          deviceNameFocusNode.unfocus();
+                          commentFocusNode.unfocus();
                           if (form!.validate() && comment.isNotEmpty) {
                             loading.value = true;
                             ref.read(photographCommentsServiceProvider).postComment(deviceName, photographId, comment, rating).then((value) {
                               ref.read(commentsDataViewProvider.notifier).addItem(value);
                               SharedPreferences.getInstance().then((value) {
-                                value.setString('deviceName', deviceName);
+                                if(deviceName != 'Anonymous') {
+                                  value.setString('deviceName', deviceName);
+                                }
                                 commentController.text = '';
                                 ratingController.value = 0;
                                 loading.value = false;
-                                showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment posted'));
                               });
                             });
                           }},

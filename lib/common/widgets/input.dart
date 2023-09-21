@@ -25,6 +25,8 @@ class SimpleInput extends StatefulHookConsumerWidget {
   final int maxLines;
   /// Color of the background of the simple input field
   final Color backgroundColor;
+  /// Focus node for switching focus
+  final FocusNode? focusNode;
   /// Validator function for the text input
   final String? Function(String?)? validator;
 
@@ -40,6 +42,7 @@ class SimpleInput extends StatefulHookConsumerWidget {
     this.password = false,
     this.maxLines = 1,
     this.backgroundColor = Colors.white,
+    this.focusNode,
     this.validator
   }) : super(key: widgetKey);
 
@@ -74,6 +77,7 @@ class SimpleInputState extends ConsumerState<SimpleInput> {
       controller: widget.controller ?? _controller,
       obscureText: widget.password,
       maxLines: widget.maxLines,
+      focusNode: widget.focusNode,
       decoration: InputDecoration(
         prefixIcon: Icon(widget.prefixIcon, color: Colors.black,),
         suffixIcon: widget.suffixWidget,
