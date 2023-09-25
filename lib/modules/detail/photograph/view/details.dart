@@ -390,19 +390,18 @@ class PhotographDetailsView extends HookConsumerWidget {
           scrollPhysics: const BouncingScrollPhysics(),
           allowImplicitScrolling: true,
           backgroundDecoration: const BoxDecoration(color: Colors.transparent),
-          loadingBuilder: (_, chunk) => Center(
-              key: const Key('PhotographWidgetGalleryLoadingCenter'),
-              child: Padding(
-                key: const Key('PhotographWidgetGalleryLoadingPadding'),
-                padding: EdgeInsets.only(top: MediaQuery.of(context).size.height - 8),
-                child: LinearProgressIndicator(
-                  key: const Key('PhotographWidgetGalleryLoadingProgressIndicator'),
-                  minHeight: 8,
-                  backgroundColor: Colors.grey[300],
-                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-                  value: (chunk?.cumulativeBytesLoaded ?? 0) / 100,
-                ),
-              )
+          loadingBuilder: (_, chunk) => Padding(
+            key: const Key('PhotographWidgetGalleryLoadingPadding'),
+            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height - (kIsWeb ? 15 : 60)),
+            child: LinearProgressIndicator(
+              key: const Key('PhotographWidgetGalleryLoadingProgressIndicator'),
+              minHeight: 15,
+              backgroundColor: Colors.grey[300],
+              valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+              value: chunk == null
+                  ? 0
+                  : chunk.cumulativeBytesLoaded / chunk.expectedTotalBytes!,
+            ),
           ),
           builder: (BuildContext context, int index) {
             return PhotoViewGalleryPageOptions(
