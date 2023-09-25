@@ -200,10 +200,11 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                   color: Colors.white.withOpacity(0.05)
               ),
               if(!_shouldHidePlayer(shouldShowCommentsDialog)) Padding(
-                padding: const EdgeInsets.only(top: kIsWeb ? 60 : 0, bottom: kIsWeb ? 60 : 0),
+                key: const Key('VideoDetailsYoutubeScaffoldPadding'),
+                padding: const EdgeInsets.only(top: kIsWeb ? 60 : 0, bottom: kIsWeb ? 60 : 0, left: kIsWeb ? 0 : 5, right: kIsWeb ? 0 : 5),
                 child: YoutubePlayerScaffold(
                     key: const Key('VideoDetailsYoutubeScaffold'),
-                    autoFullScreen: false,
+                    backgroundColor: Colors.transparent,
                     controller: _controller,
                     builder: (context, player) => player
                 ),
