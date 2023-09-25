@@ -10,7 +10,7 @@ import 'core/page.dart';
 const String boardPageRoute = '/';
 const String loginPageRoute = '/login';
 const String photographDetailsPageRoute = '/photos/details';
-const String videoDetailsPageRoute = '/videos/details/:path';
+const String videoDetailsPageRoute = '/videos/details';
 
 /// Represents the main module of the app
 class MainModule extends Module {
@@ -66,7 +66,8 @@ class MainModule extends Module {
         child: (_) => CorePage(
             pageName: 'Video details',
             render: () => VideoDetailPage(
-                path: r.args.params['path'],
+                path: r.args.queryParams['path'] ?? '',
+                id: int.parse('${r.args.queryParams['id']}'),
                 analytics: analytics,
                 observer: observer
             )

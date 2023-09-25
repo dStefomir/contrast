@@ -1,16 +1,14 @@
-import 'dart:convert';
-
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/input.dart';
 import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/snack.dart';
 import 'package:contrast/common/widgets/text.dart';
+import 'package:contrast/model/image_comments.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/detail/overlay/provider.dart';
 import 'package:contrast/modules/detail/overlay/service.dart';
 import 'package:contrast/security/session.dart';
-import 'package:contrast/utils/date.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
@@ -21,18 +19,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Dialog height
 const double dialogHeight = 550;
 /// Renders a delete item dialog
-class CommentDialog extends HookConsumerWidget {
+class CommentDialog<T> extends HookConsumerWidget {
   /// Form key
   static GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  /// Id of the selected photograph
-  final int photographId;
+  /// Widget key
+  final Key widgetKey;
+  /// Id of the selected item
+  final int parentItemId;
+  /// Service provider for the comments dialog
+  final StateNotifierProvider <CommentsNotifier, List<T>> serviceProvider;
+  /// Renders each row of the list view
+  final Widget Function(BuildContext context, T item, List<String> submittedComments, SharedPreferences sharedPrefs, int index) itemBuilder;
 
-  const CommentDialog({Key? key, required this.photographId}) : super(key: key);
+  const CommentDialog({required this.widgetKey, required this.parentItemId, required this.serviceProvider, required this.itemBuilder}) : super(key: widgetKey);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     /// List of comments
-    final apiData = ref.watch(commentsDataViewProvider);
+    final apiData = ref.watch(serviceProvider);
     /// Text controllers
     final userNameController = useTextEditingController();
     final commentController = useTextEditingController();
@@ -47,16 +51,18 @@ class CommentDialog extends HookConsumerWidget {
 
     // Fetch the comments of a photo when the dialog is opened.
     useEffect(() {
-      if(ref.read(overlayVisibilityProvider(const Key('comment_photograph'))) == true) {
-        ref.read(commentsDataViewProvider.notifier).loadComments(
-            photographId, ref
-            .read(photographCommentsServiceProvider)
-            .getComments);
+      if(ref.read(overlayVisibilityProvider(widgetKey)) == true) {
+        ref.read(serviceProvider.notifier).loadComments(
+            parentItemId,
+            apiData is List<ImageCommentsData>
+                ? ref.read(commentsServiceProvider).getPhotographComments
+                : ref.read(commentsServiceProvider).getVideoComments
+        );
       }
       SharedPreferences.getInstance().then((value) => userNameController.text = value.getString('deviceName') ?? '');
 
       return null;
-    }, [ref.watch(overlayVisibilityProvider(const Key('comment_photograph'))) == true]);
+    }, [ref.watch(overlayVisibilityProvider(widgetKey)) == true]);
 
     return Form(
       key: formKey,
@@ -108,7 +114,7 @@ class CommentDialog extends HookConsumerWidget {
                                 const Spacer(key: Key('CommentDialogColumnRowSpacer'),),
                                 DefaultButton(
                                     key: const Key('CommentDialogColumnRowButton'),
-                                    onClick: () => ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(false),
+                                    onClick: () => ref.read(overlayVisibilityProvider(widgetKey).notifier).setOverlayVisibility(false),
                                     tooltip: FlutterI18n.translate(context, 'Close'),
                                     color: Colors.white.withOpacity(0.3),
                                     borderColor: Colors.white,
@@ -170,81 +176,7 @@ class CommentDialog extends HookConsumerWidget {
                       child: ListView.builder(
                           key: const Key('CommentDialogList'),
                           itemCount: apiData.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              key: const Key('CommentDialogListPadding'),
-                              padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
-                              child: Column(
-                                key: const Key('CommentDialogListColumn'),
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      StyledText(
-                                        text: utf8.decode(apiData[index].deviceName!.runes.toList()),
-                                        fontSize: 15,
-                                        weight: FontWeight.bold,
-                                        clip: false,
-                                        align: TextAlign.start,
-                                        padding: 0,
-                                      ),
-                                      const SizedBox(width: 5,),
-                                      if(apiData[index].rating! > 0) RatingBar.builder(
-                                        initialRating: apiData[index].rating!,
-                                        minRating: 0,
-                                        direction: Axis.horizontal,
-                                        allowHalfRating: false,
-                                        ignoreGestures: true,
-                                        itemSize: 25,
-                                        glow: true,
-                                        itemCount: 5,
-                                        itemBuilder: (context, _) => const Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                        ),
-                                        onRatingUpdate: (rating) {},
-                                      ),
-                                      const Spacer(),
-                                      if (submittedComments.contains('${apiData[index].id}') || Session().isLoggedIn()) DefaultButton(
-                                          key: const Key('CommentDeleteButton'),
-                                          padding: 0,
-                                          height: 25,
-                                          onClick: () => ref.read(photographCommentsServiceProvider).deleteComment(apiData[index].id!).then((value) {
-                                            ref.read(commentsDataViewProvider.notifier).removeItem(value);
-                                            snapshot.data!.setStringList('submittedComments', submittedComments..remove('${value.id}'));
-                                            showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
-                                          }),
-                                          tooltip: FlutterI18n.translate(context, 'Delete comment'),
-                                          color: Colors.white.withOpacity(0.3),
-                                          borderColor: Colors.white,
-                                          icon: 'delete.svg'
-                                      )
-                                    ],),
-                                  Padding(
-                                    padding: EdgeInsets.only(top: submittedComments.contains('${apiData[index].id}') ? 3 : 5, bottom: 5),
-                                    child: StyledText(
-                                      text: formatTimeDifference(apiData[index].date),
-                                      fontSize: 10,
-                                      color: Colors.black38,
-                                      weight: FontWeight.bold,
-                                      align: TextAlign.start,
-                                      letterSpacing: 3,
-                                      padding: 0,
-                                    ),
-                                  ),
-                                  StyledText(
-                                    text: utf8.decode(apiData[index].comment!.runes.toList()),
-                                    fontSize: 13,
-                                    clip: false,
-                                    align: TextAlign.start,
-                                    color: Colors.black87,
-                                    padding: 0,
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
+                          itemBuilder: (context, index) => itemBuilder(context, apiData[index], submittedComments, snapshot.data!, index)),
                     ),
                     SimpleInput(
                       widgetKey: const Key('CommentInput'),
@@ -276,17 +208,31 @@ class CommentDialog extends HookConsumerWidget {
                               commentFocusNode.unfocus();
                               if (form!.validate() && comment.isNotEmpty) {
                                 loading.value = true;
-                                ref.read(photographCommentsServiceProvider).postComment(deviceName, photographId, comment, rating).then((value) {
-                                  ref.read(commentsDataViewProvider.notifier).addItem(value);
-                                  snapshot.data!.setStringList('submittedComments', submittedComments..add('${value.id}'));
-                                  if(deviceName != 'Anonymous') {
-                                    snapshot.data!.setString('deviceName', deviceName);
-                                  }
-                                  commentController.text = '';
-                                  ratingController.value = 0;
-                                  loading.value = false;
-                                  showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment posted'));
-                                });
+                                if(apiData is List<ImageCommentsData>) {
+                                  ref.read(commentsServiceProvider).postPhotographComment(deviceName, parentItemId, comment, rating).then((value) {
+                                    ref.read(serviceProvider.notifier).addItem(value);
+                                    snapshot.data!.setStringList('submittedComments', submittedComments..add('${value.id}'));
+                                    if (deviceName != 'Anonymous') {
+                                      snapshot.data!.setString('deviceName', deviceName);
+                                    }
+                                    commentController.text = '';
+                                    ratingController.value = 0;
+                                    loading.value = false;
+                                    showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment posted'));
+                                  });
+                                } else {
+                                  ref.read(commentsServiceProvider).postVideoComment(deviceName, parentItemId, comment, rating).then((value) {
+                                    ref.read(serviceProvider.notifier).addItem(value);
+                                    snapshot.data!.setStringList('submittedComments', submittedComments..add('${value.id}'));
+                                    if (deviceName != 'Anonymous') {
+                                      snapshot.data!.setString('deviceName', deviceName);
+                                    }
+                                    commentController.text = '';
+                                    ratingController.value = 0;
+                                    loading.value = false;
+                                    showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment posted'));
+                                  });
+                                }
                               }},
                             tooltip: FlutterI18n.translate(context, 'Submit'),
                             color: Colors.white.withOpacity(0.3),

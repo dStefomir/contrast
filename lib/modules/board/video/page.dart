@@ -42,7 +42,7 @@ class VideoBoardPage extends HookConsumerWidget {
           animateMenuItems: true,
           blurBackgroundColor: Colors.black,
           openWithTap: false,
-          onPressed: () => onUserAction(ref, () => Modular.to.pushNamed('videos/details/${video.path}')),
+          onPressed: () => onUserAction(ref, () => Modular.to.pushNamed('videos/details?path=${video.path}&id=${video.id}')),
           menuItems: <FocusedMenuItem>[
             FocusedMenuItem(
                 title: Text(FlutterI18n.translate(context, 'Edit Video')),
@@ -79,9 +79,9 @@ class VideoBoardPage extends HookConsumerWidget {
         widgetKey: Key('${video.id}'),
         videoPath: video.path!,
         constraints: constraints,
-        onClick: () => onUserAction(ref, () => Modular.to.pushNamed('videos/details/${video.path}')),
+        onClick: () => onUserAction(ref, () => Modular.to.pushNamed('videos/details?path=${video.path}&id=${video.id}')),
         onRedirect: kIsWeb ? () => onUserAction(ref, () async {
-          final Uri url = Uri.parse('https://www.dstefomir.eu/#/videos/details/${video.path}');
+          final Uri url = Uri.parse('videos/details?path=${video.path}&id=${video.id}');
           if (await canLaunchUrl(url)) {
             await launchUrl(url);
           }

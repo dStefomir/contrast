@@ -1,9 +1,18 @@
+import 'dart:convert';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:contrast/common/widgets/blur.dart';
+import 'package:contrast/model/image_comments.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/detail/overlay/comment.dart';
+import 'package:contrast/modules/detail/overlay/provider.dart';
+import 'package:contrast/modules/detail/overlay/service.dart';
+import 'package:contrast/security/session.dart';
+import 'package:contrast/utils/date.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import "package:universal_html/html.dart" as html;
 
 import 'package:contrast/common/widgets/icon.dart';
@@ -552,7 +561,84 @@ class PhotographDetailsView extends HookConsumerWidget {
                     controller.forward();
                   });
                 },
-                child: CommentDialog(key: const Key('PhotographDetailsPageCommentDialog'), photographId: image.id!)
+                child: CommentDialog<ImageCommentsData>(
+                  widgetKey: const Key('comment_photograph'),
+                  parentItemId: image.id!,
+                  serviceProvider: imageCommentsDataViewProvider,
+                  itemBuilder: (BuildContext context, ImageCommentsData item, List<String> submittedComments, SharedPreferences sharedPrefs, int index) => Padding(
+                    key: const Key('CommentDialogListPadding'),
+                    padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
+                    child: Column(
+                      key: const Key('CommentDialogListColumn'),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            StyledText(
+                              text: utf8.decode(item.deviceName!.runes.toList()),
+                              fontSize: 15,
+                              weight: FontWeight.bold,
+                              clip: false,
+                              align: TextAlign.start,
+                              padding: 0,
+                            ),
+                            const SizedBox(width: 5,),
+                            if(item.rating! > 0) RatingBar.builder(
+                              initialRating: item.rating!,
+                              minRating: 0,
+                              direction: Axis.horizontal,
+                              allowHalfRating: false,
+                              ignoreGestures: true,
+                              itemSize: 25,
+                              glow: true,
+                              itemCount: 5,
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (rating) {},
+                            ),
+                            const Spacer(),
+                            if (submittedComments.contains('${item.id}') || Session().isLoggedIn()) DefaultButton(
+                                key: const Key('CommentDeleteButton'),
+                                padding: 0,
+                                height: 25,
+                                onClick: () => ref.read(commentsServiceProvider).deletePhotographComment(item.id!).then((value) {
+                                  ref.read(imageCommentsDataViewProvider.notifier).removeItem(index);
+                                  sharedPrefs.setStringList('submittedComments', submittedComments..remove('${value.id}'));
+                                  showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
+                                }),
+                                tooltip: FlutterI18n.translate(context, 'Delete comment'),
+                                color: Colors.white.withOpacity(0.3),
+                                borderColor: Colors.white,
+                                icon: 'delete.svg'
+                            )
+                          ],),
+                        Padding(
+                          padding: EdgeInsets.only(top: submittedComments.contains('${item.id}') ? 3 : 5, bottom: 5),
+                          child: StyledText(
+                            text: formatTimeDifference(item.date),
+                            fontSize: 10,
+                            color: Colors.black38,
+                            weight: FontWeight.bold,
+                            align: TextAlign.start,
+                            letterSpacing: 3,
+                            padding: 0,
+                          ),
+                        ),
+                        StyledText(
+                          text: utf8.decode(item.comment!.runes.toList()),
+                          fontSize: 13,
+                          clip: false,
+                          align: TextAlign.start,
+                          color: Colors.black87,
+                          padding: 0,
+                        ),
+                      ],
+                    ),
+                  )
+                )
             ),
           )
         ]
