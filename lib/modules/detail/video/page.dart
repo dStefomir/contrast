@@ -14,6 +14,7 @@ import 'package:contrast/modules/detail/overlay/service.dart';
 import 'package:contrast/security/session.dart';
 import 'package:contrast/utils/date.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -77,13 +78,34 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _controller.close();
-    ref.read(overlayVisibilityProvider(const Key('comment_video')).notifier).setOverlayVisibility(null);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    super.dispose();
+  }
+
+  /// Function that helps to determine if the player should be hidden or not
+  bool _shouldHidePlayer(bool? isCommentOverlayOpened) {
+    if(kIsWeb) {
+      if(isCommentOverlayOpened != null && isCommentOverlayOpened == true) {
+        _controller.close();
+
+        return true;
+      } else {
+        _controller = YoutubePlayerController.fromVideoId(
+          videoId: widget.path,
+          autoPlay: false,
+          params: const YoutubePlayerParams(
+              showFullscreenButton: true, showControls: true),
+        );
+
+        return false;
+      }
+    }
+
+    return false;
   }
 
   /// Renders the comments button
@@ -102,7 +124,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       DefaultButton(
           key: const Key('VideoDetailsShareButton'),
           onClick: () {
-            ref.read(overlayVisibilityProvider(const Key('comment_video')).notifier).setOverlayVisibility(null);
+            ref.read(overlayVisibilityProvider(const Key('comment_video')).notifier).setOverlayVisibility(false);
             Clipboard.setData(
                 ClipboardData(text: 'https://www.dstefomir.eu/#/videos/details/${widget.path}')
             ).then((value) => showSuccessTextOnSnackBar(
@@ -130,20 +152,28 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
           icon: 'close.svg'
       );
 
+  /// Render video details page actions
+  List<Widget> _renderActions() => [
+    Padding(
+      key: const Key('VideoDetailsAlignBackPadding'),
+      padding: const EdgeInsets.only(top: 5.0),
+      child: _renderBackButton(context),
+    ),
+    Padding(
+      key: const Key('VideoDetailsAlignSharePadding'),
+      padding: const EdgeInsets.only(top: 5.0,),
+      child: _renderShareButton(),
+    ),
+    Padding(
+      key: const Key('VideoDetailsAlignCommentsPadding'),
+      padding: const EdgeInsets.only(top: 5.0,),
+      child: _renderCommentsButton(),
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final bool? shouldShowCommentsDialog = ref.watch(overlayVisibilityProvider(const Key('comment_video')));
-    useValueChanged(shouldShowCommentsDialog, (_, __) async {
-      if(shouldShowCommentsDialog == null || !shouldShowCommentsDialog) {
-        _controller.close();
-        _controller = YoutubePlayerController.fromVideoId(
-          videoId: widget.path,
-          autoPlay: false,
-          params: const YoutubePlayerParams(
-              showFullscreenButton: true, showControls: true),
-        );
-      }
-    });
 
     return RawKeyboardListener(
       key: const Key('VideoDetailsKeyboardListener'),
@@ -154,164 +184,145 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
           Modular.to.navigate('/');
         }
       },
-      child: LayoutBuilder(
-          key: const Key('VideoDetailsLayoutBuilder'),
-          builder: (context, constraints) =>
-              BackgroundPage(
-                  key: const Key('VideoDetailsBackgroundPage'),
-                  color: Colors.black,
-                  child: YoutubePlayerScaffold(
+      child: BackgroundPage(
+          key: const Key('VideoDetailsBackgroundPage'),
+          color: Colors.black,
+          child: Stack(
+            key: const Key('VideoDetailsStack'),
+            alignment: Alignment.center,
+            children: [
+              IconRenderer(
+                  key: const Key('VideoDetailsStackBackgroundSvg'),
+                  asset: 'background.svg',
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: Colors.white.withOpacity(0.05)
+              ),
+              if(!_shouldHidePlayer(shouldShowCommentsDialog)) Padding(
+                padding: const EdgeInsets.only(top: kIsWeb ? 60 : 0, bottom: kIsWeb ? 60 : 0),
+                child: YoutubePlayerScaffold(
                     key: const Key('VideoDetailsYoutubeScaffold'),
+                    autoFullScreen: false,
                     controller: _controller,
-                    aspectRatio: 16 / 9,
-                    builder: (context, player) =>
-                        Stack(
-                          key: const Key('VideoDetailsStack'),
-                          alignment: Alignment.center,
-                          children: [
-                            IconRenderer(
-                                key: const Key('VideoDetailsStackBackgroundSvg'),
-                                asset: 'background.svg',
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                                color: Colors.white.withOpacity(0.05)
-                            ),
-                            Align(
-                              key: const Key('VideoDetailsAlignBack'),
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                key: const Key('VideoDetailsAlignBackPadding'),
-                                padding: const EdgeInsets.all(5.0),
-                                child: _renderBackButton(context),
-                              ),
-                            ),
-                            Align(
-                              key: const Key('VideoDetailsAlignShare'),
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                key: const Key('VideoDetailsAlignSharePadding'),
-                                padding: const EdgeInsets.only(
-                                  left: 60.0, top: 5.0,),
-                                child: _renderShareButton(),
-                              ),
-                            ),
-                            Align(
-                              key: const Key('VideoDetailsAlignComments'),
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                key: const Key('VideoDetailsAlignCommentsPadding'),
-                                padding: const EdgeInsets.only(
-                                  left: 115.0, top: 5.0,),
-                                child: _renderCommentsButton(),
-                              ),
-                            ),
-                            if(shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(key: Key('BlurableDetailsPage'), strength: 10),
-                            if (shouldShowCommentsDialog != null) Align(
-                              key: const Key('CommentsDialogAlign'),
-                              alignment: Alignment.bottomCenter,
-                              child: SlideTransitionAnimation(
-                                  key: const Key('CommentsDialogSlideAnimation'),
-                                  duration: const Duration(milliseconds: 1000),
-                                  getStart: () => shouldShowCommentsDialog ? const Offset(0, 1) : const Offset(0, 0),
-                                  getEnd: () => shouldShowCommentsDialog ? const Offset(0, 0) : const Offset(0, 10),
-                                  whenTo: (controller) {
-                                    useValueChanged(shouldShowCommentsDialog, (_, __) async {
-                                      controller.reset();
-                                      controller.forward();
-                                    });
-                                  },
-                                  child: CommentDialog<VideoCommentsData>(
-                                      widgetKey: const Key('comment_video'),
-                                      parentItemId: widget.id,
-                                      serviceProvider: videoCommentsDataViewProvider,
-                                      itemBuilder: (BuildContext context, VideoCommentsData item, List<String> submittedComments, SharedPreferences sharedPrefs, int index) => Padding(
-                                        key: const Key('CommentDialogListPadding'),
-                                        padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
-                                        child: Column(
-                                          key: const Key('CommentDialogListColumn'),
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                StyledText(
-                                                  text: utf8.decode(item.deviceName!.runes.toList()),
-                                                  fontSize: 15,
-                                                  weight: FontWeight.bold,
-                                                  clip: false,
-                                                  align: TextAlign.start,
-                                                  padding: 0,
-                                                ),
-                                                const SizedBox(width: 5,),
-                                                if(item.rating! > 0) RatingBar.builder(
-                                                  initialRating: item.rating!,
-                                                  minRating: 0,
-                                                  direction: Axis.horizontal,
-                                                  allowHalfRating: false,
-                                                  ignoreGestures: true,
-                                                  itemSize: 25,
-                                                  glow: true,
-                                                  itemCount: 5,
-                                                  itemBuilder: (context, _) => const Icon(
-                                                    Icons.star,
-                                                    color: Colors.amber,
-                                                  ),
-                                                  onRatingUpdate: (rating) {},
-                                                ),
-                                                const Spacer(),
-                                                if (submittedComments.contains('${item.id}') || Session().isLoggedIn()) DefaultButton(
-                                                    key: const Key('CommentDeleteButton'),
-                                                    padding: 0,
-                                                    height: 25,
-                                                    onClick: () => ref.read(commentsServiceProvider).deleteVideoComment(item.id!).then((value) {
-                                                      ref.read(videoCommentsDataViewProvider.notifier).removeItem(index);
-                                                      sharedPrefs.setStringList('submittedComments', submittedComments..remove('${value.id}'));
-                                                      showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
-                                                    }),
-                                                    tooltip: FlutterI18n.translate(context, 'Delete comment'),
-                                                    color: Colors.white.withOpacity(0.3),
-                                                    borderColor: Colors.white,
-                                                    icon: 'delete.svg'
-                                                )
-                                              ],),
-                                            Padding(
-                                              padding: EdgeInsets.only(top: submittedComments.contains('${item.id}') ? 3 : 5, bottom: 5),
-                                              child: StyledText(
-                                                text: formatTimeDifference(item.date),
-                                                fontSize: 10,
-                                                color: Colors.black38,
-                                                weight: FontWeight.bold,
-                                                align: TextAlign.start,
-                                                letterSpacing: 3,
-                                                padding: 0,
-                                              ),
-                                            ),
-                                            StyledText(
-                                              text: utf8.decode(item.comment!.runes.toList()),
-                                              fontSize: 13,
-                                              clip: false,
-                                              align: TextAlign.start,
-                                              color: Colors.black87,
-                                              padding: 0,
-                                            ),
-                                          ],
-                                        ),
-                                      )
+                    builder: (context, player) => player
+                ),
+              ),
+              OrientationBuilder(
+                builder: (context, orientation) {
+                  return Align(
+                    key: const Key('VideoDetailsActionsOrientationAlign'),
+                    alignment: kIsWeb ? Alignment.topCenter : orientation == Orientation.portrait ? Alignment.topCenter : Alignment.centerLeft,
+                    child: orientation == Orientation.portrait || kIsWeb ? Row(
+                      key: const Key('VideoDetailsActionsRow'),
+                      children: _renderActions(),
+                    ) : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      key: const Key('VideoDetailsActionsRow'),
+                      children: _renderActions(),
+                    ),
+                  );
+                },
+              ),
+              if(shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(key: Key('BlurableDetailsPage'), strength: 10),
+              if (shouldShowCommentsDialog != null && shouldShowCommentsDialog) Align(
+                key: const Key('CommentsDialogAlign'),
+                alignment: Alignment.bottomCenter,
+                child: SlideTransitionAnimation(
+                    key: const Key('CommentsDialogSlideAnimation'),
+                    duration: const Duration(milliseconds: 1000),
+                    getStart: () => shouldShowCommentsDialog ? const Offset(0, 1) : const Offset(0, 0),
+                    getEnd: () => shouldShowCommentsDialog ? const Offset(0, 0) : const Offset(0, 10),
+                    whenTo: (controller) {
+                      useValueChanged(shouldShowCommentsDialog, (_, __) async {
+                        controller.reset();
+                        controller.forward();
+                      });
+                    },
+                    child: CommentDialog<VideoCommentsData>(
+                        widgetKey: const Key('comment_video'),
+                        parentItemId: widget.id,
+                        serviceProvider: videoCommentsDataViewProvider,
+                        itemBuilder: (BuildContext context, VideoCommentsData item, List<String> submittedComments, SharedPreferences sharedPrefs, int index) => Padding(
+                          key: const Key('CommentDialogListPadding'),
+                          padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
+                          child: Column(
+                            key: const Key('CommentDialogListColumn'),
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  StyledText(
+                                    text: utf8.decode(item.deviceName!.runes.toList()),
+                                    fontSize: 15,
+                                    weight: FontWeight.bold,
+                                    clip: false,
+                                    align: TextAlign.start,
+                                    padding: 0,
+                                  ),
+                                  const SizedBox(width: 5,),
+                                  if(item.rating! > 0) RatingBar.builder(
+                                    initialRating: item.rating!,
+                                    minRating: 0,
+                                    direction: Axis.horizontal,
+                                    allowHalfRating: false,
+                                    ignoreGestures: true,
+                                    itemSize: 25,
+                                    glow: true,
+                                    itemCount: 5,
+                                    itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (rating) {},
+                                  ),
+                                  const Spacer(),
+                                  if (submittedComments.contains('${item.id}') || Session().isLoggedIn()) DefaultButton(
+                                      key: const Key('CommentDeleteButton'),
+                                      padding: 0,
+                                      height: 25,
+                                      onClick: () => ref.read(commentsServiceProvider).deleteVideoComment(item.id!).then((value) {
+                                        ref.read(videoCommentsDataViewProvider.notifier).removeItem(index);
+                                        sharedPrefs.setStringList('submittedComments', submittedComments..remove('${value.id}'));
+                                        showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
+                                      }),
+                                      tooltip: FlutterI18n.translate(context, 'Delete comment'),
+                                      color: Colors.white.withOpacity(0.3),
+                                      borderColor: Colors.white,
+                                      icon: 'delete.svg'
                                   )
+                                ],),
+                              Padding(
+                                padding: EdgeInsets.only(top: submittedComments.contains('${item.id}') ? 3 : 5, bottom: 5),
+                                child: StyledText(
+                                  text: formatTimeDifference(item.date),
+                                  fontSize: 10,
+                                  color: Colors.black38,
+                                  weight: FontWeight.bold,
+                                  align: TextAlign.start,
+                                  letterSpacing: 3,
+                                  padding: 0,
+                                ),
                               ),
-                            ),
-                            if (shouldShowCommentsDialog == null || !shouldShowCommentsDialog) SizedBox(
-                                key: const Key('VideoDetailsSizedBoxPlayer'),
-                                width: constraints.maxWidth,
-                                height: constraints.maxHeight - 130,
-                                child: player
-                            )
-                          ],
-                        ),
-                  )
-              )
-      ),
+                              StyledText(
+                                text: utf8.decode(item.comment!.runes.toList()),
+                                fontSize: 13,
+                                clip: false,
+                                align: TextAlign.start,
+                                color: Colors.black87,
+                                padding: 0,
+                              ),
+                            ],
+                          ),
+                        )
+                    )
+                ),
+              ),
+            ],
+          )
+      )
     );
   }
 }
