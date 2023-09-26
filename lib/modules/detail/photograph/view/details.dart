@@ -568,72 +568,92 @@ class PhotographDetailsView extends HookConsumerWidget {
                   itemBuilder: (BuildContext context, ImageCommentsData item, List<String> submittedComments, SharedPreferences sharedPrefs, int index) => Padding(
                     key: const Key('CommentDialogListPadding'),
                     padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
-                    child: Column(
-                      key: const Key('CommentDialogListColumn'),
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
                       children: [
-                        Row(
-                          children: [
-                            StyledText(
-                              text: utf8.decode(item.deviceName!.runes.toList()),
-                              fontSize: 15,
-                              weight: FontWeight.bold,
-                              clip: false,
-                              align: TextAlign.start,
-                              padding: 0,
-                            ),
-                            const SizedBox(width: 5,),
-                            if(item.rating! > 0) RatingBar.builder(
-                              initialRating: item.rating!,
-                              minRating: 0,
-                              direction: Axis.horizontal,
-                              allowHalfRating: false,
-                              ignoreGestures: true,
-                              itemSize: 25,
-                              glow: true,
-                              itemCount: 5,
-                              itemBuilder: (context, _) => const Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                              ),
-                              onRatingUpdate: (rating) {},
-                            ),
-                            const Spacer(),
-                            if (submittedComments.contains('${item.id}') || Session().isLoggedIn()) DefaultButton(
-                                key: const Key('CommentDeleteButton'),
-                                padding: 0,
-                                height: 25,
-                                onClick: () => ref.read(commentsServiceProvider).deletePhotographComment(item.id!).then((value) {
-                                  ref.read(imageCommentsDataViewProvider.notifier).removeItem(index);
-                                  sharedPrefs.setStringList('submittedComments', submittedComments..remove('${value.id}'));
-                                  showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
-                                }),
-                                tooltip: FlutterI18n.translate(context, 'Delete comment'),
-                                color: Colors.white.withOpacity(0.3),
-                                borderColor: Colors.white,
-                                icon: 'delete.svg'
-                            )
-                          ],),
-                        Padding(
-                          padding: EdgeInsets.only(top: submittedComments.contains('${item.id}') ? 3 : 5, bottom: 5),
-                          child: StyledText(
-                            text: formatTimeDifference(item.date),
-                            fontSize: 10,
-                            color: Colors.black38,
-                            weight: FontWeight.bold,
-                            align: TextAlign.start,
-                            letterSpacing: 3,
-                            padding: 0,
+                        Container(
+                          key: Key("CommentDialogCircleDivider$index"),
+                          width: 5.0,
+                          height: 5.0,
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                            shape: BoxShape.circle,
                           ),
                         ),
-                        StyledText(
-                          text: utf8.decode(item.comment!.runes.toList()),
-                          fontSize: 13,
-                          clip: false,
-                          align: TextAlign.start,
-                          color: Colors.black87,
-                          padding: 0,
+                        Expanded(
+                          key: Key("CommentDialogExpandedDivider$index"),
+                          child: Padding(
+                            key: Key("CommentDialogExpandedDividerPadding$index"),
+                            padding: const EdgeInsets.only(left: 8),
+                            child: Column(
+                              key: Key('CommentDialogListColumn$index'),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    StyledText(
+                                      text: utf8.decode(item.deviceName!.runes.toList()),
+                                      fontSize: 15,
+                                      weight: FontWeight.bold,
+                                      clip: false,
+                                      align: TextAlign.start,
+                                      padding: 0,
+                                    ),
+                                    const SizedBox(width: 5,),
+                                    if(item.rating! > 0) RatingBar.builder(
+                                      initialRating: item.rating!,
+                                      minRating: 0,
+                                      direction: Axis.horizontal,
+                                      allowHalfRating: false,
+                                      ignoreGestures: true,
+                                      itemSize: 25,
+                                      glow: true,
+                                      itemCount: 5,
+                                      itemBuilder: (context, _) => const Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ),
+                                      onRatingUpdate: (rating) {},
+                                    ),
+                                    const Spacer(),
+                                    if (submittedComments.contains('${item.id}') || Session().isLoggedIn()) DefaultButton(
+                                        key: Key('CommentDeleteButton$index'),
+                                        padding: 0,
+                                        height: 25,
+                                        onClick: () => ref.read(commentsServiceProvider).deletePhotographComment(item.id!).then((value) {
+                                          ref.read(imageCommentsDataViewProvider.notifier).removeItem(index);
+                                          sharedPrefs.setStringList('submittedComments', submittedComments..remove('${value.id}'));
+                                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
+                                        }),
+                                        tooltip: FlutterI18n.translate(context, 'Delete comment'),
+                                        color: Colors.white.withOpacity(0.3),
+                                        borderColor: Colors.white,
+                                        icon: 'delete.svg'
+                                    )
+                                  ],),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10, bottom: 5),
+                                  child: StyledText(
+                                    text: formatTimeDifference(context, item.date),
+                                    fontSize: 10,
+                                    color: Colors.black38,
+                                    weight: FontWeight.bold,
+                                    align: TextAlign.start,
+                                    letterSpacing: 3,
+                                    padding: 0,
+                                  ),
+                                ),
+                                StyledText(
+                                  text: utf8.decode(item.comment!.runes.toList()),
+                                  fontSize: 13,
+                                  clip: false,
+                                  align: TextAlign.start,
+                                  color: Colors.black87,
+                                  padding: 0,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),

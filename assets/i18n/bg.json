@@ -80,5 +80,10 @@
   "Comment posted": "Коментара е изпратен",
   "The comment is more than 1000 characters": "Коментара е по - дълъг от 1000 символа",
   "Delete comment": "Изтрий коментар",
-  "Comment deleted": "Коментара беше изтрит"
+  "Comment deleted": "Коментара беше изтрит",
+  "Before": "Преди",
+  "day": "ден",
+  "days": "дни",
+  "Today": "Днес",
+  "Please, post only meaningful comments or they could get deleted": "Моля, поствайте смислени коментари или могат да бъдат изтрити"
 }

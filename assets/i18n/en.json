@@ -80,5 +80,10 @@
   "Comment posted": "Comment posted",
   "The comment is more than 1000 characters": "The comment is more than 1000 characters",
   "Delete comment": "Delete comment",
-  "Comment deleted": "Comment deleted"
+  "Comment deleted": "Comment deleted",
+  "Before": "Before",
+  "day": "day",
+  "days": "days",
+  "Today": "Today",
+  "Please, post only meaningful comments or they could get deleted": "Please, post only meaningful comments or they could get deleted"
 }

@@ -191,80 +191,99 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
             itemBuilder: (BuildContext context, VideoCommentsData item, List<String> submittedComments, SharedPreferences sharedPrefs, int index) => Padding(
               key: Key('CommentDialogListPadding$index}'),
               padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
-              child: Column(
-                key: Key('CommentDialogListColumn$index'),
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
-                  Row(
-                    key: Key('CommentDialogListRow$index'),
-                    children: [
-                      StyledText(
-                        key: Key('CommentDeviceName$index'),
-                        text: utf8.decode(item.deviceName!.runes.toList()),
-                        fontSize: 15,
-                        weight: FontWeight.bold,
-                        clip: false,
-                        align: TextAlign.start,
-                        padding: 0,
-                      ),
-                      SizedBox(
-                        key: Key('CommentDeviceNameSizedBox$index'),
-                        width: 5
-                      ),
-                      if(item.rating! > 0) RatingBar.builder(
-                        initialRating: item.rating!,
-                        minRating: 0,
-                        direction: Axis.horizontal,
-                        allowHalfRating: false,
-                        ignoreGestures: true,
-                        itemSize: 25,
-                        glow: true,
-                        itemCount: 5,
-                        itemBuilder: (context, _) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                        onRatingUpdate: (rating) {},
-                      ),
-                      Spacer(key: Key('CommentRatingBarSpacer$index')),
-                      if (submittedComments.contains('${item.id}') || Session().isLoggedIn()) DefaultButton(
-                          key: Key('CommentDeleteButton$index'),
-                          padding: 0,
-                          height: 25,
-                          onClick: () => ref.read(commentsServiceProvider).deleteVideoComment(item.id!).then((value) {
-                            ref.read(videoCommentsDataViewProvider.notifier).removeItem(index);
-                            sharedPrefs.setStringList('submittedComments', submittedComments..remove('${value.id}'));
-                            showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
-                          }),
-                          tooltip: FlutterI18n.translate(context, 'Delete comment'),
-                          color: Colors.white.withOpacity(0.3),
-                          borderColor: Colors.white,
-                          icon: 'delete.svg'
-                      )
-                    ],),
-                  Padding(
-                    key: Key('CommentDialogDatePadding$index'),
-                    padding: EdgeInsets.only(top: submittedComments.contains('${item.id}') ? 3 : 5, bottom: 5),
-                    child: StyledText(
-                      key: Key('CommentDialogDate$index'),
-                      text: formatTimeDifference(item.date),
-                      fontSize: 10,
-                      color: Colors.black38,
-                      weight: FontWeight.bold,
-                      align: TextAlign.start,
-                      letterSpacing: 3,
-                      padding: 0,
+                  Container(
+                    key: Key("CommentDialogCircleDivider$index"),
+                    width: 5.0,
+                    height: 5.0,
+                    decoration: const BoxDecoration(
+                      color: Colors.black,
+                      shape: BoxShape.circle,
                     ),
                   ),
-                  StyledText(
-                    key: Key('CommentDialogTextComment$index'),
-                    text: utf8.decode(item.comment!.runes.toList()),
-                    fontSize: 13,
-                    clip: false,
-                    align: TextAlign.start,
-                    color: Colors.black87,
-                    padding: 0,
+                  Expanded(
+                    key: Key("CommentDialogExpandedDivider$index"),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Column(
+                        key: Key('CommentDialogListColumn$index'),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            key: Key('CommentDialogListRow$index'),
+                            children: [
+                              StyledText(
+                                key: Key('CommentDeviceName$index'),
+                                text: utf8.decode(item.deviceName!.runes.toList()),
+                                fontSize: 15,
+                                weight: FontWeight.bold,
+                                clip: false,
+                                align: TextAlign.start,
+                                padding: 0,
+                              ),
+                              SizedBox(
+                                key: Key('CommentDeviceNameSizedBox$index'),
+                                width: 5
+                              ),
+                              if(item.rating! > 0) RatingBar.builder(
+                                initialRating: item.rating!,
+                                minRating: 0,
+                                direction: Axis.horizontal,
+                                allowHalfRating: false,
+                                ignoreGestures: true,
+                                itemSize: 25,
+                                glow: true,
+                                itemCount: 5,
+                                itemBuilder: (context, _) => const Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                                onRatingUpdate: (rating) {},
+                              ),
+                              Spacer(key: Key('CommentRatingBarSpacer$index')),
+                              if (submittedComments.contains('${item.id}') || Session().isLoggedIn()) DefaultButton(
+                                  key: Key('CommentDeleteButton$index'),
+                                  padding: 0,
+                                  height: 25,
+                                  onClick: () => ref.read(commentsServiceProvider).deleteVideoComment(item.id!).then((value) {
+                                    ref.read(videoCommentsDataViewProvider.notifier).removeItem(index);
+                                    sharedPrefs.setStringList('submittedComments', submittedComments..remove('${value.id}'));
+                                    showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
+                                  }),
+                                  tooltip: FlutterI18n.translate(context, 'Delete comment'),
+                                  color: Colors.white.withOpacity(0.3),
+                                  borderColor: Colors.white,
+                                  icon: 'delete.svg'
+                              )
+                            ],),
+                          Padding(
+                            key: Key('CommentDialogDatePadding$index'),
+                            padding: const EdgeInsets.only(top: 10, bottom: 5),
+                            child: StyledText(
+                              key: Key('CommentDialogDate$index'),
+                              text: formatTimeDifference(context, item.date),
+                              fontSize: 10,
+                              color: Colors.black38,
+                              weight: FontWeight.bold,
+                              align: TextAlign.start,
+                              letterSpacing: 3,
+                              padding: 0,
+                            ),
+                          ),
+                          StyledText(
+                            key: Key('CommentDialogTextComment$index'),
+                            text: utf8.decode(item.comment!.runes.toList()),
+                            fontSize: 13,
+                            clip: false,
+                            align: TextAlign.start,
+                            color: Colors.black87,
+                            padding: 0,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -319,7 +338,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                   padding: EdgeInsets.only(
                       top: orientation == Orientation.landscape && kIsWeb ? 40 : 0,
                       bottom: orientation == Orientation.landscape && kIsWeb ? 40 : 0,
-                      left: orientation == Orientation.portrait ? 0 : kIsWeb ? 35 : 0,
+                      left: orientation == Orientation.portrait ? 0 : kIsWeb ? 35 : 60,
                       right: orientation == Orientation.portrait ? 0 : kIsWeb ? 35 : 0
                   ),
                   child: YoutubePlayerScaffold(
@@ -332,15 +351,19 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                 ),
                 Align(
                   key: const Key('VideoDetailsActionsOrientationAlign'),
-                  alignment: orientation == Orientation.portrait ? Alignment.topCenter : Alignment.centerLeft,
+                  alignment: orientation == Orientation.portrait ? Alignment.topCenter : Alignment.topLeft,
                   child: orientation == Orientation.portrait ? Row(
                       key: const Key('VideoDetailsActionsRow'),
                       children: _renderActions()
-                  ) : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    key: const Key('VideoDetailsActionsRow'),
-                    children: _renderActions(),
+                  ) : Padding(
+                    key: const Key('VideoDetailsActionsColumnPadding'),
+                    padding: const EdgeInsets.only(top: 40),
+                    child: Column(
+                      key: const Key('VideoDetailsActionsColumn'),
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: _renderActions(),
+                    ),
                   ),
                 ),
                 if(shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(key: Key('BlurableDetailsPage'), strength: 10),

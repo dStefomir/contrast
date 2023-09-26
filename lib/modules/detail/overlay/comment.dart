@@ -72,7 +72,7 @@ class CommentDialog<T> extends HookConsumerWidget {
           blurRadius: 4,
           child: Container(
             key: const Key('CommentDialogTopContainer'),
-            color: Colors.white.withOpacity(0.3),
+            color: Colors.white,
             height: dialogHeight,
             child: FutureBuilder<SharedPreferences>(
                 key: const Key('CommentDialogSharedPrefsFutureBuilder'),
@@ -98,18 +98,20 @@ class CommentDialog<T> extends HookConsumerWidget {
                   key: const Key('CommentDialogTopColumn'),
                   children: [
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       key: const Key('CommentDialogInnerColumn'),
                       children: [
                         Padding(
                           key: const Key('CommentDialogColumnPadding'),
-                          padding: const EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.only(top: 10.0, left: 10, right: 10),
                           child: Row(
                               key: const Key('CommentDialogColumnRow'),
                               children: [
                                 StyledText(
                                     key: const Key('CommentDialogColumnRowText'),
                                     text: FlutterI18n.translate(context, 'Comments'),
-                                    weight: FontWeight.bold
+                                    weight: FontWeight.bold,
+                                  padding: 0,
                                 ),
                                 const Spacer(key: Key('CommentDialogColumnRowSpacer'),),
                                 DefaultButton(
@@ -120,7 +122,22 @@ class CommentDialog<T> extends HookConsumerWidget {
                                     borderColor: Colors.white,
                                     icon: 'close.svg'
                                 ),
-                              ]
+                              ],
+                          ),
+                        ),
+                        Padding(
+                          key: const Key('CommentDialogColumnRowWarningTextPadding'),
+                          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                          child: StyledText(
+                              key: const Key('CommentDialogColumnRowWarningText'),
+                              text: FlutterI18n.translate(context, 'Please, post only meaningful comments or they could get deleted'),
+                              color: Colors.black87,
+                              fontSize: 10,
+                              padding: 0,
+                              letterSpacing: 3,
+                              clip: false,
+                              align: TextAlign.start,
+                              weight: FontWeight.normal
                           ),
                         ),
                       ],
@@ -238,7 +255,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                             color: Colors.white.withOpacity(0.3),
                             borderColor: Colors.white,
                             icon: 'navigate_next.svg'
-                        ) : const LoadingIndicator(color: Colors.white),
+                        ) : const LoadingIndicator(color: Colors.black),
                       ),
                     )
                   ],
