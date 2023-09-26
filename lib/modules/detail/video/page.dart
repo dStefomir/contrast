@@ -189,16 +189,18 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
             parentItemId: widget.id,
             serviceProvider: videoCommentsDataViewProvider,
             itemBuilder: (BuildContext context, VideoCommentsData item, List<String> submittedComments, SharedPreferences sharedPrefs, int index) => Padding(
-              key: const Key('CommentDialogListPadding'),
+              key: Key('CommentDialogListPadding$index}'),
               padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
               child: Column(
-                key: const Key('CommentDialogListColumn'),
+                key: Key('CommentDialogListColumn$index'),
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    key: Key('CommentDialogListRow$index'),
                     children: [
                       StyledText(
+                        key: Key('CommentDeviceName$index'),
                         text: utf8.decode(item.deviceName!.runes.toList()),
                         fontSize: 15,
                         weight: FontWeight.bold,
@@ -206,7 +208,10 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                         align: TextAlign.start,
                         padding: 0,
                       ),
-                      const SizedBox(width: 5,),
+                      SizedBox(
+                        key: Key('CommentDeviceNameSizedBox$index'),
+                        width: 5
+                      ),
                       if(item.rating! > 0) RatingBar.builder(
                         initialRating: item.rating!,
                         minRating: 0,
@@ -222,9 +227,9 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                         ),
                         onRatingUpdate: (rating) {},
                       ),
-                      const Spacer(),
+                      Spacer(key: Key('CommentRatingBarSpacer$index')),
                       if (submittedComments.contains('${item.id}') || Session().isLoggedIn()) DefaultButton(
-                          key: const Key('CommentDeleteButton'),
+                          key: Key('CommentDeleteButton$index'),
                           padding: 0,
                           height: 25,
                           onClick: () => ref.read(commentsServiceProvider).deleteVideoComment(item.id!).then((value) {
@@ -239,8 +244,10 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                       )
                     ],),
                   Padding(
+                    key: Key('CommentDialogDatePadding$index'),
                     padding: EdgeInsets.only(top: submittedComments.contains('${item.id}') ? 3 : 5, bottom: 5),
                     child: StyledText(
+                      key: Key('CommentDialogDate$index'),
                       text: formatTimeDifference(item.date),
                       fontSize: 10,
                       color: Colors.black38,
@@ -251,6 +258,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                     ),
                   ),
                   StyledText(
+                    key: Key('CommentDialogTextComment$index'),
                     text: utf8.decode(item.comment!.runes.toList()),
                     fontSize: 13,
                     clip: false,
@@ -309,10 +317,10 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                 if(!shouldHideOverlay(shouldShowCommentsDialog)) Padding(
                   key: const Key('VideoDetailsYoutubeScaffoldPadding'),
                   padding: EdgeInsets.only(
-                      top: orientation == Orientation.landscape && kIsWeb ? 60 : 0,
-                      bottom: orientation == Orientation.landscape && kIsWeb ? 60 : 0,
-                      left: orientation == Orientation.portrait ? 0 : 35,
-                      right: orientation == Orientation.portrait ? 0 : 35
+                      top: orientation == Orientation.landscape && kIsWeb ? 40 : 0,
+                      bottom: orientation == Orientation.landscape && kIsWeb ? 40 : 0,
+                      left: orientation == Orientation.portrait ? 0 : kIsWeb ? 35 : 0,
+                      right: orientation == Orientation.portrait ? 0 : kIsWeb ? 35 : 0
                   ),
                   child: YoutubePlayerScaffold(
                       key: const Key('VideoDetailsYoutubeScaffold'),
