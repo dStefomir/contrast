@@ -52,6 +52,8 @@ class VideoDetailPage extends StatefulHookConsumerWidget {
 class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
   /// Youtube controller
   late YoutubePlayerController _controller;
+  /// Key used for the comments overlay
+  late Key commentKey;
 
   @override
   void initState() {
@@ -70,6 +72,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       params: const YoutubePlayerParams(
           showFullscreenButton: true, showControls: true),
     );
+    commentKey = const Key('comment_video');
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
@@ -86,23 +89,14 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
     super.dispose();
   }
 
-  /// Function that helps to determine if the player should be hidden or not
-  bool _shouldHidePlayer(bool? isCommentOverlayOpened) {
-    if(kIsWeb) {
-      if(isCommentOverlayOpened != null && isCommentOverlayOpened == true) {
-        _controller.close();
-
+  /// Determines if the video player should be visible or not
+  bool shouldHideOverlay(bool? shouldHideOverlay) {
+    if (kIsWeb) {
+      if(shouldHideOverlay != null && shouldHideOverlay) {
         return true;
-      } else {
-        _controller = YoutubePlayerController.fromVideoId(
-          videoId: widget.path,
-          autoPlay: false,
-          params: const YoutubePlayerParams(
-              showFullscreenButton: true, showControls: true),
-        );
-
-        return false;
       }
+
+      return false;
     }
 
     return false;
@@ -112,7 +106,10 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
   Widget _renderCommentsButton() =>
       DefaultButton(
           key: const Key('VideoDetailsCommentsButton'),
-          onClick: () => ref.read(overlayVisibilityProvider(const Key('comment_video')).notifier).setOverlayVisibility(true),
+          onClick: () async {
+            await _controller.pauseVideo();
+            ref.read(overlayVisibilityProvider(commentKey).notifier).setOverlayVisibility(true);
+          },
           color: Colors.white,
           borderColor: Colors.black,
           tooltip: FlutterI18n.translate(context, 'Comments'),
@@ -123,8 +120,9 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
   Widget _renderShareButton() =>
       DefaultButton(
           key: const Key('VideoDetailsShareButton'),
-          onClick: () {
-            ref.read(overlayVisibilityProvider(const Key('comment_video')).notifier).setOverlayVisibility(false);
+          onClick: () async {
+            await _controller.pauseVideo();
+            ref.read(overlayVisibilityProvider(commentKey).notifier).setOverlayVisibility(null);
             Clipboard.setData(
                 ClipboardData(text: 'https://www.dstefomir.eu/#/videos/details/${widget.path}')
             ).then((value) => showSuccessTextOnSnackBar(
@@ -143,7 +141,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       DefaultButton(
           key: const Key('VideoDetailsBackButton'),
           onClick: () {
-            ref.read(overlayVisibilityProvider(const Key('comment_video')).notifier).setOverlayVisibility(null);
+            ref.read(overlayVisibilityProvider(commentKey).notifier).setOverlayVisibility(null);
             Modular.to.navigate('/');
             },
           color: Colors.white,
@@ -171,9 +169,117 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
     ),
   ];
 
+  /// Renders the comment overlay
+  Widget _renderCommentsOverlay(bool? shouldShowCommentsDialog) => Align(
+    key: const Key('CommentsDialogAlign'),
+    alignment: Alignment.bottomCenter,
+    child: SlideTransitionAnimation(
+        key: const Key('CommentsDialogSlideAnimation'),
+        duration: const Duration(milliseconds: 1000),
+        getStart: () => shouldShowCommentsDialog != null && shouldShowCommentsDialog ? const Offset(0, 1) : const Offset(0, 0),
+        getEnd: () => shouldShowCommentsDialog != null && shouldShowCommentsDialog ? const Offset(0, 0) : const Offset(0, 10),
+        whenTo: (controller) {
+          useValueChanged(shouldShowCommentsDialog, (_, __) async {
+            controller.reset();
+            controller.forward();
+          });
+        },
+        child: CommentDialog<VideoCommentsData>(
+            widgetKey: commentKey,
+            parentItemId: widget.id,
+            serviceProvider: videoCommentsDataViewProvider,
+            itemBuilder: (BuildContext context, VideoCommentsData item, List<String> submittedComments, SharedPreferences sharedPrefs, int index) => Padding(
+              key: const Key('CommentDialogListPadding'),
+              padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
+              child: Column(
+                key: const Key('CommentDialogListColumn'),
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      StyledText(
+                        text: utf8.decode(item.deviceName!.runes.toList()),
+                        fontSize: 15,
+                        weight: FontWeight.bold,
+                        clip: false,
+                        align: TextAlign.start,
+                        padding: 0,
+                      ),
+                      const SizedBox(width: 5,),
+                      if(item.rating! > 0) RatingBar.builder(
+                        initialRating: item.rating!,
+                        minRating: 0,
+                        direction: Axis.horizontal,
+                        allowHalfRating: false,
+                        ignoreGestures: true,
+                        itemSize: 25,
+                        glow: true,
+                        itemCount: 5,
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (rating) {},
+                      ),
+                      const Spacer(),
+                      if (submittedComments.contains('${item.id}') || Session().isLoggedIn()) DefaultButton(
+                          key: const Key('CommentDeleteButton'),
+                          padding: 0,
+                          height: 25,
+                          onClick: () => ref.read(commentsServiceProvider).deleteVideoComment(item.id!).then((value) {
+                            ref.read(videoCommentsDataViewProvider.notifier).removeItem(index);
+                            sharedPrefs.setStringList('submittedComments', submittedComments..remove('${value.id}'));
+                            showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
+                          }),
+                          tooltip: FlutterI18n.translate(context, 'Delete comment'),
+                          color: Colors.white.withOpacity(0.3),
+                          borderColor: Colors.white,
+                          icon: 'delete.svg'
+                      )
+                    ],),
+                  Padding(
+                    padding: EdgeInsets.only(top: submittedComments.contains('${item.id}') ? 3 : 5, bottom: 5),
+                    child: StyledText(
+                      text: formatTimeDifference(item.date),
+                      fontSize: 10,
+                      color: Colors.black38,
+                      weight: FontWeight.bold,
+                      align: TextAlign.start,
+                      letterSpacing: 3,
+                      padding: 0,
+                    ),
+                  ),
+                  StyledText(
+                    text: utf8.decode(item.comment!.runes.toList()),
+                    fontSize: 13,
+                    clip: false,
+                    align: TextAlign.start,
+                    color: Colors.black87,
+                    padding: 0,
+                  ),
+                ],
+              ),
+            )
+        )
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
-    final bool? shouldShowCommentsDialog = ref.watch(overlayVisibilityProvider(const Key('comment_video')));
+    final bool? shouldShowCommentsDialog = ref.watch(overlayVisibilityProvider(commentKey));
+    /// If its web reset the controller when the comments overlay is closed
+    useValueChanged(shouldShowCommentsDialog, (_, __) async {
+      if(kIsWeb && shouldShowCommentsDialog != null && !shouldShowCommentsDialog) {
+        _controller.close();
+        _controller = YoutubePlayerController.fromVideoId(
+          videoId: widget.path,
+          autoPlay: false,
+          params: const YoutubePlayerParams(
+              showFullscreenButton: true, showControls: true),
+        );
+      }
+    });
 
     return RawKeyboardListener(
       key: const Key('VideoDetailsKeyboardListener'),
@@ -187,141 +293,52 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       child: BackgroundPage(
           key: const Key('VideoDetailsBackgroundPage'),
           color: Colors.black,
-          child: Stack(
-            key: const Key('VideoDetailsStack'),
-            alignment: Alignment.center,
-            children: [
-              IconRenderer(
-                  key: const Key('VideoDetailsStackBackgroundSvg'),
-                  asset: 'background.svg',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: Colors.white.withOpacity(0.05)
-              ),
-              if(!_shouldHidePlayer(shouldShowCommentsDialog)) Padding(
-                key: const Key('VideoDetailsYoutubeScaffoldPadding'),
-                padding: const EdgeInsets.only(top: kIsWeb ? 60 : 0, bottom: kIsWeb ? 60 : 0, left: kIsWeb ? 0 : 5, right: kIsWeb ? 0 : 5),
-                child: YoutubePlayerScaffold(
-                    key: const Key('VideoDetailsYoutubeScaffold'),
-                    backgroundColor: Colors.transparent,
-                    controller: _controller,
-                    builder: (context, player) => player
+          child: OrientationBuilder(
+            builder: (BuildContext context, Orientation orientation) => Stack(
+              key: const Key('VideoDetailsStack'),
+              alignment: Alignment.center,
+              children: [
+                IconRenderer(
+                    key: const Key('VideoDetailsStackBackgroundSvg'),
+                    asset: 'background.svg',
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: Colors.white.withOpacity(0.05)
                 ),
-              ),
-              OrientationBuilder(
-                builder: (context, orientation) {
-                  return Align(
-                    key: const Key('VideoDetailsActionsOrientationAlign'),
-                    alignment: kIsWeb ? Alignment.topCenter : orientation == Orientation.portrait ? Alignment.topCenter : Alignment.centerLeft,
-                    child: orientation == Orientation.portrait || kIsWeb ? Row(
-                      key: const Key('VideoDetailsActionsRow'),
-                      children: _renderActions(),
-                    ) : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      key: const Key('VideoDetailsActionsRow'),
-                      children: _renderActions(),
-                    ),
-                  );
-                },
-              ),
-              if(shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(key: Key('BlurableDetailsPage'), strength: 10),
-              if (shouldShowCommentsDialog != null && shouldShowCommentsDialog) Align(
-                key: const Key('CommentsDialogAlign'),
-                alignment: Alignment.bottomCenter,
-                child: SlideTransitionAnimation(
-                    key: const Key('CommentsDialogSlideAnimation'),
-                    duration: const Duration(milliseconds: 1000),
-                    getStart: () => shouldShowCommentsDialog ? const Offset(0, 1) : const Offset(0, 0),
-                    getEnd: () => shouldShowCommentsDialog ? const Offset(0, 0) : const Offset(0, 10),
-                    whenTo: (controller) {
-                      useValueChanged(shouldShowCommentsDialog, (_, __) async {
-                        controller.reset();
-                        controller.forward();
-                      });
-                    },
-                    child: CommentDialog<VideoCommentsData>(
-                        widgetKey: const Key('comment_video'),
-                        parentItemId: widget.id,
-                        serviceProvider: videoCommentsDataViewProvider,
-                        itemBuilder: (BuildContext context, VideoCommentsData item, List<String> submittedComments, SharedPreferences sharedPrefs, int index) => Padding(
-                          key: const Key('CommentDialogListPadding'),
-                          padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
-                          child: Column(
-                            key: const Key('CommentDialogListColumn'),
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  StyledText(
-                                    text: utf8.decode(item.deviceName!.runes.toList()),
-                                    fontSize: 15,
-                                    weight: FontWeight.bold,
-                                    clip: false,
-                                    align: TextAlign.start,
-                                    padding: 0,
-                                  ),
-                                  const SizedBox(width: 5,),
-                                  if(item.rating! > 0) RatingBar.builder(
-                                    initialRating: item.rating!,
-                                    minRating: 0,
-                                    direction: Axis.horizontal,
-                                    allowHalfRating: false,
-                                    ignoreGestures: true,
-                                    itemSize: 25,
-                                    glow: true,
-                                    itemCount: 5,
-                                    itemBuilder: (context, _) => const Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    onRatingUpdate: (rating) {},
-                                  ),
-                                  const Spacer(),
-                                  if (submittedComments.contains('${item.id}') || Session().isLoggedIn()) DefaultButton(
-                                      key: const Key('CommentDeleteButton'),
-                                      padding: 0,
-                                      height: 25,
-                                      onClick: () => ref.read(commentsServiceProvider).deleteVideoComment(item.id!).then((value) {
-                                        ref.read(videoCommentsDataViewProvider.notifier).removeItem(index);
-                                        sharedPrefs.setStringList('submittedComments', submittedComments..remove('${value.id}'));
-                                        showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
-                                      }),
-                                      tooltip: FlutterI18n.translate(context, 'Delete comment'),
-                                      color: Colors.white.withOpacity(0.3),
-                                      borderColor: Colors.white,
-                                      icon: 'delete.svg'
-                                  )
-                                ],),
-                              Padding(
-                                padding: EdgeInsets.only(top: submittedComments.contains('${item.id}') ? 3 : 5, bottom: 5),
-                                child: StyledText(
-                                  text: formatTimeDifference(item.date),
-                                  fontSize: 10,
-                                  color: Colors.black38,
-                                  weight: FontWeight.bold,
-                                  align: TextAlign.start,
-                                  letterSpacing: 3,
-                                  padding: 0,
-                                ),
-                              ),
-                              StyledText(
-                                text: utf8.decode(item.comment!.runes.toList()),
-                                fontSize: 13,
-                                clip: false,
-                                align: TextAlign.start,
-                                color: Colors.black87,
-                                padding: 0,
-                              ),
-                            ],
-                          ),
-                        )
-                    )
+                if(!shouldHideOverlay(shouldShowCommentsDialog)) Padding(
+                  key: const Key('VideoDetailsYoutubeScaffoldPadding'),
+                  padding: EdgeInsets.only(
+                      top: orientation == Orientation.landscape && kIsWeb ? 60 : 0,
+                      bottom: orientation == Orientation.landscape && kIsWeb ? 60 : 0,
+                      left: orientation == Orientation.portrait ? 0 : 35,
+                      right: orientation == Orientation.portrait ? 0 : 35
+                  ),
+                  child: YoutubePlayerScaffold(
+                      key: const Key('VideoDetailsYoutubeScaffold'),
+                      aspectRatio: 16 / 9,
+                      backgroundColor: Colors.transparent,
+                      controller: _controller,
+                      builder: (context, player) => player
+                  ),
                 ),
-              ),
-            ],
+                Align(
+                  key: const Key('VideoDetailsActionsOrientationAlign'),
+                  alignment: orientation == Orientation.portrait ? Alignment.topCenter : Alignment.centerLeft,
+                  child: orientation == Orientation.portrait ? Row(
+                      key: const Key('VideoDetailsActionsRow'),
+                      children: _renderActions()
+                  ) : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    key: const Key('VideoDetailsActionsRow'),
+                    children: _renderActions(),
+                  ),
+                ),
+                if(shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(key: Key('BlurableDetailsPage'), strength: 10),
+                if (shouldShowCommentsDialog != null) _renderCommentsOverlay(shouldShowCommentsDialog)
+              ],
+            ),
           )
       )
     );
