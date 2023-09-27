@@ -37,8 +37,8 @@ class BoardPageFooter extends HookConsumerWidget {
         width: 120,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: ExactAssetImage('assets/profile.jpg'),
-            fit: BoxFit.cover,
+            image: ExactAssetImage('assets/profile_background.jpg'),
+            fit: BoxFit.fill,
           ),
         ),
         height: boardPadding + 22,
@@ -57,8 +57,7 @@ class BoardPageFooter extends HookConsumerWidget {
                 shape: const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
                 direction: SpeedDialDirection.up,
                 animationDuration: const Duration(milliseconds: 500),
-                buttonSize: const Size(80, 0),
-                elevation: 1,
+                elevation: 10,
                 spacing: 5,
                 spaceBetweenChildren: 10,
                 children: [

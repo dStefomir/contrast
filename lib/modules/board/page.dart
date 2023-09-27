@@ -101,6 +101,32 @@ class BoardPageState extends ConsumerState<BoardPage> {
     }
   }
 
+  /// Calculates the offset for the starting animation of the board animation
+  Offset _calculateBoardStartAnimation(WidgetRef ref) {
+    final String currentTab = ref.watch(boardFooterTabProvider);
+    final String currentFilter = ref.watch(boardHeaderTabProvider);
+    double dx = -3;
+    double dy = 0;
+
+    useValueChanged(currentFilter, (_, __) async {
+      if(currentTab == 'photos') {
+        dx = 0;
+        dy = -3;
+      }
+    });
+    useValueChanged(currentTab, (_, __) async {
+      if(currentTab == 'photos') {
+        dx = -3;
+        dy = 0;
+      } else {
+        dx = 3;
+        dy = 0;
+      }
+    });
+
+    return Offset(dx, dy);
+  }
+
   /// Renders the floating action button
   Widget _buildFloatingActionButtons(BuildContext context, WidgetRef ref) => Padding(
     key: const Key('FloatingActionButtonPadding'),
@@ -178,32 +204,6 @@ class BoardPageState extends ConsumerState<BoardPage> {
         ]
     ),
   ).translateOnPhotoHover;
-
-  /// Calculates the offset for the starting animation of the board animation
-  Offset _calculateBoardStartAnimation(WidgetRef ref) {
-    final String currentTab = ref.watch(boardFooterTabProvider);
-    final String currentFilter = ref.watch(boardHeaderTabProvider);
-    double dx = -3;
-    double dy = 0;
-
-    useValueChanged(currentFilter, (_, __) async {
-      if(currentTab == 'photos') {
-        dx = 0;
-        dy = -3;
-      }
-    });
-    useValueChanged(currentTab, (_, __) async {
-      if(currentTab == 'photos') {
-        dx = -3;
-        dy = 0;
-      } else {
-        dx = 3;
-        dy = 0;
-      }
-    });
-
-    return Offset(dx, dy);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -342,7 +342,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                           getStart: () => const Offset(0.0, 1),
                           getEnd: () => Offset.zero,
                           duration: const Duration(milliseconds: 1200),
-                          child: BoardPageFooter(key: const Key('BoardFooterAlign'), onUserAction: _onAction)
+                          child: BoardPageFooter(key: const Key('BoardFooterAlign'), onUserAction: _onAction,)
                       )
                   ),
                   Align(
