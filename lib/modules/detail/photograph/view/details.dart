@@ -342,7 +342,7 @@ class PhotographDetailsView extends HookConsumerWidget {
       },
       child: Padding(
         key: const Key('PhotographDetailsButtonPadding'),
-        padding: const EdgeInsets.only(left: 225.0, top: 5.0),
+        padding: EdgeInsets.only(left: !kIsWeb || Session().isLoggedIn() ? 225.0 : 170.0, top: 5.0),
         child: Align(
             key: const Key('PhotographDetailsButtonAlign'),
             alignment: Alignment.topLeft,
@@ -526,7 +526,7 @@ class PhotographDetailsView extends HookConsumerWidget {
           ) :
           _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
           _renderDetailsBtn(ref, context, scrollController, image),
-          _renderCommentsBtn(ref, context),
+          if (!kIsWeb || Session().isLoggedIn()) _renderCommentsBtn(ref, context),
           _renderAudioButton(context, ref),
           _renderShareButton(context, ref, currentPhotographIndex),
           _renderGoBackBtn(context, ref),
@@ -546,8 +546,8 @@ class PhotographDetailsView extends HookConsumerWidget {
               child: _renderPhotographTitle(context, ref, currentPhotographIndex)
           ),
           _renderSignature(maxHeight, currentView),
-          if(shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(key: Key('BlurableDetailsPage'), strength: 10),
-          if (shouldShowCommentsDialog != null) Align(
+          if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(key: Key('BlurableDetailsPage'), strength: 10),
+          if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null) Align(
             key: const Key('CommentsDialogAlign'),
             alignment: Alignment.bottomCenter,
             child: SlideTransitionAnimation(

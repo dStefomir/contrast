@@ -162,7 +162,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       padding: const EdgeInsets.only(top: 5.0,),
       child: _renderShareButton(),
     ),
-    Padding(
+    if (!kIsWeb || Session().isLoggedIn()) Padding(
       key: const Key('VideoDetailsAlignCommentsPadding'),
       padding: const EdgeInsets.only(top: 5.0,),
       child: _renderCommentsButton(),
@@ -366,8 +366,8 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                     ),
                   ),
                 ),
-                if(shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(key: Key('BlurableDetailsPage'), strength: 10),
-                if (shouldShowCommentsDialog != null) _renderCommentsOverlay(shouldShowCommentsDialog)
+                if((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(key: Key('BlurableDetailsPage'), strength: 10),
+                if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null) _renderCommentsOverlay(shouldShowCommentsDialog)
               ],
             ),
           )
