@@ -22,7 +22,6 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 import '../../../common/widgets/snack.dart';
@@ -188,7 +187,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
             widgetKey: commentKey,
             parentItemId: widget.id,
             serviceProvider: videoCommentsDataViewProvider,
-            itemBuilder: (BuildContext context, VideoCommentsData item, List<String> submittedComments, SharedPreferences sharedPrefs, int index) => Padding(
+            itemBuilder: (BuildContext context, VideoCommentsData item, String? deviceId, int index) => Padding(
               key: Key('CommentDialogListPadding$index}'),
               padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
               child: Row(
@@ -243,13 +242,12 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                 onRatingUpdate: (rating) {},
                               ),
                               Spacer(key: Key('CommentRatingBarSpacer$index')),
-                              if (submittedComments.contains('${item.id}') || Session().isLoggedIn()) DefaultButton(
+                              if (deviceId == item.deviceId || Session().isLoggedIn()) DefaultButton(
                                   key: Key('CommentDeleteButton$index'),
                                   padding: 0,
                                   height: 25,
                                   onClick: () => ref.read(commentsServiceProvider).deleteVideoComment(item.id!).then((value) {
                                     ref.read(videoCommentsDataViewProvider.notifier).removeItem(index);
-                                    sharedPrefs.setStringList('submittedComments', submittedComments..remove('${value.id}'));
                                     showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
                                   }),
                                   tooltip: FlutterI18n.translate(context, 'Delete comment'),

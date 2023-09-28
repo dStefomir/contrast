@@ -12,7 +12,6 @@ import 'package:contrast/utils/date.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import "package:universal_html/html.dart" as html;
 
 import 'package:contrast/common/widgets/icon.dart';
@@ -565,7 +564,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                   widgetKey: const Key('comment_photograph'),
                   parentItemId: image.id!,
                   serviceProvider: imageCommentsDataViewProvider,
-                  itemBuilder: (BuildContext context, ImageCommentsData item, List<String> submittedComments, SharedPreferences sharedPrefs, int index) => Padding(
+                  itemBuilder: (BuildContext context, ImageCommentsData item, String? deviceId, int index) => Padding(
                     key: const Key('CommentDialogListPadding'),
                     padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
                     child: Row(
@@ -616,13 +615,12 @@ class PhotographDetailsView extends HookConsumerWidget {
                                       onRatingUpdate: (rating) {},
                                     ),
                                     const Spacer(),
-                                    if (submittedComments.contains('${item.id}') || Session().isLoggedIn()) DefaultButton(
+                                    if (deviceId == item.deviceId || Session().isLoggedIn()) DefaultButton(
                                         key: Key('CommentDeleteButton$index'),
                                         padding: 0,
                                         height: 25,
                                         onClick: () => ref.read(commentsServiceProvider).deletePhotographComment(item.id!).then((value) {
                                           ref.read(imageCommentsDataViewProvider.notifier).removeItem(index);
-                                          sharedPrefs.setStringList('submittedComments', submittedComments..remove('${value.id}'));
                                           showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
                                         }),
                                         tooltip: FlutterI18n.translate(context, 'Delete comment'),

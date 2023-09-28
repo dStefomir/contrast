@@ -20,8 +20,8 @@ class PhotographCommentsService {
     }, result);
   }
   /// Post a photograph comment
-  Future<ImageCommentsData> postPhotographComment(String deviceName, int imageId, String comment, double rating) async {
-    final result = await Session.proxy.post('/images/comments?deviceName=$deviceName&imageId=$imageId&comment=$comment&rating=$rating');
+  Future<ImageCommentsData> postPhotographComment(String deviceId, String deviceName, int imageId, String comment, double rating) async {
+    final result = await Session.proxy.post('/images/comments?deviceId=$deviceId&deviceName=$deviceName&imageId=$imageId&comment=$comment&rating=$rating');
 
     return isolate.compute((response) => ImageCommentsData.fromJson(response), result);
   }
@@ -44,8 +44,8 @@ class PhotographCommentsService {
     }, result);
   }
   /// Post a video comment
-  Future<VideoCommentsData> postVideoComment(String deviceName, int videoId, String comment, double rating) async {
-    final result = await Session.proxy.post('/videos/comments?deviceName=$deviceName&videoId=$videoId&comment=$comment&rating=$rating');
+  Future<VideoCommentsData> postVideoComment(String deviceId, String deviceName, int videoId, String comment, double rating) async {
+    final result = await Session.proxy.post('/videos/comments?deviceId=$deviceId&deviceName=$deviceName&videoId=$videoId&comment=$comment&rating=$rating');
 
     return isolate.compute((response) => VideoCommentsData.fromJson(response), result);
   }

@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 void showErrorTextOnSnackBar(BuildContext context, String text) =>
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 3500),
       content: SizedBox(
         height: boardPadding,
         child: Center(
           child: StyledText(
             text: text,
             padding: 0,
+            fontSize: 13,
             useShadow: true,
             color: Colors.white,
           ),
@@ -26,13 +27,14 @@ void showErrorTextOnSnackBar(BuildContext context, String text) =>
 void showSuccessTextOnSnackBar(BuildContext context, String text) =>
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 1000),
       content: SizedBox(
         height: boardPadding,
         child: Center(
           child: StyledText(
             text: text,
             padding: 0,
+            fontSize: 13,
             useShadow: true,
             color: Colors.black,
           ),

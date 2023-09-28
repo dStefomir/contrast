@@ -5,6 +5,7 @@ class ImageCommentsData {
   final String? comment;
   final DateTime? date;
   final String? deviceName;
+  final String? deviceId;
   final double? rating;
 
   ImageCommentsData({
@@ -13,6 +14,7 @@ class ImageCommentsData {
     this.comment,
     this.date,
     this.deviceName,
+    this.deviceId,
     this.rating
     });
 
@@ -22,6 +24,7 @@ class ImageCommentsData {
       comment: json["comment"],
       date: json["date"] != null ? DateTime.parse(json["date"]) : null,
       deviceName: json["device_name"],
+      deviceId: json["device_id"],
       rating: json["rating"]
   );
 
@@ -30,7 +33,8 @@ class ImageCommentsData {
     "image_id": imageId,
     "comment": comment,
     "date": date,
-    "deviceName": deviceName,
+    "device_name": deviceName,
+    "device_id": deviceId,
     "rating": rating
   };
 }
