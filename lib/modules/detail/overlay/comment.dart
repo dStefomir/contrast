@@ -152,18 +152,18 @@ class CommentDialog<T> extends HookConsumerWidget {
                       ),
                     ),
                     Padding(
-                      key: const Key('CommentDialogColumnRowWarningTextPadding'),
+                      key: const Key('CommentDialogColumnRowWarningOnlyOneTextPadding'),
                       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                       child: StyledText(
-                          key: const Key('CommentDialogColumnRowWarningText'),
-                          text: FlutterI18n.translate(context, 'Please, post only meaningful comments or they could get deleted'),
+                          key: const Key('CommentDialogColumnRowWarningOnlyOneText'),
+                          text: FlutterI18n.translate(context, 'You can post only one comment per day'),
                           color: Colors.black87,
                           fontSize: 10,
                           padding: 0,
                           letterSpacing: 3,
                           clip: false,
                           align: TextAlign.start,
-                          weight: FontWeight.normal
+                          weight: FontWeight.bold
                       ),
                     ),
                   ],
