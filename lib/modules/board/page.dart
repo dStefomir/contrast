@@ -108,19 +108,18 @@ class BoardPageState extends ConsumerState<BoardPage> {
     double dx = -3;
     double dy = 0;
 
+    if(currentTab == 'photos') {
+      dx = -3;
+      dy = 0;
+    } else {
+      dx = 3;
+      dy = 0;
+    }
+
     useValueChanged(currentFilter, (_, __) async {
       if(currentTab == 'photos') {
         dx = 0;
         dy = -3;
-      }
-    });
-    useValueChanged(currentTab, (_, __) async {
-      if(currentTab == 'photos') {
-        dx = -3;
-        dy = 0;
-      } else {
-        dx = 3;
-        dy = 0;
       }
     });
 
