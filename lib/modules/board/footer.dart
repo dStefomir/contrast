@@ -15,8 +15,6 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../common/widgets/snack.dart';
-
 /// Renders the footer of the board page
 class BoardPageFooter extends HookConsumerWidget {
 
@@ -134,9 +132,7 @@ class BoardPageFooter extends HookConsumerWidget {
                       elevation: 1,
                       onTap: () => onUserAction(
                           ref,
-                              () => Clipboard.setData(
-                                  const ClipboardData(text: 'https://www.dstefomir.eu')
-                              ).then((_) => showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Copied to clipboard')))
+                              () => ref.read(overlayVisibilityProvider(const Key('share')).notifier).setOverlayVisibility(true)
                       )
                   ),
                   SpeedDialChild(

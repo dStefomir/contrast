@@ -75,7 +75,7 @@ class DeleteDialog<T> extends HookConsumerWidget {
                               },
                               tooltip: FlutterI18n.translate(context, 'Close'),
                               color: Colors.white,
-                              borderColor: Colors.white,
+                              borderColor: Colors.black,
                               icon: 'close.svg'
                           ),
                         ]

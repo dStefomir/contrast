@@ -137,6 +137,121 @@ class PhotographDetailsView extends HookConsumerWidget {
     }
   }
 
+  /// Renders the comments dialog
+  Widget _renderCommentsOverlay(WidgetRef ref, ImageData image, bool shouldShowCommentsDialog) => Align(
+    key: const Key('CommentsDialogAlign'),
+    alignment: Alignment.bottomCenter,
+    child: SlideTransitionAnimation(
+        key: const Key('CommentsDialogSlideAnimation'),
+        duration: const Duration(milliseconds: 1000),
+        getStart: () => shouldShowCommentsDialog ? const Offset(0, 1) : const Offset(0, 0),
+        getEnd: () => shouldShowCommentsDialog ? const Offset(0, 0) : const Offset(0, 10),
+        whenTo: (controller) {
+          useValueChanged(shouldShowCommentsDialog, (_, __) async {
+            controller.reset();
+            controller.forward();
+          });
+        },
+        child: CommentDialog<ImageCommentsData>(
+            widgetKey: const Key('comment_photograph'),
+            parentItemId: image.id!,
+            serviceProvider: imageCommentsDataViewProvider,
+            itemBuilder: (BuildContext context, ImageCommentsData item, String? deviceId, int index) => Padding(
+              key: const Key('CommentDialogListPadding'),
+              padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
+              child: Row(
+                children: [
+                  Container(
+                    key: Key("CommentDialogCircleDivider$index"),
+                    width: 5.0,
+                    height: 5.0,
+                    decoration: const BoxDecoration(
+                      color: Colors.black,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  Expanded(
+                    key: Key("CommentDialogExpandedDivider$index"),
+                    child: Padding(
+                      key: Key("CommentDialogExpandedDividerPadding$index"),
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Column(
+                        key: Key('CommentDialogListColumn$index'),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              StyledText(
+                                text: utf8.decode(item.deviceName!.runes.toList()),
+                                fontSize: 15,
+                                weight: FontWeight.bold,
+                                clip: false,
+                                align: TextAlign.start,
+                                padding: 0,
+                              ),
+                              const SizedBox(width: 5,),
+                              if(item.rating! > 0) RatingBar.builder(
+                                initialRating: item.rating!,
+                                minRating: 0,
+                                direction: Axis.horizontal,
+                                allowHalfRating: false,
+                                ignoreGestures: true,
+                                itemSize: 25,
+                                glow: true,
+                                itemCount: 5,
+                                itemBuilder: (context, _) => const Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                                onRatingUpdate: (rating) {},
+                              ),
+                              const Spacer(),
+                              if (deviceId == item.deviceId || Session().isLoggedIn()) DefaultButton(
+                                  key: Key('CommentDeleteButton$index'),
+                                  padding: 0,
+                                  height: 25,
+                                  onClick: () => ref.read(commentsServiceProvider).deletePhotographComment(item.id!).then((value) {
+                                    ref.read(imageCommentsDataViewProvider.notifier).removeItem(index);
+                                    showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
+                                  }),
+                                  tooltip: FlutterI18n.translate(context, 'Delete comment'),
+                                  color: Colors.white.withOpacity(0.3),
+                                  borderColor: Colors.white,
+                                  icon: 'delete.svg'
+                              )
+                            ],),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10, bottom: 5),
+                            child: StyledText(
+                              text: formatTimeDifference(context, item.date),
+                              fontSize: 10,
+                              color: Colors.black38,
+                              weight: FontWeight.bold,
+                              align: TextAlign.start,
+                              letterSpacing: 3,
+                              padding: 0,
+                            ),
+                          ),
+                          StyledText(
+                            text: utf8.decode(item.comment!.runes.toList()),
+                            fontSize: 13,
+                            clip: false,
+                            align: TextAlign.start,
+                            color: Colors.black87,
+                            padding: 0,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+        )
+    ),
+  );
+
   /// Renders the photograph signature
   Widget _renderSignature(double maxHeight, String currentView) => SlideTransitionAnimation(
       key: const Key('PhotographDetailsSignatureSlideAnimation'),
@@ -308,7 +423,7 @@ class PhotographDetailsView extends HookConsumerWidget {
 
     return Padding(
       key: const Key('PhotographCommentsButtonPadding'),
-      padding: const EdgeInsets.only(left: 170.0, top: 5.0),
+      padding: const EdgeInsets.only(left: kIsWeb ? 170.0 : 115, top: 5.0),
       child: Align(
           key: const Key('PhotographCommentsButtonAlign'),
           alignment: Alignment.topLeft,
@@ -341,7 +456,7 @@ class PhotographDetailsView extends HookConsumerWidget {
       },
       child: Padding(
         key: const Key('PhotographDetailsButtonPadding'),
-        padding: EdgeInsets.only(left: !kIsWeb || Session().isLoggedIn() ? 225.0 : 170.0, top: 5.0),
+        padding: EdgeInsets.only(left: !kIsWeb ? 170 : !Session().isLoggedIn() ? 170.0 : 225, top: 5.0),
         child: Align(
             key: const Key('PhotographDetailsButtonAlign'),
             alignment: Alignment.topLeft,
@@ -400,10 +515,10 @@ class PhotographDetailsView extends HookConsumerWidget {
           backgroundDecoration: const BoxDecoration(color: Colors.transparent),
           loadingBuilder: (_, chunk) => Padding(
             key: const Key('PhotographWidgetGalleryLoadingPadding'),
-            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height - (kIsWeb ? 15 : 60)),
+            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height - (kIsWeb ? 15 : 80)),
             child: LinearProgressIndicator(
               key: const Key('PhotographWidgetGalleryLoadingProgressIndicator'),
-              minHeight: 15,
+              minHeight: 5,
               backgroundColor: Colors.grey[300],
               valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
               value: chunk == null
@@ -526,7 +641,7 @@ class PhotographDetailsView extends HookConsumerWidget {
           _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
           _renderDetailsBtn(ref, context, scrollController, image),
           if (!kIsWeb || Session().isLoggedIn()) _renderCommentsBtn(ref, context),
-          _renderAudioButton(context, ref),
+          if (kIsWeb) _renderAudioButton(context, ref),
           _renderShareButton(context, ref, currentPhotographIndex),
           _renderGoBackBtn(context, ref),
           Visibility(
@@ -546,119 +661,7 @@ class PhotographDetailsView extends HookConsumerWidget {
           ),
           _renderSignature(maxHeight, currentView),
           if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(key: Key('BlurableDetailsPage'), strength: 10),
-          if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null) Align(
-            key: const Key('CommentsDialogAlign'),
-            alignment: Alignment.bottomCenter,
-            child: SlideTransitionAnimation(
-                key: const Key('CommentsDialogSlideAnimation'),
-                duration: const Duration(milliseconds: 1000),
-                getStart: () => shouldShowCommentsDialog ? const Offset(0, 1) : const Offset(0, 0),
-                getEnd: () => shouldShowCommentsDialog ? const Offset(0, 0) : const Offset(0, 10),
-                whenTo: (controller) {
-                  useValueChanged(shouldShowCommentsDialog, (_, __) async {
-                    controller.reset();
-                    controller.forward();
-                  });
-                },
-                child: CommentDialog<ImageCommentsData>(
-                  widgetKey: const Key('comment_photograph'),
-                  parentItemId: image.id!,
-                  serviceProvider: imageCommentsDataViewProvider,
-                  itemBuilder: (BuildContext context, ImageCommentsData item, String? deviceId, int index) => Padding(
-                    key: const Key('CommentDialogListPadding'),
-                    padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
-                    child: Row(
-                      children: [
-                        Container(
-                          key: Key("CommentDialogCircleDivider$index"),
-                          width: 5.0,
-                          height: 5.0,
-                          decoration: const BoxDecoration(
-                            color: Colors.black,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        Expanded(
-                          key: Key("CommentDialogExpandedDivider$index"),
-                          child: Padding(
-                            key: Key("CommentDialogExpandedDividerPadding$index"),
-                            padding: const EdgeInsets.only(left: 8),
-                            child: Column(
-                              key: Key('CommentDialogListColumn$index'),
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    StyledText(
-                                      text: utf8.decode(item.deviceName!.runes.toList()),
-                                      fontSize: 15,
-                                      weight: FontWeight.bold,
-                                      clip: false,
-                                      align: TextAlign.start,
-                                      padding: 0,
-                                    ),
-                                    const SizedBox(width: 5,),
-                                    if(item.rating! > 0) RatingBar.builder(
-                                      initialRating: item.rating!,
-                                      minRating: 0,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: false,
-                                      ignoreGestures: true,
-                                      itemSize: 25,
-                                      glow: true,
-                                      itemCount: 5,
-                                      itemBuilder: (context, _) => const Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                      ),
-                                      onRatingUpdate: (rating) {},
-                                    ),
-                                    const Spacer(),
-                                    if (deviceId == item.deviceId || Session().isLoggedIn()) DefaultButton(
-                                        key: Key('CommentDeleteButton$index'),
-                                        padding: 0,
-                                        height: 25,
-                                        onClick: () => ref.read(commentsServiceProvider).deletePhotographComment(item.id!).then((value) {
-                                          ref.read(imageCommentsDataViewProvider.notifier).removeItem(index);
-                                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
-                                        }),
-                                        tooltip: FlutterI18n.translate(context, 'Delete comment'),
-                                        color: Colors.white.withOpacity(0.3),
-                                        borderColor: Colors.white,
-                                        icon: 'delete.svg'
-                                    )
-                                  ],),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10, bottom: 5),
-                                  child: StyledText(
-                                    text: formatTimeDifference(context, item.date),
-                                    fontSize: 10,
-                                    color: Colors.black38,
-                                    weight: FontWeight.bold,
-                                    align: TextAlign.start,
-                                    letterSpacing: 3,
-                                    padding: 0,
-                                  ),
-                                ),
-                                StyledText(
-                                  text: utf8.decode(item.comment!.runes.toList()),
-                                  fontSize: 13,
-                                  clip: false,
-                                  align: TextAlign.start,
-                                  color: Colors.black87,
-                                  padding: 0,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                )
-            ),
-          )
+          if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null) _renderCommentsOverlay(ref, image, shouldShowCommentsDialog)
         ]
     );
   }

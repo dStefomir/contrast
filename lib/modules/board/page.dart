@@ -1,3 +1,4 @@
+import 'package:contrast/modules/board/overlay/share/share.dart';
 import "package:universal_html/html.dart" as html;
 import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/shadow.dart';
@@ -79,6 +80,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
     ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(null);
     ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(null);
     ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(null);
+    ref.read(overlayVisibilityProvider(const Key('share')).notifier).setOverlayVisibility(null);
     if(action != null) {
       action();
     }
@@ -92,6 +94,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
           ref.read(overlayVisibilityProvider(const Key('upload_image'))) != null ||
           ref.read(overlayVisibilityProvider(const Key('edit_image'))) != null ||
           ref.read(overlayVisibilityProvider(const Key('upload_video'))) != null ||
+          ref.read(overlayVisibilityProvider(const Key('edit_video'))) != null ||
           ref.read(overlayVisibilityProvider(const Key('edit_video'))) != null;
 
   /// Handles the escape key of the keyboard
@@ -213,6 +216,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
     final bool? shouldShowEditPhotographDialog = ref.watch(overlayVisibilityProvider(const Key('edit_image')));
     final bool? shouldShowUploadVideoDialog = ref.watch(overlayVisibilityProvider(const Key('upload_video')));
     final bool? shouldShowEditVideoDialog = ref.watch(overlayVisibilityProvider(const Key('edit_video')));
+    final bool? shouldShowShareDialog = ref.watch(overlayVisibilityProvider(const Key('share')));
     double titlePadding = 0;
     /// In mobile view we need to calculate a padding so that the title
     /// can be in the center of the screen because of the left drawer
@@ -389,7 +393,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                           (shouldShowUploadPhotographDialog != null && shouldShowUploadPhotographDialog) ||
                           (shouldShowEditPhotographDialog != null && shouldShowEditPhotographDialog) ||
                           (shouldShowUploadVideoDialog != null && shouldShowUploadVideoDialog) ||
-                          (shouldShowEditVideoDialog != null && shouldShowEditVideoDialog),
+                          (shouldShowEditVideoDialog != null && shouldShowEditVideoDialog) ||
+                          (shouldShowShareDialog != null && shouldShowShareDialog),
                       child: const Blurrable(key: Key('DeletePhotoDialogBlurrable'), strength: 10),
                   ),
                   if (shouldShowDeletePhotographDialog != null) Align(
@@ -594,6 +599,23 @@ class BoardPageState extends ConsumerState<BoardPage> {
                           });
                         },
                         child: const QrCodeDialog(key: Key('BoardPageQrCodeDialog'))
+                    ),
+                  ),
+                  if (shouldShowShareDialog != null) Align(
+                    key: const Key('ShareDialogAlign'),
+                    alignment: Alignment.bottomCenter,
+                    child: SlideTransitionAnimation(
+                        key: const Key('ShareDialogSlideAnimation'),
+                        duration: const Duration(milliseconds: 1000),
+                        getStart: () => shouldShowShareDialog ? const Offset(0, 1) : const Offset(0, 0),
+                        getEnd: () => shouldShowShareDialog ? const Offset(0, 0) : const Offset(0, 10),
+                        whenTo: (controller) {
+                          useValueChanged(shouldShowShareDialog, (_, __) async {
+                            controller.reset();
+                            controller.forward();
+                          });
+                        },
+                        child: const ShareDialog(key: Key('BoardPageShareDialog'))
                     ),
                   )
                 ]

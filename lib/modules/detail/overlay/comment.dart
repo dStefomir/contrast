@@ -142,10 +142,13 @@ class CommentDialog<T> extends HookConsumerWidget {
                           const Spacer(key: Key('CommentDialogColumnRowSpacer'),),
                           DefaultButton(
                               key: const Key('CommentDialogColumnRowButton'),
-                              onClick: () => ref.read(overlayVisibilityProvider(widgetKey).notifier).setOverlayVisibility(false),
+                              onClick: () {
+                                ref.read(overlayVisibilityProvider(widgetKey).notifier).setOverlayVisibility(false);
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                },
                               tooltip: FlutterI18n.translate(context, 'Close'),
                               color: Colors.white.withOpacity(0.3),
-                              borderColor: Colors.white,
+                              borderColor: Colors.black,
                               icon: 'close.svg'
                           ),
                         ],
@@ -281,7 +284,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                           }},
                         tooltip: FlutterI18n.translate(context, 'Submit'),
                         color: Colors.white.withOpacity(0.3),
-                        borderColor: Colors.white,
+                        borderColor: Colors.black,
                         icon: 'navigate_next.svg'
                     ) : const LoadingIndicator(color: Colors.black),
                   ),

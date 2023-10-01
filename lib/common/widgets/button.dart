@@ -237,6 +237,8 @@ class DefaultButton extends StatelessWidget {
   final double padding;
   /// Tooltip text
   final String? tooltip;
+  /// Svg color
+  final Color? svgColor;
 
   const DefaultButton({
     required this.onClick,
@@ -248,6 +250,7 @@ class DefaultButton extends StatelessWidget {
     this.borderWidth = 1,
     this.height = 35,
     this.padding = 10,
+    this.svgColor,
     super.key
   });
 
@@ -259,14 +262,14 @@ class DefaultButton extends StatelessWidget {
         decoration: BoxDecoration(
             color: color,
             shape: shape,
-            border: borderWidth == 0 ? null : Border.all(color: Colors.black, width: borderWidth)
+            border: borderWidth == 0 ? null : Border.all(color: borderColor, width: borderWidth)
         ),
         child: InkWell(
           onTap: onClick,
           child: IconRenderer(
               asset: icon,
               fit: BoxFit.scaleDown,
-              color: Colors.black,
+              color: svgColor,
               height: height
           ),
         ),

@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -47,7 +50,7 @@ class QrCodeDialog extends HookConsumerWidget {
                           onClick: () => ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false),
                           tooltip: FlutterI18n.translate(context, 'Close'),
                           color: Colors.white,
-                          borderColor: Colors.white,
+                          borderColor: Colors.black,
                           icon: 'close.svg'
                       ),
                     ]
@@ -98,7 +101,7 @@ class QrCodeDialog extends HookConsumerWidget {
                 child: QrImageView(
                   key: const Key('QrCodeDialogBodyQrCode'),
                   padding: EdgeInsets.zero,
-                  data: 'https://www.dstefomir.eu',
+                  data: kIsWeb ? 'https://www.dstefomir.eu' : Platform.isAndroid ? 'https://play.google.com/store/apps/details?id=eu.bsdsoft.contrast' : 'https://apps.apple.com/bg/app/contrastus/id6466247842',
                   version: QrVersions.auto,
                   size: 350,
                 ),

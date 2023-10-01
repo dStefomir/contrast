@@ -123,7 +123,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
             await _controller.pauseVideo();
             ref.read(overlayVisibilityProvider(commentKey).notifier).setOverlayVisibility(null);
             Clipboard.setData(
-                ClipboardData(text: 'https://www.dstefomir.eu/#/videos/details/${widget.path}')
+                ClipboardData(text: 'https://www.youtube.com/watch?v=${widget.path}')
             ).then((value) => showSuccessTextOnSnackBar(
                 context,
                 FlutterI18n.translate(context, 'Copied to clipboard'
@@ -252,7 +252,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                   }),
                                   tooltip: FlutterI18n.translate(context, 'Delete comment'),
                                   color: Colors.white.withOpacity(0.3),
-                                  borderColor: Colors.white,
+                                  borderColor: Colors.black,
                                   icon: 'delete.svg'
                               )
                             ],),
