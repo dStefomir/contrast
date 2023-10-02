@@ -2,6 +2,7 @@ import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/tab.dart';
+import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
@@ -45,12 +46,27 @@ class BoardPageFilter extends ConsumerWidget {
                     ),
                   ),
                 ),
-                Align(key: const Key('HeaderMobileLayoutStackAlignColumn'),
+                Align(
+                  key: const Key('HeaderMobileLayoutStackAlignColumn'),
                   alignment: Alignment.topLeft,
                   child: Column(
                     key: const Key('HeaderMobileLayoutStackColumn'),
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      RotatedBox(
+                        key: const Key('CategoriesRotatedBox'),
+                        quarterTurns: 3,
+                        child: StyledText(
+                            key: const Key('CategoriesStyledText'),
+                            text: FlutterI18n.translate(context, 'Categories'),
+                            padding: 0,
+                            fontSize: 15,
+                            weight: FontWeight.bold,
+                            letterSpacing: 15,
+                            useShadow: true,
+                            color: Colors.white.withOpacity(0.6)
+                        ),
+                      ),
                       const Spacer(key: Key('HeaderMobileLayoutStackAllSpacer')),
                       MenuButton(
                           widgetKey: const Key('all'),
