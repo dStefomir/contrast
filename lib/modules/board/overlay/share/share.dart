@@ -19,30 +19,23 @@ class ShareDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => ShadowWidget(
-    key: const Key('ShareDialogShadowWidget'),
     offset: const Offset(0, 0),
     blurRadius: 4,
     child: Container(
-        key: const Key('ShareDialogTopContainer'),
         color: Colors.white,
         height: dialogHeight,
         child: Column(
-          key: const Key('ShareDialogTopColumn'),
           children: [
             Padding(
-              key: const Key('ShareDialogFirstInnerPadding'),
               padding: const EdgeInsets.all(10.0),
               child: Row(
-                  key: const Key('ShareDialogFirstInnerRow'),
                   children: [
                     StyledText(
-                        key: const Key('ShareDialogHeaderText'),
                         text: FlutterI18n.translate(context, 'Share Contrastus'),
                         weight: FontWeight.bold
                     ),
-                    const Spacer(key: Key('ShareDialogHeaderSpacer')),
+                    const Spacer(),
                     DefaultButton(
-                        key: const Key('ShareDialogHeaderCloseButton'),
                         onClick: () => ref.read(overlayVisibilityProvider(const Key('share')).notifier).setOverlayVisibility(false),
                         tooltip: FlutterI18n.translate(context, 'Close'),
                         color: Colors.white,
@@ -52,15 +45,10 @@ class ShareDialog extends HookConsumerWidget {
                   ]
               ),
             ),
-            const Divider(
-                key: Key('ShareDialogHeaderDivider'),
-                color: Colors.black
-            ),
+            const Divider(color: Colors.black),
             Padding(
-              key: const Key('WebColumnHolderPadding'),
               padding: const EdgeInsets.only(top: 15),
               child: DefaultButton(
-                  key: const Key('WebColumnButton'),
                   shape: BoxShape.circle,
                   tooltip: FlutterI18n.translate(context, 'Website'),
                   onClick: () => Clipboard.setData(
@@ -76,11 +64,9 @@ class ShareDialog extends HookConsumerWidget {
               ),
             ),
             Row(
-              key: const Key('ContentRow'),
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 DefaultButton(
-                    key: const Key('AndroidColumnButton'),
                     shape: BoxShape.circle,
                     tooltip: FlutterI18n.translate(context, 'Google Play Store'),
                     onClick: () => Clipboard.setData(
@@ -94,9 +80,8 @@ class ShareDialog extends HookConsumerWidget {
                     height: 100,
                     icon: 'play_store.svg'
                 ),
-                const SizedBox(width: 20,),
+                const SizedBox(width: 20),
                 DefaultButton(
-                    key: const Key('IosColumnButton'),
                     shape: BoxShape.circle,
                     tooltip: FlutterI18n.translate(context, 'Apple App Store'),
                     onClick: () => Clipboard.setData(

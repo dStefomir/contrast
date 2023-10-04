@@ -20,21 +20,17 @@ class BoardPageFilter extends ConsumerWidget {
   const BoardPageFilter({super.key, required this.onUserAction});
 
   /// Render mobile layout
-  Widget _renderMobileLayout(BuildContext context, WidgetRef ref) => LayoutBuilder(key: const Key('HeaderMobileLayoutBuilder'), builder: (context, constraints) =>
+  Widget _renderMobileLayout(BuildContext context, WidgetRef ref) => LayoutBuilder(builder: (context, constraints) =>
       ShadowWidget(
-        key: const Key('HeaderMobileLayoutShadowWidget'),
         blurRadius: 1,
         offset: const Offset(2, 0),
         child: Container(
-          key: const Key('HeaderMobileLayoutContainer'),
           width: boardPadding,
           height: constraints.maxHeight - boardPadding,
           color: Colors.white,
           child: Stack(
-              key: const Key('HeaderMobileLayoutStack'),
               children: [
                 Container(
-                  key: const Key('HeaderMobileLayoutStackContainer'),
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
@@ -47,17 +43,13 @@ class BoardPageFilter extends ConsumerWidget {
                   ),
                 ),
                 Align(
-                  key: const Key('HeaderMobileLayoutStackAlignColumn'),
                   alignment: Alignment.topLeft,
                   child: Column(
-                    key: const Key('HeaderMobileLayoutStackColumn'),
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       RotatedBox(
-                        key: const Key('CategoriesRotatedBox'),
                         quarterTurns: 3,
                         child: StyledText(
-                            key: const Key('CategoriesStyledText'),
                             text: FlutterI18n.translate(context, 'Categories'),
                             padding: 0,
                             fontSize: 15,
@@ -67,7 +59,7 @@ class BoardPageFilter extends ConsumerWidget {
                             color: Colors.white.withOpacity(0.6)
                         ),
                       ),
-                      const Spacer(key: Key('HeaderMobileLayoutStackAllSpacer')),
+                      const Spacer(),
                       MenuButton(
                           widgetKey: const Key('all'),
                           iconPath: 'all.svg',
@@ -124,18 +116,14 @@ class BoardPageFilter extends ConsumerWidget {
 
   /// Render desktop layout
   Widget _renderDesktopLayout(BuildContext context, WidgetRef ref) => ShadowWidget(
-    key: const Key('HeaderDesktopLayoutShadowWidget'),
     offset: const Offset(0, 2),
     blurRadius: 2,
     child: Container(
-      key: const Key('HeaderDesktopLayoutContainer'),
       color: Colors.white,
       height: boardPadding,
       child: Stack(
-        key: const Key('HeaderDesktopLayoutStack'),
         children: [
           Container(
-            key: const Key('HeaderDesktopLayoutStackBackgroundGradient'),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -148,13 +136,11 @@ class BoardPageFilter extends ConsumerWidget {
             ),
           ),
           Align(
-            key: const Key('HeaderDesktopLayoutStackAlign'),
             alignment: Alignment.center,
             child: Row(
-              key: const Key('HeaderDesktopLayoutRow'),
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Spacer(key: Key('HeaderDesktopLayoutAllSpacer')),
+                const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('all'),
                     tabKey: 'all',
@@ -162,7 +148,7 @@ class BoardPageFilter extends ConsumerWidget {
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.watch(boardHeaderTabProvider) == 'all'
                 ).translateOnPhotoHover,
-                const Spacer(key: Key('HeaderDesktopLayoutLandscapeSpacer')),
+                const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('landscape'),
                     tabKey: 'landscape',
@@ -170,7 +156,7 @@ class BoardPageFilter extends ConsumerWidget {
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'landscape'
                 ).translateOnPhotoHover,
-                const Spacer(key: Key('HeaderDesktopLayoutPortraitsSpacer')),
+                const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('portraits'),
                     tabKey: 'portraits',
@@ -178,7 +164,7 @@ class BoardPageFilter extends ConsumerWidget {
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'portraits'
                 ).translateOnPhotoHover,
-                const Spacer(key: Key('HeaderDesktopLayoutStreetSpacer')),
+                const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('street'),
                     tabKey: 'street',
@@ -186,7 +172,7 @@ class BoardPageFilter extends ConsumerWidget {
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'street'
                 ).translateOnPhotoHover,
-                const Spacer(key: Key('HeaderDesktopLayoutOtherSpacer')),
+                const Spacer(),
                 ContrastTab(
                     widgetKey: const Key('other'),
                     tabKey: 'other',
@@ -194,7 +180,7 @@ class BoardPageFilter extends ConsumerWidget {
                     onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                     isSelected: ref.read(boardHeaderTabProvider) == 'other'
                 ).translateOnPhotoHover,
-                const Spacer(key: Key('HeaderDesktopLayoutEndSpacer')),
+                const Spacer(),
               ],
             ),
           ),

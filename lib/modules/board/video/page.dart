@@ -34,7 +34,6 @@ class VideoBoardPage extends HookConsumerWidget {
 
     if (Session().isLoggedIn()) {
       return FocusedMenuHolder(
-          key: const Key('VideoFocusedMenu'),
           menuWidth: 300,
           blurSize: 5.0,
           menuItemExtent: 45,
@@ -110,12 +109,9 @@ class VideoBoardPage extends HookConsumerWidget {
         });
       },
       listEmptyChild: Center(
-        key: const Key('VideoDataViewCenterEmpty'),
         child: Padding(
-          key: const Key('VideoDataViewCenterEmptyPadding'),
           padding: const EdgeInsets.all(15),
           child: StyledText(
-            key: const Key('VideoDataViewCenterEmptyText'),
             text: FlutterI18n.translate(context, 'Nothing here so far'),
             color: Colors.black,
           ),

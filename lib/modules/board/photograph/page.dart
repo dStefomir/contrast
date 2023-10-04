@@ -32,7 +32,6 @@ class PhotographBoardPage extends HookConsumerWidget {
 
     if (Session().isLoggedIn()) {
       return FocusedMenuHolder(
-          key: const Key('PhotoFocusedMenu'),
           menuWidth: 300,
           blurSize: 5.0,
           menuItemExtent: 45,
@@ -105,12 +104,9 @@ class PhotographBoardPage extends HookConsumerWidget {
         });
       },
       listEmptyChild: Center(
-        key: const Key('PhotographDataViewCenterEmpty'),
         child: Padding(
-          key: const Key('PhotographDataViewCenterEmptyPadding'),
           padding: const EdgeInsets.all(15),
           child: StyledText(
-            key: const Key('PhotographDataViewCenterEmptyText'),
             text: FlutterI18n.translate(context, 'Nothing here so far'),
             color: Colors.black,
           ),

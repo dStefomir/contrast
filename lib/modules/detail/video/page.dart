@@ -104,7 +104,6 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
   /// Renders the comments button
   Widget _renderCommentsButton() =>
       DefaultButton(
-          key: const Key('VideoDetailsCommentsButton'),
           onClick: () async {
             await _controller.pauseVideo();
             ref.read(overlayVisibilityProvider(commentKey).notifier).setOverlayVisibility(true);
@@ -118,7 +117,6 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
   /// Renders the share button
   Widget _renderShareButton() =>
       DefaultButton(
-          key: const Key('VideoDetailsShareButton'),
           onClick: () async {
             await _controller.pauseVideo();
             ref.read(overlayVisibilityProvider(commentKey).notifier).setOverlayVisibility(null);
@@ -138,7 +136,6 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
   /// Renders the back button
   Widget _renderBackButton(BuildContext context) =>
       DefaultButton(
-          key: const Key('VideoDetailsBackButton'),
           onClick: () {
             ref.read(overlayVisibilityProvider(commentKey).notifier).setOverlayVisibility(null);
             Modular.to.navigate('/');
@@ -152,17 +149,14 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
   /// Render video details page actions
   List<Widget> _renderActions() => [
     Padding(
-      key: const Key('VideoDetailsAlignBackPadding'),
       padding: const EdgeInsets.only(top: 5.0),
       child: _renderBackButton(context),
     ),
     Padding(
-      key: const Key('VideoDetailsAlignSharePadding'),
       padding: const EdgeInsets.only(top: 5.0,),
       child: _renderShareButton(),
     ),
     if (!kIsWeb || Session().isLoggedIn()) Padding(
-      key: const Key('VideoDetailsAlignCommentsPadding'),
       padding: const EdgeInsets.only(top: 5.0,),
       child: _renderCommentsButton(),
     ),
@@ -170,10 +164,8 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
 
   /// Renders the comment overlay
   Widget _renderCommentsOverlay(bool? shouldShowCommentsDialog) => Align(
-    key: const Key('CommentsDialogAlign'),
     alignment: Alignment.bottomCenter,
     child: SlideTransitionAnimation(
-        key: const Key('CommentsDialogSlideAnimation'),
         duration: const Duration(milliseconds: 1000),
         getStart: () => shouldShowCommentsDialog != null && shouldShowCommentsDialog ? const Offset(0, 1) : const Offset(0, 0),
         getEnd: () => shouldShowCommentsDialog != null && shouldShowCommentsDialog ? const Offset(0, 0) : const Offset(0, 10),
@@ -188,12 +180,10 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
             parentItemId: widget.id,
             serviceProvider: videoCommentsDataViewProvider,
             itemBuilder: (BuildContext context, VideoCommentsData item, String? deviceId, int index) => Padding(
-              key: Key('CommentDialogListPadding$index}'),
               padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
               child: Row(
                 children: [
                   Container(
-                    key: Key("CommentDialogCircleDivider$index"),
                     width: 5.0,
                     height: 5.0,
                     decoration: const BoxDecoration(
@@ -202,19 +192,15 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                     ),
                   ),
                   Expanded(
-                    key: Key("CommentDialogExpandedDivider$index"),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8),
                       child: Column(
-                        key: Key('CommentDialogListColumn$index'),
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            key: Key('CommentDialogListRow$index'),
                             children: [
                               StyledText(
-                                key: Key('CommentDeviceName$index'),
                                 text: utf8.decode(item.deviceName!.runes.toList()),
                                 fontSize: 15,
                                 weight: FontWeight.bold,
@@ -222,10 +208,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                 align: TextAlign.start,
                                 padding: 0,
                               ),
-                              SizedBox(
-                                key: Key('CommentDeviceNameSizedBox$index'),
-                                width: 5
-                              ),
+                              const SizedBox(width: 5),
                               if(item.rating! > 0) RatingBar.builder(
                                 initialRating: item.rating!,
                                 minRating: 0,
@@ -241,9 +224,8 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                 ),
                                 onRatingUpdate: (rating) {},
                               ),
-                              Spacer(key: Key('CommentRatingBarSpacer$index')),
+                              const Spacer(),
                               if (deviceId == item.deviceId || Session().isLoggedIn()) DefaultButton(
-                                  key: Key('CommentDeleteButton$index'),
                                   padding: 0,
                                   height: 25,
                                   onClick: () => ref.read(commentsServiceProvider).deleteVideoComment(item.id!).then((value) {
@@ -257,10 +239,8 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                               )
                             ],),
                           Padding(
-                            key: Key('CommentDialogDatePadding$index'),
                             padding: const EdgeInsets.only(top: 10, bottom: 5),
                             child: StyledText(
-                              key: Key('CommentDialogDate$index'),
                               text: formatTimeDifference(context, item.date),
                               fontSize: 10,
                               color: Colors.black38,
@@ -271,7 +251,6 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                             ),
                           ),
                           StyledText(
-                            key: Key('CommentDialogTextComment$index'),
                             text: utf8.decode(item.comment!.runes.toList()),
                             fontSize: 13,
                             clip: false,
@@ -307,7 +286,6 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
     });
 
     return RawKeyboardListener(
-      key: const Key('VideoDetailsKeyboardListener'),
       autofocus: true,
       focusNode: useFocusNode(),
       onKey: (RawKeyEvent event) {
@@ -316,15 +294,12 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
         }
       },
       child: BackgroundPage(
-          key: const Key('VideoDetailsBackgroundPage'),
           color: Colors.black,
           child: OrientationBuilder(
             builder: (BuildContext context, Orientation orientation) => Stack(
-              key: const Key('VideoDetailsStack'),
               alignment: Alignment.center,
               children: [
                 IconRenderer(
-                    key: const Key('VideoDetailsStackBackgroundSvg'),
                     asset: 'background.svg',
                     fit: BoxFit.cover,
                     width: double.infinity,
@@ -332,7 +307,6 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                     color: Colors.white.withOpacity(0.05)
                 ),
                 if(!shouldHideOverlay(shouldShowCommentsDialog)) Padding(
-                  key: const Key('VideoDetailsYoutubeScaffoldPadding'),
                   padding: EdgeInsets.only(
                       top: orientation == Orientation.landscape && kIsWeb ? 40 : 0,
                       bottom: orientation == Orientation.landscape && kIsWeb ? 40 : 0,
@@ -348,23 +322,19 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                   ),
                 ),
                 Align(
-                  key: const Key('VideoDetailsActionsOrientationAlign'),
                   alignment: orientation == Orientation.portrait ? Alignment.topCenter : Alignment.topLeft,
                   child: orientation == Orientation.portrait ? Row(
-                      key: const Key('VideoDetailsActionsRow'),
                       children: _renderActions()
                   ) : Padding(
-                    key: const Key('VideoDetailsActionsColumnPadding'),
                     padding: const EdgeInsets.only(top: 40),
                     child: Column(
-                      key: const Key('VideoDetailsActionsColumn'),
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: _renderActions(),
                     ),
                   ),
                 ),
-                if((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(key: Key('BlurableDetailsPage'), strength: 10),
+                if((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(strength: 10),
                 if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null) _renderCommentsOverlay(shouldShowCommentsDialog)
               ],
             ),

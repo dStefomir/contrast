@@ -40,12 +40,9 @@ class CommentDialog<T> extends HookConsumerWidget {
   /// Renders the child widget with the device unique Id
   Widget _deviceInfoWidget(Widget Function(String?) child) {
     const Widget loading = Padding(
-      key: Key('DeviceInfoNoDataPadding'),
       padding: EdgeInsets.all(15),
       child: Center(
-          key: Key('DeviceInfoNoDataCenter'),
           child: LoadingIndicator(
-              key: Key('DeviceInfoNoDataLoading'),
               color: Colors.white
           )
       ),
@@ -113,35 +110,27 @@ class CommentDialog<T> extends HookConsumerWidget {
     return Form(
       key: formKey,
       child: ShadowWidget(
-          key: const Key('CommentDialogShadow'),
           offset: const Offset(0, 0),
           blurRadius: 4,
           child: Container(
-            key: const Key('CommentDialogTopContainer'),
             color: Colors.white,
             height: dialogHeight,
             child: _deviceInfoWidget((deviceId) => Column(
-              key: const Key('CommentDialogTopColumn'),
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  key: const Key('CommentDialogInnerColumn'),
                   children: [
                     Padding(
-                      key: const Key('CommentDialogColumnPadding'),
                       padding: const EdgeInsets.only(top: 10.0, left: 10, right: 10),
                       child: Row(
-                        key: const Key('CommentDialogColumnRow'),
                         children: [
                           StyledText(
-                            key: const Key('CommentDialogColumnRowText'),
                             text: FlutterI18n.translate(context, 'Comments'),
                             weight: FontWeight.bold,
                             padding: 0,
                           ),
-                          const Spacer(key: Key('CommentDialogColumnRowSpacer'),),
+                          const Spacer(),
                           DefaultButton(
-                              key: const Key('CommentDialogColumnRowButton'),
                               onClick: () {
                                 ref.read(overlayVisibilityProvider(widgetKey).notifier).setOverlayVisibility(false);
                                 FocusManager.instance.primaryFocus?.unfocus();
@@ -155,10 +144,8 @@ class CommentDialog<T> extends HookConsumerWidget {
                       ),
                     ),
                     Padding(
-                      key: const Key('CommentDialogColumnRowWarningOnlyOneTextPadding'),
                       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                       child: StyledText(
-                          key: const Key('CommentDialogColumnRowWarningOnlyOneText'),
                           text: FlutterI18n.translate(context, 'You can post only one comment per day'),
                           color: Colors.black87,
                           fontSize: 10,
@@ -209,16 +196,10 @@ class CommentDialog<T> extends HookConsumerWidget {
                   },
                 ),
                 apiData.isEmpty ? Expanded(
-                  key: const Key('CommentNoDataExpanded'),
                   child: Center(
-                    key: const Key('CommentNoDataCentered'),
-                    child: StyledText(
-                        key: const Key('CommentNoDataText'),
-                        text: FlutterI18n.translate(context, 'Nothing here so far')
-                    ),
+                    child: StyledText(text: FlutterI18n.translate(context, 'Nothing here so far')),
                   ),
                 ) : Expanded(
-                  key: const Key('CommentDialogListExpanded'),
                   child: ListView.builder(
                       key: const Key('CommentDialogList'),
                       itemCount: apiData.length,
@@ -244,7 +225,6 @@ class CommentDialog<T> extends HookConsumerWidget {
                   suffixWidget: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: !loading.value ? DefaultButton(
-                        key: const Key('CommentInputSubmitButton'),
                         onClick: () async {
                           final form = formKey.currentState;
                           final String deviceName = userNameController.text.isNotEmpty ? userNameController.text : 'Anonymous';

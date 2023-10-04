@@ -131,10 +131,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
 
   /// Renders the floating action button
   Widget _buildFloatingActionButtons(BuildContext context, WidgetRef ref) => Padding(
-    key: const Key('FloatingActionButtonPadding'),
     padding: EdgeInsets.all(useMobileLayout(context) ? 95 : 37.0),
     child: SpeedDial(
-        key: const Key('FloatingActionButtonSpeedDial'),
         animatedIcon: AnimatedIcons.add_event,
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
@@ -146,22 +144,17 @@ class BoardPageState extends ConsumerState<BoardPage> {
         spaceBetweenChildren: 10,
         children: [
           SpeedDialChild(
-              key: const Key('FloatingActionButtonSpeedDialUploadVideo'),
               foregroundColor: Colors.black,
               labelBackgroundColor: Colors.white,
               labelWidget: Padding(
-                key: const Key('FloatingActionButtonSpeedDialUploadVideoPadding'),
                 padding: const EdgeInsets.all(10.0),
                 child: ShadowWidget(
-                  key: const Key('FloatingActionButtonSpeedDialUploadVideoShadow'),
                   offset: const Offset(0, 0),
                   blurRadius: 1,
                   shadowSize: 0.1,
                   child: Container(
-                    key: const Key('FloatingActionButtonSpeedDialUploadVideoContainer'),
                     color: Colors.white,
                     child: StyledText(
-                      key: const Key('FloatingActionButtonSpeedDialUploadVideoText'),
                       text: FlutterI18n.translate(context, 'Upload Video'),
                       padding: 5,
                       fontSize: 12,
@@ -175,22 +168,17 @@ class BoardPageState extends ConsumerState<BoardPage> {
               onTap: () => _onAction(ref, () => ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(true))
           ),
           SpeedDialChild(
-              key: const Key('FloatingActionButtonSpeedDialUploadPhoto'),
               foregroundColor: Colors.black,
               labelBackgroundColor: Colors.white,
               labelWidget: Padding(
-                key: const Key('FloatingActionButtonSpeedDialUploadPhotoPadding'),
                 padding: const EdgeInsets.all(10.0),
                 child: ShadowWidget(
-                  key: const Key('FloatingActionButtonSpeedDialUploadPhotoShadow'),
                   offset: const Offset(0, 0),
                   blurRadius: 1,
                   shadowSize: 0.1,
                   child: Container(
-                    key: const Key('FloatingActionButtonSpeedDialUploadPhotoContainer'),
                     color: Colors.white,
                     child: StyledText(
-                      key: const Key('FloatingActionButtonSpeedDialUploadPhotoText'),
                       text: FlutterI18n.translate(context, 'Upload Photograph'),
                       padding: 5,
                       fontSize: 12,
@@ -240,19 +228,14 @@ class BoardPageState extends ConsumerState<BoardPage> {
         return true;
       },
       child: BackgroundPage(
-          key: const Key('BoardPageBackground'),
           child: RawKeyboardListener(
-            key: const Key('BoardPageBackgroundKeyboardListener'),
             focusNode: useFocusNode(),
             onKey: _handleKeyEvent,
             child: Stack(
-                key: const Key('BoardPageStack'),
                 children: [
                   Align(
-                      key: const Key('BoardPageStackAlignTextAnimation'),
                       alignment: Alignment.center,
                       child: FadeAnimation(
-                          key: const Key('BoardPageTextAnimation'),
                           start: 1,
                           end: 0,
                           whenTo: (controller) {
@@ -268,10 +251,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                             });
                           },
                           child: Padding(
-                            key: const Key('BoardPageTextAnimationPadding'),
                             padding: EdgeInsets.only(left: titlePadding),
                             child: StyledText(
-                              key: const Key('BoardPageTextAnimationText'),
                               text: FlutterI18n.translate(
                                   context,
                                   (useMobileLayout(context) && ref.read(boardFooterTabProvider) == 'photos')
@@ -288,16 +269,13 @@ class BoardPageState extends ConsumerState<BoardPage> {
                       )
                   ),
                   Align(
-                      key: const Key('BoardPageStackAlignBoard'),
                       alignment: Alignment.center,
                       child: Padding(
-                        key: const Key('BoardPageBoardPadding'),
                         padding: !useMobileLayout(context)
                             ? EdgeInsets.only(top: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding)
                             : EdgeInsets.only(top: 0.2, left: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding),
                         child: ref.read(boardFooterTabProvider) == 'photos'
                             ? SlideTransitionAnimation(
-                            key: const Key('PhotoSlideAnimation'),
                             getStart: () => _calculateBoardStartAnimation(ref),
                             getEnd: () => const Offset(0, 0),
                             whenTo: (controller) {
@@ -315,9 +293,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                               });
                             },
                             duration: const Duration(milliseconds: 800),
-                            child: PhotographBoardPage(key: const Key('PhotoBoardPage'), onUserAction: _onAction))
+                            child: PhotographBoardPage(onUserAction: _onAction))
                             : SlideTransitionAnimation(
-                            key: const Key('VideoSlideAnimation'),
                             getStart: () => _calculateBoardStartAnimation(ref),
                             getEnd: () => const Offset(0, 0),
                             whenTo: (controller) {
@@ -333,28 +310,24 @@ class BoardPageState extends ConsumerState<BoardPage> {
                               });
                             },
                             duration: const Duration(milliseconds: 800),
-                            child: VideoBoardPage(key: const Key('VideoBoardPage'), onUserAction: _onAction)
+                            child: VideoBoardPage(onUserAction: _onAction)
                         ),
                       )
                   ),
                   Align(
-                      key: const Key('BoardFooterAlign'),
                       alignment: Alignment.bottomCenter,
                       child: SlideTransitionAnimation(
-                          key: const Key('BoardFooterSlideAnimation'),
                           getStart: () => const Offset(0.0, 1),
                           getEnd: () => Offset.zero,
                           duration: const Duration(milliseconds: 1200),
-                          child: BoardPageFooter(key: const Key('BoardFooterAlign'), onUserAction: _onAction,)
+                          child: BoardPageFooter(onUserAction: _onAction,)
                       )
                   ),
                   Align(
-                      key: const Key('BoardHeaderAlign'),
                       alignment: useMobileLayout(context)
                           ? Alignment.topLeft
                           : Alignment.topCenter,
                       child: SlideTransitionAnimation(
-                          key: const Key('BoardHeaderSlideAnimation'),
                           duration: const Duration(milliseconds: 1200),
                           getStart: () =>
                           ref.watch(boardFooterTabProvider) == 'photos'
@@ -371,14 +344,12 @@ class BoardPageState extends ConsumerState<BoardPage> {
                               controller.forward();
                             });
                           },
-                          child: BoardPageFilter(key: const Key('BoardHeaderPage'), onUserAction: _onAction)
+                          child: BoardPageFilter(onUserAction: _onAction)
                       )
                   ),
                   Visibility(
-                      key: const Key('BoardFloatingButtonsVisible'),
                       visible: Session().isLoggedIn(),
                       child: Align(
-                          key: const Key('BoardFloatingButtonsVisibleAlign'),
                           alignment: useMobileLayout(context)
                               ? Alignment.bottomCenter
                               : Alignment.bottomRight,
@@ -386,22 +357,19 @@ class BoardPageState extends ConsumerState<BoardPage> {
                       )
                   ),
                   Visibility(
-                    key: const Key('DeletePhotoDialogVisible'),
-                      visible: (shouldShowQrCodeDialog != null && shouldShowQrCodeDialog) ||
-                          (shouldShowDeletePhotographDialog != null && shouldShowDeletePhotographDialog) ||
-                          (shouldShowDeleteVideoDialog != null && shouldShowDeleteVideoDialog) ||
-                          (shouldShowUploadPhotographDialog != null && shouldShowUploadPhotographDialog) ||
-                          (shouldShowEditPhotographDialog != null && shouldShowEditPhotographDialog) ||
-                          (shouldShowUploadVideoDialog != null && shouldShowUploadVideoDialog) ||
-                          (shouldShowEditVideoDialog != null && shouldShowEditVideoDialog) ||
-                          (shouldShowShareDialog != null && shouldShowShareDialog),
-                      child: const Blurrable(key: Key('DeletePhotoDialogBlurrable'), strength: 10),
+                    visible: (shouldShowQrCodeDialog != null && shouldShowQrCodeDialog) ||
+                        (shouldShowDeletePhotographDialog != null && shouldShowDeletePhotographDialog) ||
+                        (shouldShowDeleteVideoDialog != null && shouldShowDeleteVideoDialog) ||
+                        (shouldShowUploadPhotographDialog != null && shouldShowUploadPhotographDialog) ||
+                        (shouldShowEditPhotographDialog != null && shouldShowEditPhotographDialog) ||
+                        (shouldShowUploadVideoDialog != null && shouldShowUploadVideoDialog) ||
+                        (shouldShowEditVideoDialog != null && shouldShowEditVideoDialog) ||
+                        (shouldShowShareDialog != null && shouldShowShareDialog),
+                    child: const Blurrable(strength: 10),
                   ),
                   if (shouldShowDeletePhotographDialog != null) Align(
-                    key: const Key('DeletePhotoDialogAlign'),
                     alignment: Alignment.bottomCenter,
                     child: SlideTransitionAnimation(
-                      key: const Key('DeletePhotoDialogSlideAnimation'),
                       duration: const Duration(milliseconds: 1000),
                       getStart: () => shouldShowDeletePhotographDialog ? const Offset(0, 1) : const Offset(0, 0),
                       getEnd: () => shouldShowDeletePhotographDialog ? const Offset(0, 0) : const Offset(0, 10),
@@ -417,7 +385,6 @@ class BoardPageState extends ConsumerState<BoardPage> {
                         }
                       },
                       child: DeleteDialog<ImageData>(
-                        key: const Key('BoardPageDeletePhotoDialog'),
                         data: ref.read(deleteImageProvider),
                         onSubmit: (image) {
                           if (image != null) {
@@ -433,10 +400,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                     ),
                   ),
                   if (shouldShowDeleteVideoDialog != null) Align(
-                    key: const Key('DeleteVideoDialogAlign'),
                     alignment: Alignment.bottomCenter,
                     child: SlideTransitionAnimation(
-                      key: const Key('DeleteVideoDialogSlideAnimation'),
                       duration: const Duration(milliseconds: 1000),
                       getStart: () => shouldShowDeleteVideoDialog ? const Offset(0, 1) : const Offset(0, 0),
                       getEnd: () => shouldShowDeleteVideoDialog ? const Offset(0, 0) : const Offset(0, 10),
@@ -452,7 +417,6 @@ class BoardPageState extends ConsumerState<BoardPage> {
                         }
                       },
                       child: DeleteDialog<VideoData>(
-                        key: const Key('BoardPageDeleteVideoDialog'),
                         data: ref.read(deleteVideoProvider),
                         onSubmit: (video) {
                           if (video != null) {
@@ -468,10 +432,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                     ),
                   ),
                   if (shouldShowEditPhotographDialog != null) Align(
-                    key: const Key('EditPhotoDialogAlign'),
                     alignment: Alignment.bottomCenter,
                     child: SlideTransitionAnimation(
-                      key: const Key('EditPhotoDialogSlideAnimation'),
                       duration: const Duration(milliseconds: 1000),
                       getStart: () => shouldShowEditPhotographDialog ? const Offset(0, 1) : const Offset(0, 0),
                       getEnd: () => shouldShowEditPhotographDialog ? const Offset(0, 0) : const Offset(0, 10),
@@ -487,7 +449,6 @@ class BoardPageState extends ConsumerState<BoardPage> {
                         }
                       },
                       child: UploadImageDialog(
-                        key: const Key('BoardPageEditPhotoDialog'),
                         data: ref.read(photographEditProvider),
                         onSubmit: (image) {
                           final ImageMetaData meta = ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == element.image.id).metadata;
@@ -503,10 +464,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                     ),
                   ),
                   if (shouldShowUploadPhotographDialog != null) Align(
-                    key: const Key('UploadPhotoDialogAlign'),
                     alignment: Alignment.bottomCenter,
                     child: SlideTransitionAnimation(
-                      key: const Key('UploadPhotoDialogSlideAnimation'),
                       duration: const Duration(milliseconds: 1000),
                       getStart: () => shouldShowUploadPhotographDialog ? const Offset(0, 1) : const Offset(0, 0),
                       getEnd: () => shouldShowUploadPhotographDialog ? const Offset(0, 0) : const Offset(0, 10),
@@ -517,7 +476,6 @@ class BoardPageState extends ConsumerState<BoardPage> {
                         });
                       },
                       child: UploadImageDialog(
-                        key: const Key('BoardPageUploadPhotoDialog'),
                         onSubmit: (image) {
                           ref.read(photographServiceFetchProvider.notifier).addItem(image);
                           ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
@@ -527,10 +485,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                     ),
                   ),
                   if (shouldShowUploadVideoDialog != null) Align(
-                    key: const Key('UploadVideoDialogAlign'),
                     alignment: Alignment.bottomCenter,
                     child: SlideTransitionAnimation(
-                      key: const Key('UploadVideoDialogSlideAnimation'),
                       duration: const Duration(milliseconds: 1000),
                       getStart: () => shouldShowUploadVideoDialog ? const Offset(0, 1) : const Offset(0, 0),
                       getEnd: () => shouldShowUploadVideoDialog ? const Offset(0, 0) : const Offset(0, 10),
@@ -541,7 +497,6 @@ class BoardPageState extends ConsumerState<BoardPage> {
                         });
                       },
                       child: UploadVideoDialog(
-                        key: const Key('BoardPageUploadVideoDialog'),
                         onSubmit: (video) {
                           ref.read(videoServiceFetchProvider.notifier).addItem(video);
                           ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(false);
@@ -551,10 +506,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                     ),
                   ),
                   if (shouldShowEditVideoDialog != null) Align(
-                    key: const Key('EditVideoDialogAlign'),
                     alignment: Alignment.bottomCenter,
                     child: SlideTransitionAnimation(
-                      key: const Key('EditVideoDialogSlideAnimation'),
                       duration: const Duration(milliseconds: 1000),
                       getStart: () => shouldShowEditVideoDialog ? const Offset(0, 1) : const Offset(0, 0),
                       getEnd: () => shouldShowEditVideoDialog ? const Offset(0, 0) : const Offset(0, 10),
@@ -570,7 +523,6 @@ class BoardPageState extends ConsumerState<BoardPage> {
                         }
                       },
                       child: UploadVideoDialog(
-                        key: const Key('BoardPageEditVideoDialog'),
                         data: ref.read(videoEditProvider),
                         onSubmit: (video) {
                           ref.read(videoServiceFetchProvider.notifier).removeItem(
@@ -585,10 +537,8 @@ class BoardPageState extends ConsumerState<BoardPage> {
                     ),
                   ),
                   if (shouldShowQrCodeDialog != null) Align(
-                    key: const Key('QrCodeDialogAlign'),
                     alignment: Alignment.bottomCenter,
                     child: SlideTransitionAnimation(
-                        key: const Key('QrCodeDialogSlideAnimation'),
                         duration: const Duration(milliseconds: 1000),
                         getStart: () => shouldShowQrCodeDialog ? const Offset(0, 1) : const Offset(0, 0),
                         getEnd: () => shouldShowQrCodeDialog ? const Offset(0, 0) : const Offset(0, 10),
@@ -598,14 +548,12 @@ class BoardPageState extends ConsumerState<BoardPage> {
                             controller.forward();
                           });
                         },
-                        child: const QrCodeDialog(key: Key('BoardPageQrCodeDialog'))
+                        child: const QrCodeDialog()
                     ),
                   ),
                   if (shouldShowShareDialog != null) Align(
-                    key: const Key('ShareDialogAlign'),
                     alignment: Alignment.bottomCenter,
                     child: SlideTransitionAnimation(
-                        key: const Key('ShareDialogSlideAnimation'),
                         duration: const Duration(milliseconds: 1000),
                         getStart: () => shouldShowShareDialog ? const Offset(0, 1) : const Offset(0, 0),
                         getEnd: () => shouldShowShareDialog ? const Offset(0, 0) : const Offset(0, 10),
@@ -615,7 +563,7 @@ class BoardPageState extends ConsumerState<BoardPage> {
                             controller.forward();
                           });
                         },
-                        child: const ShareDialog(key: Key('BoardPageShareDialog'))
+                        child: const ShareDialog()
                     ),
                   )
                 ]

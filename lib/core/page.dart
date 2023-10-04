@@ -48,15 +48,12 @@ class CorePage extends HookConsumerWidget {
   /// Renders the default page widget
   Widget _renderDefaultPage(BuildContext context, WidgetRef ref) => MainScaffold(
     body: FutureBuilder<SharedPreferences>(
-        key: const Key('CorePageFutureBuilder'),
         future: SharedPreferences.getInstance(),
         builder: (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
           final List<Widget> children = [
             kIsWeb ? render() : BackgroundPage(
-              key: const Key('CorePageBackground'),
               color: Colors.black,
               child: SafeArea(
-                key: const Key('CorePageSafeArea'),
                 bottom: false,
                 child: render(),
               ),

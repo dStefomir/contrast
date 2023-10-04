@@ -82,10 +82,8 @@ class UploadImageDialog extends HookConsumerWidget {
 
     return
       Visibility(
-        key: const Key('UploadPhotoDialogActionsVisibility'),
         visible: (data != null || ref.watch(fileProvider).isFileSelected()) && !isLoading,
         child: OutlinedButton(
-            key: const Key('UploadPhotoDialogActionsSubmitButton'),
             style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.black),
                 elevation: MaterialStateProperty.all(2),
@@ -93,7 +91,6 @@ class UploadImageDialog extends HookConsumerWidget {
                 textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
             ),
             child: Text(
-                key: const Key('UploadPhotoDialogActionsSubmitButtonText'),
                 FlutterI18n.translate(context, 'Submit')
             ),
             onPressed: () {
@@ -123,11 +120,9 @@ class UploadImageDialog extends HookConsumerWidget {
     final bool isLoading = ref.watch(loadingProvider);
 
     return isLoading ? const Center(
-        key: Key('UploadPhotoDialogLoadingIndicatorCenter'),
         child: Padding(
-            key: Key('UploadPhotoDialogLoadingIndicatorPadding'),
           padding: EdgeInsets.all(25),
-          child: LoadingIndicator(key: Key('UploadPhotoDialogLoadingIndicator'),)
+          child: LoadingIndicator()
         )
     ) :
     SimpleInput(
@@ -142,10 +137,8 @@ class UploadImageDialog extends HookConsumerWidget {
 
   ///Renders the geo form
   Widget _renderGeoForm(BuildContext context, WidgetRef ref) => Row(
-    key: const Key('UploadPhotoDialogGeoRow'),
     children: [
       Expanded(
-          key: const Key('UploadPhotoDialogGeoExpandedLatitude'),
           child: SimpleInput(
             widgetKey: const Key('photograph latitude'),
             labelText: FlutterI18n.translate(context, 'Latitude'),
@@ -164,12 +157,8 @@ class UploadImageDialog extends HookConsumerWidget {
               },
           )
       ),
-      const SizedBox(
-          key: Key('UploadPhotoDialogGeoSeparator'),
-          width: 15
-      ),
+      const SizedBox(width: 15),
       Expanded(
-          key: const Key('UploadPhotoDialogGeoExpandedLongitude'),
           child: SimpleInput(
             widgetKey: const Key('photograph longitude'),
             labelText: FlutterI18n.translate(context, 'Longitude'),
@@ -196,38 +185,30 @@ class UploadImageDialog extends HookConsumerWidget {
     final String selectedCategory = ref.watch(categoryProvider(data?.category));
 
     return Center(
-      key: const Key('UploadPhotoDialogCategoryCenter'),
       child: Padding(
-        key: const Key('UploadPhotoDialogCategoryPadding'),
         padding: const EdgeInsets.all(8.0),
         child: PopupMenuButton<String>(
-          key: const Key('UploadPhotoDialogCategoryPopupButton'),
           onSelected: (value) => ref.read(categoryProvider(data?.category).notifier).setCategory(value),
           padding: EdgeInsets.zero,
           itemBuilder: (_) => <PopupMenuItem<String>>[
             PopupMenuItem<String>(
-                key: const Key('UploadPhotoDialogCategoryPopupLandscape'),
                 value: 'landscape',
                 child: Text(FlutterI18n.translate(context, 'L A N D S C A P E'), style: const TextStyle(fontSize: 20))
             ),
             PopupMenuItem<String>(
-                key: const Key('UploadPhotoDialogCategoryPopupPortraits'),
                 value: 'portraits',
                 child: Text(FlutterI18n.translate(context, 'P O R T R A I T S'), style: const TextStyle(fontSize: 20))
             ),
             PopupMenuItem<String>(
-                key: const Key('UploadPhotoDialogCategoryPopupStreet'),
                 value: 'street',
                 child: Text(FlutterI18n.translate(context, 'S T R E E T'), style: const TextStyle(fontSize: 20))
             ),
             PopupMenuItem<String>(
-                key: const Key('UploadPhotoDialogCategoryPopupOther'),
                 value: 'other',
                 child: Text(FlutterI18n.translate(context, 'O T H E R'), style: const TextStyle(fontSize: 20))
             ),
           ],
           child: Text(
-              key: const Key('UploadPhotoDialogCategoryPopupTitle'),
               selectedCategory, style: const TextStyle(fontSize: 20)
           ),
         ),
@@ -239,13 +220,11 @@ class UploadImageDialog extends HookConsumerWidget {
   Widget _renderSelectedImageName(FileData fileData) =>
       fileData.isFileSelected() || data != null ?
         Center(
-            key: const Key('UploadPhotoDialogSelectedImageCenter'),
             child: StyledText(
-              key: const Key('UploadPhotoDialogSelectedImageText'),
                 text: data != null ? data!.path! : fileData.fileName!,
                 decoration: TextDecoration.underline,
             )
-        ) : const SizedBox.shrink(key: Key('UploadPhotoDialogSelectedImageNothing'));
+        ) : const SizedBox.shrink();
 
   /// Renders the image upload button or if its in edit mode - the existing image
   Widget _renderUploadButton(BuildContext context, WidgetRef ref, FileData fileData) {
@@ -253,27 +232,21 @@ class UploadImageDialog extends HookConsumerWidget {
     final bool isHovering = ref.watch(hoverProvider(widgetKey));
 
     return Column(
-      key: const Key('UploadPhotoDialogUploadButtonColumn'),
       children: [
         StyledTooltip(
-          key: const Key('UploadPhotoDialogUploadButtonTooltip'),
           text: FlutterI18n.translate(context, 'Photograph'),
           pointingPosition: AxisDirection.right,
           child: Material(
-            key: const Key('UploadPhotoDialogUploadButtonMaterial'),
             color: Colors.transparent,
             child: InkWell(
-              key: const Key('UploadPhotoDialogUploadButtonInkWell'),
               onTap: () => _selectPhotograph(ref),
               onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
               child: AnimatedContainer(
-                  key: const Key('UploadPhotoDialogUploadButtonAnimatedContainer'),
                   width: isHovering ? 165 : 160,
                   height: isHovering ? 165 : 160,
                   duration: const Duration(milliseconds: 800),
                   curve: Curves.fastOutSlowIn,
                   child: IconRenderer(
-                    key: const Key('UploadPhotoDialogUploadButtonSvg'),
                     asset: 'upload.svg',
                     color: Colors.black,
                     width: isHovering ? 250 : 240 - 20,
@@ -283,68 +256,51 @@ class UploadImageDialog extends HookConsumerWidget {
             ),
           ),
         ),
-        StyledText(
-            key: const Key('UploadPhotoDialogUploadButtonTitle'),
-            text: FlutterI18n.translate(context, 'Select an image')
-        )
+        StyledText(text: FlutterI18n.translate(context, 'Select an image'))
       ],
     );
   }
 
   /// Renders the dialog body
   Widget _renderDialogBody(BuildContext context, WidgetRef ref, FileData fileData) => Column(
-    key: const Key('UploadPhotoDialogBodyColumn'),
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Visibility(
-          key: const Key('UploadPhotoDialogBodyUploadButtonVisibility'),
           visible: !fileData.isFileSelected() && data == null,
           child: _renderUploadButton(context, ref, fileData)
       ),
       Visibility(
-        key: const Key('UploadPhotoDialogBodyContentVisibility'),
         visible: fileData.isFileSelected() || data != null,
         child: Column(
-            key: const Key('UploadPhotoDialogBodyContentColumn'),
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _renderSelectedImageName(fileData),
-            _renderCategorySelector(context, ref),
-            const SizedBox(
-                key: Key('UploadPhotoDialogBodyContentSelectorSeparator'),
-                height: 10
-            ),
-            _renderGeoForm(context, ref),
-            const SizedBox(
-                key: Key('UploadPhotoDialogBodyContentGeoSeparator'),
-                height: 10
-            ),
-            _renderLoadingIndicator(context, ref),
-        ]),
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _renderSelectedImageName(fileData),
+              _renderCategorySelector(context, ref),
+              const SizedBox(height: 10),
+              _renderGeoForm(context, ref),
+              const SizedBox(height: 10),
+              _renderLoadingIndicator(context, ref),
+            ]
+        ),
       )
     ],
   );
 
   /// Renders the dialog header
   Widget _renderDialogHeader(BuildContext context, WidgetRef ref) => Column(
-    key: const Key('UploadPhotoDialogHeaderColumn'),
     children: [
       Padding(
-        key: const Key('UploadPhotoDialogHeaderRowPadding'),
         padding: const EdgeInsets.all(10.0),
         child: Row(
-            key: const Key('UploadPhotoDialogHeaderRow'),
             children: [
               StyledText(
-                  key: const Key('UploadPhotoDialogHeaderText'),
                   text: data != null ? FlutterI18n.translate(context, 'Edit Photograph') : FlutterI18n.translate(context, 'Upload Photograph'),
                   weight: FontWeight.bold
               ),
-              const Spacer(key: Key('UploadPhotoDialogHeaderSpacer')),
+              const Spacer(),
               DefaultButton(
-                  key: const Key('UploadPhotoDialogHeaderCloseButton'),
                   onClick: () {
                     if(data != null) {
                       ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(false);
@@ -360,10 +316,7 @@ class UploadImageDialog extends HookConsumerWidget {
             ]
         ),
       ),
-      const Divider(
-        key: Key('UploadPhotoDialogHeaderDivider'),
-        color: Colors.black
-      )
+      const Divider(color: Colors.black)
     ],
   );
 
@@ -374,19 +327,15 @@ class UploadImageDialog extends HookConsumerWidget {
     return Form(
       key: _formKey,
       child: ShadowWidget(
-        key: const Key('UploadPhotoDialogShadow'),
         offset: const Offset(0, 0),
         blurRadius: 4,
         child: Container(
-          key: const Key('UploadPhotoDialogColumnContainer'),
           color: Colors.white,
           height: dialogHeight,
           child: Column(
-            key: const Key('UploadPhotoDialogColumn'),
             children: [
               _renderDialogHeader(context, ref),
               Padding(
-                key: const Key('UploadPhotoDialogBodyPadding'),
                 padding: const EdgeInsets.all(10.0),
                 child: _renderDialogBody(context, ref, fileData),
               ),

@@ -23,13 +23,10 @@ class LoginPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => Form(
     key: formKey,
     child: BackgroundPage(
-        key: const Key('LoginBackgroundPage'),
         child: Stack(
           alignment: Alignment.center,
-          key: const Key('LoginStack'),
           children: [
             Container(
-              key: const Key('LoginStackGradient'),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
@@ -42,37 +39,29 @@ class LoginPage extends HookConsumerWidget {
               ),
             ),
             IconRenderer(
-              key: const Key('LogicStackBackgroundSvg'),
               asset: 'background.svg',
               color: Colors.black.withOpacity(0.05),
               fit: BoxFit.fitWidth,
               width: MediaQuery.of(context).size.width,
             ),
             Align(
-              key: const Key('LoginTitleAlign'),
               alignment: Alignment.topCenter,
               child: Padding(
-                key: const Key('LoginTitlePadding'),
                 padding: const EdgeInsets.only(top: 50),
                 child: Text(
-                    key: const Key('LoginTitleText'),
                     FlutterI18n.translate(context, 'L O G I N'),
                     style: const TextStyle(fontSize: 40)
                 ),
               ),
             ),
             Center(
-              key: const Key('LoginInputCenter'),
               child: Column(
-                key: const Key('LoginInputColumn'),
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
-                    key: const Key('LoginInputUserPadding'),
                     padding: const EdgeInsets.all(10.0),
                     child: SizedBox(
-                        key: const Key('LoginInputUserSizedBox'),
                         width: 400,
                         child: SimpleInput(
                           widgetKey: const Key('user'),
@@ -89,11 +78,8 @@ class LoginPage extends HookConsumerWidget {
                     ),
                   ),
                   Padding(
-                    key: const Key('LoginInputPasswordPadding'),
                     padding: const EdgeInsets.all(10.0),
-                    child: SizedBox(
-                        key: const Key('LoginInputPasswordSizedBox'),
-                        width: 400,
+                    child: SizedBox(width: 400,
                         child: SimpleInput(
                           widgetKey: const Key('password'),
                           labelText: FlutterI18n.translate(context, 'Password'),
@@ -110,7 +96,6 @@ class LoginPage extends HookConsumerWidget {
                     ),
                   ),
                   OutlinedButton(
-                    key: const Key('LoginSubmitButton'),
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.black),
                         elevation: MaterialStateProperty.all(2),
@@ -133,19 +118,14 @@ class LoginPage extends HookConsumerWidget {
                           showErrorTextOnSnackBar(context, FlutterI18n.translate(context, 'Wrong user or password'));
                         });
                       }},
-                    child: Text(
-                        key: const Key('LoginSubmitButtonText'),
-                        FlutterI18n.translate(context, 'Log In')
-                    ),
+                    child: Text(FlutterI18n.translate(context, 'Log In')),
                   ).translateOnPhotoHover,
                 ],
               ),
             ),
             Align(
-              key: const Key('LoginCloseButtonAlign'),
               alignment: Alignment.topLeft,
               child: DefaultButton(
-                  key: const Key('LoginCloseButton'),
                   onClick: () => Modular.to.navigate("/"),
                   color: Colors.white,
                   borderColor: Colors.black,
