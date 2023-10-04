@@ -3,6 +3,7 @@ import 'package:contrast/common/widgets/page.dart';
 import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/map/provider.dart';
 import 'package:contrast/common/widgets/text.dart';
+import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/detail/photograph/provider.dart';
 import 'package:contrast/modules/detail/photograph/view/details.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -66,47 +67,58 @@ class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
   Widget build(BuildContext context) {
     final dataProvider = ref.watch(fetchBoardProvider);
 
-    return BackgroundPage(
-      key: const Key('PhotographDetailsBackground'),
-      color: Colors.black,
-      child: dataProvider.when(
-          data: (data) {
-            final int photoIndex = data.indexWhere((element) => element.id == widget.id);
-            // Photograph geo providers has to be initialized with with geo data if there is any.
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (data[photoIndex].lat != null) {
-                ref.read(mapLatProvider.notifier).setCurrentLat(data[photoIndex].lat!);
-              }
-              if (data[photoIndex].lng != null) {
-                ref.read(mapLngProvider.notifier).setCurrentLng(data[photoIndex].lng!);
-              }
-            });
+    return WillPopScope(
+      onWillPop: () async {
+        if(ref.read(overlayVisibilityProvider(const Key('comment_photograph'))) != null) {
+          ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
 
-            return PhotographDetailsView(
-                key: const Key('PhotographDetailsPage'),
-                images: data,
-                photoIndex: photoIndex,
-                category: widget.category,
-                audio: player
-            );
-          },
-          error: (error, stackTrace) => Center(
-              key: const Key('PhotographDetailsCenterError'),
-              child: StyledText(
-                key: const Key('PhotographDetailsCenterErrorText'),
-                text: error.toString(),
-                color: Colors.white,
-                weight: FontWeight.bold,
-                clip: false,
-              )
-          ),
-          loading: () => const Center(
-            key: Key('PhotographDetailsCenterLoading'),
-            child: LoadingIndicator(
-                key: Key('PhotographDetailsCenterLoadingIndicator'),
-                color: Colors.white
+          return false;
+        }
+
+        return true;
+      },
+      child: BackgroundPage(
+        key: const Key('PhotographDetailsBackground'),
+        color: Colors.black,
+        child: dataProvider.when(
+            data: (data) {
+              final int photoIndex = data.indexWhere((element) => element.id == widget.id);
+              // Photograph geo providers has to be initialized with with geo data if there is any.
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (data[photoIndex].lat != null) {
+                  ref.read(mapLatProvider.notifier).setCurrentLat(data[photoIndex].lat!);
+                }
+                if (data[photoIndex].lng != null) {
+                  ref.read(mapLngProvider.notifier).setCurrentLng(data[photoIndex].lng!);
+                }
+              });
+
+              return PhotographDetailsView(
+                  key: const Key('PhotographDetailsPage'),
+                  images: data,
+                  photoIndex: photoIndex,
+                  category: widget.category,
+                  audio: player
+              );
+            },
+            error: (error, stackTrace) => Center(
+                key: const Key('PhotographDetailsCenterError'),
+                child: StyledText(
+                  key: const Key('PhotographDetailsCenterErrorText'),
+                  text: error.toString(),
+                  color: Colors.white,
+                  weight: FontWeight.bold,
+                  clip: false,
+                )
             ),
-          )
+            loading: () => const Center(
+              key: Key('PhotographDetailsCenterLoading'),
+              child: LoadingIndicator(
+                  key: Key('PhotographDetailsCenterLoadingIndicator'),
+                  color: Colors.white
+              ),
+            )
+        ),
       ),
     );
   }

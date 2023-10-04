@@ -23,8 +23,8 @@ class BoardPageFilter extends ConsumerWidget {
   Widget _renderMobileLayout(BuildContext context, WidgetRef ref) => LayoutBuilder(key: const Key('HeaderMobileLayoutBuilder'), builder: (context, constraints) =>
       ShadowWidget(
         key: const Key('HeaderMobileLayoutShadowWidget'),
-        blurRadius: 2,
-        offset: const Offset(3, 0),
+        blurRadius: 1,
+        offset: const Offset(2, 0),
         child: Container(
           key: const Key('HeaderMobileLayoutContainer'),
           width: boardPadding,

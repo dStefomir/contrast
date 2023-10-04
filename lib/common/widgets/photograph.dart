@@ -81,11 +81,11 @@ class ContrastPhotograph extends StatelessWidget {
         paddingRight = 1.5;
         paddingLeft = 1.5;
         shadowWidth = constraints.maxWidth - (paddingRight + paddingLeft);
-        shadowHeight = constraints.maxHeight / 1.5;
+        shadowHeight = constraints.maxHeight / 1.5 - 2;
       } else {
         paddingTop = 1.5;
         paddingBottom = 1.5;
-        shadowWidth = constraints.maxWidth / 1.5;
+        shadowWidth = constraints.maxWidth / 1.5 -2;
         shadowHeight = constraints.maxHeight - (paddingTop + paddingBottom);
       }
     }
@@ -95,7 +95,7 @@ class ContrastPhotograph extends StatelessWidget {
       children: [
         ShadowWidget(
             offset: const Offset(0, 0),
-            blurRadius: 2,
+            blurRadius: 1,
             child: SizedBox(
               width: shadowWidth,
               height: shadowHeight,
