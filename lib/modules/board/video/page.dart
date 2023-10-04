@@ -80,7 +80,7 @@ class VideoBoardPage extends HookConsumerWidget {
         constraints: constraints,
         onClick: () => onUserAction(ref, () => Modular.to.pushNamed('videos/details?path=${video.path}&id=${video.id}')),
         onRedirect: kIsWeb ? () => onUserAction(ref, () async {
-          final Uri url = Uri.parse('videos/details?path=${video.path}&id=${video.id}');
+          final Uri url = Uri.parse('https://www.youtube.com/watch?v=${video.path}');
           if (await canLaunchUrl(url)) {
             await launchUrl(url);
           }

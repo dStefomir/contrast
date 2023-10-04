@@ -30,6 +30,26 @@ class ContrastVideo extends HookConsumerWidget {
     this.onRedirect
   }) : super(key: widgetKey);
 
+  List<Widget> renderFilmLikeWidget() {
+    final List<Widget> widgets = [];
+    const int whiteBoxes = 5;
+    double whiteBoxWidth = constraints.maxWidth / 20;
+
+    for (int i = 0; i < whiteBoxes - 1; i++) {
+      widgets.add(const Spacer());
+      widgets.add(
+          Container(
+            width: whiteBoxWidth,
+            height: constraints.maxHeight / 20,
+            color: Colors.white.withOpacity(0.9),
+          )
+      );
+      widgets.add(const Spacer());
+    }
+
+    return widgets;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isHovering = ref.watch(hoverProvider(widgetKey));
@@ -38,7 +58,7 @@ class ContrastVideo extends HookConsumerWidget {
     return Material(
         color: Colors.transparent,
         child: InkWell(
-          hoverColor: Colors.black,
+          hoverColor: Colors.transparent,
           onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
           onTap: () {},
           child: GestureDetector(
@@ -54,10 +74,43 @@ class ContrastVideo extends HookConsumerWidget {
                   constraints: constraints,
                   image: ImageData(path: videoPath),
                   quality: FilterQuality.high,
-                  borderColor: Colors.black,
+                  borderColor: Colors.transparent,
+                  fit: BoxFit.contain,
                   compressed: false,
                   isThumbnail: true,
                   height: double.infinity,
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: constraints.maxHeight / 8),
+                    child: Container(
+                      width: constraints.maxWidth,
+                      height: constraints.maxHeight / 10,
+                      color: isHovering ? Colors.black : Colors.black54,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: renderFilmLikeWidget(),
+                      ),
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: constraints.maxHeight / 8),
+                    child: Container(
+                      width: constraints.maxWidth,
+                      height: constraints.maxHeight / 10,
+                      color: isHovering ? Colors.black : Colors.black54,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: renderFilmLikeWidget(),
+                      ),
+                    ),
+                  ),
                 ),
                 Visibility(
                   visible: isHovering,
@@ -78,11 +131,14 @@ class ContrastVideo extends HookConsumerWidget {
                 if (isHovering && onRedirect != null && getRunningPlatform(context) == 'DESKTOP')
                   Align(
                     alignment: Alignment.topRight,
-                    child: RedirectButton(
-                      widgetKey: Key('$widgetKey/redirect'),
-                      constraints: constraints,
-                      onRedirect: onRedirect!,
-                      height: constraints.maxHeight / 7,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: constraints.maxHeight / 4.45),
+                      child: RedirectButton(
+                        widgetKey: Key('$widgetKey/redirect'),
+                        constraints: constraints,
+                        onRedirect: onRedirect!,
+                        height: constraints.maxHeight / 7,
+                      ),
                     )
                 )
               ],

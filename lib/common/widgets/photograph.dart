@@ -32,6 +32,8 @@ class ContrastPhotograph extends StatelessWidget {
   final ImageData? image;
   /// Color of the border of the image
   final Color borderColor;
+  /// Custom border of the photograph
+  final BoxBorder? customBorder;
   /// Image border width
   final double borderWidth;
   /// Should display a compressed image or not
@@ -57,6 +59,7 @@ class ContrastPhotograph extends StatelessWidget {
     this.fit,
     this.image,
     this.compressed = true,
+    this.customBorder,
     this.width,
     this.height,
     this.data,
@@ -75,7 +78,7 @@ class ContrastPhotograph extends StatelessWidget {
 
     if (isThumbnail) {
       shadowWidth = constraints.maxWidth;
-      shadowHeight = constraints.maxHeight / 1.8;
+      shadowHeight = constraints.maxHeight / 1.33;
     } else {
       if (image!.isLandscape!) {
         paddingRight = 1.5;
@@ -85,7 +88,7 @@ class ContrastPhotograph extends StatelessWidget {
       } else {
         paddingTop = 1.5;
         paddingBottom = 1.5;
-        shadowWidth = constraints.maxWidth / 1.5 -2;
+        shadowWidth = constraints.maxWidth / 1.5 - 2;
         shadowHeight = constraints.maxHeight - (paddingTop + paddingBottom);
       }
     }
@@ -95,7 +98,7 @@ class ContrastPhotograph extends StatelessWidget {
       children: [
         ShadowWidget(
             offset: const Offset(0, 0),
-            blurRadius: 1,
+            blurRadius: 3,
             child: SizedBox(
               width: shadowWidth,
               height: shadowHeight,
@@ -103,17 +106,20 @@ class ContrastPhotograph extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.only(top: paddingTop, bottom: paddingBottom, left: paddingLeft, right: paddingRight),
-          child: ExtendedRawImage(
-            image: state.extendedImageInfo?.image,
-            width: width,
-            height: !isThumbnail ? height : double.infinity,
-            fit: fit ?? (compressed
-                ? image?.isLandscape != null && image!.isLandscape!
-                ? BoxFit.fitWidth
-                : BoxFit.fitHeight
-                : BoxFit.contain),
-            isAntiAlias: true,
-            filterQuality: quality,
+          child: AspectRatio(
+            aspectRatio: isThumbnail || image!.isLandscape! ? 3 / 2 : 2 / 3,
+            child: ExtendedRawImage(
+              image: state.extendedImageInfo?.image,
+              width: width,
+              height: !isThumbnail ? height : double.infinity,
+              fit: fit ?? (compressed
+                  ? image?.isLandscape != null && image!.isLandscape!
+                  ? BoxFit.fitWidth
+                  : BoxFit.fitHeight
+                  : BoxFit.contain),
+              isAntiAlias: true,
+              filterQuality: quality,
+            ),
           ),
         ),
       ],
@@ -150,7 +156,7 @@ class ContrastPhotograph extends StatelessWidget {
       photo = ExtendedImage.network(fetch!(image!.path!),
         width: width,
         height: !isThumbnail ? height : double.infinity,
-        border: Border.all(color: borderColor, width: borderWidth),
+        border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
         enableLoadState: !compressed,
         fit: fit ?? (compressed
             ? image?.isLandscape != null && image!.isLandscape!
@@ -174,7 +180,7 @@ class ContrastPhotograph extends StatelessWidget {
           width: width,
           height: height,
           scale: 0.6,
-          border: Border.all(color: borderColor, width: borderWidth),
+          border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
           loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
           enableLoadState: !compressed,
           fit: fit ?? BoxFit.contain,
@@ -244,6 +250,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
             constraints: constraints,
             quality: FilterQuality.low,
             borderColor: Colors.black,
+            customBorder: const Border.symmetric(horizontal: BorderSide(color: Colors.black, width: 3)),
             image: wrapper.image,
             compressed: true,
             height: double.infinity,
@@ -256,15 +263,15 @@ class ContrastPhotographMeta extends HookConsumerWidget {
             scaleFactor: 16,
           ).translateOnPhotoHover,
           if (isHovering && onRedirect != null && getRunningPlatform(context) == 'DESKTOP')
-          Align(
-              alignment: Alignment.topRight,
-              child: RedirectButton(
-                widgetKey: Key("${widgetKey.toString()}/photograph/redirect"),
-                constraints: constraints,
-                onRedirect: onRedirect!,
-                height: constraints.maxHeight / 7,
-              )
-          ),
+            Align(
+                alignment: Alignment.topRight,
+                child: RedirectButton(
+                  widgetKey: Key("${widgetKey.toString()}/photograph/redirect"),
+                  constraints: constraints,
+                  onRedirect: onRedirect!,
+                  height: constraints.maxHeight / 7,
+                )
+            ),
         ],
       );
 
@@ -396,4 +403,3 @@ class ImageMetaDataDetails extends StatelessWidget {
     );
   }
 }
-
