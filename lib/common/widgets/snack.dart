@@ -13,8 +13,9 @@ void showErrorTextOnSnackBar(BuildContext context, String text) =>
           child: StyledText(
             text: text,
             padding: 0,
-            fontSize: 13,
-            useShadow: true,
+            fontSize: 15,
+            clip: false,
+            weight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
@@ -27,15 +28,16 @@ void showErrorTextOnSnackBar(BuildContext context, String text) =>
 void showSuccessTextOnSnackBar(BuildContext context, String text) =>
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 3500),
       content: SizedBox(
         height: boardPadding,
         child: Center(
           child: StyledText(
             text: text,
             padding: 0,
-            fontSize: 13,
-            useShadow: true,
+            fontSize: 15,
+            clip: false,
+            weight: FontWeight.bold,
             color: Colors.black,
           ),
         ),

@@ -21,10 +21,16 @@ class PhotographCommentsService {
     }, result);
   }
   /// Post a photograph comment
-  Future<ImageCommentsData> postPhotographComment(String deviceId, String deviceName, int imageId, String comment, double rating) async {
-    final result = await Session.proxy.post('/images/comments?deviceId=$deviceId&deviceName=$deviceName&imageId=$imageId&comment=$comment&rating=$rating');
+  Future<ImageCommentsData> postPhotographComment(String deviceId, String deviceName, int imageId, String comment, double rating, bool isAdmin) async {
+    if(isAdmin) {
+      final result = await Session.proxy.post('/images/comments/admin?imageId=$imageId&comment=$comment&rating=$rating');
 
-    return isolate.compute((response) => ImageCommentsData.fromJson(response), result);
+      return isolate.compute((response) => ImageCommentsData.fromJson(response), result);
+    } else {
+      final result = await Session.proxy.post('/images/comments?deviceId=$deviceId&deviceName=$deviceName&imageId=$imageId&comment=$comment&rating=$rating');
+
+      return isolate.compute((response) => ImageCommentsData.fromJson(response), result);
+    }
   }
   /// Approves a photograph comment
   Future<ImageCommentsData> approvePhotographComment(int id) async {
@@ -40,7 +46,7 @@ class PhotographCommentsService {
   }
   /// Deletes a comment for a photograph as admin
   Future<ImageCommentsData> deletePhotographCommentAsAdmin(int id) async {
-    final result = await Session.proxy.delete('/images/comments?id=$id');
+    final result = await Session.proxy.delete('/images/comments/admin?id=$id');
 
     return isolate.compute((response) => ImageCommentsData.fromJson(response), result);
   }
@@ -58,10 +64,16 @@ class PhotographCommentsService {
     }, result);
   }
   /// Post a video comment
-  Future<VideoCommentsData> postVideoComment(String deviceId, String deviceName, int videoId, String comment, double rating) async {
-    final result = await Session.proxy.post('/videos/comments?deviceId=$deviceId&deviceName=$deviceName&videoId=$videoId&comment=$comment&rating=$rating');
+  Future<VideoCommentsData> postVideoComment(String deviceId, String deviceName, int videoId, String comment, double rating, bool isAdmin) async {
+    if(isAdmin) {
+      final result = await Session.proxy.post('/videos/comments/admin?videoId=$videoId&comment=$comment&rating=$rating');
 
-    return isolate.compute((response) => VideoCommentsData.fromJson(response), result);
+      return isolate.compute((response) => VideoCommentsData.fromJson(response), result);
+    } else {
+      final result = await Session.proxy.post('/videos/comments?deviceId=$deviceId&deviceName=$deviceName&videoId=$videoId&comment=$comment&rating=$rating');
+
+      return isolate.compute((response) => VideoCommentsData.fromJson(response), result);
+    }
   }
   /// Approves a video comment
   Future<VideoCommentsData> approveVideoComment(int id) async {
@@ -77,7 +89,7 @@ class PhotographCommentsService {
   }
   /// Deletes a comment for a video as admin
   Future<VideoCommentsData> deleteVideoCommentAsAdmin(int id) async {
-    final result = await Session.proxy.delete('/videos/comments?id=$id');
+    final result = await Session.proxy.delete('/videos/comments/admin?id=$id');
 
     return isolate.compute((response) => VideoCommentsData.fromJson(response), result);
   }

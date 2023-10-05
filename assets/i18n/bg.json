@@ -92,5 +92,6 @@
   "Categories": "Категории",
   "Approve pending comments": "Удобри изчакващи коментари",
   "Comment approved": "Коментара беше удобрен",
-  "Approve comment": "Удобряване на коментар"
+  "Approve comment": "Удобряване на коментар",
+  "Comment review is pending": "Предстои ревю на коментар"
 }

@@ -68,7 +68,7 @@ class CommentDialog<T> extends HookConsumerWidget {
               return loading;
             }
 
-            return child(snapshot.data!.serialNumber);
+            return child(snapshot.data!.id);
           }
       );
     } else {
@@ -248,23 +248,27 @@ class CommentDialog<T> extends HookConsumerWidget {
                               sharedPrefs.setString('deviceName', deviceName);
                             }
                             if(apiData is List<ImageCommentsData>) {
-                              ref.read(commentsServiceProvider).postPhotographComment(deviceId ?? 'noId', deviceName, parentItemId, comment, rating).then((value) {
-                                ref.read(serviceProvider.notifier).addItem(value);
+                              ref.read(commentsServiceProvider).postPhotographComment(deviceId ?? 'noId', deviceName, parentItemId, comment, rating, isAdmin).then((value) {
+                                if(value.approved! == true) {
+                                  ref.read(serviceProvider.notifier).addItem(value);
+                                }
                                 commentController.text = '';
                                 ratingController.value = 0;
                                 loading.value = false;
-                                showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment posted'));
+                                showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, value.approved! ? 'Comment posted' : 'Comment review is pending'));
                               }).onError((error, stackTrace) {
                                 loading.value = false;
                                 showErrorTextOnSnackBar(context, FlutterI18n.translate(context, 'Only one comment per day is allowed'));
                               });
                             } else {
-                              ref.read(commentsServiceProvider).postVideoComment(deviceId ?? 'noId', deviceName, parentItemId, comment, rating).then((value) {
-                                ref.read(serviceProvider.notifier).addItem(value);
+                              ref.read(commentsServiceProvider).postVideoComment(deviceId ?? 'noId', deviceName, parentItemId, comment, rating, isAdmin).then((value) {
+                                if(value.approved! == true) {
+                                  ref.read(serviceProvider.notifier).addItem(value);
+                                }
                                 commentController.text = '';
                                 ratingController.value = 0;
                                 loading.value = false;
-                                showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment posted'));
+                                showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, value.approved! ? 'Comment posted' : 'Comment review is pending'));
                               }).onError((error, stackTrace) {
                                 loading.value = false;
                                 showErrorTextOnSnackBar(context, FlutterI18n.translate(context, 'Only one comment per day is allowed'));
