@@ -17,8 +17,8 @@ class CommentsNotifier<T> extends StateNotifier<List<T>> {
   CommentsNotifier({required this.ref}) : super([]);
 
   /// Fetches the comments of a photograph
-  Future<void> loadComments(int id, Future<List<T>> Function(int) fetchComments) async {
-    final comments = await fetchComments(id);
+  Future<void> loadComments(int id, bool isAdmin, Future<List<T>> Function(int, bool) fetchComments) async {
+    final comments = await fetchComments(id, isAdmin);
     state = comments;
   }
 

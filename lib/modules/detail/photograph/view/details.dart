@@ -200,10 +200,28 @@ class PhotographDetailsView extends HookConsumerWidget {
                                 onRatingUpdate: (rating) {},
                               ),
                               const Spacer(),
+                              if (Session().isLoggedIn() && !item.approved!) DefaultButton(
+                                  padding: 0,
+                                  height: 25,
+                                  onClick: () => ref.read(commentsServiceProvider).approvePhotographComment(item.id!).then((value) {
+                                    ref.read(imageCommentsDataViewProvider.notifier).updateItem(item, value);
+                                    showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment approved'));
+                                  }),
+                                  tooltip: FlutterI18n.translate(context, 'Approve comment'),
+                                  color: Colors.white.withOpacity(0.3),
+                                  borderColor: Colors.white,
+                                  icon: 'check.svg'
+                              ),
+                              if (Session().isLoggedIn() && !item.approved!) const SizedBox(width: 20),
                               if (deviceId == item.deviceId || Session().isLoggedIn()) DefaultButton(
                                   padding: 0,
                                   height: 25,
-                                  onClick: () => ref.read(commentsServiceProvider).deletePhotographComment(item.id!).then((value) {
+                                  onClick: () => Session().isLoggedIn() ?
+                                  ref.read(commentsServiceProvider).deletePhotographCommentAsAdmin(item.id!).then((value) {
+                                    ref.read(imageCommentsDataViewProvider.notifier).removeItem(index);
+                                    showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
+                                  }) :
+                                  ref.read(commentsServiceProvider).deletePhotographComment(item.id!, deviceId!).then((value) {
                                     ref.read(imageCommentsDataViewProvider.notifier).removeItem(index);
                                     showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
                                   }),
@@ -212,7 +230,8 @@ class PhotographDetailsView extends HookConsumerWidget {
                                   borderColor: Colors.white,
                                   icon: 'delete.svg'
                               )
-                            ],),
+                            ],
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10, bottom: 5),
                             child: StyledText(

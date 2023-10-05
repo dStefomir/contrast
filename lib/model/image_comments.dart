@@ -7,6 +7,7 @@ class ImageCommentsData {
   final String? deviceName;
   final String? deviceId;
   final double? rating;
+  final bool? approved;
 
   ImageCommentsData({
     this.id,
@@ -15,7 +16,8 @@ class ImageCommentsData {
     this.date,
     this.deviceName,
     this.deviceId,
-    this.rating
+    this.rating,
+    this.approved
     });
 
   factory ImageCommentsData.fromJson(Map<String, dynamic> json) => ImageCommentsData(
@@ -25,7 +27,8 @@ class ImageCommentsData {
       date: json["date"] != null ? DateTime.parse(json["date"]) : null,
       deviceName: json["device_name"],
       deviceId: json["device_id"],
-      rating: json["rating"]
+      rating: json["rating"],
+      approved: json["approved"] ?? false
   );
 
   Map<String, dynamic> toJson() => {
@@ -35,6 +38,7 @@ class ImageCommentsData {
     "date": date,
     "device_name": deviceName,
     "device_id": deviceId,
-    "rating": rating
+    "rating": rating,
+    "approved": approved
   };
 }

@@ -90,6 +90,8 @@ class CommentDialog<T> extends HookConsumerWidget {
     final commentFocusNode = useFocusNode();
     /// Loading controller
     final loading = useState(false);
+    /// Is the admin logged in or not
+    final bool isAdmin = Session().isLoggedIn();
 
 
     // Fetch the comments of a photo when the dialog is opened.
@@ -97,13 +99,19 @@ class CommentDialog<T> extends HookConsumerWidget {
       if(ref.read(overlayVisibilityProvider(widgetKey)) == true) {
         ref.read(serviceProvider.notifier).loadComments(
             parentItemId,
+            isAdmin,
             apiData is List<ImageCommentsData>
                 ? ref.read(commentsServiceProvider).getPhotographComments
                 : ref.read(commentsServiceProvider).getVideoComments
         );
       }
-      SharedPreferences.getInstance().then((value) => userNameController.text = value.getString('deviceName') ?? '');
-
+      SharedPreferences.getInstance().then((value) {
+        if(isAdmin) {
+          userNameController.text = 'dStefomir';
+        } else {
+          userNameController.text = value.getString('deviceName') ?? '';
+        }
+      });
       return null;
     }, [ref.watch(overlayVisibilityProvider(widgetKey)) == true]);
 
@@ -146,7 +154,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                       child: StyledText(
-                          text: FlutterI18n.translate(context, 'You can post only one comment per day'),
+                          text: FlutterI18n.translate(context, isAdmin ? 'Approve pending comments' : 'You can post only one comment per day'),
                           color: Colors.black87,
                           fontSize: 10,
                           padding: 0,
@@ -163,6 +171,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                   backgroundColor: Colors.white.withOpacity(0.3),
                   controller: userNameController,
                   focusNode: deviceNameFocusNode,
+                  enabled: !isAdmin,
                   labelText: FlutterI18n.translate(context, 'From who'),
                   onChange: (e) => e,
                   suffixWidget: Center(

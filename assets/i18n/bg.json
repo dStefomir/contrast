@@ -89,5 +89,8 @@
   "Website": "Уебсайт",
   "Google Play Store": "Андроид",
   "Apple App Store": "ИОС",
-  "Categories": "Категории"
+  "Categories": "Категории",
+  "Approve pending comments": "Удобри изчакващи коментари",
+  "Comment approved": "Коментара беше удобрен",
+  "Approve comment": "Удобряване на коментар"
 }

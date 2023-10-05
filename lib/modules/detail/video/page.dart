@@ -225,10 +225,28 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                 onRatingUpdate: (rating) {},
                               ),
                               const Spacer(),
+                              if (Session().isLoggedIn() && !item.approved!) DefaultButton(
+                                  padding: 0,
+                                  height: 25,
+                                  onClick: () => ref.read(commentsServiceProvider).approveVideoComment(item.id!).then((value) {
+                                    ref.read(videoCommentsDataViewProvider.notifier).updateItem(item, value);
+                                    showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment approved'));
+                                  }),
+                                  tooltip: FlutterI18n.translate(context, 'Approve comment'),
+                                  color: Colors.white.withOpacity(0.3),
+                                  borderColor: Colors.white,
+                                  icon: 'check.svg'
+                              ),
+                              if (Session().isLoggedIn() && !item.approved!) const SizedBox(width: 20),
                               if (deviceId == item.deviceId || Session().isLoggedIn()) DefaultButton(
                                   padding: 0,
                                   height: 25,
-                                  onClick: () => ref.read(commentsServiceProvider).deleteVideoComment(item.id!).then((value) {
+                                  onClick: () => Session().isLoggedIn() ?
+                                  ref.read(commentsServiceProvider).deleteVideoCommentAsAdmin(item.id!).then((value) {
+                                    ref.read(videoCommentsDataViewProvider.notifier).removeItem(index);
+                                    showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
+                                  }) :
+                                  ref.read(commentsServiceProvider).deleteVideoComment(item.id!, deviceId!).then((value) {
                                     ref.read(videoCommentsDataViewProvider.notifier).removeItem(index);
                                     showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
                                   }),
@@ -293,52 +311,63 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
           Modular.to.navigate('/');
         }
       },
-      child: BackgroundPage(
-          color: Colors.black,
-          child: OrientationBuilder(
-            builder: (BuildContext context, Orientation orientation) => Stack(
-              alignment: Alignment.center,
-              children: [
-                IconRenderer(
-                    asset: 'background.svg',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                    color: Colors.white.withOpacity(0.05)
-                ),
-                if(!shouldHideOverlay(shouldShowCommentsDialog)) Padding(
-                  padding: EdgeInsets.only(
-                      top: orientation == Orientation.landscape && kIsWeb ? 40 : 0,
-                      bottom: orientation == Orientation.landscape && kIsWeb ? 40 : 0,
-                      left: orientation == Orientation.portrait ? 0 : kIsWeb ? 35 : 60,
-                      right: orientation == Orientation.portrait ? 0 : kIsWeb ? 35 : 0
+      child: WillPopScope(
+        onWillPop: () async {
+          if(ref.read(overlayVisibilityProvider(const Key('comment_video'))) != null) {
+            ref.read(overlayVisibilityProvider(const Key('comment_video')).notifier).setOverlayVisibility(null);
+
+            return false;
+          }
+
+          return true;
+        },
+        child: BackgroundPage(
+            color: Colors.black,
+            child: OrientationBuilder(
+              builder: (BuildContext context, Orientation orientation) => Stack(
+                alignment: Alignment.center,
+                children: [
+                  IconRenderer(
+                      asset: 'background.svg',
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                      color: Colors.white.withOpacity(0.05)
                   ),
-                  child: YoutubePlayerScaffold(
-                      key: const Key('VideoDetailsYoutubeScaffold'),
-                      aspectRatio: 16 / 9,
-                      backgroundColor: Colors.transparent,
-                      controller: _controller,
-                      builder: (context, player) => player
-                  ),
-                ),
-                Align(
-                  alignment: orientation == Orientation.portrait ? Alignment.topCenter : Alignment.topLeft,
-                  child: orientation == Orientation.portrait ? Row(
-                      children: _renderActions()
-                  ) : Padding(
-                    padding: const EdgeInsets.only(top: 40),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: _renderActions(),
+                  if(!shouldHideOverlay(shouldShowCommentsDialog)) Padding(
+                    padding: EdgeInsets.only(
+                        top: orientation == Orientation.landscape && kIsWeb ? 40 : 0,
+                        bottom: orientation == Orientation.landscape && kIsWeb ? 40 : 0,
+                        left: orientation == Orientation.portrait ? 0 : kIsWeb ? 35 : 60,
+                        right: orientation == Orientation.portrait ? 0 : kIsWeb ? 35 : 0
+                    ),
+                    child: YoutubePlayerScaffold(
+                        key: const Key('VideoDetailsYoutubeScaffold'),
+                        aspectRatio: 16 / 9,
+                        backgroundColor: Colors.transparent,
+                        controller: _controller,
+                        builder: (context, player) => player
                     ),
                   ),
-                ),
-                if((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(strength: 10),
-                if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null) _renderCommentsOverlay(shouldShowCommentsDialog)
-              ],
-            ),
-          )
+                  Align(
+                    alignment: orientation == Orientation.portrait ? Alignment.topCenter : Alignment.topLeft,
+                    child: orientation == Orientation.portrait ? Row(
+                        children: _renderActions()
+                    ) : Padding(
+                      padding: const EdgeInsets.only(top: 40),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: _renderActions(),
+                      ),
+                    ),
+                  ),
+                  if((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(strength: 10),
+                  if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null) _renderCommentsOverlay(shouldShowCommentsDialog)
+                ],
+              ),
+            )
+        ),
       )
     );
   }

@@ -7,6 +7,7 @@ class VideoCommentsData {
   final String? deviceName;
   final String? deviceId;
   final double? rating;
+  final bool? approved;
 
   VideoCommentsData({
     this.id,
@@ -15,7 +16,8 @@ class VideoCommentsData {
     this.date,
     this.deviceName,
     this.deviceId,
-    this.rating
+    this.rating,
+    this.approved
   });
 
   factory VideoCommentsData.fromJson(Map<String, dynamic> json) => VideoCommentsData(
@@ -25,7 +27,8 @@ class VideoCommentsData {
       date: json["date"] != null ? DateTime.parse(json["date"]) : null,
       deviceName: json["device_name"],
       deviceId: json["device_id"],
-      rating: json["rating"]
+      rating: json["rating"],
+      approved: json["approved"] ?? false
   );
 
   Map<String, dynamic> toJson() => {
@@ -35,6 +38,7 @@ class VideoCommentsData {
     "date": date,
     "device_name": deviceName,
     "device_id": deviceId,
-    "rating": rating
+    "rating": rating,
+    "approved": approved
   };
 }

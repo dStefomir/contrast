@@ -1,6 +1,7 @@
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
+import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/paged_list.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,8 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   final void Function(AnimationController)? whenShouldAnimateGlass;
   /// Widget that should be displayed if the list view is empty
   final Widget listEmptyChild;
+  /// Asset used for a background image
+  final String? backgroundAsset;
 
   const RestfulAnimatedDataView({
     Key? key,
@@ -39,7 +42,8 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     this.onRightKeyPressed,
     this.whenShouldAnimateGlass,
     this.itemsPerRow = 4,
-    this.dimHeight = 0
+    this.dimHeight = 0,
+    this.backgroundAsset
   }) : super(key: key);
 
   /// Handles the keyboard key up and down for scrolling
@@ -110,6 +114,13 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     return apiData.isNotEmpty ? Stack(
       alignment: Alignment.center,
       children: [
+        if (backgroundAsset != null) IconRenderer(
+          asset: backgroundAsset!, 
+          color: Colors.black.withOpacity(0.05),
+          fit: BoxFit.cover,
+          width: double.infinity, 
+          height: double.infinity,
+        ),
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
