@@ -69,8 +69,9 @@ class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        if(ref.read(overlayVisibilityProvider(const Key('comment_photograph'))) != null) {
+        if(ref.read(overlayVisibilityProvider(const Key('comment_photograph'))) != null || ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph'))) != null) {
           ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
+          ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
 
           return false;
         }

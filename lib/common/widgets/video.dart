@@ -21,13 +21,16 @@ class ContrastVideo extends HookConsumerWidget {
   final Function onClick;
   /// What happens when the user clicks the redirect button
   final Function? onRedirect;
+  /// Is the widget disabled or not
+  final bool disabled;
 
   const ContrastVideo({
     required this.widgetKey,
     required this.videoPath,
     required this.constraints,
     required this.onClick,
-    this.onRedirect
+    this.onRedirect,
+    this.disabled = false,
   }) : super(key: widgetKey);
 
   List<Widget> renderFilmLikeWidget() {
@@ -50,6 +53,86 @@ class ContrastVideo extends HookConsumerWidget {
     return widgets;
   }
 
+  /// Renders the video widget
+  Widget _renderVideoWidget(BuildContext context, WidgetRef ref, PhotographBoardService serviceProvider, bool isHovering) => Stack(
+    alignment: Alignment.center,
+    children: [
+      ContrastPhotograph(
+        widgetKey: Key('${widgetKey.toString()}/photograph'),
+        fetch: (path) => serviceProvider.getCompressedPhotograph(context, videoPath, true),
+        constraints: constraints,
+        image: ImageData(path: videoPath),
+        quality: FilterQuality.high,
+        borderColor: Colors.transparent,
+        fit: BoxFit.contain,
+        compressed: false,
+        isThumbnail: true,
+        height: double.infinity,
+      ),
+      Align(
+        alignment: Alignment.topCenter,
+        child: Padding(
+          padding: EdgeInsets.only(top: constraints.maxHeight / 8),
+          child: Container(
+            width: constraints.maxWidth,
+            height: constraints.maxHeight / 10,
+            color: isHovering ? Colors.black : Colors.black54,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: renderFilmLikeWidget(),
+            ),
+          ),
+        ),
+      ),
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: constraints.maxHeight / 8),
+          child: Container(
+            width: constraints.maxWidth,
+            height: constraints.maxHeight / 10,
+            color: isHovering ? Colors.black : Colors.black54,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: renderFilmLikeWidget(),
+            ),
+          ),
+        ),
+      ),
+      if (!disabled) Visibility(
+        visible: isHovering,
+        child: SizedBox(
+          height: double.infinity,
+          child: Center(
+              child: ShadowWidget(
+                blurRadius: 20,
+                shouldHaveBorderRadius: true,
+                child: Icon(Icons.play_arrow,
+                    color: Colors.white,
+                    size: constraints.maxHeight / 4
+                ),
+              )
+          ),
+        ).translateOnVideoHover,
+      ),
+      if (!disabled && isHovering && onRedirect != null && getRunningPlatform(context) == 'DESKTOP')
+        Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: EdgeInsets.only(top: constraints.maxHeight / 4.45),
+              child: RedirectButton(
+                widgetKey: Key('$widgetKey/redirect'),
+                constraints: constraints,
+                onRedirect: onRedirect!,
+                height: constraints.maxHeight / 7,
+              ),
+            )
+        )
+    ],
+  );
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isHovering = ref.watch(hoverProvider(widgetKey));
@@ -57,94 +140,17 @@ class ContrastVideo extends HookConsumerWidget {
 
     return Material(
         color: Colors.transparent,
-        child: InkWell(
+        child: !disabled ? InkWell(
           hoverColor: Colors.transparent,
           onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
           onTap: () {},
           child: GestureDetector(
-            onTap: () => onClick(),
-            onLongPress: () => ref.read(hoverProvider(widgetKey).notifier).onHover(true),
-            onLongPressEnd: (details) => ref.read(hoverProvider(widgetKey).notifier).onHover(false),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                ContrastPhotograph(
-                  widgetKey: Key('${widgetKey.toString()}/photograph'),
-                  fetch: (path) => serviceProvider.getCompressedPhotograph(context, videoPath, true),
-                  constraints: constraints,
-                  image: ImageData(path: videoPath),
-                  quality: FilterQuality.high,
-                  borderColor: Colors.transparent,
-                  fit: BoxFit.contain,
-                  compressed: false,
-                  isThumbnail: true,
-                  height: double.infinity,
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Padding(
-                    padding: EdgeInsets.only(top: constraints.maxHeight / 8),
-                    child: Container(
-                      width: constraints.maxWidth,
-                      height: constraints.maxHeight / 10,
-                      color: isHovering ? Colors.black : Colors.black54,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: renderFilmLikeWidget(),
-                      ),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: constraints.maxHeight / 8),
-                    child: Container(
-                      width: constraints.maxWidth,
-                      height: constraints.maxHeight / 10,
-                      color: isHovering ? Colors.black : Colors.black54,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: renderFilmLikeWidget(),
-                      ),
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: isHovering,
-                  child: SizedBox(
-                    height: double.infinity,
-                    child: Center(
-                        child: ShadowWidget(
-                          blurRadius: 20,
-                          shouldHaveBorderRadius: true,
-                          child: Icon(Icons.play_arrow,
-                              color: Colors.white,
-                              size: constraints.maxHeight / 4
-                          ),
-                        )
-                    ),
-                  ).translateOnVideoHover,
-                ),
-                if (isHovering && onRedirect != null && getRunningPlatform(context) == 'DESKTOP')
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: EdgeInsets.only(top: constraints.maxHeight / 4.45),
-                      child: RedirectButton(
-                        widgetKey: Key('$widgetKey/redirect'),
-                        constraints: constraints,
-                        onRedirect: onRedirect!,
-                        height: constraints.maxHeight / 7,
-                      ),
-                    )
-                )
-              ],
-            ),
-          ),
-        )
+              onTap: () => onClick(),
+              onLongPress: () => ref.read(hoverProvider(widgetKey).notifier).onHover(true),
+              onLongPressEnd: (details) => ref.read(hoverProvider(widgetKey).notifier).onHover(false),
+              child: _renderVideoWidget(context, ref, serviceProvider, isHovering)
+          )
+        ) : _renderVideoWidget(context, ref, serviceProvider, isHovering)
     );
   }
 }

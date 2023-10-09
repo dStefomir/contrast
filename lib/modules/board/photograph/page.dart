@@ -1,7 +1,7 @@
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
+import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/photograph.dart';
-import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/model/image_data.dart';
 import 'package:contrast/modules/board/overlay/delete/provider.dart';
 import 'package:contrast/modules/board/photograph/overlay/provider.dart';
@@ -96,21 +96,14 @@ class PhotographBoardPage extends HookConsumerWidget {
           ),
       onRightKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('videos'),
       whenShouldAnimateGlass: (controller) {
-        final String currentTab = ref.watch(
-            boardFooterTabProvider);
+        final String currentTab = ref.watch(boardFooterTabProvider);
         useValueChanged(currentTab, (_, __) async {
           controller.reset();
           controller.forward();
         });
       },
-      listEmptyChild: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: StyledText(
-            text: FlutterI18n.translate(context, 'Nothing here so far'),
-            color: Colors.black,
-          ),
-        ),
+      listEmptyChild: const Center(
+        child: LoadingIndicator(color: Colors.black),
       )
   );
 }

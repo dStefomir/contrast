@@ -7,6 +7,7 @@ import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/detail/overlay/comment.dart';
 import 'package:contrast/modules/detail/overlay/provider.dart';
 import 'package:contrast/modules/detail/overlay/service.dart';
+import 'package:contrast/modules/detail/photograph/overlay/trip_planning.dart';
 import 'package:contrast/security/session.dart';
 import 'package:contrast/utils/date.dart';
 import 'package:flutter/foundation.dart';
@@ -136,6 +137,23 @@ class PhotographDetailsView extends HookConsumerWidget {
       }
     }
   }
+
+  /// Renders the trip planning dialog
+  Widget _renderTripPlanningOverlay(WidgetRef ref, ImageData image, bool shouldShowTripPlanningDialog) => Align(
+    alignment: Alignment.bottomCenter,
+    child: SlideTransitionAnimation(
+        duration: const Duration(milliseconds: 1000),
+        getStart: () => shouldShowTripPlanningDialog ? const Offset(0, 1) : const Offset(0, 0),
+        getEnd: () => shouldShowTripPlanningDialog ? const Offset(0, 0) : const Offset(0, 10),
+        whenTo: (controller) {
+          useValueChanged(shouldShowTripPlanningDialog, (_, __) async {
+            controller.reset();
+            controller.forward();
+          });
+        },
+        child: TripPlanningOverlay(image: image)
+    ),
+  );
 
   /// Renders the comments dialog
   Widget _renderCommentsOverlay(WidgetRef ref, ImageData image, bool shouldShowCommentsDialog) => Align(
@@ -354,6 +372,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         child: DefaultButton(
             onClick: () {
               ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
+              ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
               Modular.to.navigate('/');
               },
             color: Colors.white,
@@ -426,6 +445,34 @@ class PhotographDetailsView extends HookConsumerWidget {
     );
   }
 
+  /// Renders the trip planning button
+  Widget _renderTripPlanningBtn(WidgetRef ref, BuildContext context, ImageData image) {
+    return SlideTransitionAnimation(
+      duration: const Duration(milliseconds: 1000),
+      getStart: () => _isAreCoordinatesValid(image.lat, image.lng) ? const Offset(0, -1) : const Offset(0, 0),
+      getEnd: () => _isAreCoordinatesValid(image.lat, image.lng) ? const Offset(0, 0) : const Offset(0, -1),
+      whenTo: (controller) {
+        useValueChanged(_isAreCoordinatesValid(image.lat, image.lng), (_, __) async {
+          controller.reset();
+          controller.forward();
+        });
+      },
+      child: Padding(
+        padding: EdgeInsets.only(left: !Session().isLoggedIn() ? 225.0 : 280, top: 5.0),
+        child: Align(
+            alignment: Alignment.topLeft,
+            child: DefaultButton(
+                onClick: () => ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(true),
+                color: Colors.white,
+                borderColor: Colors.black,
+                tooltip: FlutterI18n.translate(context, 'Trip planning'),
+                icon: 'route.svg'
+            )
+        ),
+      ),
+    );
+  }
+
   /// Render the details button
   Widget _renderDetailsBtn(WidgetRef ref, BuildContext context, ScrollController scrollController, ImageData image) {
     final String iconAsset = ref.watch(photographDetailAssetProvider);
@@ -452,6 +499,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                       scrollController.offset == 0 ? scrollController.position.maxScrollExtent : 0
                   );
                   ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
+                  ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(false);
                   },
                 color: Colors.white,
                 borderColor: Colors.black,
@@ -579,6 +627,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     final double maxWidth = MediaQuery.of(context).size.width;
     final double maxHeight = MediaQuery.of(context).size.height;
     final bool? shouldShowCommentsDialog = ref.watch(overlayVisibilityProvider(const Key('comment_photograph')));
+    final bool? shouldShowTripPlanningDialog = ref.watch(overlayVisibilityProvider(const Key('trip_planning_photograph')));
 
     return Stack(
         children: [
@@ -609,6 +658,7 @@ class PhotographDetailsView extends HookConsumerWidget {
           ) :
           _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
           _renderDetailsBtn(ref, context, scrollController, image),
+          if (!kIsWeb) _renderTripPlanningBtn(ref, context, image),
           if (!kIsWeb || Session().isLoggedIn()) _renderCommentsBtn(ref, context),
           if (kIsWeb) _renderAudioButton(context, ref),
           _renderShareButton(context, ref, currentPhotographIndex),
@@ -626,8 +676,9 @@ class PhotographDetailsView extends HookConsumerWidget {
               child: _renderPhotographTitle(context, ref, currentPhotographIndex)
           ),
           _renderSignature(maxHeight, currentView),
-          if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(strength: 10),
-          if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null) _renderCommentsOverlay(ref, image, shouldShowCommentsDialog)
+          if ((!kIsWeb || Session().isLoggedIn()) && ((shouldShowCommentsDialog != null && shouldShowCommentsDialog) || (shouldShowTripPlanningDialog != null && shouldShowTripPlanningDialog))) const Blurrable(strength: 10),
+          if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null) _renderCommentsOverlay(ref, image, shouldShowCommentsDialog),
+          if (!kIsWeb && shouldShowTripPlanningDialog != null) _renderTripPlanningOverlay(ref, image, shouldShowTripPlanningDialog)
         ]
     );
   }

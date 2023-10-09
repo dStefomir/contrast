@@ -1,9 +1,7 @@
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
-import 'package:contrast/common/widgets/photograph.dart';
-import 'package:contrast/common/widgets/text.dart';
+import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/video.dart';
-import 'package:contrast/model/image_data.dart';
 import 'package:contrast/model/video_data.dart';
 import 'package:contrast/modules/board/overlay/delete/provider.dart';
 import 'package:contrast/modules/board/photograph/service.dart';
@@ -60,16 +58,18 @@ class VideoBoardPage extends HookConsumerWidget {
                 })
             ),
           ],
-          child: ContrastPhotograph(
-            widgetKey: Key('${video.id}'),
-            image: ImageData(path: video.path),
-            fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, true),
-            constraints: constraints,
-            quality: FilterQuality.high,
-            borderColor: Colors.black,
-            compressed: false,
-            isThumbnail: true,
-            height: double.infinity,
+          child: ContrastVideo(
+              widgetKey: Key('${video.id}'),
+              videoPath: video.path!,
+              constraints: constraints,
+              onClick: () => onUserAction(ref, () => Modular.to.pushNamed('videos/details?path=${video.path}&id=${video.id}')),
+              disabled: true,
+              onRedirect: kIsWeb ? () => onUserAction(ref, () async {
+                final Uri url = Uri.parse('https://www.youtube.com/watch?v=${video.path}');
+                if (await canLaunchUrl(url)) {
+                  await launchUrl(url);
+                }
+              }) : null
           )
       );
     }
@@ -108,14 +108,8 @@ class VideoBoardPage extends HookConsumerWidget {
           controller.forward();
         });
       },
-      listEmptyChild: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: StyledText(
-            text: FlutterI18n.translate(context, 'Nothing here so far'),
-            color: Colors.black,
-          ),
-        ),
+      listEmptyChild: const Center(
+        child: LoadingIndicator(color: Colors.black),
       )
   );
 }

@@ -93,5 +93,11 @@
   "Approve pending comments": "Удобри изчакващи коментари",
   "Comment approved": "Коментара беше удобрен",
   "Approve comment": "Удобряване на коментар",
-  "Comment review is pending": "Предстои ревю на коментар"
+  "Comment review is pending": "Предстои ревю на коментар",
+  "Trip planning": "Планирай пътуване",
+  "Plan a trip to this photographic location" : "Планирай пътуване до това фотографско местоположение",
+  "Plan": "Планиране",
+  "A trip plan was added to your calendar": "План за пътупане беше добавен в календара Ви",
+  "You have planned a trip to a photographic location": "Планирано пътуване до фотографска локация",
+  "Location": "Локация"
 }

@@ -334,13 +334,8 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                       height: double.infinity,
                       color: Colors.white.withOpacity(0.05)
                   ),
-                  if(!shouldHideOverlay(shouldShowCommentsDialog)) Padding(
-                    padding: EdgeInsets.only(
-                        top: orientation == Orientation.landscape && kIsWeb ? 40 : 0,
-                        bottom: orientation == Orientation.landscape && kIsWeb ? 40 : 0,
-                        left: orientation == Orientation.portrait ? 0 : kIsWeb ? 35 : 60,
-                        right: orientation == Orientation.portrait ? 0 : kIsWeb ? 35 : 0
-                    ),
+                  if (!shouldHideOverlay(shouldShowCommentsDialog)) Padding(
+                    padding: EdgeInsets.only(top: kIsWeb && orientation == Orientation.landscape ? 60 : 0),
                     child: YoutubePlayerScaffold(
                         key: const Key('VideoDetailsYoutubeScaffold'),
                         aspectRatio: 16 / 9,
@@ -349,18 +344,9 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                         builder: (context, player) => player
                     ),
                   ),
-                  Align(
-                    alignment: orientation == Orientation.portrait ? Alignment.topCenter : Alignment.topLeft,
-                    child: orientation == Orientation.portrait ? Row(
-                        children: _renderActions()
-                    ) : Padding(
-                      padding: const EdgeInsets.only(top: 40),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: _renderActions(),
-                      ),
-                    ),
+                  if (!(!kIsWeb && orientation == Orientation.landscape)) Align(
+                      alignment: Alignment.topLeft,
+                      child: Row(children: _renderActions())
                   ),
                   if((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(strength: 10),
                   if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null) _renderCommentsOverlay(shouldShowCommentsDialog)

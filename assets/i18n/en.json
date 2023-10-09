@@ -93,5 +93,12 @@
   "Approve pending comments": "Approve pending comments",
   "Comment approved": "Comment approved",
   "Approve comment": "Approve comment",
-  "Comment review is pending": "Comment review is pending"
+  "Comment review is pending": "Comment review is pending",
+  "Trip planning": "Trip planning",
+  "Plan a trip to this photographic location" : "Plan a trip to this photographic location",
+  "Plan": "Plan",
+  "A trip plan was added to your calendar": "A trip plan was added to your calendar",
+  "Photographic location": "Photographic location",
+  "You have planned a trip to a photographic location": "You have planned a trip to a photographic location",
+  "Location": "Location"
 }
