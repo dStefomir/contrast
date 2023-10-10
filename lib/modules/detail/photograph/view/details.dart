@@ -542,18 +542,7 @@ class PhotographDetailsView extends HookConsumerWidget {
           key: const Key('PhotographWidgetGallery'),
           scrollPhysics: const BouncingScrollPhysics(),
           allowImplicitScrolling: false,
-          backgroundDecoration: const BoxDecoration(color: Colors.transparent),
-          loadingBuilder: (context, chunk) => Padding(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height - (kIsWeb ? 15 : 80)),
-            child: LinearProgressIndicator(
-              minHeight: 5,
-              backgroundColor: Colors.grey[300],
-              valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-              value: chunk == null
-                  ? 0
-                  : chunk.cumulativeBytesLoaded / chunk.expectedTotalBytes!,
-            ),
-          ),
+          loadingBuilder: (context, chunk) => const SizedBox.shrink(),
           builder: (BuildContext context, int index) {
             return PhotoViewGalleryPageOptions(
                 imageProvider: ExtendedNetworkImageProvider(
@@ -625,6 +614,16 @@ class PhotographDetailsView extends HookConsumerWidget {
           )
       );
 
+  /// Renders the loading indicator for the photograph
+  Widget _renderLoadingIndicator() => Align(
+    alignment: Alignment.bottomCenter,
+    child: LinearProgressIndicator(
+      minHeight: 25,
+      backgroundColor: Colors.grey[300],
+      valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+    ),
+  );
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final PageController pageController = usePageController(initialPage: photoIndex);
@@ -647,6 +646,7 @@ class PhotographDetailsView extends HookConsumerWidget {
               height: double.infinity,
               color: Colors.white.withOpacity(0.05)
           ),
+          _renderLoadingIndicator(),
           getRunningPlatform(context) == 'MOBILE' ?
           GestureDetector(
               onVerticalDragUpdate: (details) {
