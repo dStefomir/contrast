@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 /// Dialog height
-const double dialogHeight = 490;
+const double dialogHeight = 500;
 /// Renders the trip planning overlay
 class TripPlanningOverlay extends HookConsumerWidget {
 

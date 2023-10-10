@@ -128,7 +128,7 @@ class ContrastPhotograph extends StatelessWidget {
     if(state.extendedImageLoadState == LoadState.completed) {
       if(getRunningPlatform(context) == 'DESKTOP') {
         return FadeAnimation(
-            key: Key('${widgetKey.toString()}/rawImage'),
+            key: Key('${widgetKey.toString()}_rawImage'),
             start: 0,
             end: 1,
             duration: const Duration(milliseconds: 400),
@@ -167,12 +167,12 @@ class ContrastPhotograph extends StatelessWidget {
         loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
         enableMemoryCache: true,
         cacheRawData: true,
-        cacheKey: getRunningPlatform(context) == 'DESKTOP' ? "${widgetKey.toString()}/cache" : null,
+        cacheKey: "${widgetKey.toString()}_cache_key",
         clearMemoryCacheIfFailed: false,
         clearMemoryCacheWhenDispose: false,
         filterQuality: quality,
         isAntiAlias: true,
-        imageCacheName: getRunningPlatform(context) == 'DESKTOP' ? image?.path! : null,
+        imageCacheName: getRunningPlatform(context) == 'DESKTOP' ? "${widgetKey.toString()}_cache_name" : null,
       );
     } else {
       photo = ExtendedImage.memory(
@@ -245,7 +245,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
         alignment: Alignment.center,
         children: [
           ContrastPhotograph(
-            widgetKey: Key("${widgetKey.toString()}/photograph"),
+            widgetKey: Key("${widgetKey.toString()}_photograph"),
             fetch: fetch,
             constraints: constraints,
             quality: FilterQuality.low,
@@ -266,7 +266,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
             Align(
                 alignment: Alignment.topRight,
                 child: RedirectButton(
-                  widgetKey: Key("${widgetKey.toString()}/photograph/redirect"),
+                  widgetKey: Key("${widgetKey.toString()}_photograph_redirect"),
                   constraints: constraints,
                   onRedirect: onRedirect!,
                   height: constraints.maxHeight / 7,

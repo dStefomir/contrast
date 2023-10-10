@@ -103,6 +103,7 @@ class PhotographDetailsView extends HookConsumerWidget {
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(images.length - 1);
     }
     ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
+    ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
   }
 
   /// Switches to the previous photograph if there is such
@@ -118,6 +119,7 @@ class PhotographDetailsView extends HookConsumerWidget {
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(0);
     }
     ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
+    ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
   }
 
   // Handles the key events from the Focus widget and updates the page
@@ -539,9 +541,9 @@ class PhotographDetailsView extends HookConsumerWidget {
       child: PhotoViewGallery.builder(
           key: const Key('PhotographWidgetGallery'),
           scrollPhysics: const BouncingScrollPhysics(),
-          allowImplicitScrolling: true,
+          allowImplicitScrolling: false,
           backgroundDecoration: const BoxDecoration(color: Colors.transparent),
-          loadingBuilder: (_, chunk) => Padding(
+          loadingBuilder: (context, chunk) => Padding(
             padding: EdgeInsets.only(top: MediaQuery.of(context).size.height - (kIsWeb ? 15 : 80)),
             child: LinearProgressIndicator(
               minHeight: 5,
@@ -554,26 +556,33 @@ class PhotographDetailsView extends HookConsumerWidget {
           ),
           builder: (BuildContext context, int index) {
             return PhotoViewGalleryPageOptions(
-                imageProvider: ExtendedNetworkImageProvider(serviceProvider.getPhotograph(image.path!)),
+                imageProvider: ExtendedNetworkImageProvider(
+                  serviceProvider.getPhotograph(image.path!),
+                  cache: true,
+                  cacheKey: 'image_cache_key$currentPhotographIndex',
+                  imageCacheName: 'image_cache_name$currentPhotographIndex',
+                  cacheRawData: true,
+                ),
                 filterQuality: FilterQuality.high,
                 minScale: PhotoViewComputedScale.contained,
                 maxScale: PhotoViewComputedScale.covered * 2,
-                heroAttributes: PhotoViewHeroAttributes(tag: index),
+                heroAttributes: PhotoViewHeroAttributes(tag: image.id!),
             );
           },
           pageController: pageController,
           onPageChanged: (int page) async {
+            if (kIsWeb) {
+              await scrollController.animateTo(
+                  0,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOutExpo
+              );
+            }
             ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(page);
-            await scrollController.animateTo(
-                0,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOutExpo
-            );
-            _handlePhotographShotLocation(ref);
             ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
+            _handlePhotographShotLocation(ref);
             _setPhotographDetailAsset(ref, scrollController);
           },
-          scrollDirection: Axis.horizontal,
           itemCount: images.length,
       ),
     );

@@ -87,7 +87,6 @@ dependencies:
   # device info library
   device_info_plus: ^10.0.0
   # add to calendar library
-#  add_2_calendar: ^2.1.2
   add_2_calendar:
     git:
       url: https://github.com/ja2375/add_2_calendar

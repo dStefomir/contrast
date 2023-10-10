@@ -13,7 +13,7 @@ bool useMobileLayout(BuildContext context, {int shortestSideLimit = 670}) {
 /// Determines the correct scaling of pixels based on the device the app is ran on
 double getScaledPixels(BuildContext context, double pixels) {
   final double pixelScale = MediaQuery.of(context).devicePixelRatio;
-  if(pixelScale > 1) {
+  if (pixelScale > 1) {
     return pixels * pixelScale;
   } else {
     return pixels / 0.5;
@@ -22,7 +22,7 @@ double getScaledPixels(BuildContext context, double pixels) {
 
 /// Gets the running platform based on the layout of the device
 String getRunningPlatform(BuildContext context) {
-  if(defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android) {
+  if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android) {
     return 'MOBILE';
   }
 

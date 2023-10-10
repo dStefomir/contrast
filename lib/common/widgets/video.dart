@@ -58,7 +58,7 @@ class ContrastVideo extends HookConsumerWidget {
     alignment: Alignment.center,
     children: [
       ContrastPhotograph(
-        widgetKey: Key('${widgetKey.toString()}/photograph'),
+        widgetKey: Key('${widgetKey.toString()}_photograph'),
         fetch: (path) => serviceProvider.getCompressedPhotograph(context, videoPath, true),
         constraints: constraints,
         image: ImageData(path: videoPath),
