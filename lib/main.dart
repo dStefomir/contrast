@@ -10,7 +10,6 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sizer/sizer.dart';
 
 const String webKey = 'BLgFNQuws2vnlVfNuYDe1N2E2DnCQA0H5LxYSc2YBscxJhb_jfouU4f-hryoyYmftLgWKQDG1Fsl1us4ylwRhSA';
 
@@ -115,58 +114,56 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context) => Sizer(
-      builder: (_, __, ___) => MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          title: "Contrast",
-          routeInformationParser: Modular.routeInformationParser,
-          routerDelegate: Modular.routerDelegate,
-          scrollBehavior: NoThumbScrollBehavior().copyWith(scrollbars: false),
-          localizationsDelegates: [
-            widget.flutterI18nDelegate,
-            GlobalCupertinoLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate
-          ],
-          supportedLocales: const [
-            Locale('bg', 'BG'),
-            Locale('en', 'US'),
-          ],
-          theme: ThemeData(
-            fontFamily: 'Slovic',
-            brightness: Brightness.light,
-            inputDecorationTheme: const InputDecorationTheme(
-                isDense: true,
-                contentPadding: EdgeInsets.all(10),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(0)),
-                  borderSide: BorderSide(color: inputFieldBorderColor),
-                ),
-                errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(0)),
-                    borderSide: BorderSide(color: inputFieldErrorBorderColor)
-                ),
-                disabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(0)),
-                  borderSide: BorderSide(color: inputFieldDisabledBorderColor),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(0)),
-                  borderSide: BorderSide(color: inputFieldFocusedBorderColor),
-                ),
-                filled: true,
-                fillColor: inputFieldBackgroundColor,
-                hintStyle: TextStyle(color: inputFieldHintTextColor),
-                floatingLabelBehavior: FloatingLabelBehavior.never
+  Widget build(BuildContext context) => MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: "Contrast",
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
+      scrollBehavior: NoThumbScrollBehavior().copyWith(scrollbars: false),
+      localizationsDelegates: [
+        widget.flutterI18nDelegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: const [
+        Locale('bg', 'BG'),
+        Locale('en', 'US'),
+      ],
+      theme: ThemeData(
+        fontFamily: 'Slovic',
+        brightness: Brightness.light,
+        inputDecorationTheme: const InputDecorationTheme(
+            isDense: true,
+            contentPadding: EdgeInsets.all(10),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(0)),
+              borderSide: BorderSide(color: inputFieldBorderColor),
             ),
-            iconTheme: const IconThemeData(color: buttonIconSvgColor),
-            buttonTheme: const ButtonThemeData(
-                height: 50,
-                minWidth: 0,
-                buttonColor: buttonBackgroundColor,
-                textTheme: ButtonTextTheme.primary
+            errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(0)),
+                borderSide: BorderSide(color: inputFieldErrorBorderColor)
             ),
-          )
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(color: inputFieldDisabledBorderColor),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(color: inputFieldFocusedBorderColor),
+            ),
+            filled: true,
+            fillColor: inputFieldBackgroundColor,
+            hintStyle: TextStyle(color: inputFieldHintTextColor),
+            floatingLabelBehavior: FloatingLabelBehavior.never
+        ),
+        iconTheme: const IconThemeData(color: buttonIconSvgColor),
+        buttonTheme: const ButtonThemeData(
+            height: 50,
+            minWidth: 0,
+            buttonColor: buttonBackgroundColor,
+            textTheme: ButtonTextTheme.primary
+        ),
       )
   );
 }

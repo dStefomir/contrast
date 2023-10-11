@@ -68,7 +68,7 @@ class ContrastPhotograph extends StatelessWidget {
   }) : super(key: widgetKey);
 
   /// Renders a widget based on the photograph state
-  Widget _renderPhotographState(BuildContext context, ExtendedImageState state) {
+  Widget _renderPhotographState(BuildContext context, ExtendedImageState state, String platform) {
     double shadowWidth = 0;
     double shadowHeight = 0;
     double paddingTop = 0;
@@ -126,7 +126,7 @@ class ContrastPhotograph extends StatelessWidget {
     );
 
     if(state.extendedImageLoadState == LoadState.completed) {
-      if(getRunningPlatform(context) == 'DESKTOP') {
+      if(platform == 'DESKTOP') {
         return FadeAnimation(
             key: Key('${widgetKey.toString()}_rawImage'),
             start: 0,
@@ -150,6 +150,7 @@ class ContrastPhotograph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String platform = getRunningPlatform(context);
     Widget photo;
 
     if (data == null) {
@@ -164,32 +165,33 @@ class ContrastPhotograph extends StatelessWidget {
             : BoxFit.fitHeight
             : BoxFit.contain),
         cache: true,
-        loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
+        loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state, platform),
         enableMemoryCache: true,
         cacheRawData: true,
-        cacheKey: "${widgetKey.toString()}_cache_key",
+        cacheKey: "${widgetKey.toString()}_cache_key_$platform",
         clearMemoryCacheIfFailed: false,
         clearMemoryCacheWhenDispose: false,
         filterQuality: quality,
         isAntiAlias: true,
-        imageCacheName: getRunningPlatform(context) == 'DESKTOP' ? "${widgetKey.toString()}_cache_name" : null,
+        imageCacheName: platform == 'DESKTOP' ? "${widgetKey.toString()}_cache_name_$platform" : null,
       );
     } else {
       photo = ExtendedImage.memory(
-          data!,
-          width: width,
-          height: height,
-          scale: 0.6,
-          border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
-          loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
-          enableLoadState: !compressed,
-          fit: fit ?? BoxFit.contain,
-          enableMemoryCache: true,
-          cacheRawData: true,
-          clearMemoryCacheIfFailed: false,
-          clearMemoryCacheWhenDispose: false,
-          filterQuality: quality,
-          isAntiAlias: true
+        data!,
+        width: width,
+        height: height,
+        scale: 0.6,
+        border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
+        loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state, platform),
+        enableLoadState: !compressed,
+        fit: fit ?? BoxFit.contain,
+        enableMemoryCache: true,
+        cacheRawData: true,
+        clearMemoryCacheIfFailed: false,
+        clearMemoryCacheWhenDispose: false,
+        filterQuality: quality,
+        isAntiAlias: true,
+        imageCacheName: platform == 'DESKTOP' ? "${widgetKey.toString()}_cache_name_$platform" : null,
       );
     }
 
