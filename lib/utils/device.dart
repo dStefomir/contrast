@@ -22,7 +22,7 @@ double getScaledPixels(BuildContext context, double pixels) {
 }
 
 /// Gets the running platform based on the layout of the device
-Future<String> getRunningPlatform(BuildContext context) async {
+String getRunningPlatform(BuildContext context) {
   if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android) {
     if (SizerUtil.deviceType == DeviceType.tablet) {
 
