@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 /// Determines if the app should load a mobile or other type of layout based on calculated pixels
 bool useMobileLayout(BuildContext context, {int shortestSideLimit = 670}) {
@@ -21,9 +22,15 @@ double getScaledPixels(BuildContext context, double pixels) {
 }
 
 /// Gets the running platform based on the layout of the device
-String getRunningPlatform(BuildContext context) {
+Future<String> getRunningPlatform(BuildContext context) async {
   if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android) {
-    return 'MOBILE';
+    if(SizerUtil.deviceType == DeviceType.web) {
+      return 'MOBILE';
+    }
+    if(SizerUtil.deviceType == DeviceType.mobile) {
+      return 'MOBILE';
+    }
+    return 'DESKTOP';
   }
 
   return 'DESKTOP';

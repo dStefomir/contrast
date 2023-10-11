@@ -10,6 +10,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sizer/sizer.dart';
 
 const String webKey = 'BLgFNQuws2vnlVfNuYDe1N2E2DnCQA0H5LxYSc2YBscxJhb_jfouU4f-hryoyYmftLgWKQDG1Fsl1us4ylwRhSA';
 
@@ -114,8 +115,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      MaterialApp.router(
+  Widget build(BuildContext context) => Sizer(
+      builder: (_, __, ___) => MaterialApp.router(
           debugShowCheckedModeBanner: false,
           title: "Contrast",
           routeInformationParser: Modular.routeInformationParser,
@@ -142,16 +143,16 @@ class _MyAppState extends State<MyApp> {
                   borderSide: BorderSide(color: inputFieldBorderColor),
                 ),
                 errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(0)),
-                  borderSide: BorderSide(color: inputFieldErrorBorderColor)
+                    borderRadius: BorderRadius.all(Radius.circular(0)),
+                    borderSide: BorderSide(color: inputFieldErrorBorderColor)
                 ),
                 disabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(0)),
                   borderSide: BorderSide(color: inputFieldDisabledBorderColor),
                 ),
                 focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(0)),
-                    borderSide: BorderSide(color: inputFieldFocusedBorderColor),
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
+                  borderSide: BorderSide(color: inputFieldFocusedBorderColor),
                 ),
                 filled: true,
                 fillColor: inputFieldBackgroundColor,
@@ -166,5 +167,6 @@ class _MyAppState extends State<MyApp> {
                 textTheme: ButtonTextTheme.primary
             ),
           )
-      );
+      )
+  );
 }
