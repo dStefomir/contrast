@@ -24,13 +24,12 @@ double getScaledPixels(BuildContext context, double pixels) {
 /// Gets the running platform based on the layout of the device
 Future<String> getRunningPlatform(BuildContext context) async {
   if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android) {
-    if(SizerUtil.deviceType == DeviceType.web) {
-      return 'MOBILE';
+    if (SizerUtil.deviceType == DeviceType.tablet) {
+
+      return 'DESKTOP';
     }
-    if(SizerUtil.deviceType == DeviceType.mobile) {
-      return 'MOBILE';
-    }
-    return 'DESKTOP';
+
+    return 'MOBILE';
   }
 
   return 'DESKTOP';
