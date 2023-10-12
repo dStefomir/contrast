@@ -45,6 +45,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   final int photoIndex;
   /// Current selected photograph category
   final String category;
+  /// Audio player instance
   final AudioPlayer audio;
 
   const PhotographDetailsView({
@@ -122,7 +123,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
   }
 
-  // Handles the key events from the Focus widget and updates the page
+  /// Handles the key events from the Focus widget and updates the page
   void _handleKeyEvent(RawKeyEvent event, WidgetRef ref, ScrollController scrollController, PageController pageController, int currentPhotographIndex) {
     if (event is RawKeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {

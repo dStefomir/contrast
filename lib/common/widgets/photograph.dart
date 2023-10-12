@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/button.dart';
@@ -13,6 +12,7 @@ import 'package:contrast/model/image_meta_data.dart';
 import 'package:contrast/utils/date.dart';
 import 'package:contrast/utils/device.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -126,7 +126,7 @@ class ContrastPhotograph extends StatelessWidget {
     );
 
     if(state.extendedImageLoadState == LoadState.completed) {
-      if(platform == 'DESKTOP') {
+      if(!kIsWeb) {
         return FadeAnimation(
             key: Key('${widgetKey.toString()}_rawImage'),
             start: 0,
