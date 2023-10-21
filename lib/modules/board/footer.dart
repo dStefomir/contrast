@@ -9,7 +9,6 @@ import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

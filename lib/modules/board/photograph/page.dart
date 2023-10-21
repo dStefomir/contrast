@@ -1,7 +1,10 @@
+import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
+import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/photograph.dart';
+import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/model/image_data.dart';
 import 'package:contrast/modules/board/overlay/delete/provider.dart';
 import 'package:contrast/modules/board/photograph/overlay/provider.dart';
@@ -24,6 +27,46 @@ class PhotographBoardPage extends HookConsumerWidget {
   final Function(WidgetRef ref, Function? action) onUserAction;
 
   const PhotographBoardPage({super.key, required this.onUserAction});
+
+  /// Gets an asset based on the selected photograph category
+  String? getRestfulViewHeader(WidgetRef ref) {
+    final String selectedFilter = ref.read(boardHeaderTabProvider);
+
+    switch(selectedFilter) {
+      case 'all':
+        return 'all_banner.jpg';
+      case 'landscape':
+        return 'landscape_banner.jpg';
+      case 'portraits':
+        return 'portrait_banner.jpg';
+      case 'street':
+        return 'street_banner.jpg';
+      case 'other':
+        return 'other_banner.jpg';
+    }
+
+    return null;
+  }
+
+  /// Gets the text for the restful view header
+  String? getRestfulViewHeaderText(BuildContext context, WidgetRef ref) {
+    final String selectedFilter = ref.read(boardHeaderTabProvider);
+
+    switch(selectedFilter) {
+      case 'all':
+        return FlutterI18n.translate(context, 'Don’t shoot what it looks like. Shoot what it feels like');
+      case 'landscape':
+        return FlutterI18n.translate(context, 'The real voyage of discovery consists not in seeking new landscapes, but in having new eyes');
+      case 'portraits':
+        return FlutterI18n.translate(context, 'The countenance is the portrait of the soul, and the eyes mark its intentions');
+      case 'street':
+        return FlutterI18n.translate(context, 'Street Photography is like fishing. Catching the fish is more exciting than eating it');
+      case 'other':
+        return FlutterI18n.translate(context, 'Until one has loved an animal, a part of one’s soul remains unawakened');
+    }
+
+    return null;
+  }
 
   /// Renders a photograph
   Widget _renderPhoto(WidgetRef ref, BuildContext context, ImageBoardWrapper wrapper, BoxConstraints constraints) {
@@ -102,6 +145,30 @@ class PhotographBoardPage extends HookConsumerWidget {
           controller.forward();
         });
       },
+      headerWidget: (longestSize, isMobile) => Stack(
+        fit: StackFit.expand,
+        children: [
+          IconRenderer(asset: getRestfulViewHeader(ref)!, fit: isMobile ? BoxFit.fitWidth : BoxFit.cover),
+          Align(
+              alignment: Alignment.bottomCenter,
+              child: FadeAnimation(
+                start: 0,
+                end: 1,
+                duration: const Duration(milliseconds: 2000),
+                child: StyledText(
+                  text: getRestfulViewHeaderText(context, ref)!,
+                  color: Colors.white,
+                  useShadow: true,
+                  align: TextAlign.center,
+                  letterSpacing: 5,
+                  fontSize: longestSize / 90,
+                  italic: true,
+                  clip: false,
+                ),
+              )
+          ),
+        ],
+      ),
       listEmptyChild: const Center(
         child: LoadingIndicator(color: Colors.black),
       )

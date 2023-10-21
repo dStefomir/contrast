@@ -26,6 +26,8 @@ class StyledText extends StatelessWidget {
   final TextAlign align;
   /// Shadow
   final List<Shadow>? shadow;
+  /// Font family to be used
+  final String? family;
 
   const StyledText({
     Key? key,
@@ -40,7 +42,8 @@ class StyledText extends StatelessWidget {
     this.letterSpacing = 4,
     this.italic = false,
     this.align = TextAlign.center,
-    this.shadow
+    this.shadow,
+    this.family
   }) : super(key: key);
 
   /// Renders the widget
@@ -51,6 +54,7 @@ class StyledText extends StatelessWidget {
             text,
             textAlign: align,
             style: TextStyle(
+              fontFamily: family,
               color: color ?? Colors.black,
               overflow: clip ? TextOverflow.ellipsis : null,
               fontSize: fontSize,

@@ -1,8 +1,8 @@
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
-import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/modules/board/provider.dart';
+import 'package:contrast/utils/device.dart';
 import 'package:contrast/utils/paged_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,8 +29,8 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   final void Function(AnimationController)? whenShouldAnimateGlass;
   /// Widget that should be displayed if the list view is empty
   final Widget listEmptyChild;
-  /// Asset used for a background image
-  final String? backgroundAsset;
+  /// Widget for the header of the data view
+  final Widget Function(double, bool)? headerWidget;
 
   const RestfulAnimatedDataView({
     Key? key,
@@ -38,12 +38,12 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     required this.loadPage,
     required this.itemBuilder,
     required this.listEmptyChild,
+    this.headerWidget,
     this.onLeftKeyPressed,
     this.onRightKeyPressed,
     this.whenShouldAnimateGlass,
     this.itemsPerRow = 4,
     this.dimHeight = 0,
-    this.backgroundAsset
   }) : super(key: key);
 
   /// Handles the keyboard key up and down for scrolling
@@ -80,9 +80,9 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   /// Render glass effect widget
   Widget _renderGlass({required double width, required double height}) => ClipRect(
     child: Container(
-      decoration: BoxDecoration(
-          border: Border.all(width: 5, color: Colors.black)
-      ),
+        decoration: BoxDecoration(
+            border: Border.all(width: 5, color: Colors.black)
+        ),
         child: Blurrable(
             strength: 5,
             child: SizedBox(
@@ -101,26 +101,24 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     final apiData = ref.watch(serviceProvider);
     /// Check the selected filter for changes
     final String selectedFilter = ref.watch(boardHeaderTabProvider);
+    /// Represents the longest size of the screen
+    final double longestScreenSize = MediaQuery.of(context).size.longestSide;
+    /// Is ran on a mobile device or not
+    final bool isMobile = useMobileLayout(context);
+    
     /// If the selected filter is changed clear the data
     useValueChanged(
         selectedFilter, (_, __) async => ref.read(serviceProvider.notifier).clearFetchedData(loadPage)
     );
     // Fetch the first page when the widget is first built.
     useEffect(() {
-        ref.read(serviceProvider.notifier).fetchNextPage(loadPage);
+      ref.read(serviceProvider.notifier).fetchNextPage(loadPage);
       return null;
     }, []);
 
     return apiData.isNotEmpty ? Stack(
       alignment: Alignment.center,
       children: [
-        if (backgroundAsset != null) IconRenderer(
-          asset: backgroundAsset!, 
-          color: Colors.black.withOpacity(0.05),
-          fit: BoxFit.cover,
-          width: double.infinity, 
-          height: double.infinity,
-        ),
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
@@ -144,13 +142,35 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
               autofocus: true,
               focusNode: useFocusNode(),
               onKey: (event) => _handleKeyEvent(event, controller),
-              child: GridView.builder(
-                addAutomaticKeepAlives: false,
-                addRepaintBoundaries: false,
+              child: CustomScrollView(
                 controller: controller,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
-                itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
-                itemCount: apiData.length,
+                slivers: [
+                  if (headerWidget != null)
+                  SliverAppBar(
+                    expandedHeight: longestScreenSize / (isMobile ? 4.5 : 4),
+                    backgroundColor: Colors.white,
+                    clipBehavior: Clip.antiAlias,
+                    floating: true,
+                    pinned: false,
+                    stretch: true,
+                    automaticallyImplyLeading: true,
+                    elevation: 10,
+                    forceElevated: true,
+                    flexibleSpace: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black, width: 1)
+                      ),
+                      child: headerWidget!(longestScreenSize, isMobile),
+                    )
+                  ),
+                  SliverGrid.builder(
+                    addAutomaticKeepAlives: false,
+                    addRepaintBoundaries: false,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
+                    itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
+                    itemCount: apiData.length,
+                  ),
+                ],
               )
           ),
         ),
@@ -178,3 +198,4 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     ) : listEmptyChild;
   }
 }
+

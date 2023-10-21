@@ -127,6 +127,8 @@ class SlideTransitionAnimation extends HookConsumerWidget {
   final Offset Function() getEnd;
   /// Duration of the animation
   final Duration duration;
+  /// Should the animation repeat itself
+  final bool repeat;
 
   const SlideTransitionAnimation({
     super.key,
@@ -137,6 +139,7 @@ class SlideTransitionAnimation extends HookConsumerWidget {
     this.onCompleted,
     this.onAnimating,
     this.duration = const Duration(microseconds: 500),
+    this.repeat = false,
   });
 
   @override
@@ -152,6 +155,14 @@ class SlideTransitionAnimation extends HookConsumerWidget {
       animationController.addStatusListener((status) {
         if (status == AnimationStatus.completed && onCompleted != null) {
           onCompleted!();
+        }
+      });
+    }
+    if(repeat) {
+      animationController.addStatusListener((status) {
+        if(status == AnimationStatus.completed) {
+          animationController.reset();
+          animationController.forward();
         }
       });
     }
