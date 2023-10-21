@@ -148,22 +148,25 @@ class PhotographBoardPage extends HookConsumerWidget {
       headerWidget: (longestSize, isMobile) => Stack(
         fit: StackFit.expand,
         children: [
-          IconRenderer(asset: getRestfulViewHeader(ref)!, fit: isMobile ? BoxFit.fitWidth : BoxFit.cover),
+          IconRenderer(asset: getRestfulViewHeader(ref)!, fit: BoxFit.cover),
           Align(
-              alignment: Alignment.bottomCenter,
-              child: FadeAnimation(
-                start: 0,
-                end: 1,
-                duration: const Duration(milliseconds: 2000),
-                child: StyledText(
-                  text: getRestfulViewHeaderText(context, ref)!,
-                  color: Colors.white,
-                  useShadow: true,
-                  align: TextAlign.center,
-                  letterSpacing: 5,
-                  fontSize: longestSize / 90,
-                  italic: true,
-                  clip: false,
+              alignment: Alignment.bottomLeft,
+              child: SizedBox(
+                width: longestSize / 2,
+                child: FadeAnimation(
+                  start: 0,
+                  end: 1,
+                  duration: const Duration(milliseconds: 2000),
+                  child: StyledText(
+                    text: '"${getRestfulViewHeaderText(context, ref)!}"',
+                    color: Colors.white,
+                    useShadow: true,
+                    align: TextAlign.start,
+                    letterSpacing: 5,
+                    fontSize: longestSize / 50,
+                    italic: true,
+                    clip: false,
+                  ),
                 ),
               )
           ),

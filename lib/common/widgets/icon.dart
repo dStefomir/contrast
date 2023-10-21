@@ -13,6 +13,8 @@ class IconRenderer extends StatelessWidget {
   final double? width;
   /// Height of the svg
   final double? height;
+  /// Render a placeholder
+  final Widget Function(BuildContext)? renderPlaceholder;
 
   const IconRenderer({
     Key? key,
@@ -20,7 +22,8 @@ class IconRenderer extends StatelessWidget {
     this.color,
     this.fit = BoxFit.contain,
     this.width,
-    this.height
+    this.height,
+    this.renderPlaceholder
   }) : super(key: key);
 
   @override
@@ -29,13 +32,15 @@ class IconRenderer extends StatelessWidget {
         'assets/$asset',
         width: width,
         height: height,
+        placeholderBuilder: renderPlaceholder,
         fit: fit,
         color: color,
         clipBehavior: Clip.antiAlias,
-      ) : Image.asset(
-        'assets/$asset',
+      ) : FadeInImage(
+        image: AssetImage('assets/$asset'),
         fit: fit,
         width: width,
         height: height,
+        placeholder: const AssetImage('assets/placeholder.png'),
       );
 }

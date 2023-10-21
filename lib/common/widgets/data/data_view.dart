@@ -147,7 +147,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                 slivers: [
                   if (headerWidget != null)
                   SliverAppBar(
-                    expandedHeight: longestScreenSize / (isMobile ? 4.5 : 4),
+                    expandedHeight: longestScreenSize / (isMobile ? 2 : 4),
                     backgroundColor: Colors.white,
                     clipBehavior: Clip.antiAlias,
                     floating: true,
