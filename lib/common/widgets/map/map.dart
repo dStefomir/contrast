@@ -34,11 +34,10 @@ class ContrastMap extends HookConsumerWidget {
     return FlutterMap(
       mapController: controller,
       options: MapOptions(
-          center: LatLng(lat, lng),
-          zoom: mapDefaultZoom,
-          enableScrollWheel: true,
+          initialCenter: LatLng(lat, lng),
+          initialZoom: mapDefaultZoom,
+          interactionOptions: InteractionOptions(enableScrollWheel: true, flags: mapInteraction),
           maxZoom: mapMaxZoom,
-          interactiveFlags: mapInteraction
       ),
       children: [
         TileLayer(
@@ -52,7 +51,7 @@ class ContrastMap extends HookConsumerWidget {
                 width: 40,
                 height: 40,
                 point: LatLng(lat, lng),
-                builder: (ctx) => InkWell(
+                child: InkWell(
                     onTap: () async {
                       final Uri url = Uri.parse('https://www.google.com/maps/@$lat,$lng,20.45z?entry=ttu');
                       if (await canLaunchUrl(url)) {

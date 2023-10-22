@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.3.0+32
+version: 2.3.1+33
 
 environment:
   sdk: '>=3.0.6 <4.0.0'
@@ -41,9 +41,9 @@ dependencies:
   flutter_i18n: ^0.34.0
   # in memory file creation
   file: ^6.0.0
-  flutter_riverpod: ^2.4.3
-  hooks_riverpod: ^2.4.3
-  flutter_hooks: ^0.20.2
+  flutter_riverpod: ^2.4.4
+  hooks_riverpod: ^2.4.4
+  flutter_hooks: ^0.20.3
   # html cross platform library
   universal_html: ^2.2.4
   # qr code library
@@ -71,34 +71,31 @@ dependencies:
   # accessing image size
   image_size_getter: ^2.1.2
   # use native file explorer to pick single or multiple absolute file paths
-  file_picker: ^5.5.0
+  file_picker: ^6.0.0
   # youtube video player
   youtube_player_iframe: ^4.0.4
   # audio player
   audioplayers: ^5.2.0
   # shared prefs library
-  shared_preferences: ^2.2.1
+  shared_preferences: ^2.2.2
   # Open street maps library
-  flutter_map: ^5.0.0
+  flutter_map: ^6.0.0
   # Tooltip library
   just_the_tooltip: ^0.0.12
   # Rating library
   flutter_rating_bar: ^4.0.1
   # device info library
-  device_info_plus: ^10.0.0
+  device_info_plus: ^9.1.0
   # add to calendar library
-  add_2_calendar:
-    git:
-      url: https://github.com/ja2375/add_2_calendar
-      ref: 38b63dd1bab5d24ec01213211b12e086bcb387a9
+  add_2_calendar: ^2.2.5
   # date picker library
-  syncfusion_flutter_datepicker: ^23.1.39
+  syncfusion_flutter_datepicker: ^23.1.41
   # gif running library
   flutter_gif: ^0.0.4
   # Firebase libraries
-  firebase_core: ^2.17.0
-  firebase_analytics: ^10.5.1
-  firebase_messaging: ^14.6.9
+  firebase_core: ^2.19.0
+  firebase_analytics: ^10.6.1
+  firebase_messaging: ^14.7.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
