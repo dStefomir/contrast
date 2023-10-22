@@ -54,15 +54,15 @@ class PhotographBoardPage extends HookConsumerWidget {
 
     switch(selectedFilter) {
       case 'all':
-        return FlutterI18n.translate(context, 'Don’t shoot what it looks like. Shoot what it feels like');
+        return FlutterI18n.translate(context, 'allComment');
       case 'landscape':
-        return FlutterI18n.translate(context, 'The real voyage of discovery consists not in seeking new landscapes, but in having new eyes');
+        return FlutterI18n.translate(context, 'landscapeComment');
       case 'portraits':
-        return FlutterI18n.translate(context, 'The countenance is the portrait of the soul, and the eyes mark its intentions');
+        return FlutterI18n.translate(context, 'portraitsComment');
       case 'street':
-        return FlutterI18n.translate(context, 'Street Photography is like fishing. Catching the fish is more exciting than eating it');
+        return FlutterI18n.translate(context, 'streetComment');
       case 'other':
-        return FlutterI18n.translate(context, 'Until one has loved an animal, a part of one’s soul remains unawakened');
+        return FlutterI18n.translate(context, 'otherComment');
     }
 
     return null;

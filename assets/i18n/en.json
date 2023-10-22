@@ -101,10 +101,10 @@
   "Photographic location": "Photographic location",
   "You have planned a trip to a photographic location": "You have planned a trip to a photographic location",
   "Location": "Location",
-  "Don’t shoot what it looks like. Shoot what it feels like": "Don’t shoot what it looks like. Shoot what it feels like.",
-  "The real voyage of discovery consists not in seeking new landscapes, but in having new eyes": "The real voyage of discovery consists not in seeking new landscapes, but in having new eyes.",
-  "The countenance is the portrait of the soul, and the eyes mark its intentions": "The countenance is the portrait of the soul, and the eyes mark its intentions.",
-  "Street Photography is like fishing. Catching the fish is more exciting than eating it": "Street Photography is like fishing. Catching the fish is more exciting than eating it.",
-  "Until one has loved an animal, a part of one’s soul remains unawakened": "Until one has loved an animal, a part of one’s soul remains unawakened.",
-  "Every frame of a video is an opportunity to create something extraordinary": "Every frame of a video is an opportunity to create something extraordinary."
+  "allComment": "Don’t shoot what it looks like. Shoot what it feels like.",
+  "landscapeComment": "The real voyage of discovery consists not in seeking new landscapes, but in having new eyes.",
+  "portraitsComment": "The countenance is the portrait of the soul, and the eyes mark its intentions.",
+  "streetComment": "Street Photography is like fishing. Catching the fish is more exciting than eating it.",
+  "otherComment": "Until one has loved an animal, a part of one’s soul remains unawakened.",
+  "videosComment": "Every frame of a video is an opportunity to create something extraordinary."
 }

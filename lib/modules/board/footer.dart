@@ -270,6 +270,11 @@ class BoardPageFooter extends HookConsumerWidget {
                     ),
                   ),
                 ),
+                IconRenderer(
+                    asset: 'background.svg',
+                    fit: BoxFit.cover,
+                    color: Colors.black.withOpacity(0.05)
+                ),
                 Align(
                   alignment: Alignment.center,
                   child: Row(
@@ -283,9 +288,9 @@ class BoardPageFooter extends HookConsumerWidget {
                           onClick: (String tab) => ref.read(boardFooterTabProvider.notifier).switchTab(tab),
                           isSelected: currentTab == 'photos'
                       ).translateOnPhotoHover,
-                      const Spacer(key: Key('FooterDesktopLayoutPhotosSpacer')),
-                      const SizedBox(key: Key('FooterDesktopLayoutAboutMeSizedBox'), width: 160),
-                      const Spacer(key: Key('FooterDesktopLayoutVideosSpacer')),
+                      const Spacer(),
+                      const SizedBox(width: 160),
+                      const Spacer(),
                       ContrastTab(
                           widgetKey: const Key('videos'),
                           tabKey: 'videos',
@@ -293,7 +298,7 @@ class BoardPageFooter extends HookConsumerWidget {
                           onClick: (String tab) => ref.read(boardFooterTabProvider.notifier).switchTab(tab),
                           isSelected: currentTab == 'videos'
                       ).translateOnPhotoHover,
-                      const Spacer(key: Key('FooterDesktopLayoutStackVideosEmptySpacer')),
+                      const Spacer(),
                     ],
                   ),
                 ),

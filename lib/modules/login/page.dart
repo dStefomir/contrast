@@ -41,8 +41,7 @@ class LoginPage extends HookConsumerWidget {
             IconRenderer(
               asset: 'background.svg',
               color: Colors.black.withOpacity(0.05),
-              fit: BoxFit.fitWidth,
-              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.cover,
             ),
             Align(
               alignment: Alignment.topCenter,

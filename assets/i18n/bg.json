@@ -100,10 +100,10 @@
   "A trip plan was added to your calendar": "План за пътупане беше добавен в календара Ви",
   "You have planned a trip to a photographic location": "Планирано пътуване до фотографска локация",
   "Location": "Локация",
-  "Don’t shoot what it looks like. Shoot what it feels like": "Не снимайте как изглежда. Снимайте какво е усещането.",
-  "The real voyage of discovery consists not in seeking new landscapes, but in having new eyes.": "Истинското пътешествие на откривателство не се състои в търсене на нови пейзажи, а в нови очи.",
-  "The countenance is the portrait of the soul, and the eyes mark its intentions": "Лицето е портретът на душата, а очите бележат нейните намерения.",
-  "Street Photography is like fishing. Catching the fish is more exciting than eating it": "Уличната фотография е като риболова. Да хванеш рибата е по-вълнуващо, отколкото да я изядеш.",
-  "Until one has loved an animal, a part of one’s soul remains unawakened": "Докато човек не обикне животно, част от душата му остава непробудена.",
-  "Every frame of a video is an opportunity to create something extraordinary": "Всеки кадър от видеоклип е възможност да създадете нещо необикновено."
+  "allComment": "Не снимайте как изглежда. Снимайте какво е усещането.",
+  "landscapeComment": "Истинското пътешествие на откривателство не се състои в търсене на нови пейзажи, а в нови очи.",
+  "portraitsComment": "Лицето е портретът на душата, а очите бележат нейните намерения.",
+  "streetComment": "Уличната фотография е като риболова. Да хванеш рибата е по-вълнуващо, отколкото да я изядеш.",
+  "otherComment": "Докато човек не обикне животно, част от душата му остава непробудена.",
+  "videosComment": "Всеки кадър от видеоклип е възможност да създадете нещо необикновено."
 }

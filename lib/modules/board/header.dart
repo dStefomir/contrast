@@ -1,12 +1,12 @@
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
+import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/tab.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -41,6 +41,11 @@ class BoardPageFilter extends ConsumerWidget {
                       ],
                     ),
                   ),
+                ),
+                IconRenderer(
+                    asset: 'background.svg',
+                    fit: BoxFit.cover,
+                    color: Colors.black.withOpacity(0.1)
                 ),
                 Align(
                   alignment: Alignment.topLeft,
@@ -134,6 +139,11 @@ class BoardPageFilter extends ConsumerWidget {
                 ],
               ),
             ),
+          ),
+          IconRenderer(
+              asset: 'background.svg',
+              fit: BoxFit.cover,
+              color: Colors.black.withOpacity(0.05)
           ),
           Align(
             alignment: Alignment.center,

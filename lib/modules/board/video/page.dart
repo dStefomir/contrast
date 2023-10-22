@@ -141,7 +141,7 @@ class VideoBoardPage extends HookConsumerWidget {
                     end: 1,
                     duration: const Duration(milliseconds: 2000),
                     child: StyledText(
-                      text: '"${FlutterI18n.translate(context, 'Every frame of a video is an opportunity to create something extraordinary')}"',
+                      text: '"${FlutterI18n.translate(context, 'videosComment')}"',
                       color: Colors.white,
                       useShadow: true,
                       align: TextAlign.start,
