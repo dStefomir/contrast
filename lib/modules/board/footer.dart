@@ -213,7 +213,10 @@ class BoardPageFooter extends HookConsumerWidget {
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: () => ref.read(boardFooterTabProvider.notifier).switchTab('videos'),
+                        onTap: () {
+                          ref.read(boardHeaderTabProvider.notifier).switchTab('all');
+                          ref.read(boardFooterTabProvider.notifier).switchTab('videos');
+                        },
                         child: Container(
                           height: boardPadding,
                           padding: const EdgeInsets.all(18.0),

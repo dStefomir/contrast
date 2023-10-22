@@ -32,9 +32,9 @@ class VideoBoardPage extends HookConsumerWidget {
   const VideoBoardPage({super.key, required this.onUserAction, required this.giffController});
 
   /// Renders the data view header banner widget
-  Widget _renderDataViewHeader(bool isMobile) {
+  Widget _renderDataViewHeader() {
     if(kIsWeb) {
-      return IconRenderer(asset: 'video_web_banner.jpg', fit: isMobile ? BoxFit.fitWidth : BoxFit.cover);
+      return const IconRenderer(asset: 'video_web_banner.jpg', fit: BoxFit.cover);
     }
 
     return GifImage(
@@ -128,10 +128,10 @@ class VideoBoardPage extends HookConsumerWidget {
             controller.forward();
           });
         },
-        headerWidget: (longestSize, isMobile) => Stack(
+        headerWidget: (longestSize, _) => Stack(
           fit: StackFit.expand,
           children: [
-            _renderDataViewHeader(isMobile),
+            _renderDataViewHeader(),
             Align(
                 alignment: Alignment.bottomLeft,
                 child: SizedBox(
