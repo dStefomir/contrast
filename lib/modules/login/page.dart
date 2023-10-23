@@ -39,7 +39,9 @@ class LoginPage extends HookConsumerWidget {
               ),
             ),
             IconRenderer(
-              asset: 'background.svg',
+              width: double.infinity,
+              height: double.infinity,
+              asset: 'background_portrait.svg',
               color: Colors.black.withOpacity(0.05),
               fit: BoxFit.cover,
             ),
