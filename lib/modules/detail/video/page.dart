@@ -328,7 +328,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                 alignment: Alignment.center,
                 children: [
                   IconRenderer(
-                      asset: 'background.svg',
+                      asset: 'background_portrait.svg',
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: double.infinity,

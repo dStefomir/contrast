@@ -88,7 +88,7 @@ class StyledButton extends HookConsumerWidget {
                   height: iconHeight,
                   width: iconHeight,
                   child: IconRenderer(
-                    asset: 'background.svg',
+                    asset: 'background_portrait.svg',
                     color: !isHovering
                         ? Colors.black.withOpacity(0.3)
                         : Colors.white,

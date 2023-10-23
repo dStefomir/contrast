@@ -641,7 +641,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     return Stack(
         children: [
           IconRenderer(
-              asset: 'background.svg',
+              asset: 'background_portrait.svg',
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,
