@@ -549,8 +549,8 @@ class PhotographDetailsView extends HookConsumerWidget {
                 imageProvider: ExtendedNetworkImageProvider(
                   serviceProvider.getPhotograph(image.path!),
                   cache: true,
-                  cacheKey: 'image_cache_key$currentPhotographIndex',
-                  imageCacheName: 'image_cache_name$currentPhotographIndex',
+                  cacheKey: 'image_cache_key${image.id}',
+                  imageCacheName: 'image_cache_name${image.id}',
                   cacheRawData: true,
                 ),
                 filterQuality: FilterQuality.high,

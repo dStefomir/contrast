@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:contrast/common/widgets/page.dart';
 import 'package:contrast/core/provider.dart';
 import 'package:contrast/modules/login/overlay/cookie.dart';
@@ -54,7 +56,7 @@ class CorePage extends HookConsumerWidget {
             kIsWeb ? render() : BackgroundPage(
               color: Colors.black,
               child: SafeArea(
-                bottom: false,
+                bottom: Platform.isAndroid,
                 child: render(),
               ),
             )
