@@ -1,10 +1,9 @@
-import 'package:contrast/common/widgets/animation.dart';
+import 'package:contrast/common/widgets/banner.dart';
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/photograph.dart';
-import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/model/image_data.dart';
 import 'package:contrast/modules/board/overlay/delete/provider.dart';
 import 'package:contrast/modules/board/photograph/overlay/provider.dart';
@@ -29,43 +28,56 @@ class PhotographBoardPage extends HookConsumerWidget {
   const PhotographBoardPage({super.key, required this.onUserAction});
 
   /// Gets an asset based on the selected photograph category
-  String? getRestfulViewHeader(WidgetRef ref) {
+  List<String> getRestfulViewHeader(WidgetRef ref) {
     final String selectedFilter = ref.read(boardHeaderTabProvider);
 
     switch(selectedFilter) {
       case 'all':
-        return 'all_banner.jpg';
+        return ['landscape_banner.jpg', 'portrait_banner.jpg', 'street_banner.jpg', 'other_banner.jpg'];
       case 'landscape':
-        return 'landscape_banner.jpg';
+        return ['landscape_banner.jpg'];
       case 'portraits':
-        return 'portrait_banner.jpg';
+        return ['portrait_banner.jpg'];
       case 'street':
-        return 'street_banner.jpg';
+        return ['street_banner.jpg'];
       case 'other':
-        return 'other_banner.jpg';
+        return ['other_banner.jpg'];
     }
 
-    return null;
+    return [];
   }
 
   /// Gets the text for the restful view header
-  String? getRestfulViewHeaderText(BuildContext context, WidgetRef ref) {
+  List<String> getRestfulViewHeaderText(BuildContext context, WidgetRef ref) {
     final String selectedFilter = ref.read(boardHeaderTabProvider);
 
     switch(selectedFilter) {
       case 'all':
-        return FlutterI18n.translate(context, 'allComment');
+        return [
+          FlutterI18n.translate(context, 'landscapeComment'),
+          FlutterI18n.translate(context, 'portraitsComment'),
+          FlutterI18n.translate(context, 'streetComment'),
+          FlutterI18n.translate(context, 'otherComment')
+        ];
       case 'landscape':
-        return FlutterI18n.translate(context, 'landscapeComment');
+        return [
+          FlutterI18n.translate(context, 'landscapeComment')
+        ];
       case 'portraits':
-        return FlutterI18n.translate(context, 'portraitsComment');
+        return [
+          FlutterI18n.translate(context, 'portraitsComment')
+        ];
       case 'street':
-        return FlutterI18n.translate(context, 'streetComment');
+        return [
+          FlutterI18n.translate(context, 'streetComment')
+        ];
       case 'other':
-        return FlutterI18n.translate(context, 'otherComment');
+        return [
+          FlutterI18n.translate(context, 'otherComment')
+        ];
     }
 
-    return null;
+    return [];
   }
 
   /// Renders a photograph
@@ -145,32 +157,10 @@ class PhotographBoardPage extends HookConsumerWidget {
           controller.forward();
         });
       },
-      headerWidget: (longestSize, isMobile) => Stack(
-        fit: StackFit.expand,
-        children: [
-          IconRenderer(asset: getRestfulViewHeader(ref)!, fit: BoxFit.cover),
-          Align(
-              alignment: Alignment.bottomLeft,
-              child: SizedBox(
-                width: longestSize / 2,
-                child: FadeAnimation(
-                  start: 0,
-                  end: 1,
-                  duration: const Duration(milliseconds: 2000),
-                  child: StyledText(
-                    text: '"${getRestfulViewHeaderText(context, ref)!}"',
-                    color: Colors.white,
-                    useShadow: true,
-                    align: TextAlign.start,
-                    letterSpacing: 5,
-                    fontSize: longestSize / 50,
-                    italic: true,
-                    clip: false,
-                  ),
-                ),
-              )
-          ),
-        ],
+      headerWidget: () => BannerWidget(
+        banners: getRestfulViewHeader(ref),
+        quotes: getRestfulViewHeaderText(context, ref),
+        height: MediaQuery.of(context).size.height / 2.5,
       ),
       listEmptyChild: const Center(
         child: LoadingIndicator(color: Colors.black),

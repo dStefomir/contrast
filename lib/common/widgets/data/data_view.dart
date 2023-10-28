@@ -1,7 +1,6 @@
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
-import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
 import 'package:contrast/utils/paged_list.dart';
@@ -31,7 +30,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   /// Widget that should be displayed if the list view is empty
   final Widget listEmptyChild;
   /// Widget for the header of the data view
-  final Widget Function(double, bool)? headerWidget;
+  final Widget Function()? headerWidget;
 
   const RestfulAnimatedDataView({
     Key? key,
@@ -148,7 +147,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                 slivers: [
                   if (headerWidget != null)
                   SliverAppBar(
-                    expandedHeight: longestScreenSize / (isMobile ? 2.5 : 3),
+                    expandedHeight: longestScreenSize / (isMobile ? 2.5 : 4),
                     backgroundColor: Colors.white,
                     clipBehavior: Clip.antiAlias,
                     floating: true,
@@ -159,14 +158,14 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                     forceElevated: true,
                     flexibleSpace: Container(
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black, width: 1)
+                        border: Border.all(color: Colors.black, width: 2)
                       ),
-                      child: headerWidget!(longestScreenSize, isMobile),
+                      child: headerWidget!(),
                     )
                   ),
                   SliverGrid.builder(
-                    addAutomaticKeepAlives: false,
-                    addRepaintBoundaries: false,
+                    addAutomaticKeepAlives: true,
+                    addRepaintBoundaries: true,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
                     itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
                     itemCount: apiData.length,

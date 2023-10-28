@@ -1,5 +1,4 @@
 import 'package:contrast/modules/board/overlay/share/share.dart';
-import 'package:flutter_gif/flutter_gif.dart';
 import "package:universal_html/html.dart" as html;
 import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/shadow.dart';
@@ -49,11 +48,8 @@ class BoardPage extends StatefulHookConsumerWidget {
 
 class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMixin {
 
-  late FlutterGifController _videoBoardGiffController;
-
   @override
   void initState() {
-    _videoBoardGiffController = FlutterGifController(vsync: this);
     // Send analytics when the widget is first built.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.analytics.logAppOpen();
@@ -70,7 +66,6 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
 
   @override
   void dispose() {
-    _videoBoardGiffController.dispose();
     html.window.onPopState.drain();
     super.dispose();
   }
@@ -315,7 +310,7 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
                               });
                             },
                             duration: const Duration(milliseconds: 800),
-                            child: VideoBoardPage(onUserAction: _onAction, giffController: _videoBoardGiffController)
+                            child: VideoBoardPage(onUserAction: _onAction)
                         ),
                       )
                   ),

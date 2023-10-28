@@ -1,9 +1,7 @@
-import 'package:contrast/common/widgets/animation.dart';
+import 'package:contrast/common/widgets/banner.dart';
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
-import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/load.dart';
-import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/common/widgets/video.dart';
 import 'package:contrast/model/video_data.dart';
 import 'package:contrast/modules/board/overlay/delete/provider.dart';
@@ -13,7 +11,6 @@ import 'package:contrast/modules/board/video/service.dart';
 import 'package:contrast/security/session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gif/flutter_gif.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -26,22 +23,16 @@ import 'package:url_launcher/url_launcher.dart';
 class VideoBoardPage extends HookConsumerWidget {
   /// What happens when the user performs an action
   final Function(WidgetRef ref, Function? action) onUserAction;
-  /// Controller for the giff header of the data view
-  final FlutterGifController giffController;
 
-  const VideoBoardPage({super.key, required this.onUserAction, required this.giffController});
+  const VideoBoardPage({super.key, required this.onUserAction});
 
-  /// Renders the data view header banner widget
-  Widget _renderDataViewHeader() {
+  /// Gets the asset for the data view header
+  String _getDataViewHeader() {
     if(kIsWeb) {
-      return const IconRenderer(asset: 'video_web_banner.jpg', fit: BoxFit.cover);
+      return 'video_web_banner.jpg';
     }
 
-    return GifImage(
-      controller: giffController,
-      fit: BoxFit.cover,
-      image: const AssetImage("assets/video_banner.gif",),
-    );
+    return 'video_banner.gif';
   }
 
   /// Renders a video
@@ -106,9 +97,6 @@ class VideoBoardPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      giffController.repeat(min: 0, max: 299, period: const Duration(seconds: 10));
-    });
     return RestfulAnimatedDataView<VideoData>(
         key: const Key('VideoDataView'),
         serviceProvider: videoServiceFetchProvider,
@@ -128,32 +116,10 @@ class VideoBoardPage extends HookConsumerWidget {
             controller.forward();
           });
         },
-        headerWidget: (longestSize, _) => Stack(
-          fit: StackFit.expand,
-          children: [
-            _renderDataViewHeader(),
-            Align(
-                alignment: Alignment.bottomLeft,
-                child: SizedBox(
-                  width: longestSize / 2,
-                  child: FadeAnimation(
-                    start: 0,
-                    end: 1,
-                    duration: const Duration(milliseconds: 2000),
-                    child: StyledText(
-                      text: '"${FlutterI18n.translate(context, 'videosComment')}"',
-                      color: Colors.white,
-                      useShadow: true,
-                      align: TextAlign.start,
-                      letterSpacing: 5,
-                      fontSize: longestSize / 50,
-                      italic: true,
-                      clip: false,
-                    ),
-                  ),
-                )
-            ),
-          ],
+        headerWidget: () => BannerWidget(
+          banners: [_getDataViewHeader()],
+          height: MediaQuery.of(context).size.height / 2.5,
+          quotes: [(FlutterI18n.translate(context, 'videosComment'))],
         ),
         listEmptyChild: const Center(
           child: LoadingIndicator(color: Colors.black),
