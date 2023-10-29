@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.3.4+37
+version: 2.4.0+38
 
 environment:
   sdk: '>=3.0.6 <4.0.0'
@@ -41,21 +41,21 @@ dependencies:
   flutter_i18n: ^0.34.0
   # in memory file creation
   file: ^6.0.0
-  flutter_riverpod: ^2.4.4
-  hooks_riverpod: ^2.4.4
+  flutter_riverpod: ^2.4.5
+  hooks_riverpod: ^2.4.5
   flutter_hooks: ^0.20.3
   # html cross platform library
   universal_html: ^2.2.4
   # qr code library
   qr_flutter: ^4.1.0
   # url launching library
-  url_launcher: ^6.1.14
+  url_launcher: ^6.2.1
   # handling floating action button
   flutter_speed_dial: ^7.0.0
   # context menu library
   focused_menu: ^1.0.5
   # Svg handler library
-  flutter_svg: ^2.0.7
+  flutter_svg: ^2.0.8
   # decode jwt tokens
   jwt_decode: ^0.3.1
   # translation and core library
@@ -79,7 +79,7 @@ dependencies:
   # shared prefs library
   shared_preferences: ^2.2.2
   # Open street maps library
-  flutter_map: ^6.0.0
+  flutter_map: ^6.0.1
   # Tooltip library
   just_the_tooltip: ^0.0.12
   # Rating library
@@ -87,15 +87,15 @@ dependencies:
   # device info library
   device_info_plus: ^9.1.0
   # add to calendar library
-  add_2_calendar: ^2.2.5
+  add_2_calendar: ^3.0.1
   # date picker library
-  syncfusion_flutter_datepicker: ^23.1.41
+  syncfusion_flutter_datepicker: ^23.1.42
   # gif running library
   flutter_gif: ^0.0.4
   # Firebase libraries
-  firebase_core: ^2.19.0
-  firebase_analytics: ^10.6.1
-  firebase_messaging: ^14.7.1
+  firebase_core: ^2.20.0
+  firebase_analytics: ^10.6.2
+  firebase_messaging: ^14.7.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

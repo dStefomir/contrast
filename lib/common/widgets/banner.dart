@@ -64,13 +64,16 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
 
   /// Sets a periodic timer for changing the banners
   Timer _startBannerChangingTimer() => Timer(_nextBanner, () {
-    if (_getCurrentPage() == widget.banners.length - 1) {
-      _pageController.nextPage(duration: _bannerAnimationDuration, curve: Curves.fastEaseInToSlowEaseOut);
-    } else {
-      _pageController.animateToPage(_getCurrentPage() + 1, duration: _bannerAnimationDuration, curve: Curves.fastEaseInToSlowEaseOut);
+    if(_pageController.hasClients) {
+      if (_getCurrentPage() == widget.banners.length - 1) {
+        _pageController.nextPage(duration: _bannerAnimationDuration, curve: Curves.fastEaseInToSlowEaseOut);
+      } else {
+        _pageController.animateToPage(_getCurrentPage() + 1, duration: _bannerAnimationDuration, curve: Curves.fastEaseInToSlowEaseOut);
+      }
     }
   });
 
+  /// Returns the current displayed page from the page view
   int _getCurrentPage() {
     int currentPage;
     if(_pageController.hasClients) {
@@ -199,10 +202,11 @@ class _BannerDotIndicator extends StatefulHookConsumerWidget {
 }
 
 class _BannerDotIndicatorState extends ConsumerState<_BannerDotIndicator> {
-  /// Timer for rendering the indicator
-  Timer? _animationRender;
+
   /// Starting width of the indicator
   late ValueNotifier<double> _selectedIndicatorWidth;
+  /// Timer for rendering the indicator
+  Timer? _animationRender;
 
   @override
   void initState() {
@@ -214,7 +218,6 @@ class _BannerDotIndicatorState extends ConsumerState<_BannerDotIndicator> {
   void dispose() {
     _animationRender!.cancel();
     widget.pageController.removeListener(_onDotChanged);
-    _selectedIndicatorWidth.dispose();
     super.dispose();
   }
 
