@@ -51,31 +51,46 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
 
   /// Handles the keyboard key up and down for scrolling
   void _handleKeyEvent(RawKeyEvent event, ScrollController controller) {
+    void scrollBack(double offset) {
+      if (offset - 250 >= 0) {
+        controller.animateTo(
+            offset - 250,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.ease
+        );
+      }
+    }
+    void scrollNext(double offset) {
+      final double maxScroll = controller.position.maxScrollExtent;
+      final double currentScroll = controller.position.pixels;
+      const double delta = 10;
+      if (maxScroll - currentScroll >= delta) {
+        controller.animateTo(
+            offset + 250,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.ease
+        );
+      }
+    }
+
     if (event is RawKeyDownEvent) {
       var offset = controller.offset;
-      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-        if (offset != 0) {
-          controller.animateTo(
-              offset - 250,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.ease
-          );
+      if (event.logicalKey == LogicalKeyboardKey.arrowUp && axis == Axis.vertical) {
+        scrollBack(offset);
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowDown && axis == Axis.vertical) {
+        scrollNext(offset);
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+        if (axis == Axis.vertical && onLeftKeyPressed != null) {
+          onLeftKeyPressed!();
+        } else {
+          scrollBack(offset);
         }
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-        final double maxScroll = controller.position.maxScrollExtent;
-        final double currentScroll = controller.position.pixels;
-        const double delta = 10;
-        if (maxScroll - currentScroll >= delta) {
-          controller.animateTo(
-              offset + 250,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.ease
-          );
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+        if (axis == Axis.vertical && onRightKeyPressed != null) {
+          onRightKeyPressed!();
+        } else {
+          scrollNext(offset);
         }
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft && onLeftKeyPressed != null) {
-        onLeftKeyPressed!();
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight && onRightKeyPressed != null) {
-        onRightKeyPressed!();
       }
     }
   }
