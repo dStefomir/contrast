@@ -9,6 +9,7 @@ import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/board/video/overlay/provider.dart';
 import 'package:contrast/modules/board/video/service.dart';
 import 'package:contrast/security/session.dart';
+import 'package:contrast/utils/device.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -97,11 +98,14 @@ class VideoBoardPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isMobile = useMobileLayout(context);
+
     return RestfulAnimatedDataView<VideoData>(
         key: const Key('VideoDataView'),
         serviceProvider: videoServiceFetchProvider,
         loadPage: ref.read(videoBoardServiceProvider).getVideoBoard,
-        itemsPerRow: 3,
+        itemsPerRow: isMobile ? 3 : 2,
+        axis: isMobile ? Axis.vertical : Axis.horizontal,
         dimHeight: MediaQuery.of(context).size.height / 2.5,
         itemBuilder: (BuildContext context, int index, int dataLength, VideoData wrapper) =>
             LayoutBuilder(key: const Key('VideoDataViewBuilder'), builder: (context, constraints) =>
@@ -116,10 +120,10 @@ class VideoBoardPage extends HookConsumerWidget {
             controller.forward();
           });
         },
-        headerWidget: () => BannerWidget(
+        headerWidget: (scaleFactor) => BannerWidget(
           banners: [_getDataViewHeader()],
-          height: MediaQuery.of(context).size.height / 2.5,
           quotes: [(FlutterI18n.translate(context, 'videosComment'))],
+          scaleFactor: scaleFactor,
         ),
         listEmptyChild: const Center(
           child: LoadingIndicator(color: Colors.black),

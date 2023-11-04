@@ -262,7 +262,7 @@ class BoardPageFooter extends HookConsumerWidget {
                     asset: 'background_landscape.svg',
                     width: double.infinity,
                     fit: BoxFit.fitWidth,
-                    color: Colors.black.withOpacity(0.03)
+                    color: Colors.black.withOpacity(0.07)
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -296,7 +296,10 @@ class BoardPageFooter extends HookConsumerWidget {
                           widgetKey: const Key('videos'),
                           tabKey: 'videos',
                           text: FlutterI18n.translate(context, 'videos'),
-                          onClick: (String tab) => ref.read(boardFooterTabProvider.notifier).switchTab(tab),
+                          onClick: (String tab) {
+                            ref.read(boardHeaderTabProvider.notifier).switchTab('all');
+                            ref.read(boardFooterTabProvider.notifier).switchTab(tab);
+                            },
                           isSelected: currentTab == 'videos'
                       ).translateOnPhotoHover,
                       const Spacer(),

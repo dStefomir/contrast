@@ -8,6 +8,8 @@ class StyledText extends StatelessWidget {
   final Color? color;
   /// Font size
   final double? fontSize;
+  /// Limits the lines ot the text field
+  final int? maxLines;
   /// Text decoration weight
   final FontWeight? weight;
   /// Text decoration
@@ -33,6 +35,7 @@ class StyledText extends StatelessWidget {
     Key? key,
     required this.text,
     this.fontSize = 20,
+    this.maxLines,
     this.color,
     this.weight,
     this.decoration,
@@ -53,6 +56,7 @@ class StyledText extends StatelessWidget {
         child: Text(
             text,
             textAlign: align,
+            maxLines: 4,
             style: TextStyle(
               fontFamily: family,
               color: color ?? Colors.black,

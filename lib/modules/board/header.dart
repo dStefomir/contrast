@@ -23,7 +23,7 @@ class BoardPageFilter extends ConsumerWidget {
   Widget _renderMobileLayout(BuildContext context, WidgetRef ref) => LayoutBuilder(builder: (context, constraints) =>
       ShadowWidget(
         blurRadius: 1,
-        offset: const Offset(2, 0),
+        offset: const Offset(2, 2),
         child: Container(
           width: boardPadding,
           height: constraints.maxHeight - boardPadding,
@@ -132,7 +132,7 @@ class BoardPageFilter extends ConsumerWidget {
               asset: 'background_landscape.svg',
               width: double.infinity,
               fit: BoxFit.fitWidth,
-              color: Colors.black.withOpacity(0.03)
+              color: Colors.black.withOpacity(0.07)
           ),
           Container(
             decoration: BoxDecoration(

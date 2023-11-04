@@ -134,11 +134,6 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         fontFamily: 'Slovic',
         brightness: Brightness.light,
-        appBarTheme: const AppBarTheme(
-          systemOverlayStyle: SystemUiOverlayStyle(
-              statusBarBrightness: Brightness.dark
-          ),
-        ),
         inputDecorationTheme: const InputDecorationTheme(
             isDense: true,
             contentPadding: EdgeInsets.all(10),

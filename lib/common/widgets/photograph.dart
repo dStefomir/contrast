@@ -78,7 +78,7 @@ class ContrastPhotograph extends StatelessWidget {
 
     if (isThumbnail) {
       shadowWidth = constraints.maxWidth;
-      shadowHeight = constraints.maxHeight / 1.33;
+      shadowHeight = constraints.maxHeight / 1.34;
     } else {
       if (image!.isLandscape!) {
         paddingRight = 1.5;
@@ -98,7 +98,7 @@ class ContrastPhotograph extends StatelessWidget {
       children: [
         ShadowWidget(
             offset: const Offset(0, 0),
-            blurRadius: 3,
+            blurRadius: isThumbnail ? 10: 3,
             child: SizedBox(
               width: shadowWidth,
               height: shadowHeight,
@@ -173,7 +173,6 @@ class ContrastPhotograph extends StatelessWidget {
         clearMemoryCacheWhenDispose: false,
         filterQuality: quality,
         isAntiAlias: true,
-        imageCacheName: platform == 'DESKTOP' ? "${widgetKey.toString()}_cache_name_$platform" : null,
       );
     } else {
       photo = ExtendedImage.memory(
@@ -191,7 +190,6 @@ class ContrastPhotograph extends StatelessWidget {
         clearMemoryCacheWhenDispose: false,
         filterQuality: quality,
         isAntiAlias: true,
-        imageCacheName: platform == 'DESKTOP' ? "${widgetKey.toString()}_cache_name_$platform" : null,
       );
     }
 
@@ -213,6 +211,8 @@ class ContrastPhotographMeta extends HookConsumerWidget {
   final Function onClick;
   /// What happens when the user clicks the redirect button
   final Function? onRedirect;
+  /// Color of the border of the photograph
+  final Color borderColor;
 
   const ContrastPhotographMeta({
     required this.widgetKey,
@@ -220,7 +220,8 @@ class ContrastPhotographMeta extends HookConsumerWidget {
     required this.constraints,
     required this.onClick,
     this.fetch,
-    this.onRedirect
+    this.onRedirect,
+    this.borderColor = Colors.black
   }) : super(key: widgetKey);
 
   /// Shows the popup overlay
@@ -251,12 +252,12 @@ class ContrastPhotographMeta extends HookConsumerWidget {
             fetch: fetch,
             constraints: constraints,
             quality: FilterQuality.low,
-            borderColor: Colors.black,
+            borderColor: borderColor,
             image: wrapper.image,
-            borderWidth: 1,
+            borderWidth: 1.5,
             compressed: true,
-            height: double.infinity,
-            width: double.infinity,
+            height: constraints.maxHeight,
+            width: constraints.maxWidth,
           ),
           if (metadata != null) metadata,
           if(isHovering) ImageMetaDataDetails(

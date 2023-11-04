@@ -1,7 +1,6 @@
 import 'package:contrast/common/widgets/banner.dart';
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
-import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/photograph.dart';
 import 'package:contrast/model/image_data.dart';
@@ -10,6 +9,7 @@ import 'package:contrast/modules/board/photograph/overlay/provider.dart';
 import 'package:contrast/modules/board/photograph/service.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/security/session.dart';
+import 'package:contrast/utils/device.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -82,8 +82,8 @@ class PhotographBoardPage extends HookConsumerWidget {
 
   /// Renders a photograph
   Widget _renderPhoto(WidgetRef ref, BuildContext context, ImageBoardWrapper wrapper, BoxConstraints constraints) {
-    final String selectedFilter = ref.read(boardHeaderTabProvider);
     final serviceProvider = ref.read(photographyBoardServiceProvider);
+    final currentCategory = ref.read(boardHeaderTabProvider);
 
     if (Session().isLoggedIn()) {
       return FocusedMenuHolder(
@@ -94,7 +94,7 @@ class PhotographBoardPage extends HookConsumerWidget {
           animateMenuItems: true,
           blurBackgroundColor: Colors.black,
           openWithTap: false,
-          onPressed: () => onUserAction(ref, () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$selectedFilter')),
+          onPressed: () => onUserAction(ref, () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$currentCategory')),
           menuItems: <FocusedMenuItem>[
             FocusedMenuItem(
                 title: Text(FlutterI18n.translate(context, 'Edit Photograph')),
@@ -128,9 +128,10 @@ class PhotographBoardPage extends HookConsumerWidget {
         fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
         wrapper: wrapper,
         constraints: constraints,
-        onClick: () => onUserAction(ref, () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$selectedFilter')),
+        borderColor: Colors.black,
+        onClick: () => onUserAction(ref, () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$currentCategory')),
         onRedirect: kIsWeb ? () => onUserAction(ref, () async {
-          final Uri url = Uri.parse('https://www.dstefomir.eu/#/photos/details?id=${wrapper.image.id}&category=$selectedFilter');
+          final Uri url = Uri.parse('https://www.dstefomir.eu/#/photos/details?id=${wrapper.image.id}&category=$currentCategory');
           if (await canLaunchUrl(url)) {
             await launchUrl(url);
           }
@@ -139,31 +140,37 @@ class PhotographBoardPage extends HookConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => RestfulAnimatedDataView<ImageBoardWrapper>(
-      key: const Key('PhotographDataView'),
-      serviceProvider: photographServiceFetchProvider,
-      loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
-      itemsPerRow: 3,
-      dimHeight: MediaQuery.of(context).size.height / 2.5,
-      itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper) =>
-          LayoutBuilder(key: const Key('PhotographDataViewBuilder'), builder: (context, constraints) =>
-              _renderPhoto(ref, context, wrapper, constraints)
-          ),
-      onRightKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('videos'),
-      whenShouldAnimateGlass: (controller) {
-        final String currentTab = ref.watch(boardFooterTabProvider);
-        useValueChanged(currentTab, (_, __) async {
-          controller.reset();
-          controller.forward();
-        });
-      },
-      headerWidget: () => BannerWidget(
-        banners: getRestfulViewHeader(ref),
-        quotes: getRestfulViewHeaderText(context, ref),
-        height: MediaQuery.of(context).size.height / 2.5,
-      ),
-      listEmptyChild: const Center(
-        child: LoadingIndicator(color: Colors.black),
-      )
-  );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isMobile = useMobileLayout(context);
+
+    return RestfulAnimatedDataView<ImageBoardWrapper>(
+        key: const Key('PhotographDataView'),
+        serviceProvider: photographServiceFetchProvider,
+        loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
+        itemsPerRow: isMobile ? 3 : 2,
+        axis: isMobile ? Axis.vertical : Axis.horizontal,
+        dimHeight: MediaQuery.of(context).size.height / 2.5,
+        itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper) =>
+            LayoutBuilder(
+                key: const Key('PhotographDataViewBuilder'),
+                builder: (context, constraints) => _renderPhoto(ref, context, wrapper, constraints)
+            ),
+        onRightKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('videos'),
+        whenShouldAnimateGlass: (controller) {
+          final String currentTab = ref.watch(boardFooterTabProvider);
+          useValueChanged(currentTab, (_, __) async {
+            controller.reset();
+            controller.forward();
+          });
+        },
+        headerWidget: (scaleFactor) => BannerWidget(
+            banners: getRestfulViewHeader(ref),
+            quotes: getRestfulViewHeaderText(context, ref),
+            scaleFactor: scaleFactor
+        ),
+        listEmptyChild: const Center(
+          child: LoadingIndicator(color: Colors.black),
+        )
+    );
+  }
 }

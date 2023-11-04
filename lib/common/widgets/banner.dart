@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:contrast/common/widgets/icon.dart';
+import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -17,13 +18,13 @@ class BannerWidget extends StatefulHookConsumerWidget {
   final List<String> banners;
   /// Banner quotes
   final List<String> quotes;
-  /// Height of the widget
-  final double height;
+  /// Scale factor
+  final double scaleFactor;
 
   const BannerWidget({
     super.key,
     required this.banners,
-    required this.height,
+    required this.scaleFactor,
     this.quotes = const []
   });
 
@@ -115,7 +116,7 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
       children: [
         PageView.builder(
           controller: _pageController,
-          itemCount: widget.banners.length + 2,
+          itemCount: widget.banners.length > 1 ? widget.banners.length + 2 : widget.banners.length,
           itemBuilder: (context, index) {
             String banner;
             String text;
@@ -124,7 +125,7 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
               text = widget.quotes.last;
             } else if (index == widget.banners.length + 1) {
               banner = widget.banners.first;
-              text = widget.banners.first;
+              text = widget.quotes.first;
             } else {
               banner = widget.banners[index - 1];
               text = widget.quotes[index - 1];
@@ -151,9 +152,9 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
                         useShadow: true,
                         align: TextAlign.start,
                         letterSpacing: 5,
-                        fontSize: longestSide / 50,
+                        fontSize: widget.scaleFactor / 15,
                         italic: true,
-                        clip: false,
+                        clip: true,
                       ),
                     )
                 ),
@@ -239,37 +240,45 @@ class _BannerDotIndicatorState extends ConsumerState<_BannerDotIndicator> {
       children.add(
           Padding(
             padding: const EdgeInsets.only(right: 7),
-            child: isBannerCurrent ? ClipRRect(
-              borderRadius: BorderRadius.circular(0),
-              child: Stack(
-                alignment: Alignment.centerLeft,
-                children: [
-                  Container(
-                    height: 10,
-                    width: 25,
-                    decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(0)
-                      //more than 50% of width makes circle
+            child: isBannerCurrent ? ShadowWidget(
+              blurRadius: 0.5,
+              offset: const Offset(0, 0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(0),
+                child: Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [
+                    Container(
+                      height: 10,
+                      width: 25,
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(0)
+                        //more than 50% of width makes circle
+                      ),
                     ),
-                  ),
-                  AnimatedContainer(
-                    duration: widget.duration,
-                    height: 10,
-                    width: _selectedIndicatorWidth.value,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(0)
+                    AnimatedContainer(
+                      duration: widget.duration,
+                      height: 10,
+                      width: _selectedIndicatorWidth.value,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(0)
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ) : Container(
-              height: 10,
-              width: 10,
-              decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(0)
+            ) : ShadowWidget(
+              blurRadius: 0.5,
+              offset: const Offset(0, 0),
+              child: Container(
+                height: 10,
+                width: 10,
+                decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(0)
+                ),
               ),
             ),
           )

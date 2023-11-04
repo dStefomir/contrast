@@ -7,7 +7,7 @@ class BackgroundPage extends StatelessWidget {
   /// Background color of the holder page
   final Color color;
 
-  const BackgroundPage({Key? key, required this.child, this.color=Colors.white}) : super(key: key);
+  const BackgroundPage({Key? key, required this.child, this.color = Colors.white}) : super(key: key);
 
   @override
   Widget build(BuildContext context) =>
