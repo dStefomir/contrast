@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 
 /// Determines if the app should load a mobile or other type of layout based on calculated pixels
 bool useMobileLayout(BuildContext context, {int shortestSideLimit = 670}) {
+  final mediaQuery = MediaQuery.of(context);
   /// The equivalent of the "smallestWidth" qualifier on Android.
-  var shortestSide = MediaQuery.of(context).size.shortestSide;  // it's in dps
+  final shortestSide = mediaQuery.size.shortestSide;  // it's in dps
+  final orientation = mediaQuery.orientation;
   /// Determine if we should use mobile layout or not. The
   /// number 600 is a common breakpoint for a typical 7-inch tablet.
-  return shortestSide < shortestSideLimit;
+  return shortestSide < shortestSideLimit && orientation == Orientation.portrait;
 }
 
 /// Determines the correct scaling of pixels based on the device the app is ran on

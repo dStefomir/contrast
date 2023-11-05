@@ -144,18 +144,15 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
                 IconRenderer(asset: banner, fit: BoxFit.cover),
                 if (widget.quotes.isNotEmpty && text.isNotEmpty) Align(
                     alignment: Alignment.bottomLeft,
-                    child: SizedBox(
-                      width: longestSide / 2,
-                      child: StyledText(
-                        text: '"$text"',
-                        color: Colors.white,
-                        useShadow: true,
-                        align: TextAlign.start,
-                        letterSpacing: 5,
-                        fontSize: widget.scaleFactor / 15,
-                        italic: true,
-                        clip: true,
-                      ),
+                    child: StyledText(
+                      text: '"$text"',
+                      color: Colors.white,
+                      useShadow: true,
+                      align: TextAlign.start,
+                      letterSpacing: 5,
+                      fontSize: widget.scaleFactor / 25,
+                      italic: true,
+                      clip: true,
                     )
                 ),
               ],

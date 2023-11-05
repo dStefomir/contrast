@@ -205,6 +205,7 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
     final bool? shouldShowUploadVideoDialog = ref.watch(overlayVisibilityProvider(const Key('upload_video')));
     final bool? shouldShowEditVideoDialog = ref.watch(overlayVisibilityProvider(const Key('edit_video')));
     final bool? shouldShowShareDialog = ref.watch(overlayVisibilityProvider(const Key('share')));
+    
     double titlePadding = 0;
     /// In mobile view we need to calculate a padding so that the title
     /// can be in the center of the screen because of the left drawer

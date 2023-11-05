@@ -84,6 +84,8 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
     ]);
     super.dispose();
   }

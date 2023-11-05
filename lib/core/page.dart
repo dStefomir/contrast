@@ -5,7 +5,6 @@ import 'package:contrast/core/provider.dart';
 import 'package:contrast/modules/login/overlay/cookie.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -73,14 +72,7 @@ class CorePage extends HookConsumerWidget {
   );
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-
-    return _renderDefaultPage(context, ref);
-  }
+  Widget build(BuildContext context, WidgetRef ref) => _renderDefaultPage(context, ref);
 }
 
 /// Scaffold wrapper for each page

@@ -3,6 +3,7 @@ import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/paged_list.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -174,7 +175,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                   slivers: [
                     if (headerWidget != null)
                     SliverAppBar(
-                        expandedHeight: axis == Axis.vertical ? widgetMaxHeight / 3 : widgetMaxHeight / 2.5,
+                        expandedHeight: axis == Axis.vertical ? widgetMaxHeight / 3 : kIsWeb ? widgetMaxHeight / 2.5 : widgetMaxWidth / 2,
                         backgroundColor: Colors.white,
                         clipBehavior: Clip.antiAlias,
                         floating: true,
@@ -187,7 +188,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.black, width: 2)
                           ),
-                          child: headerWidget!(axis == Axis.vertical ? widgetMaxHeight / 3 : widgetMaxHeight / 3),
+                          child: headerWidget!(axis == Axis.vertical ? widgetMaxHeight / 3 : kIsWeb ? widgetMaxHeight / 2.5 : widgetMaxWidth / 2),
                         )
                     ),
                     SliverGrid.builder(
