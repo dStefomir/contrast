@@ -123,166 +123,168 @@ class CommentDialog<T> extends HookConsumerWidget {
           child: Container(
             color: Colors.white,
             height: dialogHeight,
-            child: _deviceInfoWidget((deviceId) => Column(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0, left: 10, right: 10),
-                      child: Row(
-                        children: [
-                          StyledText(
-                            text: FlutterI18n.translate(context, 'Comments'),
-                            weight: FontWeight.bold,
+            child: _deviceInfoWidget((deviceId) => SingleChildScrollView(
+              child: Column(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0, left: 10, right: 10),
+                        child: Row(
+                          children: [
+                            StyledText(
+                              text: FlutterI18n.translate(context, 'Comments'),
+                              weight: FontWeight.bold,
+                              padding: 0,
+                            ),
+                            const Spacer(),
+                            DefaultButton(
+                                onClick: () {
+                                  ref.read(overlayVisibilityProvider(widgetKey).notifier).setOverlayVisibility(false);
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  },
+                                tooltip: FlutterI18n.translate(context, 'Close'),
+                                color: Colors.white.withOpacity(0.3),
+                                borderColor: Colors.black,
+                                icon: 'close.svg'
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                        child: StyledText(
+                            text: FlutterI18n.translate(context, isAdmin ? 'Approve pending comments' : 'You can post only one comment per day'),
+                            color: Colors.black87,
+                            fontSize: 10,
                             padding: 0,
-                          ),
-                          const Spacer(),
-                          DefaultButton(
-                              onClick: () {
-                                ref.read(overlayVisibilityProvider(widgetKey).notifier).setOverlayVisibility(false);
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                },
-                              tooltip: FlutterI18n.translate(context, 'Close'),
-                              color: Colors.white.withOpacity(0.3),
-                              borderColor: Colors.black,
-                              icon: 'close.svg'
-                          ),
-                        ],
+                            letterSpacing: 3,
+                            clip: false,
+                            align: TextAlign.start,
+                            weight: FontWeight.bold
+                        ),
+                      ),
+                    ],
+                  ),
+                  SimpleInput(
+                    widgetKey: const Key('CommentInputDeviceName'),
+                    backgroundColor: Colors.white.withOpacity(0.3),
+                    controller: userNameController,
+                    focusNode: deviceNameFocusNode,
+                    enabled: !isAdmin,
+                    labelText: FlutterI18n.translate(context, 'From who'),
+                    onChange: (e) => e,
+                    suffixWidget: Center(
+                      widthFactor: 1.5,
+                      child: RatingBar.builder(
+                        initialRating: ratingController.value,
+                        minRating: 0,
+                        wrapAlignment: WrapAlignment.center,
+                        direction: Axis.horizontal,
+                        allowHalfRating: false,
+                        itemSize: 25,
+                        glow: true,
+                        itemCount: 5,
+                        itemBuilder: (_, __) => const Icon(Icons.star, color: Colors.amber,),
+                        onRatingUpdate: (rating) => ratingController.value = rating,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                      child: StyledText(
-                          text: FlutterI18n.translate(context, isAdmin ? 'Approve pending comments' : 'You can post only one comment per day'),
-                          color: Colors.black87,
-                          fontSize: 10,
-                          padding: 0,
-                          letterSpacing: 3,
-                          clip: false,
-                          align: TextAlign.start,
-                          weight: FontWeight.bold
-                      ),
-                    ),
-                  ],
-                ),
-                SimpleInput(
-                  widgetKey: const Key('CommentInputDeviceName'),
-                  backgroundColor: Colors.white.withOpacity(0.3),
-                  controller: userNameController,
-                  focusNode: deviceNameFocusNode,
-                  enabled: !isAdmin,
-                  labelText: FlutterI18n.translate(context, 'From who'),
-                  onChange: (e) => e,
-                  suffixWidget: Center(
-                    widthFactor: 1.5,
-                    child: RatingBar.builder(
-                      initialRating: ratingController.value,
-                      minRating: 0,
-                      wrapAlignment: WrapAlignment.center,
-                      direction: Axis.horizontal,
-                      allowHalfRating: false,
-                      itemSize: 25,
-                      glow: true,
-                      itemCount: 5,
-                      itemBuilder: (_, __) => const Icon(Icons.star, color: Colors.amber,),
-                      onRatingUpdate: (rating) => ratingController.value = rating,
-                    ),
-                  ),
-                  validator: (e) {
-                    if(e != null && !Session().isLoggedIn() && (
-                        e.toLowerCase().contains('dstefomir') ||
-                            e.toLowerCase().contains('stefomir') ||
-                            e.toLowerCase().contains('stefomird') ||
-                            e.toLowerCase().contains('dstefko') ||
-                            e.toLowerCase().contains('stefkod'
-                            )
-                    )) {
-                      return FlutterI18n.translate(context, 'This name cannot be used');
-                    }
+                    validator: (e) {
+                      if(e != null && !Session().isLoggedIn() && (
+                          e.toLowerCase().contains('dstefomir') ||
+                              e.toLowerCase().contains('stefomir') ||
+                              e.toLowerCase().contains('stefomird') ||
+                              e.toLowerCase().contains('dstefko') ||
+                              e.toLowerCase().contains('stefkod'
+                              )
+                      )) {
+                        return FlutterI18n.translate(context, 'This name cannot be used');
+                      }
 
-                    return null;
-                  },
-                ),
-                apiData.isEmpty ? Expanded(
-                  child: Center(
-                    child: StyledText(text: FlutterI18n.translate(context, 'Nothing here so far')),
+                      return null;
+                    },
                   ),
-                ) : Expanded(
-                  child: ListView.builder(
-                      key: const Key('CommentDialogList'),
-                      itemCount: apiData.length,
-                      itemBuilder: (context, index) => itemBuilder(context, apiData[index], deviceId, index)),
-                ),
-                SimpleInput(
-                  widgetKey: const Key('CommentInput'),
-                  backgroundColor: Colors.white.withOpacity(0.3),
-                  controller: commentController,
-                  focusNode: commentFocusNode,
-                  onChange: (e) => e,
-                  labelText: FlutterI18n.translate(context, 'Comment'),
-                  validator: (e) {
-                    if (e != null && e.isEmpty) {
-                      return FlutterI18n.translate(context, 'This field is mandatory');
-                    }
-                    if(e != null && e.length > 1000) {
-                      return FlutterI18n.translate(context, 'The comment is more than 1000 characters');
-                    }
+                  apiData.isEmpty ? Expanded(
+                    child: Center(
+                      child: StyledText(text: FlutterI18n.translate(context, 'Nothing here so far')),
+                    ),
+                  ) : Expanded(
+                    child: ListView.builder(
+                        key: const Key('CommentDialogList'),
+                        itemCount: apiData.length,
+                        itemBuilder: (context, index) => itemBuilder(context, apiData[index], deviceId, index)),
+                  ),
+                  SimpleInput(
+                    widgetKey: const Key('CommentInput'),
+                    backgroundColor: Colors.white.withOpacity(0.3),
+                    controller: commentController,
+                    focusNode: commentFocusNode,
+                    onChange: (e) => e,
+                    labelText: FlutterI18n.translate(context, 'Comment'),
+                    validator: (e) {
+                      if (e != null && e.isEmpty) {
+                        return FlutterI18n.translate(context, 'This field is mandatory');
+                      }
+                      if(e != null && e.length > 1000) {
+                        return FlutterI18n.translate(context, 'The comment is more than 1000 characters');
+                      }
 
-                    return null;
-                  },
-                  suffixWidget: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: !loading.value ? DefaultButton(
-                        onClick: () async {
-                          final form = formKey.currentState;
-                          final String deviceName = userNameController.text.isNotEmpty ? userNameController.text : 'Anonymous';
-                          final String comment = commentController.text;
-                          final double rating = ratingController.value;
-                          deviceNameFocusNode.unfocus();
-                          commentFocusNode.unfocus();
-                          if (form!.validate() && comment.isNotEmpty) {
-                            loading.value = true;
-                            final SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-                            if (deviceName != 'Anonymous') {
-                              sharedPrefs.setString('deviceName', deviceName);
-                            }
-                            if(apiData is List<ImageCommentsData>) {
-                              ref.read(commentsServiceProvider).postPhotographComment(deviceId ?? 'noId', deviceName, parentItemId, comment, rating, isAdmin).then((value) {
-                                if(value.approved! == true) {
-                                  ref.read(serviceProvider.notifier).addItem(value);
-                                }
-                                commentController.text = '';
-                                ratingController.value = 0;
-                                loading.value = false;
-                                showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, value.approved! ? 'Comment posted' : 'Comment review is pending'));
-                              }).onError((error, stackTrace) {
-                                loading.value = false;
-                                showErrorTextOnSnackBar(context, FlutterI18n.translate(context, 'Only one comment per day is allowed'));
-                              });
-                            } else {
-                              ref.read(commentsServiceProvider).postVideoComment(deviceId ?? 'noId', deviceName, parentItemId, comment, rating, isAdmin).then((value) {
-                                if(value.approved! == true) {
-                                  ref.read(serviceProvider.notifier).addItem(value);
-                                }
-                                commentController.text = '';
-                                ratingController.value = 0;
-                                loading.value = false;
-                                showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, value.approved! ? 'Comment posted' : 'Comment review is pending'));
-                              }).onError((error, stackTrace) {
-                                loading.value = false;
-                                showErrorTextOnSnackBar(context, FlutterI18n.translate(context, 'Only one comment per day is allowed'));
-                              });
-                            }
-                          }},
-                        tooltip: FlutterI18n.translate(context, 'Submit'),
-                        color: Colors.white.withOpacity(0.3),
-                        borderColor: Colors.black,
-                        icon: 'navigate_next.svg'
-                    ) : const LoadingIndicator(color: Colors.black),
-                  ),
-                )
-              ],
+                      return null;
+                    },
+                    suffixWidget: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: !loading.value ? DefaultButton(
+                          onClick: () async {
+                            final form = formKey.currentState;
+                            final String deviceName = userNameController.text.isNotEmpty ? userNameController.text : 'Anonymous';
+                            final String comment = commentController.text;
+                            final double rating = ratingController.value;
+                            deviceNameFocusNode.unfocus();
+                            commentFocusNode.unfocus();
+                            if (form!.validate() && comment.isNotEmpty) {
+                              loading.value = true;
+                              final SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
+                              if (deviceName != 'Anonymous') {
+                                sharedPrefs.setString('deviceName', deviceName);
+                              }
+                              if(apiData is List<ImageCommentsData>) {
+                                ref.read(commentsServiceProvider).postPhotographComment(deviceId ?? 'noId', deviceName, parentItemId, comment, rating, isAdmin).then((value) {
+                                  if(value.approved! == true) {
+                                    ref.read(serviceProvider.notifier).addItem(value);
+                                  }
+                                  commentController.text = '';
+                                  ratingController.value = 0;
+                                  loading.value = false;
+                                  showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, value.approved! ? 'Comment posted' : 'Comment review is pending'));
+                                }).onError((error, stackTrace) {
+                                  loading.value = false;
+                                  showErrorTextOnSnackBar(context, FlutterI18n.translate(context, 'Only one comment per day is allowed'));
+                                });
+                              } else {
+                                ref.read(commentsServiceProvider).postVideoComment(deviceId ?? 'noId', deviceName, parentItemId, comment, rating, isAdmin).then((value) {
+                                  if(value.approved! == true) {
+                                    ref.read(serviceProvider.notifier).addItem(value);
+                                  }
+                                  commentController.text = '';
+                                  ratingController.value = 0;
+                                  loading.value = false;
+                                  showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, value.approved! ? 'Comment posted' : 'Comment review is pending'));
+                                }).onError((error, stackTrace) {
+                                  loading.value = false;
+                                  showErrorTextOnSnackBar(context, FlutterI18n.translate(context, 'Only one comment per day is allowed'));
+                                });
+                              }
+                            }},
+                          tooltip: FlutterI18n.translate(context, 'Submit'),
+                          color: Colors.white.withOpacity(0.3),
+                          borderColor: Colors.black,
+                          icon: 'navigate_next.svg'
+                      ) : const LoadingIndicator(color: Colors.black),
+                    ),
+                  )
+                ],
+              ),
             ))
           )
       ),

@@ -44,95 +44,97 @@ class DeleteDialog<T> extends HookConsumerWidget {
         child: Container(
           color: Colors.white,
           height: dialogHeight,
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                        children: [
-                          StyledText(
-                              text: FlutterI18n.translate(context, 'Warning'),
-                              weight: FontWeight.bold
-                          ),
-                          const Spacer(),
-                          DefaultButton(
-                              onClick: () {
-                                if(_isImage()) {
-                                  ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
-                                } else {
-                                  ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
-                                }
-                              },
-                              tooltip: FlutterI18n.translate(context, 'Close'),
-                              color: Colors.white,
-                              borderColor: Colors.black,
-                              icon: 'close.svg'
-                          ),
-                        ]
-                    ),
-                  ),
-                  const Divider(color: Colors.black,)
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Column(
                   children: [
-                    StyledText(
-                      text: _isImage() ? FlutterI18n.translate(context, 'Delete this photo') : FlutterI18n.translate(context, 'Delete this video'),
-                      clip: false,
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                          children: [
+                            StyledText(
+                                text: FlutterI18n.translate(context, 'Warning'),
+                                weight: FontWeight.bold
+                            ),
+                            const Spacer(),
+                            DefaultButton(
+                                onClick: () {
+                                  if(_isImage()) {
+                                    ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
+                                  } else {
+                                    ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
+                                  }
+                                },
+                                tooltip: FlutterI18n.translate(context, 'Close'),
+                                color: Colors.white,
+                                borderColor: Colors.black,
+                                icon: 'close.svg'
+                            ),
+                          ]
+                      ),
                     ),
-                    StyledText(
-                        text: _isImage() ? (data as ImageData).path! : (data as VideoData).path!,
-                        clip: false
-                    ),
+                    const Divider(color: Colors.black,)
                   ],
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  OutlinedButton(
-                      style: ButtonStyle(
-                          fixedSize: MaterialStateProperty.all(const Size(100, 30)),
-                          backgroundColor: MaterialStateProperty.all(Colors.black),
-                          elevation: MaterialStateProperty.all(2),
-                          foregroundColor: MaterialStateProperty.all(Colors.white),
-                          textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      StyledText(
+                        text: _isImage() ? FlutterI18n.translate(context, 'Delete this photo') : FlutterI18n.translate(context, 'Delete this video'),
+                        clip: false,
                       ),
-                      child: Text(
-                          FlutterI18n.translate(context, 'Yes')
+                      StyledText(
+                          text: _isImage() ? (data as ImageData).path! : (data as VideoData).path!,
+                          clip: false
                       ),
-                      onPressed: () => _onDelete(ref)
+                    ],
                   ),
-                  const SizedBox(
-                      width: 30
-                  ),
-                  OutlinedButton(
-                      style: ButtonStyle(
-                          fixedSize: MaterialStateProperty.all(const Size(100, 30)),
-                          backgroundColor: MaterialStateProperty.all(Colors.white),
-                          elevation: MaterialStateProperty.all(2),
-                          foregroundColor: MaterialStateProperty.all(Colors.black),
-                          textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.black))
-                      ),
-                      child: Text(
-                          FlutterI18n.translate(context, 'No')
-                      ),
-                      onPressed: () {
-                        if(_isImage()) {
-                          ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
-                        } else {
-                          ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    OutlinedButton(
+                        style: ButtonStyle(
+                            fixedSize: MaterialStateProperty.all(const Size(100, 30)),
+                            backgroundColor: MaterialStateProperty.all(Colors.black),
+                            elevation: MaterialStateProperty.all(2),
+                            foregroundColor: MaterialStateProperty.all(Colors.white),
+                            textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
+                        ),
+                        child: Text(
+                            FlutterI18n.translate(context, 'Yes')
+                        ),
+                        onPressed: () => _onDelete(ref)
+                    ),
+                    const SizedBox(
+                        width: 30
+                    ),
+                    OutlinedButton(
+                        style: ButtonStyle(
+                            fixedSize: MaterialStateProperty.all(const Size(100, 30)),
+                            backgroundColor: MaterialStateProperty.all(Colors.white),
+                            elevation: MaterialStateProperty.all(2),
+                            foregroundColor: MaterialStateProperty.all(Colors.black),
+                            textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.black))
+                        ),
+                        child: Text(
+                            FlutterI18n.translate(context, 'No')
+                        ),
+                        onPressed: () {
+                          if(_isImage()) {
+                            ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
+                          } else {
+                            ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
+                          }
                         }
-                      }
-                  ),
-                ],
-              )
-            ],
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         )
     );

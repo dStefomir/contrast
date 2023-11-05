@@ -142,15 +142,17 @@ class UploadVideoDialog extends HookConsumerWidget {
           child: Container(
             color: Colors.white,
             height: dialogHeight,
-            child: Column(
-              children: [
-                _renderDialogHeader(context, ref),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: _renderDialogBody(context, ref),
-                ),
-                _renderDialogActions(context, ref)
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  _renderDialogHeader(context, ref),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: _renderDialogBody(context, ref),
+                  ),
+                  _renderDialogActions(context, ref)
+                ],
+              ),
             ),
           ),
         )

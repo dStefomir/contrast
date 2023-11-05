@@ -24,80 +24,82 @@ class ShareDialog extends HookConsumerWidget {
     child: Container(
         color: Colors.white,
         height: dialogHeight,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                  children: [
-                    StyledText(
-                        text: FlutterI18n.translate(context, 'Share Contrastus'),
-                        weight: FontWeight.bold
-                    ),
-                    const Spacer(),
-                    DefaultButton(
-                        onClick: () => ref.read(overlayVisibilityProvider(const Key('share')).notifier).setOverlayVisibility(false),
-                        tooltip: FlutterI18n.translate(context, 'Close'),
-                        color: Colors.white,
-                        borderColor: Colors.black,
-                        icon: 'close.svg'
-                    ),
-                  ]
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                    children: [
+                      StyledText(
+                          text: FlutterI18n.translate(context, 'Share Contrastus'),
+                          weight: FontWeight.bold
+                      ),
+                      const Spacer(),
+                      DefaultButton(
+                          onClick: () => ref.read(overlayVisibilityProvider(const Key('share')).notifier).setOverlayVisibility(false),
+                          tooltip: FlutterI18n.translate(context, 'Close'),
+                          color: Colors.white,
+                          borderColor: Colors.black,
+                          icon: 'close.svg'
+                      ),
+                    ]
+                ),
               ),
-            ),
-            const Divider(color: Colors.black),
-            Padding(
-              padding: const EdgeInsets.only(top: 15),
-              child: DefaultButton(
-                  shape: BoxShape.circle,
-                  tooltip: FlutterI18n.translate(context, 'Website'),
-                  onClick: () => Clipboard.setData(
-                      const ClipboardData(text: 'https://www.dstefomir.eu')
-                  ).then((value) => showSuccessTextOnSnackBar(
-                      context,
-                      FlutterI18n.translate(context, 'Copied to clipboard')
-                  )),
-                  borderColor: Colors.transparent,
-                  borderWidth: 5,
-                  height: 100,
-                  icon: 'chrome.svg'
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                DefaultButton(
+              const Divider(color: Colors.black),
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: DefaultButton(
                     shape: BoxShape.circle,
-                    tooltip: FlutterI18n.translate(context, 'Google Play Store'),
+                    tooltip: FlutterI18n.translate(context, 'Website'),
                     onClick: () => Clipboard.setData(
-                        const ClipboardData(text: 'https://play.google.com/store/apps/details?id=eu.bsdsoft.contrast')
+                        const ClipboardData(text: 'https://www.dstefomir.eu')
                     ).then((value) => showSuccessTextOnSnackBar(
                         context,
                         FlutterI18n.translate(context, 'Copied to clipboard')
                     )),
                     borderColor: Colors.transparent,
-                    padding: 25,
+                    borderWidth: 5,
                     height: 100,
-                    icon: 'play_store.svg'
+                    icon: 'chrome.svg'
                 ),
-                const SizedBox(width: 20),
-                DefaultButton(
-                    shape: BoxShape.circle,
-                    tooltip: FlutterI18n.translate(context, 'Apple App Store'),
-                    onClick: () => Clipboard.setData(
-                        const ClipboardData(text: 'https://apps.apple.com/bg/app/contrastus/id6466247842')
-                    ).then((value) => showSuccessTextOnSnackBar(
-                        context,
-                        FlutterI18n.translate(context, 'Copied to clipboard')
-                    )),
-                    borderColor: Colors.transparent,
-                    padding: 25,
-                    height: 100,
-                    icon: 'app_store.svg'
-                ),
-              ],
-            )
-          ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  DefaultButton(
+                      shape: BoxShape.circle,
+                      tooltip: FlutterI18n.translate(context, 'Google Play Store'),
+                      onClick: () => Clipboard.setData(
+                          const ClipboardData(text: 'https://play.google.com/store/apps/details?id=eu.bsdsoft.contrast')
+                      ).then((value) => showSuccessTextOnSnackBar(
+                          context,
+                          FlutterI18n.translate(context, 'Copied to clipboard')
+                      )),
+                      borderColor: Colors.transparent,
+                      padding: 25,
+                      height: 100,
+                      icon: 'play_store.svg'
+                  ),
+                  const SizedBox(width: 20),
+                  DefaultButton(
+                      shape: BoxShape.circle,
+                      tooltip: FlutterI18n.translate(context, 'Apple App Store'),
+                      onClick: () => Clipboard.setData(
+                          const ClipboardData(text: 'https://apps.apple.com/bg/app/contrastus/id6466247842')
+                      ).then((value) => showSuccessTextOnSnackBar(
+                          context,
+                          FlutterI18n.translate(context, 'Copied to clipboard')
+                      )),
+                      borderColor: Colors.transparent,
+                      padding: 25,
+                      height: 100,
+                      icon: 'app_store.svg'
+                  ),
+                ],
+              )
+            ],
+          ),
         )
     ),
   );
