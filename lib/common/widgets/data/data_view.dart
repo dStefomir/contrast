@@ -129,7 +129,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     /// If the selected filter is changed clear the data.
     useEffect(() {
       ref.read(serviceProvider.notifier).clearFetchedData(loadPage);
-      ref.read(serviceProvider.notifier).fetchNextPage(loadPage);
       return null;
     }, [selectedFilter]);
 
