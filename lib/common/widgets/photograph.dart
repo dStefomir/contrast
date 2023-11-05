@@ -256,8 +256,8 @@ class ContrastPhotographMeta extends HookConsumerWidget {
             image: wrapper.image,
             borderWidth: 1.5,
             compressed: true,
-            height: constraints.maxHeight,
-            width: constraints.maxWidth,
+            height: double.infinity,
+            width: double.infinity,
           ),
           if (metadata != null) metadata,
           if(isHovering) ImageMetaDataDetails(
