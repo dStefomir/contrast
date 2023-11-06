@@ -141,7 +141,7 @@ class PhotographBoardPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isMobile = useMobileLayout(context);
+    final isMobile = useMobileLayoutOriented(context);
 
     return RestfulAnimatedDataView<ImageBoardWrapper>(
         key: const Key('PhotographDataView'),

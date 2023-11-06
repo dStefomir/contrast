@@ -98,7 +98,7 @@ class VideoBoardPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isMobile = useMobileLayout(context);
+    final isMobile = useMobileLayoutOriented(context);
 
     return RestfulAnimatedDataView<VideoData>(
         key: const Key('VideoDataView'),

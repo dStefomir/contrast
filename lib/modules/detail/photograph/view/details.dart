@@ -328,7 +328,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                 : '',
             color: Colors.white,
             useShadow: true,
-            fontSize: useMobileLayout(context) ? 25 : 62,
+            fontSize: useMobileLayoutOriented(context) ? 25 : 62,
             clip: false,
             italic: true,
             weight: FontWeight.w100,
@@ -674,11 +674,11 @@ class PhotographDetailsView extends HookConsumerWidget {
           _renderShareButton(context, ref, currentPhotographIndex),
           _renderGoBackBtn(context, ref),
           Visibility(
-              visible: currentPhotographIndex != 0 && !useMobileLayout(context),
+              visible: currentPhotographIndex != 0 && !useMobileLayoutOriented(context),
               child: _renderPreviousBtn(ref, context, pageController, currentPhotographIndex)
           ),
           Visibility(
-              visible: currentPhotographIndex != images.length - 1 && !useMobileLayout(context),
+              visible: currentPhotographIndex != images.length - 1 && !useMobileLayoutOriented(context),
               child: _renderNextBtn(ref, context, pageController, currentPhotographIndex)
           ),
           Visibility(

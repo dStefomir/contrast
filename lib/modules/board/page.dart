@@ -56,7 +56,7 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
       widget.analytics.logEvent(
           name: 'board_page',
           parameters: <String, dynamic>{
-            'layout': useMobileLayout(context) ? 'mobile' : 'desktop'
+            'layout': useMobileLayoutOriented(context) ? 'mobile' : 'desktop'
           });
     });
     html.window.onPopState.listen((event) => _onAction(ref, null));
@@ -131,7 +131,7 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
 
   /// Renders the floating action button
   Widget _buildFloatingActionButtons(BuildContext context, WidgetRef ref) => Padding(
-    padding: EdgeInsets.all(useMobileLayout(context) ? 95 : 37.0),
+    padding: EdgeInsets.all(useMobileLayoutOriented(context) ? 95 : 37.0),
     child: SpeedDial(
         animatedIcon: AnimatedIcons.add_event,
         backgroundColor: Colors.black,
@@ -211,7 +211,7 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
     /// can be in the center of the screen because of the left drawer
     /// that the mobile view has. If its a desktop view we do nothing.
       useValueChanged(ref.watch(boardHeaderTabProvider), (_, __) async {
-        if (useMobileLayout(context)) {
+        if (useMobileLayoutOriented(context)) {
           if (ref.watch(boardFooterTabProvider) == 'photos') {
             titlePadding = boardPadding;
           }
@@ -256,7 +256,7 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
                             child: StyledText(
                               text: FlutterI18n.translate(
                                   context,
-                                  (useMobileLayout(context) && ref.read(boardFooterTabProvider) == 'photos')
+                                  (useMobileLayoutOriented(context) && ref.read(boardFooterTabProvider) == 'photos')
                                       ? ref.read(boardHeaderTabProvider)
                                       : 'CONTRASTUS'
                               ),
@@ -264,7 +264,7 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
                               useShadow: false,
                               weight: FontWeight.bold,
                               letterSpacing: 10,
-                              fontSize: useMobileLayout(context) ? 30 : 60,
+                              fontSize: useMobileLayoutOriented(context) ? 30 : 60,
                             ),
                           )
                       )
@@ -272,7 +272,7 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
                   Align(
                       alignment: Alignment.center,
                       child: Padding(
-                        padding: !useMobileLayout(context)
+                        padding: !useMobileLayoutOriented(context)
                             ? EdgeInsets.only(top: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding)
                             : EdgeInsets.only(top: 0.2, left: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding),
                         child: ref.read(boardFooterTabProvider) == 'photos'
@@ -325,7 +325,7 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
                       )
                   ),
                   Align(
-                      alignment: useMobileLayout(context)
+                      alignment: useMobileLayoutOriented(context)
                           ? Alignment.topLeft
                           : Alignment.topCenter,
                       child: SlideTransitionAnimation(
@@ -351,7 +351,7 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
                   Visibility(
                       visible: Session().isLoggedIn(),
                       child: Align(
-                          alignment: useMobileLayout(context)
+                          alignment: useMobileLayoutOriented(context)
                               ? Alignment.bottomCenter
                               : Alignment.bottomRight,
                           child: _buildFloatingActionButtons(context, ref)

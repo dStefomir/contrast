@@ -201,7 +201,7 @@ class BoardPageFilter extends ConsumerWidget {
   );
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => useMobileLayout(context)
+  Widget build(BuildContext context, WidgetRef ref) => useMobileLayoutOriented(context)
       ? _renderMobileLayout(context, ref)
       : _renderDesktopLayout(context, ref);
 }

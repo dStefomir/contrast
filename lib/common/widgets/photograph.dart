@@ -81,14 +81,14 @@ class ContrastPhotograph extends StatelessWidget {
       shadowHeight = constraints.maxHeight / 1.34;
     } else {
       if (image!.isLandscape!) {
-        paddingRight = 1.5;
-        paddingLeft = 1.5;
+        paddingRight = 1.52;
+        paddingLeft = 1.52;
         shadowWidth = constraints.maxWidth - (paddingRight + paddingLeft);
-        shadowHeight = constraints.maxHeight / 1.5 - 2;
+        shadowHeight = constraints.maxHeight / 1.52 - 2;
       } else {
-        paddingTop = 1.5;
-        paddingBottom = 1.5;
-        shadowWidth = constraints.maxWidth / 1.5 - 2;
+        paddingTop = 1.52;
+        paddingBottom = 1.52;
+        shadowWidth = constraints.maxWidth / 1.52 - 2;
         shadowHeight = constraints.maxHeight - (paddingTop + paddingBottom);
       }
     }
@@ -225,9 +225,9 @@ class ContrastPhotographMeta extends HookConsumerWidget {
   }) : super(key: widgetKey);
 
   /// Shows the popup overlay
-  OverlayEntry _createPopupDialog(BuildContext context, Widget? metadata, bool isHovering) =>
+  OverlayEntry _createPopupDialog(BuildContext context, bool isHovering) =>
       OverlayEntry(
-          builder: (context) => AnimatedDialog(
+          builder: (_) => AnimatedDialog(
               width: constraints.maxWidth + 150,
               height: constraints.maxHeight + 150,
               child: _renderPhoto(
@@ -280,8 +280,8 @@ class ContrastPhotographMeta extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    late OverlayEntry? popupDialog;
     final bool isHovering = ref.watch(hoverProvider(widgetKey));
+    OverlayEntry? popupDialog;
 
     return Material(
       color: Colors.transparent,
@@ -291,15 +291,18 @@ class ContrastPhotographMeta extends HookConsumerWidget {
         hoverColor: Colors.black,
         child: GestureDetector(
             onTap: () => onClick(),
-            onLongPress: () {
-              if (!isHovering) {
-                popupDialog = _createPopupDialog(context, null, isHovering);
-                Overlay.of(context).insert(popupDialog!);
+            onLongPressStart: (details) {
+              if (popupDialog == null && useMobileLayoutOriented(context)) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  popupDialog = _createPopupDialog(context, isHovering);
+                  Overlay.of(context).insert(popupDialog!);
+                });
               }
             },
             onLongPressEnd: (details) {
-              if (!isHovering) {
-                popupDialog?.remove();
+              if(popupDialog != null && useMobileLayoutOriented(context)) {
+                popupDialog!.remove();
+                popupDialog = null;
               }
             },
             child: _renderPhoto(context, null, isHovering)

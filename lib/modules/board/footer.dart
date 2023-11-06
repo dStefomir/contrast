@@ -322,7 +322,7 @@ class BoardPageFooter extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final String currentTab = ref.watch(boardFooterTabProvider);
 
-    return useMobileLayout(context)
+    return useMobileLayoutOriented(context)
         ? _renderMobileLayout(context, ref, currentTab)
         : _renderDesktopLayout(context, ref, currentTab);
   }

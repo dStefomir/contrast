@@ -17,8 +17,8 @@ class CookieWarningDialog extends StatelessWidget {
         alignment: FractionalOffset.bottomLeft,
         child: Container(
           margin: EdgeInsets.only(
-              left: useMobileLayout(context) ? 0 : 10.0,
-              bottom: useMobileLayout(context) ? 0 : 10.0
+              left: useMobileLayoutOriented(context) ? 0 : 10.0,
+              bottom: useMobileLayoutOriented(context) ? 0 : 10.0
           ),
           child: Material(
             elevation: 18.0,
