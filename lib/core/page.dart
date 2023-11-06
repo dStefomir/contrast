@@ -56,6 +56,8 @@ class CorePage extends HookConsumerWidget {
               color: Colors.black.withOpacity(0.8),
               child: SafeArea(
                 bottom: Platform.isAndroid,
+                left: false,
+                right: false,
                 child: render(),
               ),
             )

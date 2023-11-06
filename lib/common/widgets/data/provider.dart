@@ -30,8 +30,8 @@ class DataViewNotifier<T> extends StateNotifier<List<T>> {
     _currentPage++;
   }
 
-  /// Clears the fetched data and resets the current page
-  void clearFetchedData(Future<PagedList<T>> Function(int, String) fetchPage) async {
+  /// Clears the fetched data, fetches and resets the current page
+  void clearAndFetchedData(Future<PagedList<T>> Function(int, String) fetchPage) async {
     state.clear();
     _currentPage = 1;
     await fetchNextPage(fetchPage);

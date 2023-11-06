@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -18,13 +19,10 @@ class BannerWidget extends StatefulHookConsumerWidget {
   final List<String> banners;
   /// Banner quotes
   final List<String> quotes;
-  /// Scale factor
-  final double scaleFactor;
 
   const BannerWidget({
     super.key,
     required this.banners,
-    required this.scaleFactor,
     this.quotes = const []
   });
 
@@ -106,7 +104,6 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
       ));
     }
 
-    final longestSide = MediaQuery.of(context).size.longestSide;
     if (widget.banners.length > 1) {
       _nextBannerTimer ??= _startBannerChangingTimer();
     }
@@ -142,19 +139,20 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
                   image: AssetImage("assets/$banner",),
                 ) :
                 IconRenderer(asset: banner, fit: BoxFit.cover),
-                if (widget.quotes.isNotEmpty && text.isNotEmpty) Align(
-                    alignment: Alignment.bottomLeft,
-                    child: StyledText(
-                      text: '"$text"',
-                      color: Colors.white,
-                      useShadow: true,
-                      align: TextAlign.start,
-                      letterSpacing: 5,
-                      fontSize: widget.scaleFactor / 25,
-                      italic: true,
-                      clip: true,
-                    )
-                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: StyledText(
+                    maxLines: 1,
+                    text: text,
+                    color: Colors.white,
+                    useShadow: true,
+                    align: TextAlign.start,
+                    letterSpacing: 5,
+                    fontSize: !kIsWeb ? 20 : 25,
+                    italic: true,
+                    clip: true,
+                  ),
+                )
               ],
             );
           },

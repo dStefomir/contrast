@@ -120,10 +120,9 @@ class VideoBoardPage extends HookConsumerWidget {
             controller.forward();
           });
         },
-        headerWidget: (scaleFactor) => BannerWidget(
+        headerWidget: () => BannerWidget(
           banners: [_getDataViewHeader()],
-          quotes: [(FlutterI18n.translate(context, 'videosComment'))],
-          scaleFactor: scaleFactor,
+          quotes: [(FlutterI18n.translate(context, 'Videos'))],
         ),
         listEmptyChild: const Center(
           child: LoadingIndicator(color: Colors.black),

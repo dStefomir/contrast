@@ -54,26 +54,26 @@ class PhotographBoardPage extends HookConsumerWidget {
     switch(selectedFilter) {
       case 'all':
         return [
-          FlutterI18n.translate(context, 'landscapeComment'),
-          FlutterI18n.translate(context, 'portraitsComment'),
-          FlutterI18n.translate(context, 'streetComment'),
-          FlutterI18n.translate(context, 'otherComment')
+          FlutterI18n.translate(context, 'Landscape'),
+          FlutterI18n.translate(context, 'Portraits'),
+          FlutterI18n.translate(context, 'Street'),
+          FlutterI18n.translate(context, 'Other')
         ];
       case 'landscape':
         return [
-          FlutterI18n.translate(context, 'landscapeComment')
+          FlutterI18n.translate(context, 'Landscape')
         ];
       case 'portraits':
         return [
-          FlutterI18n.translate(context, 'portraitsComment')
+          FlutterI18n.translate(context, 'Portraits')
         ];
       case 'street':
         return [
-          FlutterI18n.translate(context, 'streetComment')
+          FlutterI18n.translate(context, 'Street')
         ];
       case 'other':
         return [
-          FlutterI18n.translate(context, 'otherComment')
+          FlutterI18n.translate(context, 'Other')
         ];
     }
 
@@ -147,7 +147,7 @@ class PhotographBoardPage extends HookConsumerWidget {
         key: const Key('PhotographDataView'),
         serviceProvider: photographServiceFetchProvider,
         loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
-        itemsPerRow: isMobile ? 3 : 2,
+        itemsPerRow: isMobile ? 3 : kIsWeb ? 2 : 1,
         axis: isMobile ? Axis.vertical : Axis.horizontal,
         dimHeight: MediaQuery.of(context).size.height / 2.5,
         itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper) =>
@@ -163,10 +163,9 @@ class PhotographBoardPage extends HookConsumerWidget {
             controller.forward();
           });
         },
-        headerWidget: (scaleFactor) => BannerWidget(
+        headerWidget: () => BannerWidget(
             banners: getRestfulViewHeader(ref),
             quotes: getRestfulViewHeaderText(context, ref),
-            scaleFactor: scaleFactor
         ),
         listEmptyChild: const Center(
           child: LoadingIndicator(color: Colors.black),

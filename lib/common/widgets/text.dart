@@ -56,7 +56,7 @@ class StyledText extends StatelessWidget {
         child: Text(
             text,
             textAlign: align,
-            maxLines: 4,
+            maxLines: maxLines,
             style: TextStyle(
               fontFamily: family,
               color: color ?? Colors.black,

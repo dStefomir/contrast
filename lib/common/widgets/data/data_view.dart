@@ -3,7 +3,6 @@ import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/paged_list.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,7 +32,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   /// Widget that should be displayed if the list view is empty
   final Widget listEmptyChild;
   /// Widget for the header of the data view
-  final Widget Function(double)? headerWidget;
+  final Widget Function()? headerWidget;
 
   const RestfulAnimatedDataView({
     Key? key,
@@ -128,7 +127,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     /// Fetch the first page when the widget is first built.
     /// If the selected filter is changed clear the data.
     useEffect(() {
-      ref.read(serviceProvider.notifier).clearFetchedData(loadPage);
+      ref.read(serviceProvider.notifier).clearAndFetchedData(loadPage);
       return null;
     }, [selectedFilter]);
 
@@ -174,7 +173,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                   slivers: [
                     if (headerWidget != null)
                     SliverAppBar(
-                        expandedHeight: axis == Axis.vertical ? widgetMaxHeight / 3 : kIsWeb ? widgetMaxHeight / 2.5 : widgetMaxWidth / 2,
+                        expandedHeight: axis == Axis.vertical ? widgetMaxHeight / 3 : widgetMaxWidth / 2.5,
                         backgroundColor: Colors.white,
                         clipBehavior: Clip.antiAlias,
                         floating: true,
@@ -187,7 +186,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.black, width: 2)
                           ),
-                          child: headerWidget!(axis == Axis.vertical ? widgetMaxHeight / 3 : kIsWeb ? widgetMaxHeight / 2.5 : widgetMaxWidth / 2),
+                          child: headerWidget!(),
                         )
                     ),
                     SliverGrid.builder(
