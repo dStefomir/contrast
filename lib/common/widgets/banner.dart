@@ -5,7 +5,6 @@ import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_gif/flutter_gif.dart';
 
@@ -33,6 +32,8 @@ class BannerWidget extends StatefulHookConsumerWidget {
 class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderStateMixin {
   /// Page controller for handling the page view
   late PageController _pageController;
+  /// Current banner index
+  late int _currentBannerIndex;
   /// Controller for the giff header of the data view
   FlutterGifController? _videoBoardGiffController;
   /// Timer for switching to the next banner
@@ -40,7 +41,8 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
 
   @override
   void initState() {
-    _pageController = PageController(initialPage: 1);
+    _currentBannerIndex = 1;
+    _pageController = PageController(initialPage: _currentBannerIndex);
     _videoBoardGiffController = widget.banners.firstWhere(
             (element) => element.contains('.gif'), orElse: () => '').isNotEmpty
         ? FlutterGifController(vsync: this)
@@ -58,40 +60,29 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
       _pageController.removeListener(_onBannerChange);
     }
     _pageController.dispose();
+    if (_videoBoardGiffController != null) {
+      _videoBoardGiffController!.dispose();
+    }
     super.dispose();
   }
 
   /// Sets a periodic timer for changing the banners
   Timer _startBannerChangingTimer() => Timer(_nextBanner, () {
     if(_pageController.hasClients) {
-      if (_getCurrentPage() == widget.banners.length - 1) {
+      if (_currentBannerIndex == widget.banners.length - 1) {
         _pageController.nextPage(duration: _bannerAnimationDuration, curve: Curves.fastEaseInToSlowEaseOut);
       } else {
-        _pageController.animateToPage(_getCurrentPage() + 1, duration: _bannerAnimationDuration, curve: Curves.fastEaseInToSlowEaseOut);
+        _pageController.animateToPage(_currentBannerIndex + 1, duration: _bannerAnimationDuration, curve: Curves.fastEaseInToSlowEaseOut);
       }
     }
   });
 
-  /// Returns the current displayed page from the page view
-  int _getCurrentPage() {
-    int currentPage;
-    if(_pageController.hasClients) {
-      currentPage = _pageController.page?.toInt() ?? 1;
-    } else {
-      currentPage = 1;
-    }
-
-    return currentPage;
-  }
-
   /// What happens when banner is changed
   _onBannerChange() {
-    setState(() {
-      if (_nextBannerTimer != null) {
-        _nextBannerTimer!.cancel();
-      }
-      _nextBannerTimer = _startBannerChangingTimer();
-    });
+    if (_nextBannerTimer != null) {
+      _nextBannerTimer!.cancel();
+    }
+    _nextBannerTimer = _startBannerChangingTimer();
   }
 
   @override
@@ -157,6 +148,9 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
             );
           },
           onPageChanged: (index) {
+            setState(() {
+              _currentBannerIndex = index;
+            });
             if (widget.banners.length > 1) {
               if (index == 0) {
                 _pageController.jumpToPage(widget.banners.length);
@@ -173,7 +167,8 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
               child: _BannerDotIndicator(
                   pageController: _pageController,
                   banners: widget.banners.length,
-                  duration: _nextBanner
+                  duration: _nextBanner,
+                  currentBannerIndex: _currentBannerIndex
               )
           ),
         )
@@ -186,52 +181,66 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
 class _BannerDotIndicator extends StatefulHookConsumerWidget {
   /// Parent page controller for moving to other pages
   final PageController pageController;
+  /// Current index of the banner
+  final int currentBannerIndex;
   /// Number of banners
   final int banners;
   /// Duration for switching to the next banner
   final Duration duration;
 
-  const _BannerDotIndicator({required this.pageController, required this.banners, required this.duration});
+  const _BannerDotIndicator({required this.pageController, required this.currentBannerIndex, required this.banners, required this.duration});
 
   @override
   ConsumerState createState() => _BannerDotIndicatorState();
 }
 
-class _BannerDotIndicatorState extends ConsumerState<_BannerDotIndicator> {
+class _BannerDotIndicatorState extends ConsumerState<_BannerDotIndicator> with TickerProviderStateMixin {
 
-  /// Starting width of the indicator
-  late ValueNotifier<double> _selectedIndicatorWidth;
-  /// Timer for rendering the indicator
-  Timer? _animationRender;
+  /// Animation controller
+  late AnimationController _controller;
+  /// Animation
+  late Animation _animation;
 
   @override
   void initState() {
     widget.pageController.addListener(_onDotChanged);
+    _controller = AnimationController(vsync: this, duration: widget.duration);
+    _controller.addListener(_reload);
+    _animation = Tween<double>(begin: 10, end: 25).animate(_controller);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _controller.forward();
+    });
     super.initState();
   }
 
   @override
   void dispose() {
-    _animationRender!.cancel();
     widget.pageController.removeListener(_onDotChanged);
+    _controller.removeListener(_reload);
+    _controller.dispose();
     super.dispose();
   }
 
-  /// Sets a periodic timer for rendering the remaining time for banner change in the indicator
-  Timer startIndicatorRenderingTimer() => Timer.periodic(const Duration(milliseconds: 16), (timer) {
-    if(_selectedIndicatorWidth.value < 25) {
-      _selectedIndicatorWidth.value = _selectedIndicatorWidth.value + (25 / (widget.duration.inSeconds));
-    }
-  });
-
   /// What happens when the banner is changed
-  _onDotChanged() => _selectedIndicatorWidth.value = 0.0;
+  _onDotChanged() {
+    Future.delayed(const Duration(milliseconds: 100), () {
+      _controller.removeListener(_reload);
+      _controller.stop();
+      _controller.duration = widget.duration;
+      _controller.reset();
+      _controller.addListener(_reload);
+      _controller.forward();
+    });
+  }
+
+  /// Reloads the widget state
+  _reload() => setState(() {});
 
   /// Renders the banner indicators
   List<Widget> _renderIndicators() {
     final List<Widget> children = [];
     for(int i = 0; i < widget.banners; i++) {
-      final isBannerCurrent = i == (widget.pageController.page?.round() ?? 0) - 1;
+      final isBannerCurrent = i == widget.currentBannerIndex - 1;
       children.add(
           Padding(
             padding: const EdgeInsets.only(right: 7),
@@ -252,15 +261,14 @@ class _BannerDotIndicatorState extends ConsumerState<_BannerDotIndicator> {
                         //more than 50% of width makes circle
                       ),
                     ),
-                    AnimatedContainer(
-                      duration: widget.duration,
+                    Container(
                       height: 10,
-                      width: _selectedIndicatorWidth.value,
+                      width: _animation.value,
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(0)
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -284,14 +292,9 @@ class _BannerDotIndicatorState extends ConsumerState<_BannerDotIndicator> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    _selectedIndicatorWidth = useState(0.0);
-    _animationRender ??= startIndicatorRenderingTimer();
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: _renderIndicators(),
-    );
-  }
+  Widget build(BuildContext context) => Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: _renderIndicators(),
+  );
 }
