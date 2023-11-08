@@ -135,13 +135,14 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
       alignment: Alignment.center,
       children: [
         Align(
-          alignment: Alignment.bottomCenter,
+          alignment: axis == Axis.vertical ? Alignment.bottomCenter : Alignment.centerRight,
           child: Container(
-            height: dimHeight,
+            height: axis == Axis.vertical ? dimHeight : null,
+            width: axis == Axis.vertical ? null : dimHeight,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+                begin: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
+                end: axis == Axis.vertical ? Alignment.bottomCenter : Alignment.centerRight,
                 colors: [
                   Colors.transparent,
                   Colors.black.withOpacity(0.8),
