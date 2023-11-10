@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.4.8+49
+version: 2.4.8+50
 
 environment:
   sdk: '>=3.0.6 <4.0.0'
@@ -55,7 +55,7 @@ dependencies:
   # context menu library
   focused_menu: ^1.0.5
   # Svg handler library
-  flutter_svg: ^2.0.8
+  flutter_svg: ^2.0.9
   # decode jwt tokens
   jwt_decode: ^0.3.1
   # translation and core library
@@ -71,7 +71,7 @@ dependencies:
   # accessing image size
   image_size_getter: ^2.1.2
   # use native file explorer to pick single or multiple absolute file paths
-  file_picker: ^6.0.0
+  file_picker: ^6.1.1
   # youtube video player
   youtube_player_iframe: ^4.0.4
   # audio player
@@ -89,17 +89,17 @@ dependencies:
   # add to calendar library
   add_2_calendar: ^3.0.1
   # date picker library
-  syncfusion_flutter_datepicker: ^23.1.42
+  syncfusion_flutter_datepicker: ^23.1.44
   # gif running library
   flutter_gif: ^0.0.4
   # Firebase libraries
-  firebase_core: ^2.20.0
-  firebase_analytics: ^10.6.2
-  firebase_messaging: ^14.7.2
+  firebase_core: ^2.22.0
+  firebase_analytics: ^10.6.4
+  firebase_messaging: ^14.7.4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.6
 
 flutter_icons:
   android: true

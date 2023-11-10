@@ -147,7 +147,7 @@ class PhotographBoardPage extends HookConsumerWidget {
         key: const Key('PhotographDataView'),
         serviceProvider: photographServiceFetchProvider,
         loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
-        itemsPerRow: isMobile ? 3 : 2,
+        itemsPerRow: isMobile ? 3 : kIsWeb ? 2 : 1,
         axis: isMobile ? Axis.vertical : Axis.horizontal,
         dimHeight: MediaQuery.of(context).size.height / 2.5,
         itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper) =>

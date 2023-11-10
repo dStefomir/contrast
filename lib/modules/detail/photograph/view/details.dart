@@ -285,7 +285,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   );
 
   /// Renders the photograph signature
-  Widget _renderSignature(double maxHeight, String currentView) => SlideTransitionAnimation(
+  Widget _renderSignature(BuildContext context, String currentView) => SlideTransitionAnimation(
       duration: const Duration(milliseconds: 500),
       getStart: () => currentView == 'map.svg' ? const Offset(0, 1) : const Offset(0, 0),
       getEnd: () => currentView == 'map.svg' ? const Offset(0, 0) : const Offset(0, 1),
@@ -302,7 +302,7 @@ class PhotographDetailsView extends HookConsumerWidget {
           child: IconRenderer(
             asset: 'signature.svg',
             color: Colors.white,
-            height: maxHeight / 10,
+            height: MediaQuery.of(context).size.shortestSide / 6,
           ),
         ),
       )
@@ -685,7 +685,7 @@ class PhotographDetailsView extends HookConsumerWidget {
               visible: photographTitleVisibility,
               child: _renderPhotographTitle(context, ref, currentPhotographIndex)
           ),
-          _renderSignature(maxHeight, currentView),
+          _renderSignature(context, currentView),
           if ((!kIsWeb || Session().isLoggedIn()) && ((shouldShowCommentsDialog != null && shouldShowCommentsDialog) || (shouldShowTripPlanningDialog != null && shouldShowTripPlanningDialog))) const Blurrable(strength: 10),
           if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null) _renderCommentsOverlay(ref, image, shouldShowCommentsDialog),
           if (!kIsWeb && shouldShowTripPlanningDialog != null) _renderTripPlanningOverlay(ref, image, shouldShowTripPlanningDialog)

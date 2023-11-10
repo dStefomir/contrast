@@ -3,6 +3,7 @@ import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/paged_list.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -160,7 +161,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
               focusNode: useFocusNode(),
               onKey: (event) => _handleKeyEvent(event, controller),
               child: Listener(
-                onPointerSignal: axis == Axis.horizontal ? (event) {
+                onPointerSignal: axis == Axis.horizontal && kIsWeb ? (event) {
                   if (event is PointerScrollEvent) {
                     final offset = event.scrollDelta.dy;
                     if (controller.offset + offset >= 0) {
@@ -187,7 +188,29 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.black, width: 2)
                           ),
-                          child: headerWidget!(),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              headerWidget!(),
+                              Align(
+                                alignment: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
+                                child: Container(
+                                  height: axis == Axis.vertical ? dimHeight / 2 : null,
+                                  width: axis == Axis.vertical ? null : dimHeight / 2,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: axis == Axis.vertical ? Alignment.bottomCenter : Alignment.centerRight,
+                                      end: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
+                                      colors: [
+                                        Colors.transparent,
+                                        Colors.black.withOpacity(0.8),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         )
                     ),
                     SliverGrid.builder(

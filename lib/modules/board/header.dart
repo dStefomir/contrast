@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/icon.dart';
@@ -21,99 +23,102 @@ class BoardPageFilter extends ConsumerWidget {
 
   /// Render mobile layout
   Widget _renderMobileLayout(BuildContext context, WidgetRef ref) => LayoutBuilder(builder: (context, constraints) =>
-      ShadowWidget(
-        blurRadius: 1,
-        offset: const Offset(2, 2),
-        child: Container(
-          width: boardPadding,
-          height: constraints.maxHeight - boardPadding,
-          color: Colors.white,
-          child: Stack(
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.black,
-                        Colors.white,
-                      ],
+      Padding(
+        padding: const EdgeInsets.only(top: 0.2),
+        child: ShadowWidget(
+          blurRadius: 1,
+          offset: const Offset(2, 2),
+          child: Container(
+            width: boardPadding,
+            height: constraints.maxHeight - boardPadding - 0.2,
+            color: Colors.white,
+            child: Stack(
+                children: [
+              Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black,
+                          Colors.white,
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                IconRenderer(
-                    asset: 'background_portrait.svg',
-                    fit: BoxFit.cover,
-                    color: Colors.black.withOpacity(0.1)
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      RotatedBox(
-                        quarterTurns: 3,
-                        child: StyledText(
-                            text: FlutterI18n.translate(context, 'Categories'),
-                            padding: 0,
-                            fontSize: 15,
-                            weight: FontWeight.bold,
-                            letterSpacing: 15,
-                            useShadow: true,
-                            color: Colors.white.withOpacity(0.6)
-                        ),
-                      ),
-                      const Spacer(),
-                      MenuButton(
-                          widgetKey: const Key('all'),
-                          iconPath: 'all.svg',
-                          tooltip: FlutterI18n.translate(context, 'All'),
-                          disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                          selected: ref.watch(boardHeaderTabProvider) == 'all',
-                          size: boardPadding,
-                          onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('all'))
-                      ).translateOnPhotoHover,
-                      MenuButton(
-                          widgetKey: const Key('landscape'),
-                          iconPath: 'landscape.svg',
-                          tooltip: FlutterI18n.translate(context, 'Landscape'),
-                          disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                          selected: ref.watch(boardHeaderTabProvider) == 'landscape',
-                          size: boardPadding,
-                          onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('landscape'))
-                      ).translateOnPhotoHover,
-                      MenuButton(
-                          widgetKey: const Key('portraits'),
-                          iconPath: 'portraits.svg',
-                          tooltip: FlutterI18n.translate(context, 'Portraits'),
-                          disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                          selected: ref.watch(boardHeaderTabProvider) == 'portraits',
-                          size: boardPadding,
-                          onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('portraits'))
-                      ).translateOnPhotoHover,
-                      MenuButton(
-                          widgetKey: const Key('street'),
-                          iconPath: 'street.svg',
-                          tooltip: FlutterI18n.translate(context, 'Street'),
-                          disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                          selected: ref.watch(boardHeaderTabProvider) == 'street',
-                          size: boardPadding,
-                          onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('street'))
-                      ).translateOnPhotoHover,
-                      MenuButton(
-                          widgetKey: const Key('other'),
-                          iconPath: 'dog.svg',
-                          tooltip: FlutterI18n.translate(context, 'Other'),
-                          disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                          selected: ref.watch(boardHeaderTabProvider) == 'other',
-                          size: boardPadding,
-                          onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('other'))
-                      ).translateOnPhotoHover,
-                    ],
+                  IconRenderer(
+                      asset: 'background_portrait.svg',
+                      fit: BoxFit.cover,
+                      color: Colors.black.withOpacity(0.1)
                   ),
-                )
-              ]
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        RotatedBox(
+                          quarterTurns: 3,
+                          child: StyledText(
+                              text: FlutterI18n.translate(context, 'Categories'),
+                              padding: 0,
+                              fontSize: 15,
+                              weight: FontWeight.bold,
+                              letterSpacing: 15,
+                              useShadow: true,
+                              color: Colors.white.withOpacity(0.6)
+                          ),
+                        ),
+                        const Spacer(),
+                        MenuButton(
+                            widgetKey: const Key('all'),
+                            iconPath: 'all.svg',
+                            tooltip: FlutterI18n.translate(context, 'All'),
+                            disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                            selected: ref.watch(boardHeaderTabProvider) == 'all',
+                            size: boardPadding,
+                            onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('all'))
+                        ).translateOnPhotoHover,
+                        MenuButton(
+                            widgetKey: const Key('landscape'),
+                            iconPath: 'landscape.svg',
+                            tooltip: FlutterI18n.translate(context, 'Landscape'),
+                            disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                            selected: ref.watch(boardHeaderTabProvider) == 'landscape',
+                            size: boardPadding,
+                            onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('landscape'))
+                        ).translateOnPhotoHover,
+                        MenuButton(
+                            widgetKey: const Key('portraits'),
+                            iconPath: 'portraits.svg',
+                            tooltip: FlutterI18n.translate(context, 'Portraits'),
+                            disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                            selected: ref.watch(boardHeaderTabProvider) == 'portraits',
+                            size: boardPadding,
+                            onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('portraits'))
+                        ).translateOnPhotoHover,
+                        MenuButton(
+                            widgetKey: const Key('street'),
+                            iconPath: 'street.svg',
+                            tooltip: FlutterI18n.translate(context, 'Street'),
+                            disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                            selected: ref.watch(boardHeaderTabProvider) == 'street',
+                            size: boardPadding,
+                            onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('street'))
+                        ).translateOnPhotoHover,
+                        MenuButton(
+                            widgetKey: const Key('other'),
+                            iconPath: 'dog.svg',
+                            tooltip: FlutterI18n.translate(context, 'Other'),
+                            disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                            selected: ref.watch(boardHeaderTabProvider) == 'other',
+                            size: boardPadding,
+                            onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('other'))
+                        ).translateOnPhotoHover,
+                      ],
+                    ),
+                  )
+                ]
+            ),
           ),
         ),
       )

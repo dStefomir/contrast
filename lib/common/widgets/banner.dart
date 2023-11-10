@@ -104,6 +104,7 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
       children: [
         PageView.builder(
           controller: _pageController,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: widget.banners.length > 1 ? widget.banners.length + 2 : widget.banners.length,
           itemBuilder: (context, index) {
             String banner;
@@ -131,7 +132,7 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
                 ) :
                 IconRenderer(asset: banner, fit: BoxFit.cover),
                 Align(
-                  alignment: Alignment.bottomLeft,
+                  alignment: Alignment.center,
                   child: StyledText(
                     maxLines: 1,
                     text: text,
@@ -161,9 +162,9 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
           },
         ),
         if (widget.banners.length > 1) Align(
-          alignment: Alignment.topCenter,
+          alignment: Alignment.bottomCenter,
           child: Padding(
-              padding: const EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(bottom: 20),
               child: _BannerDotIndicator(
                   pageController: _pageController,
                   banners: widget.banners.length,
@@ -223,14 +224,16 @@ class _BannerDotIndicatorState extends ConsumerState<_BannerDotIndicator> with T
 
   /// What happens when the banner is changed
   _onDotChanged() {
-    Future.delayed(const Duration(milliseconds: 100), () {
-      _controller.removeListener(_reload);
-      _controller.stop();
-      _controller.duration = widget.duration;
-      _controller.reset();
-      _controller.addListener(_reload);
-      _controller.forward();
-    });
+    if (mounted) {
+      Future.delayed(const Duration(milliseconds: 100), () {
+        _controller.removeListener(_reload);
+        _controller.stop();
+        _controller.duration = widget.duration;
+        _controller.reset();
+        _controller.addListener(_reload);
+        _controller.forward();
+      });
+    }
   }
 
   /// Reloads the widget state
