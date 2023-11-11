@@ -18,6 +18,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:parallax_animation/parallax_animation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Renders the video board page
@@ -37,7 +38,7 @@ class VideoBoardPage extends HookConsumerWidget {
   }
 
   /// Renders a video
-  Widget _renderVideo(BuildContext context, WidgetRef ref, VideoData video, BoxConstraints constraints) {
+  Widget _renderVideo(BuildContext context, WidgetRef ref, VideoData video, BoxConstraints constraints, bool isMobile) {
     if (Session().isLoggedIn()) {
       return FocusedMenuHolder(
           menuWidth: 300,
@@ -86,6 +87,15 @@ class VideoBoardPage extends HookConsumerWidget {
         widgetKey: Key('${video.id}'),
         videoPath: video.path!,
         constraints: constraints,
+        parallax: (child) => ParallaxWidget(
+            overflowWidthFactor: 1.2,
+            overflowHeightFactor: 1.1,
+            fixedVertical: !isMobile,
+            fixedHorizontal: isMobile,
+            alignment: isMobile ? Alignment.topCenter : Alignment.centerLeft,
+            background: child,
+            child: const SizedBox(width: double.infinity, height: double.infinity,)
+        ),
         onClick: () => onUserAction(ref, () => Modular.to.pushNamed('videos/details?path=${video.path}&id=${video.id}')),
         onRedirect: kIsWeb ? () => onUserAction(ref, () async {
           final Uri url = Uri.parse('https://www.youtube.com/watch?v=${video.path}');
@@ -109,7 +119,7 @@ class VideoBoardPage extends HookConsumerWidget {
         dimHeight: MediaQuery.of(context).size.height / 2.5,
         itemBuilder: (BuildContext context, int index, int dataLength, VideoData wrapper) =>
             LayoutBuilder(key: const Key('VideoDataViewBuilder'), builder: (context, constraints) =>
-                _renderVideo(context, ref, wrapper, constraints)
+                _renderVideo(context, ref, wrapper, constraints, isMobile)
             ),
         onLeftKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('photos'),
         whenShouldAnimateGlass: (controller) {

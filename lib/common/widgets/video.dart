@@ -17,6 +17,8 @@ class ContrastVideo extends HookConsumerWidget {
   final String videoPath;
   /// Constraints of the parent page
   final BoxConstraints constraints;
+  /// Creates a parallax widget for a child widget
+  final Widget Function(Widget)? parallax;
   /// What happens when the widgets is clicked
   final Function onClick;
   /// What happens when the user clicks the redirect button
@@ -29,6 +31,7 @@ class ContrastVideo extends HookConsumerWidget {
     required this.videoPath,
     required this.constraints,
     required this.onClick,
+    this.parallax,
     this.onRedirect,
     this.disabled = false,
   }) : super(key: widgetKey);
@@ -57,7 +60,20 @@ class ContrastVideo extends HookConsumerWidget {
   Widget _renderVideoWidget(BuildContext context, WidgetRef ref, PhotographBoardService serviceProvider, bool isHovering) => Stack(
     alignment: Alignment.center,
     children: [
-      ContrastPhotograph(
+      parallax != null ? parallax!(
+          ContrastPhotograph(
+            widgetKey: Key('${widgetKey.toString()}_photograph'),
+            fetch: (path) => serviceProvider.getCompressedPhotograph(context, videoPath, true),
+            constraints: constraints,
+            image: ImageData(path: videoPath),
+            quality: FilterQuality.high,
+            borderColor: Colors.transparent,
+            fit: BoxFit.contain,
+            compressed: false,
+            isThumbnail: true,
+            height: double.infinity,
+          )
+      ) : ContrastPhotograph(
         widgetKey: Key('${widgetKey.toString()}_photograph'),
         fetch: (path) => serviceProvider.getCompressedPhotograph(context, videoPath, true),
         constraints: constraints,
@@ -76,7 +92,7 @@ class ContrastVideo extends HookConsumerWidget {
           child: Container(
             width: constraints.maxWidth,
             height: constraints.maxHeight / 10,
-            color: isHovering ? Colors.black : Colors.black54,
+            color: isHovering ? Colors.black : const Color.fromRGBO(67, 66, 66, 1),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -92,7 +108,7 @@ class ContrastVideo extends HookConsumerWidget {
           child: Container(
             width: constraints.maxWidth,
             height: constraints.maxHeight / 10,
-            color: isHovering ? Colors.black : Colors.black54,
+            color: isHovering ? Colors.black : const Color.fromRGBO(67, 66, 66, 1),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,

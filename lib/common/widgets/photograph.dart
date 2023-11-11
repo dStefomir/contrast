@@ -78,7 +78,7 @@ class ContrastPhotograph extends StatelessWidget {
 
     if (isThumbnail) {
       shadowWidth = constraints.maxWidth;
-      shadowHeight = constraints.maxHeight / 1.34;
+      shadowHeight = constraints.maxHeight / 1.54;
     } else {
       if (image!.isLandscape!) {
         paddingRight = 1.52;
