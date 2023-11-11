@@ -18,6 +18,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:parallax_animation/parallax_animation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Renders the photographs board page
@@ -81,7 +82,7 @@ class PhotographBoardPage extends HookConsumerWidget {
   }
 
   /// Renders a photograph
-  Widget _renderPhoto(WidgetRef ref, BuildContext context, ImageBoardWrapper wrapper, BoxConstraints constraints) {
+  Widget _renderPhoto(WidgetRef ref, BuildContext context, ImageBoardWrapper wrapper, BoxConstraints constraints, bool isMobile) {
     final serviceProvider = ref.read(photographyBoardServiceProvider);
     final currentCategory = ref.read(boardHeaderTabProvider);
 
@@ -126,9 +127,18 @@ class PhotographBoardPage extends HookConsumerWidget {
     return ContrastPhotographMeta(
         widgetKey: Key('${wrapper.image.id}'),
         fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
+        parallax: (child) => ParallaxWidget(
+            overflowWidthFactor: 1.2,
+            overflowHeightFactor: 1.2,
+            fixedVertical: !isMobile,
+            fixedHorizontal: isMobile,
+            alignment: isMobile ? Alignment.topCenter : Alignment.centerLeft,
+            background: child,
+            child: const SizedBox(width: double.infinity, height: double.infinity,)
+        ),
         wrapper: wrapper,
         constraints: constraints,
-        borderColor: Colors.black,
+        borderColor: Colors.transparent,
         onClick: () => onUserAction(ref, () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$currentCategory')),
         onRedirect: kIsWeb ? () => onUserAction(ref, () async {
           final Uri url = Uri.parse('https://www.dstefomir.eu/#/photos/details?id=${wrapper.image.id}&category=$currentCategory');
@@ -153,7 +163,7 @@ class PhotographBoardPage extends HookConsumerWidget {
         itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper) =>
             LayoutBuilder(
                 key: const Key('PhotographDataViewBuilder'),
-                builder: (context, constraints) => _renderPhoto(ref, context, wrapper, constraints)
+                builder: (context, constraints) => _renderPhoto(ref, context, wrapper, constraints, isMobile)
             ),
         onRightKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('videos'),
         whenShouldAnimateGlass: (controller) {

@@ -9,7 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_gif/flutter_gif.dart';
 
 /// The time for switching to the next banner
-const _nextBanner = Duration(milliseconds: 6000);
+const _nextBanner = Duration(milliseconds: 3000);
 /// The time for general animation of the banner switching
 const _bannerAnimationDuration = Duration(milliseconds: 600);
 /// This widget renders a banner photo or video
@@ -41,8 +41,8 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
 
   @override
   void initState() {
-    _currentBannerIndex = 1;
-    _pageController = PageController(initialPage: _currentBannerIndex);
+    _currentBannerIndex = 0;
+    _pageController = PageController(initialPage: _currentBannerIndex, keepPage: false, viewportFraction: 1.0);
     _videoBoardGiffController = widget.banners.firstWhere(
             (element) => element.contains('.gif'), orElse: () => '').isNotEmpty
         ? FlutterGifController(vsync: this)
@@ -68,12 +68,8 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
 
   /// Sets a periodic timer for changing the banners
   Timer _startBannerChangingTimer() => Timer(_nextBanner, () {
-    if(_pageController.hasClients) {
-      if (_currentBannerIndex == widget.banners.length - 1) {
-        _pageController.nextPage(duration: _bannerAnimationDuration, curve: Curves.fastEaseInToSlowEaseOut);
-      } else {
-        _pageController.animateToPage(_currentBannerIndex + 1, duration: _bannerAnimationDuration, curve: Curves.fastEaseInToSlowEaseOut);
-      }
+    if (mounted) {
+      _pageController.nextPage(duration: _bannerAnimationDuration, curve: Curves.fastEaseInToSlowEaseOut);
     }
   });
 
@@ -82,7 +78,7 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
     if (_nextBannerTimer != null) {
       _nextBannerTimer!.cancel();
     }
-    _nextBannerTimer = _startBannerChangingTimer();
+    setState(() => _nextBannerTimer = _startBannerChangingTimer());
   }
 
   @override
@@ -94,10 +90,11 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
           period: const Duration(seconds: 10)
       ));
     }
-
-    if (widget.banners.length > 1) {
-      _nextBannerTimer ??= _startBannerChangingTimer();
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.banners.length > 1) {
+        _nextBannerTimer ??= _startBannerChangingTimer();
+      }
+    });
 
     return Stack(
       alignment: Alignment.center,
@@ -105,20 +102,15 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
         PageView.builder(
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: widget.banners.length > 1 ? widget.banners.length + 2 : widget.banners.length,
+          scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-            String banner;
-            String text;
-            if (index == 0) {
-              banner = widget.banners.last;
-              text = widget.quotes.last;
-            } else if (index == widget.banners.length + 1) {
-              banner = widget.banners.first;
-              text = widget.quotes.first;
-            } else {
-              banner = widget.banners[index - 1];
-              text = widget.quotes[index - 1];
+            if (widget.banners.isEmpty) {
+              return const SizedBox.shrink();
             }
+
+            final calculatedIndex = (index % widget.banners.length).round();
+            final String banner = widget.banners[calculatedIndex];
+            final String text = widget.quotes[calculatedIndex];
 
             return Stack(
               alignment: Alignment.center,
@@ -148,18 +140,7 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
               ],
             );
           },
-          onPageChanged: (index) {
-            setState(() {
-              _currentBannerIndex = index;
-            });
-            if (widget.banners.length > 1) {
-              if (index == 0) {
-                _pageController.jumpToPage(widget.banners.length);
-              } else if (index == widget.banners.length + 1) {
-                _pageController.jumpToPage(1);
-              }
-            }
-          },
+          onPageChanged: (index) => _currentBannerIndex = (index % widget.banners.length).round(),
         ),
         if (widget.banners.length > 1) Align(
           alignment: Alignment.bottomCenter,
@@ -223,18 +204,16 @@ class _BannerDotIndicatorState extends ConsumerState<_BannerDotIndicator> with T
   }
 
   /// What happens when the banner is changed
-  _onDotChanged() {
+  _onDotChanged() => Future.delayed(const Duration(milliseconds: 100), () {
     if (mounted) {
-      Future.delayed(const Duration(milliseconds: 100), () {
-        _controller.removeListener(_reload);
-        _controller.stop();
-        _controller.duration = widget.duration;
-        _controller.reset();
-        _controller.addListener(_reload);
-        _controller.forward();
-      });
+      _controller.removeListener(_reload);
+      _controller.stop();
+      _controller.duration = widget.duration;
+      _controller.reset();
+      _controller.addListener(_reload);
+      _controller.forward();
     }
-  }
+  });
 
   /// Reloads the widget state
   _reload() => setState(() {});
@@ -243,7 +222,7 @@ class _BannerDotIndicatorState extends ConsumerState<_BannerDotIndicator> with T
   List<Widget> _renderIndicators() {
     final List<Widget> children = [];
     for(int i = 0; i < widget.banners; i++) {
-      final isBannerCurrent = i == widget.currentBannerIndex - 1;
+      final isBannerCurrent = i == (widget.currentBannerIndex % widget.banners).round();
       children.add(
           Padding(
             padding: const EdgeInsets.only(right: 7),

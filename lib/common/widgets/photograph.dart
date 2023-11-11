@@ -207,6 +207,8 @@ class ContrastPhotographMeta extends HookConsumerWidget {
   final ImageBoardWrapper wrapper;
   /// Constraints of the parent page
   final BoxConstraints constraints;
+  /// Creates a parallax widget for a child widget
+  final Widget Function(Widget)? parallax;
   /// What happens when clicked on the widget
   final Function onClick;
   /// What happens when the user clicks the redirect button
@@ -219,6 +221,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
     required this.wrapper,
     required this.constraints,
     required this.onClick,
+    this.parallax,
     this.fetch,
     this.onRedirect,
     this.borderColor = Colors.black
@@ -237,17 +240,29 @@ class ContrastPhotographMeta extends HookConsumerWidget {
                     metadata: wrapper.metadata,
                     scaleFactor: 10,
                   ),
-                  isHovering
+                  isHovering,
+                  noParallax: true
               )
           )
       );
 
   /// Renders a photograph
-  Widget _renderPhoto(BuildContext context, Widget? metadata, bool isHovering) =>
+  Widget _renderPhoto(BuildContext context, Widget? metadata, bool isHovering, {bool noParallax = false}) =>
       Stack(
         alignment: Alignment.center,
         children: [
-          ContrastPhotograph(
+          (noParallax == false && parallax != null) ? parallax!(ContrastPhotograph(
+            widgetKey: Key("${widgetKey.toString()}_photograph"),
+            fetch: fetch,
+            constraints: constraints,
+            quality: FilterQuality.low,
+            borderColor: Colors.transparent,
+            image: wrapper.image,
+            borderWidth: 1.5,
+            compressed: true,
+            height: double.infinity,
+            width: double.infinity,
+          )) : ContrastPhotograph(
             widgetKey: Key("${widgetKey.toString()}_photograph"),
             fetch: fetch,
             constraints: constraints,
@@ -313,7 +328,12 @@ class ContrastPhotographMeta extends HookConsumerWidget {
                 ref.read(hoverProvider(widgetKey).notifier).onHover(false);
               }
             },
-            child: _renderPhoto(context, null, isHovering)
+            child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 1.5)
+                ),
+                child: _renderPhoto(context, null, isHovering, noParallax: false)
+            )
         ),
       ),
     );

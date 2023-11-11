@@ -645,6 +645,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.2"
+  parallax_animation:
+    dependency: "direct main"
+    description:
+      name: parallax_animation
+      sha256: "682bd9476a41cc2d5a2348dfe2d47aca34c7900fa80d5e576752f7b1ba34ff2b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   path:
     dependency: transitive
     description:
