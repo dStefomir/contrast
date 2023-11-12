@@ -61,17 +61,20 @@ class ContrastVideo extends HookConsumerWidget {
     alignment: Alignment.center,
     children: [
       parallax != null ? parallax!(
-          ContrastPhotograph(
-            widgetKey: Key('${widgetKey.toString()}_photograph'),
-            fetch: (path) => serviceProvider.getCompressedPhotograph(context, videoPath, true),
-            constraints: constraints,
-            image: ImageData(path: videoPath),
-            quality: FilterQuality.high,
-            borderColor: Colors.transparent,
-            fit: BoxFit.contain,
-            compressed: false,
-            isThumbnail: true,
-            height: double.infinity,
+          Padding(
+            padding: const EdgeInsets.only(top: 20, bottom: 25),
+            child: ContrastPhotograph(
+              widgetKey: Key('${widgetKey.toString()}_photograph'),
+              fetch: (path) => serviceProvider.getCompressedPhotograph(context, videoPath, true),
+              constraints: constraints,
+              image: ImageData(path: videoPath),
+              quality: FilterQuality.high,
+              borderColor: Colors.transparent,
+              fit: BoxFit.contain,
+              compressed: false,
+              isThumbnail: true,
+              height: double.infinity,
+            ),
           )
       ) : ContrastPhotograph(
         widgetKey: Key('${widgetKey.toString()}_photograph'),
@@ -91,7 +94,7 @@ class ContrastVideo extends HookConsumerWidget {
           padding: EdgeInsets.only(top: constraints.maxHeight / 8),
           child: Container(
             width: constraints.maxWidth,
-            height: constraints.maxHeight / 10,
+            height: constraints.maxHeight / 9.5,
             color: isHovering ? Colors.black : const Color.fromRGBO(67, 66, 66, 1),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -107,7 +110,7 @@ class ContrastVideo extends HookConsumerWidget {
           padding: EdgeInsets.only(bottom: constraints.maxHeight / 8),
           child: Container(
             width: constraints.maxWidth,
-            height: constraints.maxHeight / 10,
+            height: constraints.maxHeight / 9.5,
             color: isHovering ? Colors.black : const Color.fromRGBO(67, 66, 66, 1),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
