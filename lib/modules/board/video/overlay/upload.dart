@@ -1,4 +1,5 @@
 import 'package:contrast/common/widgets/button.dart';
+import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/input.dart';
 import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/shadow.dart';
@@ -146,11 +147,21 @@ class UploadVideoDialog extends HookConsumerWidget {
               child: Column(
                 children: [
                   _renderDialogHeader(context, ref),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: _renderDialogBody(context, ref),
-                  ),
-                  _renderDialogActions(context, ref)
+                  Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      IconRenderer(asset: 'background_landscape.svg', height: dialogHeight / 1.4, color: Colors.black.withOpacity(0.05), fit: BoxFit.cover),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: _renderDialogBody(context, ref),
+                          ),
+                          _renderDialogActions(context, ref)
+                        ],
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),

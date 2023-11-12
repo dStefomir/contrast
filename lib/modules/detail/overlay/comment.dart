@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:contrast/common/widgets/button.dart';
+import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/input.dart';
 import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/shadow.dart';
@@ -204,15 +205,24 @@ class CommentDialog<T> extends HookConsumerWidget {
                     return null;
                   },
                 ),
-                apiData.isEmpty ? Expanded(
-                  child: Center(
-                    child: StyledText(text: FlutterI18n.translate(context, 'Nothing here so far')),
+                Expanded(
+                  child: Stack(
+                    fit: StackFit.expand,
+                    alignment: Alignment.center,
+                    children: [
+                      IconRenderer(asset: 'background_landscape.svg', height: dialogHeight / 1.8, color: Colors.black.withOpacity(0.05), fit: BoxFit.cover),
+                      apiData.isEmpty ? Expanded(
+                        child: Center(
+                          child: StyledText(text: FlutterI18n.translate(context, 'Nothing here so far')),
+                        ),
+                      ) : Expanded(
+                        child: ListView.builder(
+                            key: const Key('CommentDialogList'),
+                            itemCount: apiData.length,
+                            itemBuilder: (context, index) => itemBuilder(context, apiData[index], deviceId, index)),
+                      ),
+                    ],
                   ),
-                ) : Expanded(
-                  child: ListView.builder(
-                      key: const Key('CommentDialogList'),
-                      itemCount: apiData.length,
-                      itemBuilder: (context, index) => itemBuilder(context, apiData[index], deviceId, index)),
                 ),
                 SimpleInput(
                   widgetKey: const Key('CommentInput'),

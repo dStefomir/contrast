@@ -132,12 +132,12 @@ class BoardPageFilter extends ConsumerWidget {
       color: Colors.white,
       height: boardPadding,
       child: Stack(
+        alignment: Alignment.center,
         children: [
           IconRenderer(
               asset: 'background_landscape.svg',
-              width: double.infinity,
-              fit: BoxFit.fitWidth,
-              color: Colors.black.withOpacity(0.07)
+              fit: BoxFit.cover,
+              color: Colors.black.withOpacity(0.05)
           ),
           Container(
             decoration: BoxDecoration(
