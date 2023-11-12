@@ -164,15 +164,16 @@ class ContrastPhotograph extends StatelessWidget {
             ? BoxFit.fitWidth
             : BoxFit.fitHeight
             : BoxFit.contain),
-        cache: true,
+        cache: !kIsWeb,
         loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state, platform),
-        enableMemoryCache: true,
-        cacheRawData: true,
+        enableMemoryCache: !kIsWeb,
+        cacheRawData: !kIsWeb,
         cacheKey: "${widgetKey.toString()}_cache_key_$platform",
         clearMemoryCacheIfFailed: true,
         clearMemoryCacheWhenDispose: false,
+        imageCacheName: "${widgetKey.toString()}_cache_name_$platform",
         filterQuality: quality,
-        isAntiAlias: true,
+        isAntiAlias: !kIsWeb,
       );
     } else {
       photo = ExtendedImage.memory(
@@ -184,12 +185,12 @@ class ContrastPhotograph extends StatelessWidget {
         loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state, platform),
         enableLoadState: !compressed,
         fit: fit ?? BoxFit.contain,
-        enableMemoryCache: true,
-        cacheRawData: true,
+        enableMemoryCache: !kIsWeb,
+        cacheRawData: !kIsWeb,
         clearMemoryCacheIfFailed: true,
         clearMemoryCacheWhenDispose: false,
         filterQuality: quality,
-        isAntiAlias: true,
+        isAntiAlias: !kIsWeb,
       );
     }
 
@@ -307,19 +308,19 @@ class ContrastPhotographMeta extends HookConsumerWidget {
         child: GestureDetector(
             onTap: () => onClick(),
             onLongPressStart: (details) {
-              if (useMobileLayoutOriented(context) && useMobileLayout(context)) {
+              if (!kIsWeb && (useMobileLayoutOriented(context) && useMobileLayout(context))) {
                 if (popupDialog == null) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     popupDialog = _createPopupDialog(context, isHovering);
                     Overlay.of(context).insert(popupDialog!);
                   });
                 }
-              } else {
+              } else if (!kIsWeb && !(useMobileLayoutOriented(context) && useMobileLayout(context))) {
                 ref.read(hoverProvider(widgetKey).notifier).onHover(true);
               }
             },
             onLongPressEnd: (details) {
-              if (useMobileLayoutOriented(context) && useMobileLayout(context)) {
+              if (!kIsWeb && (useMobileLayoutOriented(context) && useMobileLayout(context))) {
                 if (popupDialog != null) {
                   popupDialog!.remove();
                   popupDialog = null;

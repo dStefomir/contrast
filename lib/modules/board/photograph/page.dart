@@ -128,6 +128,7 @@ class PhotographBoardPage extends HookConsumerWidget {
         widgetKey: Key('${wrapper.image.id}'),
         fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
         parallax: (child) => ParallaxWidget(
+            key: Key('${wrapper.image.id}_photo_parallax_widget'),
             overflowWidthFactor: 1.2,
             overflowHeightFactor: 1.2,
             fixedVertical: !isMobile,
@@ -157,7 +158,7 @@ class PhotographBoardPage extends HookConsumerWidget {
         key: const Key('PhotographDataView'),
         serviceProvider: photographServiceFetchProvider,
         loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
-        itemsPerRow: isMobile ? 3 : kIsWeb ? 2 : 1,
+        itemsPerRow: isMobile ? 3 : kIsWeb ? 3 : 1,
         axis: isMobile ? Axis.vertical : Axis.horizontal,
         dimHeight: MediaQuery.of(context).size.height / 2.5,
         itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper) =>
@@ -173,10 +174,10 @@ class PhotographBoardPage extends HookConsumerWidget {
             controller.forward();
           });
         },
-        headerWidget: () => BannerWidget(
+        headerWidget: !kIsWeb ? () => BannerWidget(
             banners: getRestfulViewHeader(ref),
             quotes: getRestfulViewHeaderText(context, ref),
-        ),
+        ) : null,
         listEmptyChild: const Center(
           child: LoadingIndicator(color: Colors.black),
         )

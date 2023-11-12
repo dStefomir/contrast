@@ -88,6 +88,7 @@ class VideoBoardPage extends HookConsumerWidget {
         videoPath: video.path!,
         constraints: constraints,
         parallax: (child) => ParallaxWidget(
+            key: Key('${video.id}_video_parallax_widget'),
             overflowWidthFactor: 1.2,
             overflowHeightFactor: 1.1,
             fixedVertical: !isMobile,
@@ -130,10 +131,10 @@ class VideoBoardPage extends HookConsumerWidget {
             controller.forward();
           });
         },
-        headerWidget: () => BannerWidget(
+        headerWidget: !kIsWeb ? () => BannerWidget(
           banners: [_getDataViewHeader()],
           quotes: [(FlutterI18n.translate(context, 'Videos'))],
-        ),
+        ) : null,
         listEmptyChild: const Center(
           child: LoadingIndicator(color: Colors.black),
         )

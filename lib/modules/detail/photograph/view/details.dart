@@ -674,11 +674,11 @@ class PhotographDetailsView extends HookConsumerWidget {
           _renderShareButton(context, ref, currentPhotographIndex),
           _renderGoBackBtn(context, ref),
           Visibility(
-              visible: currentPhotographIndex != 0 && (!useMobileLayoutOriented(context) && !useMobileLayout(context)),
+              visible: currentPhotographIndex != 0 && ((!useMobileLayoutOriented(context) && !useMobileLayout(context) || kIsWeb)),
               child: _renderPreviousBtn(ref, context, pageController, currentPhotographIndex)
           ),
           Visibility(
-              visible: currentPhotographIndex != images.length - 1 && (!useMobileLayoutOriented(context) && !useMobileLayout(context)),
+              visible: currentPhotographIndex != images.length - 1 && ((!useMobileLayoutOriented(context) && !useMobileLayout(context) || kIsWeb)),
               child: _renderNextBtn(ref, context, pageController, currentPhotographIndex)
           ),
           Visibility(
