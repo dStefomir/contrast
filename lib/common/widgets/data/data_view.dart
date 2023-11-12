@@ -133,6 +133,60 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
       return null;
     }, [selectedFilter]);
 
+    final customScrollView = CustomScrollView(
+      controller: controller,
+      scrollDirection: axis,
+      slivers: [
+        if (headerWidget != null)
+          SliverAppBar(
+              expandedHeight: axis == Axis.vertical ? widgetMaxHeight / 3 : widgetMaxWidth / 2.5,
+              backgroundColor: Colors.white,
+              clipBehavior: Clip.antiAlias,
+              floating: true,
+              pinned: false,
+              stretch: true,
+              automaticallyImplyLeading: true,
+              elevation: 10,
+              forceElevated: true,
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 2)
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    headerWidget!(),
+                    Align(
+                      alignment: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
+                      child: Container(
+                        height: axis == Axis.vertical ? dimHeight / 2 : null,
+                        width: axis == Axis.vertical ? null : dimHeight / 2,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: axis == Axis.vertical ? Alignment.bottomCenter : Alignment.centerRight,
+                            end: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.8),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+          ),
+        SliverGrid.builder(
+          addAutomaticKeepAlives: true,
+          addRepaintBoundaries: true,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
+          itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
+          itemCount: apiData.length,
+        ),
+      ],
+    );
+
     return apiData.isNotEmpty ? Stack(
       alignment: Alignment.center,
       children: [
@@ -170,61 +224,9 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                     }
                   }
                 } : null,
-                child: ParallaxArea(
-                  child: CustomScrollView(
-                    controller: controller,
-                    scrollDirection: axis,
-                    slivers: [
-                      if (headerWidget != null)
-                      SliverAppBar(
-                          expandedHeight: axis == Axis.vertical ? widgetMaxHeight / 3 : widgetMaxWidth / 2.5,
-                          backgroundColor: Colors.white,
-                          clipBehavior: Clip.antiAlias,
-                          floating: true,
-                          pinned: false,
-                          stretch: true,
-                          automaticallyImplyLeading: true,
-                          elevation: 10,
-                          forceElevated: true,
-                          flexibleSpace: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black, width: 2)
-                            ),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                headerWidget!(),
-                                Align(
-                                  alignment: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
-                                  child: Container(
-                                    height: axis == Axis.vertical ? dimHeight / 2 : null,
-                                    width: axis == Axis.vertical ? null : dimHeight / 2,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: axis == Axis.vertical ? Alignment.bottomCenter : Alignment.centerRight,
-                                        end: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
-                                        colors: [
-                                          Colors.transparent,
-                                          Colors.black.withOpacity(0.8),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                      ),
-                      SliverGrid.builder(
-                        addAutomaticKeepAlives: true,
-                        addRepaintBoundaries: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
-                        itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
-                        itemCount: apiData.length,
-                      ),
-                    ],
-                  ),
-                ),
+                child: !kIsWeb ? ParallaxArea(
+                  child: customScrollView,
+                ) : customScrollView,
               )
           ),
         ),

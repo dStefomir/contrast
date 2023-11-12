@@ -127,7 +127,7 @@ class PhotographBoardPage extends HookConsumerWidget {
     return ContrastPhotographMeta(
         widgetKey: Key('${wrapper.image.id}'),
         fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
-        parallax: (child) => ParallaxWidget(
+        parallax: !kIsWeb ? (child) => ParallaxWidget(
             key: Key('${wrapper.image.id}_photo_parallax_widget'),
             overflowWidthFactor: 1.2,
             overflowHeightFactor: 1.2,
@@ -136,7 +136,7 @@ class PhotographBoardPage extends HookConsumerWidget {
             alignment: isMobile ? Alignment.topCenter : Alignment.centerLeft,
             background: child,
             child: const SizedBox(width: double.infinity, height: double.infinity,)
-        ),
+        ) : null,
         wrapper: wrapper,
         constraints: constraints,
         borderColor: Colors.transparent,

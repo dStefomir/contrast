@@ -81,7 +81,7 @@ class VideoBoardPage extends HookConsumerWidget {
         widgetKey: Key('${video.id}'),
         videoPath: video.path!,
         constraints: constraints,
-        parallax: (child) => ParallaxWidget(
+        parallax: !kIsWeb ? (child) => ParallaxWidget(
             key: Key('${video.id}_video_parallax_widget'),
             overflowWidthFactor: 1.2,
             overflowHeightFactor: 1.1,
@@ -90,7 +90,7 @@ class VideoBoardPage extends HookConsumerWidget {
             alignment: isMobile ? Alignment.topCenter : Alignment.centerLeft,
             background: child,
             child: const SizedBox(width: double.infinity, height: double.infinity,)
-        ),
+        ) : null,
         onClick: () => onUserAction(ref, () => Modular.to.pushNamed('videos/details?path=${video.path}&id=${video.id}')),
         onRedirect: kIsWeb ? () => onUserAction(ref, () async {
           final Uri url = Uri.parse('https://www.youtube.com/watch?v=${video.path}');
