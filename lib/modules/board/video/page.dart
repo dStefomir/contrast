@@ -29,13 +29,7 @@ class VideoBoardPage extends HookConsumerWidget {
   const VideoBoardPage({super.key, required this.onUserAction});
 
   /// Gets the asset for the data view header
-  String _getDataViewHeader() {
-    if(kIsWeb) {
-      return 'video_web_banner.jpg';
-    }
-
-    return 'video_banner.gif';
-  }
+  String _getDataViewHeader() => 'video_banner.gif';
 
   /// Renders a video
   Widget _renderVideo(BuildContext context, WidgetRef ref, VideoData video, BoxConstraints constraints, bool isMobile) {
