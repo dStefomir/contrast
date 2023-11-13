@@ -210,17 +210,16 @@ class CommentDialog<T> extends HookConsumerWidget {
                     fit: StackFit.expand,
                     alignment: Alignment.center,
                     children: [
-                      IconRenderer(asset: 'background_landscape.svg', height: dialogHeight / 1.8, color: Colors.black.withOpacity(0.05), fit: BoxFit.cover),
-                      apiData.isEmpty ? Expanded(
-                        child: Center(
-                          child: StyledText(text: FlutterI18n.translate(context, 'Nothing here so far')),
-                        ),
-                      ) : Expanded(
-                        child: ListView.builder(
-                            key: const Key('CommentDialogList'),
-                            itemCount: apiData.length,
-                            itemBuilder: (context, index) => itemBuilder(context, apiData[index], deviceId, index)),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        child: IconRenderer(asset: 'background_landscape.svg', height: dialogHeight / 5, color: Colors.black.withOpacity(0.03), fit: BoxFit.contain),
                       ),
+                      apiData.isEmpty ? Center(
+                        child: StyledText(text: FlutterI18n.translate(context, 'Nothing here so far')),
+                      ) : ListView.builder(
+                          key: const Key('CommentDialogList'),
+                          itemCount: apiData.length,
+                          itemBuilder: (context, index) => itemBuilder(context, apiData[index], deviceId, index)),
                     ],
                   ),
                 ),

@@ -51,7 +51,7 @@ class ShareDialog extends HookConsumerWidget {
               Stack(
                 alignment: Alignment.topCenter,
                 children: [
-                  IconRenderer(asset: 'background_landscape.svg', height: dialogHeight / 1.4, color: Colors.black.withOpacity(0.05), fit: BoxFit.cover),
+                  IconRenderer(asset: 'background_landscape.svg', height: dialogHeight / 1.4, color: Colors.black.withOpacity(0.03), fit: BoxFit.cover),
                   Column(
                     children: [
                       Padding(

@@ -68,7 +68,7 @@ class ContrastPhotograph extends StatelessWidget {
   }) : super(key: widgetKey);
 
   /// Renders a widget based on the photograph state
-  Widget _renderPhotographState(BuildContext context, ExtendedImageState state, String platform) {
+  Widget _renderPhotographState(BuildContext context, ExtendedImageState state) {
     double shadowWidth = 0;
     double shadowHeight = 0;
     double paddingTop = 0;
@@ -117,7 +117,7 @@ class ContrastPhotograph extends StatelessWidget {
                   ? BoxFit.fitWidth
                   : BoxFit.fitHeight
                   : BoxFit.contain),
-              isAntiAlias: true,
+              isAntiAlias: !kIsWeb,
               filterQuality: quality,
             ),
           ),
@@ -151,6 +151,7 @@ class ContrastPhotograph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String platform = getRunningPlatform(context);
+    final bool isMobile = useMobileLayoutOriented(context);
     Widget photo;
 
     if (data == null) {
@@ -164,14 +165,14 @@ class ContrastPhotograph extends StatelessWidget {
             ? BoxFit.fitWidth
             : BoxFit.fitHeight
             : BoxFit.contain),
-        cache: !kIsWeb,
-        loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state, platform),
-        enableMemoryCache: !kIsWeb,
-        cacheRawData: !kIsWeb,
-        cacheKey: "${widgetKey.toString()}_cache_key_$platform",
+        cache: true,
+        loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
+        enableMemoryCache: true,
+        cacheRawData: true,
+        cacheKey: "${widgetKey.toString()}_cache_key_${platform}_isMobile_$isMobile",
         clearMemoryCacheIfFailed: true,
         clearMemoryCacheWhenDispose: false,
-        imageCacheName: "${widgetKey.toString()}_cache_name_$platform",
+        imageCacheName: "${widgetKey.toString()}_cache_name_${platform}_isMobile_$isMobile",
         filterQuality: quality,
         isAntiAlias: !kIsWeb,
       );
@@ -182,11 +183,11 @@ class ContrastPhotograph extends StatelessWidget {
         height: height,
         scale: 0.6,
         border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
-        loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state, platform),
+        loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
         enableLoadState: !compressed,
         fit: fit ?? BoxFit.contain,
-        enableMemoryCache: !kIsWeb,
-        cacheRawData: !kIsWeb,
+        enableMemoryCache: true,
+        cacheRawData: true,
         clearMemoryCacheIfFailed: true,
         clearMemoryCacheWhenDispose: false,
         filterQuality: quality,

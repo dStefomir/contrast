@@ -67,7 +67,7 @@ class QrCodeDialog extends HookConsumerWidget {
                   child: IconRenderer(
                       asset: 'background_landscape.svg',
                       fit: BoxFit.cover,
-                      color: Colors.black.withOpacity(0.05)
+                      color: Colors.black.withOpacity(0.03)
                   ),
                 ),
                 Column(
