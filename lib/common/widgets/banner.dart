@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
@@ -7,11 +8,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_gif/flutter_gif.dart';
+import 'package:parallax_animation/parallax_animation.dart';
 
 /// The time for switching to the next banner
 const _nextBanner = Duration(milliseconds: 3000);
 /// The time for general animation of the banner switching
-const _bannerAnimationDuration = Duration(milliseconds: 600);
+const _bannerAnimationDuration = Duration(milliseconds: 1000);
 /// This widget renders a banner photo or video
 class BannerWidget extends StatefulHookConsumerWidget {
   /// Banners
@@ -34,6 +36,8 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
   late PageController _pageController;
   /// Current banner index
   late int _currentBannerIndex;
+  /// Previous banner index
+  late int _previousBannerIndex;
   /// Controller for the giff header of the data view
   FlutterGifController? _videoBoardGiffController;
   /// Timer for switching to the next banner
@@ -41,7 +45,8 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
 
   @override
   void initState() {
-    _currentBannerIndex = 0;
+    _currentBannerIndex = 99999999;
+    _previousBannerIndex = _currentBannerIndex;
     _pageController = PageController(initialPage: _currentBannerIndex, keepPage: false, viewportFraction: 1.0);
     _videoBoardGiffController = widget.banners.firstWhere(
             (element) => element.contains('.gif'), orElse: () => '').isNotEmpty
@@ -83,64 +88,82 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
-    if (_videoBoardGiffController != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _videoBoardGiffController!.repeat(
-          min: 0,
-          max: 299,
-          period: const Duration(seconds: 10)
-      ));
-    }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.banners.length > 1) {
         _nextBannerTimer ??= _startBannerChangingTimer();
+      }
+      if (_videoBoardGiffController != null) {
+        _videoBoardGiffController!.repeat(
+            min: 0,
+            max: 299,
+            period: const Duration(seconds: 10)
+        );
       }
     });
 
     return Stack(
       alignment: Alignment.center,
       children: [
-        PageView.builder(
-          controller: _pageController,
-          physics: const NeverScrollableScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            if (widget.banners.isEmpty) {
-              return const SizedBox.shrink();
-            }
+        ParallaxArea(
+          child: PageView.builder(
+            controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              if (widget.banners.isEmpty) {
+                return const SizedBox.shrink();
+              }
 
-            final calculatedIndex = (index % widget.banners.length).round();
-            final String banner = widget.banners[calculatedIndex];
-            final String text = widget.quotes[calculatedIndex];
+              final calculatedIndex = (index % widget.banners.length).round();
+              final String banner = widget.banners[calculatedIndex];
+              final String text = widget.quotes[calculatedIndex];
 
-            return Stack(
-              alignment: Alignment.center,
-              fit: StackFit.expand,
-              children: [
-                banner.contains('.gif') ?
-                GifImage(
-                  controller: _videoBoardGiffController!,
-                  fit: BoxFit.cover,
-                  image: AssetImage("assets/$banner",),
-                ) :
-                IconRenderer(asset: banner, fit: BoxFit.cover),
-                Align(
-                  alignment: Alignment.center,
-                  child: StyledText(
-                    maxLines: 1,
-                    text: text,
-                    color: Colors.white,
-                    useShadow: true,
-                    align: TextAlign.start,
-                    letterSpacing: 5,
-                    fontSize: !kIsWeb ? 20 : 25,
-                    italic: true,
-                    clip: true,
+              return ParallaxWidget(
+                  alignment: Alignment.centerLeft,
+                  fixedVertical: true,
+                  inverted: true,
+                  overflowWidthFactor: 1.1,
+                  overflowHeightFactor: 1,
+                  background: Stack(
+                    alignment: Alignment.center,
+                    fit: StackFit.expand,
+                    children: [
+                      banner.contains('.gif') ?
+                      GifImage(
+                        controller: _videoBoardGiffController!,
+                        fit: BoxFit.cover,
+                        image: AssetImage("assets/$banner",),
+                      ) :
+                      IconRenderer(asset: banner, fit: BoxFit.cover),
+                      Align(
+                        alignment: Alignment.center,
+                        child: FadeAnimation(
+                          start: 1,
+                          end: 0,
+                          duration: _nextBanner,
+                          child: StyledText(
+                            maxLines: 1,
+                            text: text,
+                            color: Colors.white,
+                            useShadow: true,
+                            align: TextAlign.start,
+                            letterSpacing: 5,
+                            fontSize: !kIsWeb ? 20 : 25,
+                            italic: true,
+                            clip: true,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            );
-          },
-          onPageChanged: (index) => _currentBannerIndex = (index % widget.banners.length).round(),
+                  child: const SizedBox(width: double.infinity, height: double.infinity)
+              );
+            },
+            onPageChanged: (index) {
+              _previousBannerIndex = _currentBannerIndex;
+              _currentBannerIndex = (index % widget.banners.length).round();
+            },
+          ),
         ),
         if (widget.banners.length > 1) Align(
           alignment: Alignment.bottomCenter,
@@ -150,7 +173,8 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
                   pageController: _pageController,
                   banners: widget.banners.length,
                   duration: _nextBanner,
-                  currentBannerIndex: _currentBannerIndex
+                  currentBannerIndex: _currentBannerIndex,
+                  previousBannerIndex: _previousBannerIndex
               )
           ),
         )
@@ -165,12 +189,20 @@ class _BannerDotIndicator extends StatefulHookConsumerWidget {
   final PageController pageController;
   /// Current index of the banner
   final int currentBannerIndex;
+  /// Previous index of the banner
+  final int previousBannerIndex;
   /// Number of banners
   final int banners;
   /// Duration for switching to the next banner
   final Duration duration;
 
-  const _BannerDotIndicator({required this.pageController, required this.currentBannerIndex, required this.banners, required this.duration});
+  const _BannerDotIndicator({
+    required this.pageController,
+    required this.currentBannerIndex,
+    required this.previousBannerIndex,
+    required this.banners,
+    required this.duration
+  });
 
   @override
   ConsumerState createState() => _BannerDotIndicatorState();
@@ -223,6 +255,8 @@ class _BannerDotIndicatorState extends ConsumerState<_BannerDotIndicator> with T
     final List<Widget> children = [];
     for(int i = 0; i < widget.banners; i++) {
       final isBannerCurrent = i == (widget.currentBannerIndex % widget.banners).round();
+      final isBannerPrevious = i == (widget.previousBannerIndex % widget.banners).round();
+
       children.add(
           Padding(
             padding: const EdgeInsets.only(right: 7),
@@ -254,6 +288,16 @@ class _BannerDotIndicatorState extends ConsumerState<_BannerDotIndicator> with T
                   ],
                 ),
               ),
+            ) :
+            isBannerPrevious ?
+            const ShadowWidget(
+              blurRadius: 0.5,
+              offset: Offset(0, 0),
+              child: _DotIndicatorMask(
+                  startWidth: 25,
+                  endWidth: 10,
+                  duration: Duration(milliseconds: 250)
+              ),
             ) : ShadowWidget(
               blurRadius: 0.5,
               offset: const Offset(0, 0),
@@ -280,7 +324,67 @@ class _BannerDotIndicatorState extends ConsumerState<_BannerDotIndicator> with T
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: _renderIndicators(),
     ),
   );
+}
+
+/// Renders an animated mask for the banner dot indicator
+class _DotIndicatorMask extends StatefulHookConsumerWidget {
+  /// Starting width of the animation
+  final double startWidth;
+  /// Ending width of the animation
+  final double endWidth;
+  /// Duration for the animation
+  final Duration duration;
+
+  const _DotIndicatorMask({Key? key, required this.startWidth, required this.endWidth, required this.duration}) : super(key: key);
+
+  @override
+  ConsumerState createState() => _DotIndicatorMaskState();
+}
+
+class _DotIndicatorMaskState extends ConsumerState<_DotIndicatorMask> with TickerProviderStateMixin {
+  /// Dot mask filler animation controller
+  late AnimationController _dotFillerController;
+  /// Dot mask filler Animation
+  late Animation _dotFillerAnimation;
+
+  @override
+  void initState() {
+    _dotFillerController = AnimationController(vsync: this, duration: widget.duration);
+    _dotFillerController.addListener(_reload);
+    _dotFillerAnimation = Tween<double>(begin: widget.startWidth, end: widget.endWidth).animate(_dotFillerController);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _dotFillerController.removeListener(_reload);
+    _dotFillerController.dispose();
+    super.dispose();
+  }
+
+  /// Reloads the widget state
+  _reload() => setState(() {});
+
+  @override
+  Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !_dotFillerController.isAnimating) {
+        _dotFillerController.forward();
+      }
+    });
+
+    return Container(
+      height: 10,
+      width: _dotFillerAnimation.value,
+      decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(0)
+        //more than 50% of width makes circle
+      ),
+    );
+  }
 }

@@ -94,7 +94,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   /// Switches to the next photograph if there is such
   void _goToNextPhotograph(WidgetRef ref, PageController pageController, int currentPhotographIndex) {
     if (currentPhotographIndex + 1 < images.length) {
-      pageController.jumpToPage(currentPhotographIndex + 1);
+      pageController.animateToPage(currentPhotographIndex + 1, duration: const Duration(milliseconds: 500), curve: Curves.fastEaseInToSlowEaseOut);
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(currentPhotographIndex + 1);
       ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
       _handlePhotographShotLocation(ref);
@@ -110,7 +110,7 @@ class PhotographDetailsView extends HookConsumerWidget {
   /// Switches to the previous photograph if there is such
   void _goToPreviousPhotograph(WidgetRef ref, PageController pageController, int currentPhotographIndex) {
     if (currentPhotographIndex - 1 >= 0) {
-      pageController.jumpToPage(currentPhotographIndex - 1);
+      pageController.animateToPage(currentPhotographIndex - 1, duration: const Duration(milliseconds: 500), curve: Curves.fastEaseInToSlowEaseOut);
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(currentPhotographIndex - 1);
       ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
       _handlePhotographShotLocation(ref);

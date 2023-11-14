@@ -309,19 +309,19 @@ class ContrastPhotographMeta extends HookConsumerWidget {
         child: GestureDetector(
             onTap: () => onClick(),
             onLongPressStart: (details) {
-              if (!kIsWeb && (useMobileLayoutOriented(context) && useMobileLayout(context))) {
+              if (!isHovering && (useMobileLayoutOriented(context) && useMobileLayout(context))) {
                 if (popupDialog == null) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     popupDialog = _createPopupDialog(context, isHovering);
                     Overlay.of(context).insert(popupDialog!);
                   });
                 }
-              } else if (!kIsWeb && !(useMobileLayoutOriented(context) && useMobileLayout(context))) {
+              } else if (!isHovering && !(useMobileLayoutOriented(context) && useMobileLayout(context))) {
                 ref.read(hoverProvider(widgetKey).notifier).onHover(true);
               }
             },
             onLongPressEnd: (details) {
-              if (!kIsWeb && (useMobileLayoutOriented(context) && useMobileLayout(context))) {
+              if ((useMobileLayoutOriented(context) && useMobileLayout(context))) {
                 if (popupDialog != null) {
                   popupDialog!.remove();
                   popupDialog = null;
