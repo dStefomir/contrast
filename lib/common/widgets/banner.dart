@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
@@ -45,7 +44,7 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
 
   @override
   void initState() {
-    _currentBannerIndex = 99999999;
+    _currentBannerIndex = 99999992;
     _previousBannerIndex = _currentBannerIndex;
     _pageController = PageController(initialPage: _currentBannerIndex, keepPage: false, viewportFraction: 1.0);
     _videoBoardGiffController = widget.banners.firstWhere(
@@ -107,7 +106,7 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
         ParallaxArea(
           child: PageView.builder(
             controller: _pageController,
-            physics: const NeverScrollableScrollPhysics(),
+            physics: widget.banners.length < 2 ? const NeverScrollableScrollPhysics() : null,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               if (widget.banners.isEmpty) {
@@ -137,21 +136,16 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
                       IconRenderer(asset: banner, fit: BoxFit.cover),
                       Align(
                         alignment: Alignment.center,
-                        child: FadeAnimation(
-                          start: 1,
-                          end: 0,
-                          duration: _nextBanner,
-                          child: StyledText(
-                            maxLines: 1,
-                            text: text,
-                            color: Colors.white,
-                            useShadow: true,
-                            align: TextAlign.start,
-                            letterSpacing: 5,
-                            fontSize: !kIsWeb ? 20 : 25,
-                            italic: true,
-                            clip: true,
-                          ),
+                        child: StyledText(
+                          maxLines: 1,
+                          text: text,
+                          color: Colors.white,
+                          useShadow: true,
+                          align: TextAlign.start,
+                          letterSpacing: 5,
+                          fontSize: 30,
+                          italic: true,
+                          clip: true,
                         ),
                       )
                     ],
@@ -209,7 +203,6 @@ class _BannerDotIndicator extends StatefulHookConsumerWidget {
 }
 
 class _BannerDotIndicatorState extends ConsumerState<_BannerDotIndicator> with TickerProviderStateMixin {
-
   /// Animation controller
   late AnimationController _controller;
   /// Animation
@@ -296,7 +289,7 @@ class _BannerDotIndicatorState extends ConsumerState<_BannerDotIndicator> with T
               child: _DotIndicatorMask(
                   startWidth: 25,
                   endWidth: 10,
-                  duration: Duration(milliseconds: 250)
+                  duration: Duration(milliseconds: 100)
               ),
             ) : ShadowWidget(
               blurRadius: 0.5,

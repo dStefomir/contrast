@@ -129,8 +129,8 @@ class PhotographBoardPage extends HookConsumerWidget {
         fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
         parallax: !kIsWeb ? (child) => ParallaxWidget(
             key: Key('${wrapper.image.id}_photo_parallax_widget'),
-            overflowWidthFactor: 1.2,
-            overflowHeightFactor: 1.2,
+            overflowWidthFactor: 1.25,
+            overflowHeightFactor: 1.25,
             fixedVertical: !isMobile,
             fixedHorizontal: isMobile,
             alignment: isMobile ? Alignment.topCenter : Alignment.centerLeft,

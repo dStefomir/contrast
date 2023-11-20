@@ -152,29 +152,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.black, width: 2)
                 ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    headerWidget!(),
-                    Align(
-                      alignment: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
-                      child: Container(
-                        height: axis == Axis.vertical ? dimHeight / 2 : null,
-                        width: axis == Axis.vertical ? null : dimHeight / 2,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: axis == Axis.vertical ? Alignment.bottomCenter : Alignment.centerRight,
-                            end: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
-                            colors: [
-                              Colors.transparent,
-                              Colors.black.withOpacity(0.8),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                child: headerWidget!(),
               )
           ),
         SliverGrid.builder(
