@@ -197,10 +197,10 @@ packages:
     dependency: "direct main"
     description:
       name: device_info_plus
-      sha256: "7035152271ff67b072a211152846e9f1259cf1be41e34cd3e0b5463d2d6b8419"
+      sha256: "0042cb3b2a76413ea5f8a2b40cec2a33e01d0c937e91f0f7c211fde4f7739ba6"
       url: "https://pub.dev"
     source: hosted
-    version: "9.1.0"
+    version: "9.1.1"
   device_info_plus_platform_interface:
     dependency: transitive
     description:
@@ -337,10 +337,11 @@ packages:
   flutter_gif:
     dependency: "direct main"
     description:
-      name: flutter_gif
-      sha256: b13d7e484e40685e9236ffbaddf012c2448a2e2c1ac48bed345184dd7bc87f88
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "46c7c964af26672726aff8d0bab58002a8f96980"
+      resolved-ref: "46c7c964af26672726aff8d0bab58002a8f96980"
+      url: "https://github.com/saytoonz/flutter_gif"
+    source: git
     version: "0.0.4"
   flutter_hooks:
     dependency: "direct main"
@@ -415,10 +416,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_riverpod
-      sha256: e90eaad95b2543d5473ca561f22995bb33f186b2b6065e26e9e22d913be481aa
+      sha256: d261b0f2461e0595b96f92ed807841eb72cea84a6b12b8fd0c76e5ed803e7921
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.7"
+    version: "2.4.8"
   flutter_speed_dial:
     dependency: "direct main"
     description:
@@ -465,10 +466,10 @@ packages:
     dependency: "direct main"
     description:
       name: hooks_riverpod
-      sha256: dcb557be94f6ae6c5483f74362615ebc9429c288581f570b38d3f2f70fcbad6b
+      sha256: b271e06606e718cf8185db9a792d1af00e2049e7bf5da09583654e020c00fbaa
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.7"
+    version: "2.4.8"
   html:
     dependency: transitive
     description:
@@ -801,10 +802,10 @@ packages:
     dependency: transitive
     description:
       name: riverpod
-      sha256: f003970b2b47fc708f0697299e32693fd8f5e2d490edcba65e4987f88b840cf4
+      sha256: "08451ddbaad6eae73e2422d8109775885623340d721c6637b8719c9f4b478848"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.7"
+    version: "2.4.8"
   shared_preferences:
     dependency: "direct main"
     description:

@@ -125,9 +125,19 @@ class VideoBoardPage extends HookConsumerWidget {
             controller.forward();
           });
         },
-        headerWidget: !kIsWeb ? () => BannerWidget(
-          banners: [_getDataViewHeader()],
-          quotes: [(FlutterI18n.translate(context, 'Videos'))],
+        headerWidget: !kIsWeb ? () => Container(
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(color: Colors.black, width: isMobile ? 3 : 0),
+              bottom: BorderSide(color: Colors.black, width: isMobile ? 3 : 2),
+              left: BorderSide(color: Colors.black, width: isMobile ? 0 : 0),
+              right: BorderSide(color: Colors.black, width: isMobile ? 0 : 2),
+            )
+          ),
+          child: BannerWidget(
+            banners: [_getDataViewHeader()],
+            quotes: [(FlutterI18n.translate(context, 'Videos'))],
+          ),
         ) : null,
         listEmptyChild: const Center(
           child: LoadingIndicator(color: Colors.black),

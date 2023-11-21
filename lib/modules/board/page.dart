@@ -210,23 +210,23 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
     /// In mobile view we need to calculate a padding so that the title
     /// can be in the center of the screen because of the left drawer
     /// that the mobile view has. If its a desktop view we do nothing.
-      useValueChanged(ref.watch(boardHeaderTabProvider), (_, __) async {
-        if (useMobileLayoutOriented(context)) {
-          if (ref.watch(boardFooterTabProvider) == 'photos') {
-            titlePadding = boardPadding;
-          }
+    useValueChanged(ref.watch(boardHeaderTabProvider), (_, __) async {
+      if (useMobileLayoutOriented(context)) {
+        if (ref.watch(boardFooterTabProvider) == 'photos') {
+          titlePadding = boardPadding;
         }
-      });
+      }
+    });
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      onPopInvoked: (invoked) async {
         if(_checkOverlaysState(ref)) {
           _onAction(ref, null);
 
-          return false;
+          invoked = false;
         }
 
-        return true;
+        invoked = true;
       },
       child: BackgroundPage(
           child: RawKeyboardListener(

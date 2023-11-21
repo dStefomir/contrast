@@ -65,6 +65,8 @@ class StyledButton extends HookConsumerWidget {
   final bool onlyIcon;
   /// Color of the icon
   final Color? iconColor;
+  /// Color of the background
+  final Color backgroundColor;
 
   const StyledButton({
     required this.widgetKey,
@@ -73,7 +75,8 @@ class StyledButton extends HookConsumerWidget {
     this.iconHeight = 50,
     this.shadow = true,
     this.onlyIcon = false,
-    this.iconColor
+    this.iconColor,
+    this.backgroundColor = Colors.white
   }) : super(key: widgetKey);
 
   /// Renders the button
@@ -102,15 +105,18 @@ class StyledButton extends HookConsumerWidget {
               )
             ],
           ).translateOnPhotoHover
-        : IconRenderer(
-            asset: iconAsset,
-            color: iconColor != null
-                ? iconColor!
-                : !isHovering
-                    ? Colors.black
-                    : Colors.white,
-            height: iconHeight,
-          ).translateOnPhotoHover;
+        : ColoredBox(
+      color: backgroundColor,
+      child: IconRenderer(
+        asset: iconAsset,
+        color: iconColor != null
+            ? iconColor!
+            : !isHovering
+            ? Colors.black
+            : Colors.white,
+        height: iconHeight,
+      ).translateOnPhotoHover,
+    );
   }
 
   @override

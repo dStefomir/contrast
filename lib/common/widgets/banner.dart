@@ -23,7 +23,7 @@ class BannerWidget extends StatefulHookConsumerWidget {
   const BannerWidget({
     super.key,
     required this.banners,
-    this.quotes = const []
+    this.quotes = const [],
   });
 
   @override
@@ -51,7 +51,6 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
             (element) => element.contains('.gif'), orElse: () => '').isNotEmpty
         ? FlutterGifController(vsync: this)
         : null;
-
     if (widget.banners.length > 1) {
       _pageController.addListener(_onBannerChange);
     }
@@ -60,13 +59,16 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
 
   @override
   void dispose() {
-    if (widget.banners.length > 1) {
-      _pageController.removeListener(_onBannerChange);
+    if (_videoBoardGiffController != null) {
+      try {
+        _videoBoardGiffController!.dispose();
+      } catch (e) {
+        if (kDebugMode) {
+          print(e.toString());
+        }
+      }
     }
     _pageController.dispose();
-    if (_videoBoardGiffController != null) {
-      _videoBoardGiffController!.dispose();
-    }
     super.dispose();
   }
 
@@ -87,18 +89,9 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.banners.length > 1) {
-        _nextBannerTimer ??= _startBannerChangingTimer();
-      }
-      if (_videoBoardGiffController != null) {
-        _videoBoardGiffController!.repeat(
-            min: 0,
-            max: 299,
-            period: const Duration(seconds: 10)
-        );
-      }
-    });
+    if (widget.banners.length > 1) {
+      _nextBannerTimer ??= _startBannerChangingTimer();
+    }
 
     return Stack(
       alignment: Alignment.center,
@@ -131,7 +124,12 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
                       GifImage(
                         controller: _videoBoardGiffController!,
                         fit: BoxFit.cover,
-                        image: AssetImage("assets/$banner",),
+                        image: AssetImage("assets/$banner"),
+                        onFetchCompleted: () => _videoBoardGiffController!.repeat(
+                            min: 1,
+                            max: 299,
+                            period: const Duration(seconds: 10)
+                        ),
                       ) :
                       IconRenderer(asset: banner, fit: BoxFit.cover),
                       Align(
@@ -143,7 +141,7 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
                           useShadow: true,
                           align: TextAlign.start,
                           letterSpacing: 5,
-                          fontSize: 30,
+                          fontSize: 25,
                           italic: true,
                           clip: true,
                         ),

@@ -129,8 +129,8 @@ class PhotographBoardPage extends HookConsumerWidget {
         fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
         parallax: !kIsWeb ? (child) => ParallaxWidget(
             key: Key('${wrapper.image.id}_photo_parallax_widget'),
-            overflowWidthFactor: 1.25,
-            overflowHeightFactor: 1.25,
+            overflowWidthFactor: 1.27,
+            overflowHeightFactor: 1.27,
             fixedVertical: !isMobile,
             fixedHorizontal: isMobile,
             alignment: isMobile ? Alignment.topCenter : Alignment.centerLeft,
@@ -174,9 +174,19 @@ class PhotographBoardPage extends HookConsumerWidget {
             controller.forward();
           });
         },
-        headerWidget: !kIsWeb ? () => BannerWidget(
+        headerWidget: !kIsWeb ? () => Container(
+          decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(color: Colors.black, width: isMobile ? 3 : 3),
+                bottom: BorderSide(color: Colors.black, width: isMobile ? 2 : 3),
+                left: BorderSide(color: Colors.black, width: isMobile ? 2 : 0),
+                right: BorderSide(color: Colors.black, width: isMobile ? 0 : 1.5),
+              )
+          ),
+          child: BannerWidget(
             banners: getRestfulViewHeader(ref),
             quotes: getRestfulViewHeaderText(context, ref),
+          ),
         ) : null,
         listEmptyChild: const Center(
           child: LoadingIndicator(color: Colors.black),

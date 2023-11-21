@@ -148,12 +148,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
               automaticallyImplyLeading: true,
               elevation: 10,
               forceElevated: true,
-              flexibleSpace: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 2)
-                ),
-                child: headerWidget!(),
-              )
+              flexibleSpace: headerWidget!()
           ),
         SliverGrid.builder(
           addAutomaticKeepAlives: true,

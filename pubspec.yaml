@@ -41,8 +41,8 @@ dependencies:
   flutter_i18n: ^0.34.0
   # in memory file creation
   file: ^6.0.0
-  flutter_riverpod: ^2.4.7
-  hooks_riverpod: ^2.4.7
+  flutter_riverpod: ^2.4.8
+  hooks_riverpod: ^2.4.8
   flutter_hooks: ^0.20.3
   # html cross platform library
   universal_html: ^2.2.4
@@ -85,13 +85,16 @@ dependencies:
   # Rating library
   flutter_rating_bar: ^4.0.1
   # device info library
-  device_info_plus: ^9.1.0
+  device_info_plus: ^9.1.1
   # add to calendar library
   add_2_calendar: ^3.0.1
   # date picker library
   syncfusion_flutter_datepicker: ^23.2.4
   # gif running library
-  flutter_gif: ^0.0.4
+  flutter_gif:
+    git:
+      url: https://github.com/saytoonz/flutter_gif
+      ref: 46c7c964af26672726aff8d0bab58002a8f96980
   # parallax animation library
   parallax_animation: ^0.0.3
   # Firebase libraries

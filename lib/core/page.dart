@@ -53,7 +53,7 @@ class CorePage extends HookConsumerWidget {
         builder: (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
           final List<Widget> children = [
             kIsWeb ? render() : BackgroundPage(
-              color: Colors.black.withOpacity(0.8),
+              color: Colors.black54,
               child: SafeArea(
                 bottom: Platform.isAndroid,
                 left: false,
