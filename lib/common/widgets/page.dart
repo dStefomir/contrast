@@ -1,3 +1,4 @@
+import 'package:contrast/common/widgets/blur.dart';
 import 'package:flutter/material.dart';
 
 /// Creates a wrapper page with a background image in it.
@@ -15,6 +16,7 @@ class BackgroundPage extends StatelessWidget {
           color: color,
           child: Stack(
             children: [
+              const Blurrable(strength: 50),
               Align(
                 alignment: Alignment.center,
                 child: child,
