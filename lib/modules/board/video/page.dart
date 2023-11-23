@@ -135,8 +135,8 @@ class VideoBoardPage extends HookConsumerWidget {
             )
           ),
           child: BannerWidget(
-            banners: [_getDataViewHeader()],
-            quotes: [(FlutterI18n.translate(context, 'Videos'))],
+            banner: _getDataViewHeader(),
+            quote: (FlutterI18n.translate(context, 'Videos')),
           ),
         ) : null,
         listEmptyChild: const Center(

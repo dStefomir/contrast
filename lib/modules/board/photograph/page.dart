@@ -29,56 +29,43 @@ class PhotographBoardPage extends HookConsumerWidget {
   const PhotographBoardPage({super.key, required this.onUserAction});
 
   /// Gets an asset based on the selected photograph category
-  List<String> getRestfulViewHeader(WidgetRef ref) {
+  String getRestfulViewHeader(WidgetRef ref) {
     final String selectedFilter = ref.read(boardHeaderTabProvider);
 
     switch(selectedFilter) {
       case 'all':
-        return ['landscape_banner.jpg', 'portrait_banner.jpg', 'street_banner.jpg', 'other_banner.jpg'];
+        return 'all_banner.jpg';
       case 'landscape':
-        return ['landscape_banner.jpg'];
+        return 'landscape_banner.jpg';
       case 'portraits':
-        return ['portrait_banner.jpg'];
+        return 'portrait_banner.jpg';
       case 'street':
-        return ['street_banner.jpg'];
+        return 'street_banner.jpg';
       case 'other':
-        return ['other_banner.jpg'];
+        return 'other_banner.jpg';
     }
 
-    return [];
+    return '';
   }
 
   /// Gets the text for the restful view header
-  List<String> getRestfulViewHeaderText(BuildContext context, WidgetRef ref) {
+  String getRestfulViewHeaderText(BuildContext context, WidgetRef ref) {
     final String selectedFilter = ref.read(boardHeaderTabProvider);
 
     switch(selectedFilter) {
       case 'all':
-        return [
-          FlutterI18n.translate(context, 'Landscape'),
-          FlutterI18n.translate(context, 'Portraits'),
-          FlutterI18n.translate(context, 'Street'),
-          FlutterI18n.translate(context, 'Other')
-        ];
+        return FlutterI18n.translate(context, 'All');
       case 'landscape':
-        return [
-          FlutterI18n.translate(context, 'Landscape')
-        ];
+        return FlutterI18n.translate(context, 'Landscape');
       case 'portraits':
-        return [
-          FlutterI18n.translate(context, 'Portraits')
-        ];
+        return FlutterI18n.translate(context, 'Portraits');
       case 'street':
-        return [
-          FlutterI18n.translate(context, 'Street')
-        ];
+        return FlutterI18n.translate(context, 'Street');
       case 'other':
-        return [
-          FlutterI18n.translate(context, 'Other')
-        ];
+        return FlutterI18n.translate(context, 'Other');
     }
 
-    return [];
+    return '';
   }
 
   /// Renders a photograph
@@ -184,8 +171,8 @@ class PhotographBoardPage extends HookConsumerWidget {
               )
           ),
           child: BannerWidget(
-            banners: getRestfulViewHeader(ref),
-            quotes: getRestfulViewHeaderText(context, ref),
+            banner: getRestfulViewHeader(ref),
+            quote: getRestfulViewHeaderText(context, ref),
           ),
         ) : null,
         listEmptyChild: const Center(
