@@ -14,7 +14,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import "package:universal_html/html.dart" as html;
-
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:contrast/common/widgets/animation.dart';

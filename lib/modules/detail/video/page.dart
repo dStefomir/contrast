@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/blur.dart';
@@ -318,8 +319,8 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
         onPopInvoked: (canPop) {
           if(ref.read(overlayVisibilityProvider(const Key('comment_video'))) != null) {
             ref.read(overlayVisibilityProvider(const Key('comment_video')).notifier).setOverlayVisibility(null);
-          } else {
-           Modular.to.pop();
+          } else if (!kIsWeb && Platform.isAndroid) {
+            Modular.to.pop();
           }
         },
         child: BackgroundPage(

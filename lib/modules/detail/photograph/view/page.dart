@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:contrast/common/widgets/page.dart';
 import 'package:contrast/common/widgets/load.dart';
@@ -7,6 +9,7 @@ import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/detail/photograph/provider.dart';
 import 'package:contrast/modules/detail/photograph/view/details.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -74,7 +77,7 @@ class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
         if(ref.read(overlayVisibilityProvider(const Key('comment_photograph'))) != null || ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph'))) != null) {
           ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
           ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
-        } else {
+        } else if (!kIsWeb && Platform.isAndroid) {
           Modular.to.pop();
         }
       },

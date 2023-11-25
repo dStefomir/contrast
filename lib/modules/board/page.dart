@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:contrast/modules/board/overlay/share/share.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import "package:universal_html/html.dart" as html;
 import 'package:contrast/common/widgets/blur.dart';
@@ -225,8 +228,8 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
       onPopInvoked: (invoked) {
         if(_checkOverlaysState(ref)) {
           _onAction(ref, null);
-        } else {
-         Modular.to.pop();
+        } else if (!kIsWeb && Platform.isAndroid) {
+          Modular.to.pop();
         }
       },
       child: BackgroundPage(
