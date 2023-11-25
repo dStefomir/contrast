@@ -245,6 +245,8 @@ class DefaultButton extends StatelessWidget {
   final String? tooltip;
   /// Svg color
   final Color? svgColor;
+  /// Fit for the svg icon
+  final BoxFit iconFit;
 
   const DefaultButton({
     required this.onClick,
@@ -257,6 +259,7 @@ class DefaultButton extends StatelessWidget {
     this.height = 35,
     this.padding = 10,
     this.svgColor,
+    this.iconFit = BoxFit.scaleDown,
     super.key
   });
 
@@ -274,9 +277,9 @@ class DefaultButton extends StatelessWidget {
           onTap: onClick,
           child: IconRenderer(
               asset: icon,
-              fit: BoxFit.scaleDown,
+              fit: iconFit,
               color: svgColor,
-              height: height
+              height: height,
           ),
         ),
       ),

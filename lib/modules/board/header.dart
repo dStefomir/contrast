@@ -59,8 +59,8 @@ class BoardPageFilter extends ConsumerWidget {
                         RotatedBox(
                           quarterTurns: 3,
                           child: StyledText(
-                              text: FlutterI18n.translate(context, 'Categories'),
-                              padding: 0,
+                              text: FlutterI18n.translate(context, 'CONTRASTUS'),
+                              padding: 5,
                               fontSize: 15,
                               weight: FontWeight.bold,
                               letterSpacing: 15,

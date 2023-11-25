@@ -1,3 +1,4 @@
+import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:flutter/foundation.dart';
@@ -73,16 +74,21 @@ class BannerWidgetState extends ConsumerState<BannerWidget> with TickerProviderS
         IconRenderer(asset: widget.banner, fit: BoxFit.cover),
         Align(
           alignment: Alignment.center,
-          child: StyledText(
-            maxLines: 1,
-            text: widget.quote,
-            color: Colors.white,
-            useShadow: true,
-            align: TextAlign.start,
-            letterSpacing: 5,
-            fontSize: 25,
-            italic: true,
-            clip: true,
+          child: FadeAnimation(
+            duration: const Duration(milliseconds: 2000),
+            start: 1,
+            end: 0,
+            child: StyledText(
+              maxLines: 1,
+              text: widget.quote,
+              color: Colors.white,
+              useShadow: true,
+              align: TextAlign.start,
+              letterSpacing: 5,
+              fontSize: 25,
+              italic: true,
+              clip: true,
+            ),
           ),
         )
       ],

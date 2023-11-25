@@ -4,14 +4,12 @@ import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../../../common/widgets/snack.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Dialog height
-const double dialogHeight = 400;
+const double dialogHeight = 300;
 
 /// Renders a dialog for sharing the website/apps
 class ShareDialog extends HookConsumerWidget {
@@ -53,21 +51,22 @@ class ShareDialog extends HookConsumerWidget {
                 children: [
                   IconRenderer(asset: 'background_landscape.svg', height: dialogHeight / 1.4, color: Colors.black.withOpacity(0.03), fit: BoxFit.cover),
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 15),
                         child: DefaultButton(
                             shape: BoxShape.circle,
                             tooltip: FlutterI18n.translate(context, 'Website'),
-                            onClick: () => Clipboard.setData(
-                                const ClipboardData(text: 'https://www.dstefomir.eu')
-                            ).then((value) => showSuccessTextOnSnackBar(
-                                context,
-                                FlutterI18n.translate(context, 'Copied to clipboard')
-                            )),
+                            onClick: () async {
+                              final Uri url = Uri.parse('https://www.dstefomir.eu');
+                              if (await canLaunchUrl(url)) {
+                                await launchUrl(url);
+                              }
+                            },
                             borderColor: Colors.transparent,
-                            borderWidth: 5,
-                            height: 100,
+                            iconFit: BoxFit.cover,
+                            height: 50,
                             icon: 'chrome.svg'
                         ),
                       ),
@@ -77,30 +76,32 @@ class ShareDialog extends HookConsumerWidget {
                           DefaultButton(
                               shape: BoxShape.circle,
                               tooltip: FlutterI18n.translate(context, 'Google Play Store'),
-                              onClick: () => Clipboard.setData(
-                                  const ClipboardData(text: 'https://play.google.com/store/apps/details?id=eu.bsdsoft.contrast')
-                              ).then((value) => showSuccessTextOnSnackBar(
-                                  context,
-                                  FlutterI18n.translate(context, 'Copied to clipboard')
-                              )),
+                              onClick: () async {
+                                final Uri url = Uri.parse('https://play.google.com/store/apps/details?id=eu.bsdsoft.contrast');
+                                if (await canLaunchUrl(url)) {
+                                  await launchUrl(url);
+                                }
+                              },
                               borderColor: Colors.transparent,
+                              iconFit: BoxFit.cover,
+                              height: 50,
                               padding: 25,
-                              height: 100,
                               icon: 'play_store.svg'
                           ),
                           const SizedBox(width: 20),
                           DefaultButton(
                               shape: BoxShape.circle,
                               tooltip: FlutterI18n.translate(context, 'Apple App Store'),
-                              onClick: () => Clipboard.setData(
-                                  const ClipboardData(text: 'https://apps.apple.com/bg/app/contrastus/id6466247842')
-                              ).then((value) => showSuccessTextOnSnackBar(
-                                  context,
-                                  FlutterI18n.translate(context, 'Copied to clipboard')
-                              )),
+                              onClick: () async {
+                                final Uri url = Uri.parse('https://apps.apple.com/bg/app/contrastus/id6466247842');
+                                if (await canLaunchUrl(url)) {
+                                  await launchUrl(url);
+                                }
+                              },
                               borderColor: Colors.transparent,
+                              iconFit: BoxFit.cover,
+                              height: 50,
                               padding: 25,
-                              height: 100,
                               icon: 'app_store.svg'
                           ),
                         ],

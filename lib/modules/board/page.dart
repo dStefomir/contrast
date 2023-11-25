@@ -1,4 +1,5 @@
 import 'package:contrast/modules/board/overlay/share/share.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import "package:universal_html/html.dart" as html;
 import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/shadow.dart';
@@ -95,7 +96,8 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
           ref.read(overlayVisibilityProvider(const Key('edit_image'))) != null ||
           ref.read(overlayVisibilityProvider(const Key('upload_video'))) != null ||
           ref.read(overlayVisibilityProvider(const Key('edit_video'))) != null ||
-          ref.read(overlayVisibilityProvider(const Key('edit_video'))) != null;
+          ref.read(overlayVisibilityProvider(const Key('edit_video'))) != null ||
+          ref.read(overlayVisibilityProvider(const Key('share'))) != null;
 
   /// Handles the escape key of the keyboard
   void _handleKeyEvent(RawKeyEvent event) {
@@ -219,14 +221,13 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
     });
 
     return PopScope(
-      onPopInvoked: (invoked) async {
+      canPop: false,
+      onPopInvoked: (invoked) {
         if(_checkOverlaysState(ref)) {
           _onAction(ref, null);
-
-          invoked = false;
+        } else {
+         Modular.to.pop();
         }
-
-        invoked = true;
       },
       child: BackgroundPage(
           child: RawKeyboardListener(

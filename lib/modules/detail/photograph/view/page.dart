@@ -8,6 +8,7 @@ import 'package:contrast/modules/detail/photograph/provider.dart';
 import 'package:contrast/modules/detail/photograph/view/details.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Renders the photograph details page
@@ -67,16 +68,15 @@ class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
   Widget build(BuildContext context) {
     final dataProvider = ref.watch(fetchBoardProvider);
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (canPop) {
         if(ref.read(overlayVisibilityProvider(const Key('comment_photograph'))) != null || ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph'))) != null) {
           ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
           ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
-
-          return false;
+        } else {
+          Modular.to.pop();
         }
-
-        return true;
       },
       child: BackgroundPage(
         color: Colors.black,

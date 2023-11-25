@@ -313,15 +313,14 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
           Modular.to.navigate('/');
         }
       },
-      child: WillPopScope(
-        onWillPop: () async {
+      child: PopScope(
+        canPop: false,
+        onPopInvoked: (canPop) {
           if(ref.read(overlayVisibilityProvider(const Key('comment_video'))) != null) {
             ref.read(overlayVisibilityProvider(const Key('comment_video')).notifier).setOverlayVisibility(null);
-
-            return false;
+          } else {
+           Modular.to.pop();
           }
-
-          return true;
         },
         child: BackgroundPage(
             color: Colors.black,
