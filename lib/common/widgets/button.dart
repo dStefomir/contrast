@@ -115,6 +115,7 @@ class StyledButton extends HookConsumerWidget {
             ? Colors.black
             : Colors.white,
         height: iconHeight,
+        fit: BoxFit.fill,
       ).translateOnPhotoHover,
     );
   }

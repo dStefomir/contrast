@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.5.8+64
+version: 2.5.9+65
 
 environment:
   sdk: '>=3.0.6 <4.0.0'
@@ -41,8 +41,8 @@ dependencies:
   flutter_i18n: ^0.34.0
   # in memory file creation
   file: ^7.0.0
-  flutter_riverpod: ^2.4.8
-  hooks_riverpod: ^2.4.8
+  flutter_riverpod: ^2.4.9
+  hooks_riverpod: ^2.4.9
   flutter_hooks: ^0.20.3
   # html cross platform library
   universal_html: ^2.2.4
@@ -61,7 +61,7 @@ dependencies:
   # translation and core library
   intl: ^0.18.1
   # using http request
-  http: ^1.1.0
+  http: ^1.1.2
   # image render library
   extended_image: ^8.2.0
   # zoom image library
@@ -89,12 +89,7 @@ dependencies:
   # add to calendar library
   add_2_calendar: ^3.0.1
   # date picker library
-  syncfusion_flutter_datepicker: ^23.2.4
-  # gif running library
-  flutter_gif:
-    git:
-      url: https://github.com/saytoonz/flutter_gif
-      ref: 46c7c964af26672726aff8d0bab58002a8f96980
+  syncfusion_flutter_datepicker: ^23.2.5
   # parallax animation library
   parallax_animation: ^0.0.3
   # Firebase libraries

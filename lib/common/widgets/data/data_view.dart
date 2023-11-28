@@ -1,6 +1,7 @@
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
+import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/paged_list.dart';
 import 'package:flutter/foundation.dart';
@@ -139,7 +140,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
       slivers: [
         if (headerWidget != null)
           SliverAppBar(
-              expandedHeight: axis == Axis.vertical ? widgetMaxHeight / 3 : widgetMaxWidth / 2.5,
+              expandedHeight: boardPadding - 4,
               backgroundColor: Colors.white,
               clipBehavior: Clip.antiAlias,
               floating: true,

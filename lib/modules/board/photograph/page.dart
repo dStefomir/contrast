@@ -1,4 +1,3 @@
-import 'package:contrast/common/widgets/banner.dart';
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/common/widgets/load.dart';
@@ -28,44 +27,21 @@ class PhotographBoardPage extends HookConsumerWidget {
 
   const PhotographBoardPage({super.key, required this.onUserAction});
 
-  /// Gets an asset based on the selected photograph category
-  String getRestfulViewHeader(WidgetRef ref) {
-    final String selectedFilter = ref.read(boardHeaderTabProvider);
+  /// Calculates the number of items per row for the grid view
+  int _calculateRestfulViewItemsPerRows(BuildContext context) {
+    final isMobile = useMobileLayout(context);
+    final isMobilePortrait = useMobileLayoutOriented(context);
 
-    switch(selectedFilter) {
-      case 'all':
-        return 'all_banner.jpg';
-      case 'landscape':
-        return 'landscape_banner.jpg';
-      case 'portraits':
-        return 'portrait_banner.jpg';
-      case 'street':
-        return 'street_banner.jpg';
-      case 'other':
-        return 'other_banner.jpg';
+    if (kIsWeb) {
+      return 3;
     }
-
-    return '';
-  }
-
-  /// Gets the text for the restful view header
-  String getRestfulViewHeaderText(BuildContext context, WidgetRef ref) {
-    final String selectedFilter = ref.read(boardHeaderTabProvider);
-
-    switch(selectedFilter) {
-      case 'all':
-        return FlutterI18n.translate(context, 'All');
-      case 'landscape':
-        return FlutterI18n.translate(context, 'Landscape');
-      case 'portraits':
-        return FlutterI18n.translate(context, 'Portraits');
-      case 'street':
-        return FlutterI18n.translate(context, 'Street');
-      case 'other':
-        return FlutterI18n.translate(context, 'Other');
+    if (isMobilePortrait) {
+      return 3;
+    } else if (isMobile){
+      return 1;
+    } else {
+      return 3;
     }
-
-    return '';
   }
 
   /// Renders a photograph
@@ -145,7 +121,7 @@ class PhotographBoardPage extends HookConsumerWidget {
         key: const Key('PhotographDataView'),
         serviceProvider: photographServiceFetchProvider,
         loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
-        itemsPerRow: isMobile ? 3 : kIsWeb ? 3 : 1,
+        itemsPerRow: _calculateRestfulViewItemsPerRows(context),
         axis: isMobile ? Axis.vertical : Axis.horizontal,
         dimHeight: MediaQuery.of(context).size.height / 2.5,
         itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper) =>
@@ -161,20 +137,6 @@ class PhotographBoardPage extends HookConsumerWidget {
             controller.forward();
           });
         },
-        headerWidget: !kIsWeb ? () => Container(
-          decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(color: Colors.black, width: isMobile ? 3 : 3),
-                bottom: BorderSide(color: Colors.black, width: isMobile ? 2 : 3),
-                left: BorderSide(color: Colors.black, width: isMobile ? 2 : 0),
-                right: BorderSide(color: Colors.black, width: isMobile ? 0 : 1.5),
-              )
-          ),
-          child: BannerWidget(
-            banner: getRestfulViewHeader(ref),
-            quote: getRestfulViewHeaderText(context, ref),
-          ),
-        ) : null,
         listEmptyChild: const Center(
           child: LoadingIndicator(color: Colors.black),
         )

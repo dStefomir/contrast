@@ -1,4 +1,3 @@
-import 'package:contrast/common/widgets/banner.dart';
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/common/widgets/load.dart';
@@ -27,9 +26,6 @@ class VideoBoardPage extends HookConsumerWidget {
   final Function(WidgetRef ref, Function? action) onUserAction;
 
   const VideoBoardPage({super.key, required this.onUserAction});
-
-  /// Gets the asset for the data view header
-  String _getDataViewHeader() => 'video_banner.gif';
 
   /// Renders a video
   Widget _renderVideo(BuildContext context, WidgetRef ref, VideoData video, BoxConstraints constraints, bool isMobile) {
@@ -125,20 +121,6 @@ class VideoBoardPage extends HookConsumerWidget {
             controller.forward();
           });
         },
-        headerWidget: !kIsWeb ? () => Container(
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(color: Colors.black, width: isMobile ? 3 : 0),
-              bottom: BorderSide(color: Colors.black, width: isMobile ? 3 : 2),
-              left: BorderSide(color: Colors.black, width: isMobile ? 0 : 0),
-              right: BorderSide(color: Colors.black, width: isMobile ? 0 : 2),
-            )
-          ),
-          child: BannerWidget(
-            banner: _getDataViewHeader(),
-            quote: (FlutterI18n.translate(context, 'Videos')),
-          ),
-        ) : null,
         listEmptyChild: const Center(
           child: LoadingIndicator(color: Colors.black),
         )
