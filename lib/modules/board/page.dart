@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/modules/board/overlay/share/share.dart';
 import 'package:flutter/foundation.dart';
 import "package:universal_html/html.dart" as html;
@@ -36,7 +35,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 const double boardPadding = 65;
 
@@ -200,77 +198,6 @@ class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMi
         ]
     ),
   ).translateOnPhotoHover;
-
-  Widget _renderBoardActions(BuildContext context) {
-    final isMobile = useMobileLayoutOriented(context);
-    final widgets = [
-      const Spacer(),
-      StyledButton(
-        widgetKey: const Key('instagram'),
-        onClick: () async {
-          final Uri url = Uri.parse('https://www.instagram.com/dstefomir/');
-          if (await canLaunchUrl(url)) {
-            await launchUrl(url);
-          }
-          },
-        iconAsset: 'instagram1.svg',
-        backgroundColor: Colors.transparent,
-        iconColor: Colors.black,
-        onlyIcon: true,
-        shadow: false,
-      ),
-      const Spacer(),
-      StyledButton(
-        widgetKey: const Key('share'),
-        onClick: () => _onAction(ref, () => ref.read(overlayVisibilityProvider(const Key('share')).notifier).setOverlayVisibility(true)),
-        iconAsset: 'share.svg',
-        backgroundColor: Colors.transparent,
-        iconColor: Colors.black,
-        onlyIcon: true,
-        shadow: false,
-      ),
-      const Spacer(),
-      StyledButton(
-        widgetKey: const Key('qr_code'),
-        onClick: () {
-          if(ref.read(overlayVisibilityProvider(const Key('qr_code'))) == true) {
-            ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
-          } else {
-            ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(true);
-          }
-        },
-        iconAsset: 'qr_code.svg',
-        backgroundColor: Colors.transparent,
-        iconColor: Colors.black,
-        onlyIcon: true,
-        shadow: false,
-      ),
-      const Spacer(),
-    ];
-
-    return Container(
-        decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(color: Colors.black, width: isMobile ? 3 : 3),
-              bottom: BorderSide(color: Colors.black, width: isMobile ? 2 : 3),
-              left: BorderSide(color: Colors.black, width: isMobile ? 2 : 0),
-              right: BorderSide(color: Colors.black, width: isMobile ? 0 : 1.5),
-            )
-        ),
-        padding: const EdgeInsets.all(5),
-        child: isMobile ? Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: widgets,
-        ) :  Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: widgets,
-        )
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

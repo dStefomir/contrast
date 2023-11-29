@@ -8,7 +8,6 @@ import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/board/video/overlay/provider.dart';
 import 'package:contrast/modules/board/video/service.dart';
 import 'package:contrast/security/session.dart';
-import 'package:contrast/utils/device.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -28,7 +27,7 @@ class VideoBoardPage extends HookConsumerWidget {
   const VideoBoardPage({super.key, required this.onUserAction});
 
   /// Renders a video
-  Widget _renderVideo(BuildContext context, WidgetRef ref, VideoData video, BoxConstraints constraints, bool isMobile) {
+  Widget _renderVideo(BuildContext context, WidgetRef ref, VideoData video, BoxConstraints constraints, Orientation currentOrientation) {
     if (Session().isLoggedIn()) {
       return FocusedMenuHolder(
           menuWidth: 300,
@@ -72,6 +71,7 @@ class VideoBoardPage extends HookConsumerWidget {
           )
       );
     }
+    final isMobile = currentOrientation == Orientation.portrait;
 
     return ContrastVideo(
         widgetKey: Key('${video.id}'),
@@ -99,18 +99,18 @@ class VideoBoardPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isMobile = useMobileLayoutOriented(context);
+    final orientation = MediaQuery.of(context).orientation;
 
     return RestfulAnimatedDataView<VideoData>(
         key: const Key('VideoDataView'),
         serviceProvider: videoServiceFetchProvider,
         loadPage: ref.read(videoBoardServiceProvider).getVideoBoard,
-        itemsPerRow: isMobile ? 3 : 2,
-        axis: isMobile ? Axis.vertical : Axis.horizontal,
+        itemsPerRow: orientation == Orientation.portrait ? 3 : 2,
+        axis: orientation == Orientation.portrait ? Axis.vertical : Axis.horizontal,
         dimHeight: MediaQuery.of(context).size.height / 2.5,
         itemBuilder: (BuildContext context, int index, int dataLength, VideoData wrapper) =>
             LayoutBuilder(key: const Key('VideoDataViewBuilder'), builder: (context, constraints) =>
-                _renderVideo(context, ref, wrapper, constraints, isMobile)
+                _renderVideo(context, ref, wrapper, constraints, orientation)
             ),
         onLeftKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('photos'),
         whenShouldAnimateGlass: (controller) {

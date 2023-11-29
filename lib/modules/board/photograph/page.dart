@@ -33,19 +33,33 @@ class PhotographBoardPage extends HookConsumerWidget {
     final isMobilePortrait = useMobileLayoutOriented(context);
 
     if (kIsWeb) {
+
       return 3;
     }
     if (isMobilePortrait) {
+
       return 3;
     } else if (isMobile){
+
       return 1;
     } else {
+
       return 3;
     }
   }
 
+  /// Gets an axis for the restful view
+  Axis _getRestfulViewAxis(BuildContext context, Orientation currentOrientation) {
+    if (currentOrientation == Orientation.landscape) {
+
+      return Axis.horizontal;
+    }
+
+    return Axis.vertical;
+  }
+
   /// Renders a photograph
-  Widget _renderPhoto(WidgetRef ref, BuildContext context, ImageBoardWrapper wrapper, BoxConstraints constraints, bool isMobile) {
+  Widget _renderPhoto(WidgetRef ref, BuildContext context, ImageBoardWrapper wrapper, BoxConstraints constraints, Orientation currentOrientation) {
     final serviceProvider = ref.read(photographyBoardServiceProvider);
     final currentCategory = ref.read(boardHeaderTabProvider);
 
@@ -86,6 +100,7 @@ class PhotographBoardPage extends HookConsumerWidget {
           )
       );
     }
+    final isMobile = currentOrientation == Orientation.portrait;
 
     return ContrastPhotographMeta(
         widgetKey: Key('${wrapper.image.id}'),
@@ -96,7 +111,7 @@ class PhotographBoardPage extends HookConsumerWidget {
             overflowHeightFactor: 1.27,
             fixedVertical: !isMobile,
             fixedHorizontal: isMobile,
-            alignment: isMobile ? Alignment.topCenter : Alignment.centerLeft,
+            alignment: isMobile ? Alignment.center : Alignment.centerLeft,
             background: child,
             child: const SizedBox(width: double.infinity, height: double.infinity,)
         ) : null,
@@ -115,19 +130,19 @@ class PhotographBoardPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isMobile = useMobileLayoutOriented(context);
+    final orientation = MediaQuery.of(context).orientation;
 
     return RestfulAnimatedDataView<ImageBoardWrapper>(
         key: const Key('PhotographDataView'),
         serviceProvider: photographServiceFetchProvider,
         loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
         itemsPerRow: _calculateRestfulViewItemsPerRows(context),
-        axis: isMobile ? Axis.vertical : Axis.horizontal,
+        axis: _getRestfulViewAxis(context, orientation),
         dimHeight: MediaQuery.of(context).size.height / 2.5,
         itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper) =>
             LayoutBuilder(
                 key: const Key('PhotographDataViewBuilder'),
-                builder: (context, constraints) => _renderPhoto(ref, context, wrapper, constraints, isMobile)
+                builder: (context, constraints) => _renderPhoto(ref, context, wrapper, constraints, orientation)
             ),
         onRightKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('videos'),
         whenShouldAnimateGlass: (controller) {
