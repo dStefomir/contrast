@@ -111,7 +111,7 @@ class PhotographBoardPage extends HookConsumerWidget {
             overflowHeightFactor: 1.27,
             fixedVertical: !isMobile,
             fixedHorizontal: isMobile,
-            alignment: isMobile ? Alignment.center : Alignment.centerLeft,
+            alignment: isMobile ? Alignment.topCenter : Alignment.centerLeft,
             background: child,
             child: const SizedBox(width: double.infinity, height: double.infinity,)
         ) : null,

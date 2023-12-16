@@ -320,7 +320,7 @@ class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
           if(ref.read(overlayVisibilityProvider(const Key('comment_video'))) != null) {
             ref.read(overlayVisibilityProvider(const Key('comment_video')).notifier).setOverlayVisibility(null);
           } else if (!kIsWeb && Platform.isAndroid) {
-            Modular.to.pop();
+            Modular.to.navigate('/');
           }
         },
         child: BackgroundPage(

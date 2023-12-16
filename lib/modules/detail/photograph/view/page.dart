@@ -78,7 +78,7 @@ class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
           ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
           ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
         } else if (!kIsWeb && Platform.isAndroid) {
-          Modular.to.pop();
+          Modular.to.navigate('/');
         }
       },
       child: BackgroundPage(
