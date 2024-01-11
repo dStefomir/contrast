@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.6.0+66
+version: 2.6.1+67
 
 environment:
   sdk: '>=3.0.6 <4.0.0'
@@ -38,12 +38,12 @@ dependencies:
   # Modular library
   flutter_modular: ^6.3.2
   # Translations
-  flutter_i18n: ^0.34.0
+  flutter_i18n: ^0.35.0
   # in memory file creation
   file: ^7.0.0
   flutter_riverpod: ^2.4.9
   hooks_riverpod: ^2.4.9
-  flutter_hooks: ^0.20.3
+  flutter_hooks: ^0.20.4
   # html cross platform library
   universal_html: ^2.2.4
   # qr code library
@@ -89,7 +89,7 @@ dependencies:
   # add to calendar library
   add_2_calendar: ^3.0.1
   # date picker library
-  syncfusion_flutter_datepicker: ^23.2.7
+  syncfusion_flutter_datepicker: ^24.1.43
   # parallax animation library
   parallax_animation: ^0.0.3
   # Firebase libraries
