@@ -49,7 +49,7 @@ dependencies:
   # qr code library
   qr_flutter: ^4.1.0
   # url launching library
-  url_launcher: ^6.2.2
+  url_launcher: ^6.2.3
   # handling floating action button
   flutter_speed_dial: ^7.0.0
   # context menu library
@@ -61,7 +61,7 @@ dependencies:
   # translation and core library
   intl: ^0.18.1
   # using http request
-  http: ^1.1.2
+  http: ^1.2.0
   # image render library
   extended_image: ^8.2.0
   # zoom image library
@@ -89,13 +89,13 @@ dependencies:
   # add to calendar library
   add_2_calendar: ^3.0.1
   # date picker library
-  syncfusion_flutter_datepicker: ^24.1.43
+  syncfusion_flutter_datepicker: ^24.1.45
   # parallax animation library
   parallax_animation: ^0.0.3
   # Firebase libraries
   firebase_core: ^2.24.2
-  firebase_analytics: ^10.7.4
-  firebase_messaging: ^14.7.9
+  firebase_analytics: ^10.8.0
+  firebase_messaging: ^14.7.10
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
