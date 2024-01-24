@@ -14,10 +14,10 @@ class ShaderWidget extends StatefulHookConsumerWidget {
   const ShaderWidget({super.key, required this.asset, this.child = const SizedBox.shrink()});
 
   @override
-  ConsumerState createState() => ShaderWidgetState();
+  ConsumerState createState() => _ShaderWidgetState();
 }
 
-class ShaderWidgetState extends ConsumerState<ShaderWidget> with SingleTickerProviderStateMixin {
+class _ShaderWidgetState extends ConsumerState<ShaderWidget> with SingleTickerProviderStateMixin {
 
   /// Ticker object
   late Ticker ticker;
@@ -43,6 +43,7 @@ class ShaderWidgetState extends ConsumerState<ShaderWidget> with SingleTickerPro
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
+      fit: StackFit.passthrough,
       children: [
         ShaderBuilder(
                 (_, shader, __) {
@@ -50,8 +51,8 @@ class ShaderWidgetState extends ConsumerState<ShaderWidget> with SingleTickerPro
                   return AnimatedSampler(
                         (image, size, canvas) {
                           shader.setFloat(0, time);
-                          shader.setFloat(1, size.width);
-                          shader.setFloat(2, size.height);
+                          shader.setFloat(1, 120);
+                          shader.setFloat(2, 120);
                           canvas.drawPaint(Paint()..shader = shader);
                           },
                     child: widget.child,

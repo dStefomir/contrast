@@ -46,10 +46,10 @@ class BoardPage extends StatefulHookConsumerWidget {
   const BoardPage({required this.analytics, required this.observer, super.key});
 
   @override
-  ConsumerState createState() => BoardPageState();
+  ConsumerState createState() => _BoardPageState();
 }
 
-class BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMixin {
+class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateMixin {
 
   @override
   void initState() {

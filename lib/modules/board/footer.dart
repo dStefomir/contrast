@@ -206,7 +206,7 @@ class _HomeSection extends HookConsumerWidget {
     child: ClipPath(
       clipper: HouseShape(),
       child: SizedBox(
-          width: 95,
+          width: 120,
           child: ShaderWidget(
               asset: 'background.glsl',
               child: StyledTooltip(

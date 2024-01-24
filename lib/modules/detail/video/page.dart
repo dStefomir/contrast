@@ -46,10 +46,10 @@ class VideoDetailPage extends StatefulHookConsumerWidget {
   });
 
   @override
-  ConsumerState createState() => VideoDetailPageState();
+  ConsumerState createState() => _VideoDetailPageState();
 }
 
-class VideoDetailPageState extends ConsumerState<VideoDetailPage> {
+class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
   /// Youtube controller
   late YoutubePlayerController _controller;
   /// Key used for the comments overlay

@@ -33,10 +33,10 @@ class PhotographDetailPage extends StatefulHookConsumerWidget {
   });
 
   @override
-  ConsumerState createState() => PhotographDetailPageState();
+  ConsumerState createState() => _PhotographDetailPageState();
 }
 
-class PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
+class _PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
   /// Web audio player
   late AudioPlayer player;
 

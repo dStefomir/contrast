@@ -50,10 +50,10 @@ class SimpleInput extends StatefulHookConsumerWidget {
   }) : super(key: widgetKey);
 
   @override
-  ConsumerState createState() => SimpleInputState();
+  ConsumerState createState() => _SimpleInputState();
 }
 
-class SimpleInputState extends ConsumerState<SimpleInput> {
+class _SimpleInputState extends ConsumerState<SimpleInput> {
   /// Controller for the simple input
   late TextEditingController _controller;
 

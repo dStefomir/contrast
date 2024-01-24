@@ -18,7 +18,7 @@ class HouseShape extends CustomClipper<Path> {
   }
 
   @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 /// Custom shadow of the house widget
 class HouseShadowPainter extends CustomPainter {
@@ -34,7 +34,7 @@ class HouseShadowPainter extends CustomPainter {
       ..lineTo(0, size.height * 0.331)
       ..close();
 
-    canvas.drawShadow(shadowPath, Colors.black, 1, true);
+    canvas.drawShadow(shadowPath, Colors.black, 1, false);
   }
 
   @override
