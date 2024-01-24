@@ -1,5 +1,6 @@
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/icon.dart';
+import 'package:contrast/common/widgets/shader/widget.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/shape.dart';
 import 'package:contrast/common/widgets/tab.dart';
@@ -204,134 +205,130 @@ class _HomeSection extends HookConsumerWidget {
     painter: HouseShadowPainter(),
     child: ClipPath(
       clipper: HouseShape(),
-      child: Container(
-        width: 120,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: ExactAssetImage('assets/profile_background.jpg'),
-            fit: BoxFit.fill,
-          ),
-        ),
-        height: boardPadding + 22,
-        child: StyledTooltip(
-          text: FlutterI18n.translate(context, 'Menu'),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: SpeedDial(
-                animatedIcon: AnimatedIcons.menu_home,
-                backgroundColor: Colors.transparent,
-                foregroundColor: Colors.white,
-                animatedIconTheme: const IconThemeData(size: 50),
-                shape: const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
-                direction: SpeedDialDirection.up,
-                animationDuration: const Duration(milliseconds: 500),
-                elevation: 10,
-                spacing: 5,
-                spaceBetweenChildren: 10,
-                children: [
-                  SpeedDialChild(
-                      foregroundColor: Colors.black,
-                      labelBackgroundColor: Colors.white,
-                      labelWidget: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: ShadowWidget(
-                          offset: const Offset(0, 0),
-                          blurRadius: 1,
-                          shadowSize: 0.1,
-                          child: Container(
-                            color: Colors.white,
-                            child: StyledText(
-                              text: FlutterI18n.translate(context, 'Instagram'),
-                              padding: 5,
-                              fontSize: 12,
+      child: SizedBox(
+          width: 120,
+          child: ShaderWidget(
+              asset: 'background.glsl',
+              child: StyledTooltip(
+                text: FlutterI18n.translate(context, 'Menu'),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: SpeedDial(
+                      animatedIcon: AnimatedIcons.menu_home,
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.white,
+                      animatedIconTheme: const IconThemeData(size: 50),
+                      shape: const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
+                      direction: SpeedDialDirection.up,
+                      animationDuration: const Duration(milliseconds: 500),
+                      elevation: 10,
+                      spacing: 5,
+                      spaceBetweenChildren: 10,
+                      children: [
+                        SpeedDialChild(
+                            foregroundColor: Colors.black,
+                            labelBackgroundColor: Colors.white,
+                            labelWidget: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: ShadowWidget(
+                                offset: const Offset(0, 0),
+                                blurRadius: 1,
+                                shadowSize: 0.1,
+                                child: Container(
+                                  color: Colors.white,
+                                  child: StyledText(
+                                    text: FlutterI18n.translate(context, 'Instagram'),
+                                    padding: 5,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                      child: const IconRenderer(
-                        asset: 'instagram.svg',
-                        color: Colors.black,
-                        height: 20,
-                      ),
-                      shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
-                      elevation: 1,
-                      onTap: () async {
-                        final Uri url = Uri.parse('https://www.instagram.com/dstefomir/');
-                        if (await canLaunchUrl(url)) {
-                          await launchUrl(url);
-                        }
-                      }
-                  ),
-                  SpeedDialChild(
-                      foregroundColor: Colors.black,
-                      labelBackgroundColor: Colors.white,
-                      labelWidget: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: ShadowWidget(
-                          offset: const Offset(0, 0),
-                          blurRadius: 1,
-                          shadowSize: 0.1,
-                          child: Container(
-                            color: Colors.white,
-                            child: StyledText(
-                              key: const Key('AboutMeSpeedDialShareText'),
-                              text: FlutterI18n.translate(context, 'Share'),
-                              padding: 5,
-                              fontSize: 12,
+                            child: const IconRenderer(
+                              asset: 'instagram.svg',
+                              color: Colors.black,
+                              height: 20,
                             ),
-                          ),
+                            shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+                            elevation: 1,
+                            onTap: () async {
+                              final Uri url = Uri.parse('https://www.instagram.com/dstefomir/');
+                              if (await canLaunchUrl(url)) {
+                                await launchUrl(url);
+                              }
+                            }
                         ),
-                      ),
-                      child: const IconRenderer(
-                        asset: 'share.svg',
-                        color: Colors.black,
-                        height: 20,
-                      ),
-                      shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
-                      elevation: 1,
-                      onTap: () => onUserAction(
-                          ref,
-                              () => ref.read(overlayVisibilityProvider(const Key('share')).notifier).setOverlayVisibility(true)
-                      )
-                  ),
-                  SpeedDialChild(
-                      foregroundColor: Colors.black,
-                      labelBackgroundColor: Colors.white,
-                      labelWidget: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: ShadowWidget(
-                          offset: const Offset(0, 0),
-                          blurRadius: 1,
-                          shadowSize: 0.1,
-                          child: Container(
-                            color: Colors.white,
-                            child: StyledText(
-                              text: FlutterI18n.translate(context, 'Qr code'),
-                              padding: 5,
-                              fontSize: 12,
+                        SpeedDialChild(
+                            foregroundColor: Colors.black,
+                            labelBackgroundColor: Colors.white,
+                            labelWidget: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: ShadowWidget(
+                                offset: const Offset(0, 0),
+                                blurRadius: 1,
+                                shadowSize: 0.1,
+                                child: Container(
+                                  color: Colors.white,
+                                  child: StyledText(
+                                    key: const Key('AboutMeSpeedDialShareText'),
+                                    text: FlutterI18n.translate(context, 'Share'),
+                                    padding: 5,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                            child: const IconRenderer(
+                              asset: 'share.svg',
+                              color: Colors.black,
+                              height: 20,
+                            ),
+                            shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+                            elevation: 1,
+                            onTap: () => onUserAction(
+                                ref,
+                                    () => ref.read(overlayVisibilityProvider(const Key('share')).notifier).setOverlayVisibility(true)
+                            )
                         ),
-                      ),
-                      child: const IconRenderer(
-                        asset: 'qr_code.svg',
-                        color: Colors.black,
-                        height: 20,
-                      ),
-                      shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
-                      elevation: 1,
-                      onTap: () {
-                        if(ref.read(overlayVisibilityProvider(const Key('qr_code'))) == true) {
-                          ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
-                        } else {
-                          ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(true);
-                        }
-                      }
-                  )
-                ]
-            ).translateOnPhotoHover,
-          ),
-        ),
+                        SpeedDialChild(
+                            foregroundColor: Colors.black,
+                            labelBackgroundColor: Colors.white,
+                            labelWidget: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: ShadowWidget(
+                                offset: const Offset(0, 0),
+                                blurRadius: 1,
+                                shadowSize: 0.1,
+                                child: Container(
+                                  color: Colors.white,
+                                  child: StyledText(
+                                    text: FlutterI18n.translate(context, 'Qr code'),
+                                    padding: 5,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            child: const IconRenderer(
+                              asset: 'qr_code.svg',
+                              color: Colors.black,
+                              height: 20,
+                            ),
+                            shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+                            elevation: 1,
+                            onTap: () {
+                              if(ref.read(overlayVisibilityProvider(const Key('qr_code'))) == true) {
+                                ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
+                              } else {
+                                ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(true);
+                              }
+                            }
+                        )
+                      ]
+                  ).translateOnPhotoHover,
+                ),
+              )
+          )
       ),
     ),
   );
