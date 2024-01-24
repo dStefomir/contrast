@@ -70,7 +70,7 @@ class BoardPageFooter extends HookConsumerWidget {
                     ).translateOnPhotoHover,
                   ),
                 ),
-                const SizedBox(width: 95),
+                const SizedBox(width: 120),
                 Expanded(
                   child: StyledTooltip(
                     text: FlutterI18n.translate(context, 'Videos'),
