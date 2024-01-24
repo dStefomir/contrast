@@ -70,7 +70,7 @@ class BoardPageFooter extends HookConsumerWidget {
                     ).translateOnPhotoHover,
                   ),
                 ),
-                const SizedBox(width: 120),
+                const SizedBox(width: 95),
                 Expanded(
                   child: StyledTooltip(
                     text: FlutterI18n.translate(context, 'Videos'),
@@ -206,7 +206,7 @@ class _HomeSection extends HookConsumerWidget {
     child: ClipPath(
       clipper: HouseShape(),
       child: SizedBox(
-          width: 120,
+          width: 95,
           child: ShaderWidget(
               asset: 'background.glsl',
               child: StyledTooltip(

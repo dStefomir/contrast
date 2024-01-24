@@ -4,7 +4,6 @@ precision mediump float;
 
 uniform float iTime;
 uniform vec2 iResolution;
-uniform vec2 iMouse;
 out vec4 fragColor;
 
 #define PI              3.141592654
