@@ -1,7 +1,6 @@
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
-import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/paged_list.dart';
 import 'package:flutter/foundation.dart';
@@ -34,8 +33,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   final void Function(AnimationController)? whenShouldAnimateGlass;
   /// Widget that should be displayed if the list view is empty
   final Widget listEmptyChild;
-  /// Widget for the header of the data view
-  final Widget Function()? headerWidget;
 
   const RestfulAnimatedDataView({
     Key? key,
@@ -44,7 +41,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     required this.itemBuilder,
     required this.listEmptyChild,
     this.axis = Axis.vertical,
-    this.headerWidget,
     this.onLeftKeyPressed,
     this.onRightKeyPressed,
     this.whenShouldAnimateGlass,
@@ -133,24 +129,18 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
       ref.read(serviceProvider.notifier).clearAndFetchedData(loadPage);
       return null;
     }, [selectedFilter]);
-
+    
     final customScrollView = CustomScrollView(
       controller: controller,
       scrollDirection: axis,
+      scrollBehavior: ScrollConfiguration.of(context).copyWith(
+        dragDevices: {
+          PointerDeviceKind.touch,
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.trackpad,
+        },
+      ),
       slivers: [
-        if (headerWidget != null)
-          SliverAppBar(
-              expandedHeight: boardPadding - 4,
-              backgroundColor: Colors.white,
-              clipBehavior: Clip.antiAlias,
-              floating: true,
-              pinned: false,
-              stretch: true,
-              automaticallyImplyLeading: true,
-              elevation: 10,
-              forceElevated: true,
-              flexibleSpace: headerWidget!()
-          ),
         SliverGrid.builder(
           addAutomaticKeepAlives: true,
           addRepaintBoundaries: true,
@@ -158,7 +148,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
           itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
           itemCount: apiData.length,
         ),
-      ],
+      ]
     );
 
     return apiData.isNotEmpty ? Stack(

@@ -20,13 +20,13 @@ class ShaderWidget extends StatefulHookConsumerWidget {
 class _ShaderWidgetState extends ConsumerState<ShaderWidget> with SingleTickerProviderStateMixin {
 
   /// Ticker object
-  late Ticker ticker;
+  Ticker? ticker;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) =>
-        ticker = createTicker((elapsed) =>
+        ticker ??= createTicker((elapsed) =>
             ref.read(shaderProvider.notifier).setTicker()
         )..start()
     );
@@ -35,8 +35,8 @@ class _ShaderWidgetState extends ConsumerState<ShaderWidget> with SingleTickerPr
   @override
   void dispose() {
     super.dispose();
-    ticker.stop();
-    ticker.dispose();
+    ticker?.stop();
+    ticker?.dispose();
   }
 
   @override

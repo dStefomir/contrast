@@ -34,7 +34,7 @@ class BoardPageFooter extends HookConsumerWidget {
           child: Container(
             height: boardPadding,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.transparent,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.5),

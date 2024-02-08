@@ -332,7 +332,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
             },
             child: Container(
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 1.5)
+                    border: Border.all(color: kIsWeb ? Colors.transparent : Colors.black, width: kIsWeb ? 0 : 1.5)
                 ),
                 child: _renderPhoto(context, null, isHovering, noParallax: false)
             )

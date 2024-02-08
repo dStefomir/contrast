@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.6.3+72
+version: 2.6.4+73
 
 environment:
   sdk: '>=3.0.6 <4.0.0'
@@ -41,15 +41,15 @@ dependencies:
   flutter_i18n: ^0.35.0
   # in memory file creation
   file: ^7.0.0
-  flutter_riverpod: ^2.4.9
-  hooks_riverpod: ^2.4.9
-  flutter_hooks: ^0.20.4
+  flutter_riverpod: ^2.4.10
+  hooks_riverpod: ^2.4.10
+  flutter_hooks: ^0.20.5
   # html cross platform library
   universal_html: ^2.2.4
   # qr code library
   qr_flutter: ^4.1.0
   # url launching library
-  url_launcher: ^6.2.3
+  url_launcher: ^6.2.4
   # handling floating action button
   flutter_speed_dial: ^7.0.0
   # context menu library
@@ -85,17 +85,17 @@ dependencies:
   # Rating library
   flutter_rating_bar: ^4.0.1
   # device info library
-  device_info_plus: ^9.1.1
+  device_info_plus: ^9.1.2
   # add to calendar library
   add_2_calendar: ^3.0.1
   # date picker library
-  syncfusion_flutter_datepicker: ^24.1.45
+  syncfusion_flutter_datepicker: ^24.2.4
   # parallax animation library
   parallax_animation: ^0.0.3
   # Firebase libraries
-  firebase_core: ^2.24.2
-  firebase_analytics: ^10.8.0
-  firebase_messaging: ^14.7.10
+  firebase_core: ^2.25.4
+  firebase_analytics: ^10.8.5
+  firebase_messaging: ^14.7.15
   # Shader library
   flutter_shaders: ^0.1.2
   # The following adds the Cupertino Icons font to your application.
