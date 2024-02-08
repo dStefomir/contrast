@@ -172,7 +172,7 @@ class ContrastPhotograph extends StatelessWidget {
         cacheKey: "${widgetKey.toString()}_cache_key_${platform}_isMobile_$isMobile",
         clearMemoryCacheIfFailed: true,
         clearMemoryCacheWhenDispose: false,
-        imageCacheName: "${widgetKey.toString()}_cache_name_${platform}_isMobile_$isMobile",
+        imageCacheName: kIsWeb ? "${widgetKey.toString()}_cache_name_${platform}_isMobile_$isMobile" : null,
         filterQuality: quality,
         isAntiAlias: !kIsWeb,
       );
