@@ -24,6 +24,8 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   final int itemsPerRow;
   /// Height of the dim effect
   final double dimHeight;
+  /// Padding to be applied to the data view
+  final double externalPadding;
   /// Renders each row of the list view
   final Widget Function(BuildContext context, int index, int dataLenght, T item) itemBuilder;
   /// What happens when the left arrow key is pressed
@@ -46,6 +48,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     this.whenShouldAnimateGlass,
     this.itemsPerRow = 4,
     this.dimHeight = 0,
+    this.externalPadding = 0
   }) : super(key: key);
 
   /// Handles the keyboard key up and down for scrolling
@@ -130,25 +133,28 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
       return null;
     }, [selectedFilter]);
     
-    final customScrollView = CustomScrollView(
-      controller: controller,
-      scrollDirection: axis,
-      scrollBehavior: ScrollConfiguration.of(context).copyWith(
-        dragDevices: {
-          PointerDeviceKind.touch,
-          PointerDeviceKind.mouse,
-          PointerDeviceKind.trackpad,
-        },
-      ),
-      slivers: [
-        SliverGrid.builder(
-          addAutomaticKeepAlives: true,
-          addRepaintBoundaries: true,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
-          itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
-          itemCount: apiData.length,
+    final customScrollView = Padding(
+      padding: EdgeInsets.all(externalPadding),
+      child: CustomScrollView(
+        controller: controller,
+        scrollDirection: axis,
+        scrollBehavior: ScrollConfiguration.of(context).copyWith(
+          dragDevices: {
+            PointerDeviceKind.touch,
+            PointerDeviceKind.mouse,
+            PointerDeviceKind.trackpad,
+          },
         ),
-      ]
+        slivers: [
+          SliverGrid.builder(
+            addAutomaticKeepAlives: true,
+            addRepaintBoundaries: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
+            itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
+            itemCount: apiData.length,
+          ),
+        ]
+      ),
     );
 
     return apiData.isNotEmpty ? Stack(
