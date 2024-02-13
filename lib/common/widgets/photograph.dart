@@ -96,7 +96,7 @@ class ContrastPhotograph extends StatelessWidget {
     final Widget photograph = Stack(
       alignment: Alignment.center,
       children: [
-        ShadowWidget(
+        if (kIsWeb || isThumbnail) ShadowWidget(
             offset: const Offset(0, 0),
             blurRadius: isThumbnail ? 10: 3,
             child: SizedBox(

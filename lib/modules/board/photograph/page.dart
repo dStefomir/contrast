@@ -104,7 +104,7 @@ class PhotographBoardPage extends HookConsumerWidget {
     final isMobile = currentOrientation == Orientation.portrait;
 
     return Padding(
-      padding: const EdgeInsets.all(kIsWeb ? 1.5 : 0),
+      padding: const EdgeInsets.only(left: kIsWeb ? 1.5 : 0, right: kIsWeb ? 1.5 : 0),
       child: ContrastPhotographMeta(
           widgetKey: Key('${wrapper.image.id}'),
           fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
@@ -142,7 +142,7 @@ class PhotographBoardPage extends HookConsumerWidget {
         loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
         itemsPerRow: _calculateRestfulViewItemsPerRows(context),
         axis: _getRestfulViewAxis(context, orientation),
-        dimHeight: MediaQuery.of(context).size.height / 2.5,
+        dimHeight: MediaQuery.of(context).size.height / 2,
         externalPadding: kIsWeb ? 8 : 0,
         itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper) =>
             LayoutBuilder(
