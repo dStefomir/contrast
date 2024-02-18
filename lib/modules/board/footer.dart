@@ -9,6 +9,7 @@ import 'package:contrast/common/widgets/tooltip.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -48,6 +49,7 @@ class BoardPageFooter extends HookConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
+                  flex: kIsWeb ? currentTab == 'photos' ? 2 : 1 : 1,
                   child: StyledTooltip(
                     text: FlutterI18n.translate(context, 'Photographs'),
                     child: Material(
@@ -67,11 +69,12 @@ class BoardPageFooter extends HookConsumerWidget {
                             )
                         ),
                       ),
-                    ).translateOnPhotoHover,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 120),
+                if (!kIsWeb) const SizedBox(width: 120),
                 Expanded(
+                  flex: kIsWeb ? currentTab == 'videos' ? 2 : 1 : 1,
                   child: StyledTooltip(
                     text: FlutterI18n.translate(context, 'Videos'),
                     child: Material(
@@ -94,7 +97,7 @@ class BoardPageFooter extends HookConsumerWidget {
                           ),
                         ),
                       ),
-                    ).translateOnPhotoHover,
+                    ),
                   ),
                 ),
               ],
@@ -102,7 +105,7 @@ class BoardPageFooter extends HookConsumerWidget {
           ),
         ),
       ),
-      Align(
+      if (!kIsWeb) Align(
         alignment: Alignment.bottomCenter,
         child: _HomeSection(onUserAction: onUserAction).translateOnPhotoHover
       ),
@@ -175,7 +178,7 @@ class BoardPageFooter extends HookConsumerWidget {
           ),
         ),
       ),
-      Align(
+      if (!kIsWeb) Align(
         alignment: Alignment.bottomCenter,
         child: _HomeSection(onUserAction: onUserAction).translateOnPhotoHover,
       ),

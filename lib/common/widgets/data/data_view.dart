@@ -133,28 +133,25 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
       return null;
     }, [selectedFilter]);
     
-    final customScrollView = Padding(
-      padding: EdgeInsets.all(externalPadding),
-      child: CustomScrollView(
-        controller: controller,
-        scrollDirection: axis,
-        scrollBehavior: ScrollConfiguration.of(context).copyWith(
-          dragDevices: {
-            PointerDeviceKind.touch,
-            PointerDeviceKind.mouse,
-            PointerDeviceKind.trackpad,
-          },
-        ),
-        slivers: [
-          SliverGrid.builder(
-            addAutomaticKeepAlives: true,
-            addRepaintBoundaries: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
-            itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
-            itemCount: apiData.length,
-          ),
-        ]
+    final customScrollView = CustomScrollView(
+      controller: controller,
+      scrollDirection: axis,
+      scrollBehavior: ScrollConfiguration.of(context).copyWith(
+        dragDevices: {
+          PointerDeviceKind.touch,
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.trackpad,
+        },
       ),
+      slivers: [
+        SliverGrid.builder(
+          addAutomaticKeepAlives: true,
+          addRepaintBoundaries: true,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
+          itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
+          itemCount: apiData.length,
+        ),
+      ]
     );
 
     return apiData.isNotEmpty ? Stack(

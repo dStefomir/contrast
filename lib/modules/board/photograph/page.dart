@@ -104,7 +104,7 @@ class PhotographBoardPage extends HookConsumerWidget {
     final isMobile = currentOrientation == Orientation.portrait;
 
     return Padding(
-      padding: const EdgeInsets.only(left: kIsWeb ? 1.5 : 0, right: kIsWeb ? 1.5 : 0),
+      padding: const EdgeInsets.all(kIsWeb ? 1.5 : 0),
       child: ContrastPhotographMeta(
           widgetKey: Key('${wrapper.image.id}'),
           fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
