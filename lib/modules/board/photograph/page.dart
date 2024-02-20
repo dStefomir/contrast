@@ -1,4 +1,3 @@
-import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/common/widgets/load.dart';
@@ -103,32 +102,29 @@ class PhotographBoardPage extends HookConsumerWidget {
     }
     final isMobile = currentOrientation == Orientation.portrait;
 
-    return Padding(
-      padding: const EdgeInsets.all(kIsWeb ? 1.5 : 0),
-      child: ContrastPhotographMeta(
-          widgetKey: Key('${wrapper.image.id}'),
-          fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
-          parallax: !kIsWeb ? (child) => ParallaxWidget(
-              key: Key('${wrapper.image.id}_photo_parallax_widget'),
-              overflowWidthFactor: 1.27,
-              overflowHeightFactor: 1.27,
-              fixedVertical: !isMobile,
-              fixedHorizontal: isMobile,
-              alignment: isMobile ? Alignment.topCenter : Alignment.centerLeft,
-              background: child,
-              child: const SizedBox(width: double.infinity, height: double.infinity,)
-          ) : null,
-          wrapper: wrapper,
-          constraints: constraints,
-          borderColor: Colors.transparent,
-          onClick: () => onUserAction(ref, () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$currentCategory')),
-          onRedirect: kIsWeb ? () => onUserAction(ref, () async {
-            final Uri url = Uri.parse('https://www.dstefomir.eu/#/photos/details?id=${wrapper.image.id}&category=$currentCategory');
-            if (await canLaunchUrl(url)) {
-              await launchUrl(url);
-            }
-          }) : null
-      ).translateOnPhotoHover,
+    return ContrastPhotographMeta(
+        widgetKey: Key('${wrapper.image.id}'),
+        fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
+        parallax: !kIsWeb ? (child) => ParallaxWidget(
+            key: Key('${wrapper.image.id}_photo_parallax_widget'),
+            overflowWidthFactor: 1.27,
+            overflowHeightFactor: 1.27,
+            fixedVertical: !isMobile,
+            fixedHorizontal: isMobile,
+            alignment: isMobile ? Alignment.topCenter : Alignment.centerLeft,
+            background: child,
+            child: const SizedBox(width: double.infinity, height: double.infinity,)
+        ) : null,
+        wrapper: wrapper,
+        constraints: constraints,
+        borderColor: Colors.transparent,
+        onClick: () => onUserAction(ref, () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$currentCategory')),
+        onRedirect: kIsWeb ? () => onUserAction(ref, () async {
+          final Uri url = Uri.parse('https://www.dstefomir.eu/#/photos/details?id=${wrapper.image.id}&category=$currentCategory');
+          if (await canLaunchUrl(url)) {
+            await launchUrl(url);
+          }
+        }) : null
     );
   }
 

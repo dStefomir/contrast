@@ -96,7 +96,7 @@ class ContrastPhotograph extends StatelessWidget {
     final Widget photograph = Stack(
       alignment: Alignment.center,
       children: [
-        if (kIsWeb || isThumbnail) ShadowWidget(
+        if (isThumbnail) ShadowWidget(
             offset: const Offset(0, 0),
             blurRadius: isThumbnail ? 10: 3,
             child: SizedBox(
@@ -104,22 +104,19 @@ class ContrastPhotograph extends StatelessWidget {
               height: shadowHeight,
             )
         ),
-        Padding(
-          padding: EdgeInsets.only(top: paddingTop, bottom: paddingBottom, left: paddingLeft, right: paddingRight),
-          child: AspectRatio(
-            aspectRatio: isThumbnail || image!.isLandscape! ? 3 / 2 : 2 / 3,
-            child: ExtendedRawImage(
-              image: state.extendedImageInfo?.image,
-              width: width,
-              height: !isThumbnail ? height : double.infinity,
-              fit: fit ?? (compressed
-                  ? image?.isLandscape != null && image!.isLandscape!
-                  ? BoxFit.fitWidth
-                  : BoxFit.fitHeight
-                  : BoxFit.contain),
-              isAntiAlias: !kIsWeb,
-              filterQuality: quality,
-            ),
+        AspectRatio(
+          aspectRatio: isThumbnail || image!.isLandscape! ? 3 / 2 : 2 / 3,
+          child: ExtendedRawImage(
+            image: state.extendedImageInfo?.image,
+            width: width,
+            height: !isThumbnail ? height : double.infinity,
+            fit: fit ?? (compressed
+                ? image?.isLandscape != null && image!.isLandscape!
+                ? BoxFit.fitWidth
+                : BoxFit.fitHeight
+                : BoxFit.contain),
+            isAntiAlias: !kIsWeb,
+            filterQuality: quality,
           ),
         ),
       ],
@@ -332,7 +329,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
             },
             child: Container(
                 decoration: BoxDecoration(
-                    border: Border.all(color: kIsWeb ? Colors.transparent : Colors.black, width: kIsWeb ? 0 : 1.5)
+                    border: Border.all(color: Colors.black, width: 1.5)
                 ),
                 child: _renderPhoto(context, null, isHovering, noParallax: false)
             )
@@ -350,7 +347,7 @@ class ImageMetaDataDetails extends StatelessWidget {
   final ImageMetaData metadata;
   /// Text scale factor
   final double scaleFactor;
-  /// Should be rendered in a row
+  /// Should be rendered in a row not
   final bool row;
 
   const ImageMetaDataDetails({
@@ -423,7 +420,7 @@ class ImageMetaDataDetails extends StatelessWidget {
         visible: metadata.dataOfCapture != null,
         child: _renderMetaRow(
           formatDateUi(
-              metadata.dataOfCapture != null ? metadata.dataOfCapture! : null),
+              metadata.dataOfCapture),
           'date.svg',
         ),
       ),
