@@ -102,8 +102,8 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
           ref.read(overlayVisibilityProvider(const Key('share'))) != null;
 
   /// Handles the escape key of the keyboard
-  void _handleKeyEvent(RawKeyEvent event) {
-      if (event is RawKeyDownEvent && event.logicalKey == LogicalKeyboardKey.escape) {
+  void _handleKeyEvent(KeyEvent event) {
+      if (event is KeyUpEvent && event.logicalKey == LogicalKeyboardKey.escape) {
         _onAction(ref, null);
     }
   }
@@ -225,7 +225,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
     return PopScope(
       canPop: false,
       onPopInvoked: (invoked) {
-        if(_checkOverlaysState(ref)) {
+        if (_checkOverlaysState(ref)) {
           _onAction(ref, null);
         } else if (!kIsWeb && Platform.isAndroid) {
           /// If its android - kill the application
@@ -233,9 +233,9 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
         }
       },
       child: BackgroundPage(
-          child: RawKeyboardListener(
+          child: KeyboardListener(
             focusNode: useFocusNode(),
-            onKey: _handleKeyEvent,
+            onKeyEvent: _handleKeyEvent,
             child: Stack(
                 children: [
                   Align(

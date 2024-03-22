@@ -306,11 +306,11 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       }
     });
 
-    return RawKeyboardListener(
+    return KeyboardListener(
       autofocus: true,
       focusNode: useFocusNode(),
-      onKey: (RawKeyEvent event) {
-        if (event.logicalKey == LogicalKeyboardKey.escape) {
+      onKeyEvent: (event) {
+        if (event is KeyUpEvent && event.logicalKey == LogicalKeyboardKey.escape) {
           Modular.to.navigate('/');
         }
       },

@@ -123,8 +123,8 @@ class PhotographDetailsView extends HookConsumerWidget {
   }
 
   /// Handles the key events from the Focus widget and updates the page
-  void _handleKeyEvent(RawKeyEvent event, WidgetRef ref, ScrollController scrollController, PageController pageController, int currentPhotographIndex) {
-    if (event is RawKeyDownEvent) {
+  void _handleKeyEvent(KeyEvent event, WidgetRef ref, ScrollController scrollController, PageController pageController, int currentPhotographIndex) {
+    if (event is KeyUpEvent) {
       if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
         _goToPreviousPhotograph(ref, pageController, currentPhotographIndex);
       } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
@@ -534,10 +534,10 @@ class PhotographDetailsView extends HookConsumerWidget {
       ImageData image) {
     final serviceProvider = ref.watch(photographDetailsServiceProvider);
 
-    return RawKeyboardListener(
+    return KeyboardListener(
       autofocus: true,
       focusNode: useFocusNode(),
-      onKey: (RawKeyEvent event) => _handleKeyEvent(event, ref, scrollController, pageController, currentPhotographIndex),
+      onKeyEvent: (event) => _handleKeyEvent(event, ref, scrollController, pageController, currentPhotographIndex),
       child: PhotoViewGallery.builder(
           key: const Key('PhotographWidgetGallery'),
           scrollPhysics: const BouncingScrollPhysics(),
