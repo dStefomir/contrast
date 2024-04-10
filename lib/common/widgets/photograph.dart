@@ -105,7 +105,7 @@ class ContrastPhotograph extends StatelessWidget {
             )
         ),
         AspectRatio(
-          aspectRatio: isThumbnail || image!.isLandscape! ? 3 / 2 : 2 / 3,
+          aspectRatio: isThumbnail || image!.isLandscape! ? 3 / 2.5 : 2.5 / 3,
           child: ExtendedRawImage(
             image: state.extendedImageInfo?.image,
             width: width,
@@ -265,6 +265,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
             widgetKey: Key("${widgetKey.toString()}_photograph"),
             fetch: fetch,
             constraints: constraints,
+            fit: BoxFit.cover,
             quality: FilterQuality.low,
             borderColor: borderColor,
             image: wrapper.image,

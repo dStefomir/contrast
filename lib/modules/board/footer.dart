@@ -56,7 +56,7 @@ class BoardPageFooter extends HookConsumerWidget {
                         onTap: () => ref.read(boardFooterTabProvider.notifier).switchTab('photos'),
                         child: Container(
                             height: boardPadding,
-                            padding: EdgeInsets.all(currentTab == 'photos' ? 10.0 : 18.0),
+                            padding: EdgeInsets.all(currentTab == 'photos' ? 10.0 : 15.0),
                             decoration: BoxDecoration(
                               color: currentTab == 'photos' ? Colors.black: Colors.white,
                             ),
@@ -83,7 +83,7 @@ class BoardPageFooter extends HookConsumerWidget {
                         },
                         child: Container(
                           height: boardPadding,
-                          padding: EdgeInsets.all(currentTab == 'videos' ? 10.0: 18.0),
+                          padding: EdgeInsets.all(currentTab == 'videos' ? 10.0: 15.0),
                           decoration: BoxDecoration(
                             color: currentTab == 'videos' ? Colors.black: Colors.white,
                           ),

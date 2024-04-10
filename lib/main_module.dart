@@ -7,16 +7,16 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 import 'core/page.dart';
 
-const String boardPageRoute = '/';
-const String loginPageRoute = '/login';
-const String photographDetailsPageRoute = '/photos/details';
-const String videoDetailsPageRoute = '/videos/details';
+const String _boardPageRoute = '/';
+const String _loginPageRoute = '/login';
+const String _photographDetailsPageRoute = '/photos/details';
+const String _videoDetailsPageRoute = '/videos/details';
 
 /// Represents the main module of the app
 class MainModule extends Module {
 
-  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+  static final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
+  static final FirebaseAnalyticsObserver _observer = FirebaseAnalyticsObserver(analytics: _analytics);
 
   // Provide a list of dependencies to inject into the project
   @override
@@ -25,19 +25,19 @@ class MainModule extends Module {
   @override
   void routes(r) {
     r.child(
-        boardPageRoute,
+        _boardPageRoute,
         transition: TransitionType.fadeIn,
         duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
             pageName: 'Board',
             render: () => BoardPage(
-                analytics: analytics,
-                observer: observer
+                analytics: _analytics,
+                observer: _observer
             )
         )
     );
     r.child(
-        loginPageRoute,
+        _loginPageRoute,
         transition: TransitionType.downToUp,
         duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
@@ -46,7 +46,7 @@ class MainModule extends Module {
         )
     );
     r.child(
-        photographDetailsPageRoute,
+        _photographDetailsPageRoute,
         transition: TransitionType.scale,
         duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
@@ -54,13 +54,13 @@ class MainModule extends Module {
             render: () => PhotographDetailPage(
                 id: int.parse(r.args.queryParams['id']!),
                 category: r.args.queryParams['category']!,
-                analytics: analytics,
-                observer: observer
+                analytics: _analytics,
+                observer: _observer
             )
         )
     );
     r.child(
-        videoDetailsPageRoute,
+        _videoDetailsPageRoute,
         transition: TransitionType.scale,
         duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
@@ -68,8 +68,8 @@ class MainModule extends Module {
             render: () => VideoDetailPage(
                 path: r.args.queryParams['path'] ?? '',
                 id: int.parse('${r.args.queryParams['id']}'),
-                analytics: analytics,
-                observer: observer
+                analytics: _analytics,
+                observer: _observer
             )
         )
     );
