@@ -105,7 +105,7 @@ class ContrastPhotograph extends StatelessWidget {
             )
         ),
         AspectRatio(
-          aspectRatio: isThumbnail || image!.isLandscape! ? 3 / 2.5 : 2.5 / 3,
+          aspectRatio: isThumbnail ? 3 / 2 : image!.isLandscape! ? 3 / 2.5 : 2.5 / 3,
           child: ExtendedRawImage(
             image: state.extendedImageInfo?.image,
             width: width,
