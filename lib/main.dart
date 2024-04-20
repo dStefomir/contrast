@@ -117,8 +117,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) => MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: "Contrast",
-      routeInformationParser: Modular.routeInformationParser,
-      routerDelegate: Modular.routerDelegate,
+      routerConfig: Modular.routerConfig,
       scrollBehavior: NoThumbScrollBehavior().copyWith(scrollbars: false),
       localizationsDelegates: [
         widget.flutterI18nDelegate,
