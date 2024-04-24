@@ -1,7 +1,10 @@
 import 'package:contrast/common/widgets/hover_provider.dart';
 import 'package:contrast/common/widgets/text.dart';
+import 'package:contrast/modules/board/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hyper_effects/hyper_effects.dart';
 
 /// Renders a TabText
 class ContrastTab extends HookConsumerWidget {
@@ -31,6 +34,17 @@ class ContrastTab extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isHovering = ref.watch(hoverProvider(widgetKey));
+    bool shouldAnimate = false;
+    useValueChanged(ref.watch(boardHeaderTabProvider), (_, __) async {
+      if (ref.read(boardHeaderTabProvider) == tabKey) {
+        shouldAnimate = true;
+      }
+    });
+    useValueChanged(ref.watch(boardFooterTabProvider), (_, __) async {
+      if (ref.read(boardFooterTabProvider) == tabKey) {
+        shouldAnimate = true;
+      }
+    });
 
     return Material(
       color: Colors.transparent,
@@ -54,7 +68,10 @@ class ContrastTab extends HookConsumerWidget {
                         ),
                       ]
                     : null
-            ),
+            )
+                .shake(frequency: 2)
+                .animate(trigger: shouldAnimate, playIf: () => shouldAnimate)
+                .resetAll(),
           )
       ),
     );

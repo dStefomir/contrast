@@ -16,6 +16,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hyper_effects/hyper_effects.dart';
 import 'package:parallax_animation/parallax_animation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -94,6 +95,20 @@ class VideoBoardPage extends HookConsumerWidget {
             await launchUrl(url);
           }
         }) : null
+    ).scrollTransition(
+          (context, widget, event) => widget.blur(
+        switch (event.phase) {
+          ScrollPhase.identity => 0,
+          ScrollPhase.topLeading => 10,
+          ScrollPhase.bottomTrailing => 10,
+        },
+      ).scale(
+        switch (event.phase) {
+          ScrollPhase.identity => 1,
+          ScrollPhase.topLeading => 0.1,
+          ScrollPhase.bottomTrailing => 0.1,
+        },
+      ),
     );
   }
 

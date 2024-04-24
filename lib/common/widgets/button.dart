@@ -4,8 +4,11 @@ import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/common/widgets/tooltip.dart';
+import 'package:contrast/modules/board/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hyper_effects/hyper_effects.dart';
 
 class RedirectButton extends HookConsumerWidget {
   /// Widget key
@@ -192,36 +195,44 @@ class MenuButton extends HookConsumerWidget {
     required this.selected,
     required this.size,
     required this.tooltip,
-    required this.onClick
+    required this.onClick,
   }) : super(key: widgetKey);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) =>
-      StyledTooltip(
-        text: tooltip,
-        pointingPosition: AxisDirection.left,
-        child: Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              color: selected ? Colors.black : Colors.transparent,
-            ),
-            child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                    onTap: () => onClick(),
-                    onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: IconRenderer(
-                        asset: iconPath,
-                        color: selected ? Colors.white : Colors.black,
-                      ),
-                    )
-                )
-            )
-        ),
-      );
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool shouldAnimate = false;
+    useValueChanged(ref.watch(boardHeaderTabProvider), (_, __) async {
+      if (ref.read(boardHeaderTabProvider) == iconPath.substring(0, iconPath.indexOf('.')) ||
+          ref.read(boardHeaderTabProvider) == 'other' && iconPath.substring(0, iconPath.indexOf('.')) == 'dog') {
+        shouldAnimate = true;
+      }
+    });
+    return StyledTooltip(
+      text: tooltip,
+      pointingPosition: AxisDirection.left,
+      child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: selected ? Colors.black : Colors.transparent,
+          ),
+          child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                  onTap: () => onClick(),
+                  onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: IconRenderer(
+                      asset: iconPath,
+                      color: selected ? Colors.white : Colors.black,
+                    ).rotate(12, from: 0).animate(trigger: shouldAnimate, duration: const Duration(milliseconds: 500)).resetAll(),
+                  )
+              )
+          )
+      ),
+    );
+  }
 }
 
 /// Renders a rounded button widget
