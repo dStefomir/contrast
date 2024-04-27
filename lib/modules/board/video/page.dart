@@ -1,6 +1,5 @@
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
-import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/video.dart';
 import 'package:contrast/model/video_data.dart';
 import 'package:contrast/modules/board/overlay/delete/provider.dart';
@@ -17,6 +16,7 @@ import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hyper_effects/hyper_effects.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:parallax_animation/parallax_animation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -115,6 +115,7 @@ class VideoBoardPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final orientation = MediaQuery.of(context).orientation;
+    final double halfHeightSize = MediaQuery.of(context).size.height / 2;
 
     return RestfulAnimatedDataView<VideoData>(
         key: const Key('VideoDataView'),
@@ -122,7 +123,7 @@ class VideoBoardPage extends HookConsumerWidget {
         loadPage: ref.read(videoBoardServiceProvider).getVideoBoard,
         itemsPerRow: orientation == Orientation.portrait ? 3 : 2,
         axis: orientation == Orientation.portrait ? Axis.vertical : Axis.horizontal,
-        dimHeight: MediaQuery.of(context).size.height / 2,
+        dimHeight: halfHeightSize,
         itemBuilder: (BuildContext context, int index, int dataLength, VideoData wrapper) =>
             LayoutBuilder(key: const Key('VideoDataViewBuilder'), builder: (context, constraints) =>
                 _renderVideo(context, ref, wrapper, constraints, orientation)
@@ -136,8 +137,15 @@ class VideoBoardPage extends HookConsumerWidget {
             controller.forward();
           });
         },
-        listEmptyChild: const Center(
-          child: LoadingIndicator(color: Colors.black),
+        listEmptyChild: Center(
+          child: SizedBox(
+            height: halfHeightSize,
+            child: const LoadingIndicator(
+              indicatorType: Indicator.triangleSkewSpin,
+              colors: [Colors.black],
+              strokeWidth: 2,
+            ),
+          )
         )
     );
   }

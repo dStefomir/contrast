@@ -1,6 +1,5 @@
 import 'package:contrast/common/widgets/data/data_view.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
-import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/photograph.dart';
 import 'package:contrast/model/image_data.dart';
 import 'package:contrast/modules/board/overlay/delete/provider.dart';
@@ -18,6 +17,7 @@ import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hyper_effects/hyper_effects.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:parallax_animation/parallax_animation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -146,6 +146,7 @@ class PhotographBoardPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final orientation = MediaQuery.of(context).orientation;
+    final double halfHeightSize = MediaQuery.of(context).size.height / 2;
 
     return RestfulAnimatedDataView<ImageBoardWrapper>(
         key: const Key('PhotographDataView'),
@@ -153,7 +154,7 @@ class PhotographBoardPage extends HookConsumerWidget {
         loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
         itemsPerRow: _calculateRestfulViewItemsPerRows(context),
         axis: _getRestfulViewAxis(context, orientation),
-        dimHeight: MediaQuery.of(context).size.height / 2,
+        dimHeight: halfHeightSize,
         externalPadding: kIsWeb ? 8 : 0,
         itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper) =>
             LayoutBuilder(
@@ -168,8 +169,15 @@ class PhotographBoardPage extends HookConsumerWidget {
             controller.forward();
           });
         },
-        listEmptyChild: const Center(
-          child: LoadingIndicator(color: Colors.black),
+        listEmptyChild: Center(
+          child: SizedBox(
+            height: halfHeightSize,
+            child: const LoadingIndicator(
+                indicatorType: Indicator.triangleSkewSpin,
+                colors: [Colors.black],
+                strokeWidth: 2,
+            ),
+          ),
         )
     );
   }

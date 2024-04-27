@@ -52,7 +52,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   }) : super(key: key);
 
   /// Handles the keyboard key up and down for scrolling
-  void _handleKeyEvent(RawKeyEvent event, ScrollController controller) {
+  void _handleKeyEvent(KeyEvent event, ScrollController controller) {
     void scrollBack(double offset) {
       if (offset - 250 >= 0) {
         controller.animateTo(
@@ -75,7 +75,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
       }
     }
 
-    if (event is RawKeyDownEvent) {
+    if (event is KeyDownEvent) {
       var offset = controller.offset;
       if (event.logicalKey == LogicalKeyboardKey.arrowUp && axis == Axis.vertical) {
         scrollBack(offset);
@@ -125,11 +125,15 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     final double widgetMaxHeight = MediaQuery.of(context).size.height;
     /// Represents the max width of the widget
     final double widgetMaxWidth = MediaQuery.of(context).size.width;
-
+    /// Fetches from the back-end
+    fetchData() => ref.read(serviceProvider.notifier)
+        .clearAndFetchedData(loadPage)
+        .onError((error, stackTrace) => Future.delayed(const Duration(seconds: 3), () => fetchData())
+    );
     /// Fetch the first page when the widget is first built.
     /// If the selected filter is changed clear the data.
     useEffect(() {
-      ref.read(serviceProvider.notifier).clearAndFetchedData(loadPage);
+      fetchData();
       return null;
     }, [selectedFilter]);
     
@@ -195,10 +199,10 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
           onEndOfPage: () => ref.read(serviceProvider.notifier).fetchNextPage(loadPage),
           scrollOffset: 200,
           scrollDirection: axis,
-          child: RawKeyboardListener(
+          child: KeyboardListener(
               autofocus: true,
               focusNode: useFocusNode(),
-              onKey: (event) => _handleKeyEvent(event, controller),
+              onKeyEvent: (event) => _handleKeyEvent(event, controller),
               child: Listener(
                 onPointerSignal: axis == Axis.horizontal && kIsWeb ? (event) {
                   if (event is PointerScrollEvent) {

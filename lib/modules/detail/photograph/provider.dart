@@ -7,9 +7,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final fetchBoardProvider = FutureProvider.autoDispose<List<ImageData>>((ref) async {
   final selectedFilterProvider = ref.read(boardHeaderTabProvider);
   final provider = ref.watch(photographyBoardServiceProvider);
-  final List<ImageData> photographs = await provider.getImageBoardNonFiltered(selectedFilterProvider);
-
-  return photographs;
+  try {
+    return await provider.getImageBoardNonFiltered(selectedFilterProvider);
+  } catch (e) {
+    return [];
+  }
 });
 /// Provider for current index of the photograph
 final photographIndexProvider = StateNotifierProvider.family.autoDispose<PhotographIndexNotifier, int, int>((ref, value) => PhotographIndexNotifier(ref: ref, index: value));

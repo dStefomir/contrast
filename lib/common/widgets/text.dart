@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 /// Styled text widget
 class StyledText extends StatelessWidget {
@@ -30,6 +31,8 @@ class StyledText extends StatelessWidget {
   final List<Shadow>? shadow;
   /// Font family to be used
   final String? family;
+  /// Should shimmer
+  final bool shouldShimmer;
 
   const StyledText({
     Key? key,
@@ -46,42 +49,50 @@ class StyledText extends StatelessWidget {
     this.italic = false,
     this.align = TextAlign.center,
     this.shadow,
-    this.family
+    this.family,
+    this.shouldShimmer = false
   }) : super(key: key);
 
   /// Renders the widget
-  Widget _renderText(BuildContext context) =>
-      Padding(
-        padding: EdgeInsets.all(padding),
-        child: Text(
-            text,
-            textAlign: align,
-            maxLines: maxLines,
-            style: TextStyle(
-              fontFamily: family,
-              color: color ?? Colors.black,
-              overflow: clip ? TextOverflow.ellipsis : null,
-              fontSize: fontSize,
-              fontWeight: weight ?? FontWeight.normal,
-              letterSpacing: letterSpacing,
-              decoration: decoration ?? TextDecoration.none,
-              fontStyle: italic ? FontStyle.italic : FontStyle.normal,
-              shadows: useShadow ? shadow ??
-                  const <Shadow>[
-                    Shadow(
-                      offset: Offset(1.0, 1.0),
-                      blurRadius: 3.0,
-                      color: Colors.black,
-                    ),
-                    Shadow(
-                      offset: Offset(1.0, 1.0),
-                      blurRadius: 8.0,
-                      color: Colors.black,
-                    ),
-                  ] : null
-            )
-        ),
+  Widget _renderText(BuildContext context) {
+    final widget = Text(
+        text,
+        textAlign: align,
+        maxLines: maxLines,
+        style: TextStyle(
+            fontFamily: family,
+            color: color ?? Colors.black,
+            overflow: clip ? TextOverflow.ellipsis : null,
+            fontSize: fontSize,
+            fontWeight: weight ?? FontWeight.normal,
+            letterSpacing: letterSpacing,
+            decoration: decoration ?? TextDecoration.none,
+            fontStyle: italic ? FontStyle.italic : FontStyle.normal,
+            shadows: useShadow ? shadow ??
+                const <Shadow>[
+                  Shadow(
+                    offset: Offset(1.0, 1.0),
+                    blurRadius: 3.0,
+                    color: Colors.black,
+                  ),
+                  Shadow(
+                    offset: Offset(1.0, 1.0),
+                    blurRadius: 8.0,
+                    color: Colors.black,
+                  ),
+                ] : null
+        )
     );
+
+    return Padding(
+      padding: EdgeInsets.all(padding),
+      child: shouldShimmer ? Shimmer.fromColors(
+          baseColor: Colors.grey.shade400,
+          highlightColor: Colors.white,
+          child: widget
+      ) : widget,
+    );
+  }
 
   @override
   Widget build(BuildContext context) => _renderText(context);

@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:contrast/common/widgets/page.dart';
-import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/map/provider.dart';
-import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/detail/photograph/provider.dart';
 import 'package:contrast/modules/detail/photograph/view/details.dart';
@@ -13,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 /// Renders the photograph details page
 class PhotographDetailPage extends StatefulHookConsumerWidget {
@@ -70,6 +69,18 @@ class _PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
   @override
   Widget build(BuildContext context) {
     final dataProvider = ref.watch(fetchBoardProvider);
+    final halfWidth = MediaQuery.of(context).size.width / 2;
+    /// Renders a loading indicator
+    renderLoadingIndicator() => Center(
+      child: SizedBox(
+        width: halfWidth,
+        child: LoadingIndicator(
+          indicatorType: Indicator.triangleSkewSpin,
+          colors: [Colors.white.withOpacity(0.2)],
+          strokeWidth: 2,
+        ),
+      ),
+    );
 
     return PopScope(
       canPop: false,
@@ -85,13 +96,13 @@ class _PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
         color: Colors.black,
         child: dataProvider.when(
             data: (data) {
-              final int photoIndex = data.indexWhere((element) => element.id == widget.id);
+              final int photoIndex = data.isNotEmpty ? data.indexWhere((element) => element.id == widget.id) : -1;
               // Photograph geo providers has to be initialized with with geo data if there is any.
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (data[photoIndex].lat != null) {
+                if (data.isNotEmpty && data[photoIndex].lat != null) {
                   ref.read(mapLatProvider.notifier).setCurrentLat(data[photoIndex].lat!);
                 }
-                if (data[photoIndex].lng != null) {
+                if (data.isNotEmpty && data[photoIndex].lng != null) {
                   ref.read(mapLngProvider.notifier).setCurrentLng(data[photoIndex].lng!);
                 }
               });
@@ -103,19 +114,8 @@ class _PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
                   audio: player
               );
             },
-            error: (error, stackTrace) => Center(
-                child: StyledText(
-                  text: error.toString(),
-                  color: Colors.white,
-                  weight: FontWeight.bold,
-                  clip: false,
-                )
-            ),
-            loading: () => const Center(
-              child: LoadingIndicator(
-                  color: Colors.white
-              ),
-            )
+            error: (error, stackTrace) => renderLoadingIndicator(),
+            loading: () => renderLoadingIndicator()
         ),
       ),
     );

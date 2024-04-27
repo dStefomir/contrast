@@ -131,6 +131,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         _goToNextPhotograph(ref, pageController, currentPhotographIndex);
       } else if (event.logicalKey == LogicalKeyboardKey.escape) {
         ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
+        ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
         Modular.to.navigate('/');
       } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
         _handlePhotographDetailsAction(ref, scrollController, scrollController.position.maxScrollExtent);
@@ -631,7 +632,7 @@ class PhotographDetailsView extends HookConsumerWidget {
     final int currentPhotographIndex = ref.watch(photographIndexProvider(photoIndex));
     final bool photographTitleVisibility = ref.watch(photographTitleVisibilityProvider);
     final String currentView = ref.watch(photographDetailAssetProvider);
-    final ImageData image = images[currentPhotographIndex];
+    final ImageData? image = currentPhotographIndex != -1 ? images[currentPhotographIndex] : null;
     final double maxWidth = MediaQuery.of(context).size.width;
     final double maxHeight = MediaQuery.of(context).size.height;
     final bool? shouldShowCommentsDialog = ref.watch(overlayVisibilityProvider(const Key('comment_photograph')));
@@ -647,7 +648,7 @@ class PhotographDetailsView extends HookConsumerWidget {
               color: Colors.white.withOpacity(0.05)
           ),
           _renderLoadingIndicator(),
-          getRunningPlatform(context) == 'MOBILE' ?
+          if (image != null) getRunningPlatform(context) == 'MOBILE' ?
           GestureDetector(
               onVerticalDragUpdate: (details) {
                 const sensitivity = 2000.0;
@@ -666,28 +667,28 @@ class PhotographDetailsView extends HookConsumerWidget {
               child: _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight)
           ) :
           _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
-          _renderDetailsBtn(ref, context, scrollController, image),
-          if (!kIsWeb) _renderTripPlanningBtn(ref, context, image),
-          if (!kIsWeb || Session().isLoggedIn()) _renderCommentsBtn(ref, context),
+          if (image != null) _renderDetailsBtn(ref, context, scrollController, image),
+          if (!kIsWeb && image != null) _renderTripPlanningBtn(ref, context, image),
+          if (image != null && !kIsWeb || Session().isLoggedIn()) _renderCommentsBtn(ref, context),
           if (kIsWeb) _renderAudioButton(context, ref),
-          _renderShareButton(context, ref, currentPhotographIndex),
+          if (image != null) _renderShareButton(context, ref, currentPhotographIndex),
           _renderGoBackBtn(context, ref),
           Visibility(
-              visible: currentPhotographIndex != 0 && ((!useMobileLayoutOriented(context) && !useMobileLayout(context) || kIsWeb)),
+              visible: image != null && currentPhotographIndex != 0 && ((!useMobileLayoutOriented(context) && !useMobileLayout(context) || kIsWeb)),
               child: _renderPreviousBtn(ref, context, pageController, currentPhotographIndex)
           ),
           Visibility(
-              visible: currentPhotographIndex != images.length - 1 && ((!useMobileLayoutOriented(context) && !useMobileLayout(context) || kIsWeb)),
+              visible: image != null && currentPhotographIndex != images.length - 1 && ((!useMobileLayoutOriented(context) && !useMobileLayout(context) || kIsWeb)),
               child: _renderNextBtn(ref, context, pageController, currentPhotographIndex)
           ),
-          Visibility(
+          if (image != null) Visibility(
               visible: photographTitleVisibility,
               child: _renderPhotographTitle(context, ref, currentPhotographIndex)
           ),
-          _renderSignature(context, currentView),
-          if ((!kIsWeb || Session().isLoggedIn()) && ((shouldShowCommentsDialog != null && shouldShowCommentsDialog) || (shouldShowTripPlanningDialog != null && shouldShowTripPlanningDialog))) const Blurrable(strength: 10),
-          if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null) _renderCommentsOverlay(ref, image, shouldShowCommentsDialog),
-          if (!kIsWeb && shouldShowTripPlanningDialog != null) _renderTripPlanningOverlay(ref, image, shouldShowTripPlanningDialog)
+          if (image != null) _renderSignature(context, currentView),
+          if (image != null && (!kIsWeb || Session().isLoggedIn()) && ((shouldShowCommentsDialog != null && shouldShowCommentsDialog) || (shouldShowTripPlanningDialog != null && shouldShowTripPlanningDialog))) const Blurrable(strength: 10),
+          if (image != null && (!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null) _renderCommentsOverlay(ref, image, shouldShowCommentsDialog),
+          if (image != null && !kIsWeb && shouldShowTripPlanningDialog != null) _renderTripPlanningOverlay(ref, image, shouldShowTripPlanningDialog)
         ]
     );
   }

@@ -1,3 +1,4 @@
+import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/icon.dart';
@@ -49,70 +50,77 @@ class BoardPageFilter extends ConsumerWidget {
                       fit: BoxFit.cover,
                       color: Colors.black.withOpacity(0.1)
                   ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        RotatedBox(
-                          quarterTurns: 3,
-                          child: StyledText(
-                              text: FlutterI18n.translate(context, 'CONTRASTUS'),
-                              padding: 5,
-                              fontSize: 15,
-                              weight: FontWeight.bold,
-                              letterSpacing: 15,
-                              useShadow: true,
-                              color: Colors.white.withOpacity(0.6)
+                  BlurryContainer(
+                    blur: 1.8,
+                    elevation: 0,
+                    color: Colors.transparent,
+                    padding: const EdgeInsets.all(0),
+                    borderRadius: const BorderRadius.all(Radius.circular(0)),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          RotatedBox(
+                            quarterTurns: 3,
+                            child: StyledText(
+                                text: FlutterI18n.translate(context, 'CONTRASTUS'),
+                                padding: 5,
+                                fontSize: 15,
+                                weight: FontWeight.bold,
+                                letterSpacing: 15,
+                                useShadow: true,
+                                color: Colors.white.withOpacity(0.6)
+                            ),
                           ),
-                        ),
-                        const Spacer(),
-                        MenuButton(
-                            widgetKey: const Key('all'),
-                            iconPath: 'all.svg',
-                            tooltip: FlutterI18n.translate(context, 'All'),
-                            disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                            selected: ref.watch(boardHeaderTabProvider) == 'all',
-                            size: boardPadding,
-                            onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('all'))
-                        ).translateOnPhotoHover,
-                        MenuButton(
-                            widgetKey: const Key('landscape'),
-                            iconPath: 'landscape.svg',
-                            tooltip: FlutterI18n.translate(context, 'Landscape'),
-                            disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                            selected: ref.watch(boardHeaderTabProvider) == 'landscape',
-                            size: boardPadding,
-                            onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('landscape'))
-                        ).translateOnPhotoHover,
-                        MenuButton(
-                            widgetKey: const Key('portraits'),
-                            iconPath: 'portraits.svg',
-                            tooltip: FlutterI18n.translate(context, 'Portraits'),
-                            disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                            selected: ref.watch(boardHeaderTabProvider) == 'portraits',
-                            size: boardPadding,
-                            onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('portraits'))
-                        ).translateOnPhotoHover,
-                        MenuButton(
-                            widgetKey: const Key('street'),
-                            iconPath: 'street.svg',
-                            tooltip: FlutterI18n.translate(context, 'Street'),
-                            disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                            selected: ref.watch(boardHeaderTabProvider) == 'street',
-                            size: boardPadding,
-                            onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('street'))
-                        ).translateOnPhotoHover,
-                        MenuButton(
-                            widgetKey: const Key('other'),
-                            iconPath: 'dog.svg',
-                            tooltip: FlutterI18n.translate(context, 'Other'),
-                            disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                            selected: ref.watch(boardHeaderTabProvider) == 'other',
-                            size: boardPadding,
-                            onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('other'))
-                        ).translateOnPhotoHover,
-                      ],
+                          const Spacer(),
+                          MenuButton(
+                              widgetKey: const Key('all'),
+                              iconPath: 'all.svg',
+                              tooltip: FlutterI18n.translate(context, 'All'),
+                              disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                              selected: ref.watch(boardHeaderTabProvider) == 'all',
+                              size: boardPadding,
+                              onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('all'))
+                          ).translateOnPhotoHover,
+                          MenuButton(
+                              widgetKey: const Key('landscape'),
+                              iconPath: 'landscape.svg',
+                              tooltip: FlutterI18n.translate(context, 'Landscape'),
+                              disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                              selected: ref.watch(boardHeaderTabProvider) == 'landscape',
+                              size: boardPadding,
+                              onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('landscape'))
+                          ).translateOnPhotoHover,
+                          MenuButton(
+                              widgetKey: const Key('portraits'),
+                              iconPath: 'portraits.svg',
+                              tooltip: FlutterI18n.translate(context, 'Portraits'),
+                              disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                              selected: ref.watch(boardHeaderTabProvider) == 'portraits',
+                              size: boardPadding,
+                              onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('portraits'))
+                          ).translateOnPhotoHover,
+                          MenuButton(
+                              widgetKey: const Key('street'),
+                              iconPath: 'street.svg',
+                              tooltip: FlutterI18n.translate(context, 'Street'),
+                              disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                              selected: ref.watch(boardHeaderTabProvider) == 'street',
+                              size: boardPadding,
+                              onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('street'))
+                          ).translateOnPhotoHover,
+                          MenuButton(
+                              widgetKey: const Key('other'),
+                              iconPath: 'dog.svg',
+                              tooltip: FlutterI18n.translate(context, 'Other'),
+                              disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                              selected: ref.watch(boardHeaderTabProvider) == 'other',
+                              size: boardPadding,
+                              onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('other'))
+                          ).translateOnPhotoHover,
+                        ],
+                      ),
                     ),
                   )
                 ]
@@ -135,7 +143,7 @@ class BoardPageFilter extends ConsumerWidget {
           IconRenderer(
               asset: 'background_landscape.svg',
               fit: BoxFit.cover,
-              color: Colors.black.withOpacity(0.05)
+              color: Colors.black.withOpacity(0.1)
           ),
           Container(
             decoration: BoxDecoration(
@@ -151,51 +159,58 @@ class BoardPageFilter extends ConsumerWidget {
           ),
           Align(
             alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Spacer(),
-                ContrastTab(
-                    widgetKey: const Key('all'),
-                    tabKey: 'all',
-                    text: FlutterI18n.translate(context, 'all'),
-                    onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
-                    isSelected: ref.watch(boardHeaderTabProvider) == 'all'
-                ).translateOnPhotoHover,
-                const Spacer(),
-                ContrastTab(
-                    widgetKey: const Key('landscape'),
-                    tabKey: 'landscape',
-                    text: FlutterI18n.translate(context, 'landscape'),
-                    onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
-                    isSelected: ref.read(boardHeaderTabProvider) == 'landscape'
-                ).translateOnPhotoHover,
-                const Spacer(),
-                ContrastTab(
-                    widgetKey: const Key('portraits'),
-                    tabKey: 'portraits',
-                    text: FlutterI18n.translate(context, 'portraits'),
-                    onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
-                    isSelected: ref.read(boardHeaderTabProvider) == 'portraits'
-                ).translateOnPhotoHover,
-                const Spacer(),
-                ContrastTab(
-                    widgetKey: const Key('street'),
-                    tabKey: 'street',
-                    text: FlutterI18n.translate(context, 'street'),
-                    onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
-                    isSelected: ref.read(boardHeaderTabProvider) == 'street'
-                ).translateOnPhotoHover,
-                const Spacer(),
-                ContrastTab(
-                    widgetKey: const Key('other'),
-                    tabKey: 'other',
-                    text: FlutterI18n.translate(context, 'other'),
-                    onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
-                    isSelected: ref.read(boardHeaderTabProvider) == 'other'
-                ).translateOnPhotoHover,
-                const Spacer(),
-              ],
+            child: BlurryContainer(
+              blur: 1.4,
+              elevation: 0,
+              color: Colors.transparent,
+              padding: const EdgeInsets.all(0),
+              borderRadius: const BorderRadius.all(Radius.circular(0)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Spacer(),
+                  ContrastTab(
+                      widgetKey: const Key('all'),
+                      tabKey: 'all',
+                      text: FlutterI18n.translate(context, 'all'),
+                      onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
+                      isSelected: ref.watch(boardHeaderTabProvider) == 'all'
+                  ).translateOnPhotoHover,
+                  const Spacer(),
+                  ContrastTab(
+                      widgetKey: const Key('landscape'),
+                      tabKey: 'landscape',
+                      text: FlutterI18n.translate(context, 'landscape'),
+                      onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
+                      isSelected: ref.read(boardHeaderTabProvider) == 'landscape'
+                  ).translateOnPhotoHover,
+                  const Spacer(),
+                  ContrastTab(
+                      widgetKey: const Key('portraits'),
+                      tabKey: 'portraits',
+                      text: FlutterI18n.translate(context, 'portraits'),
+                      onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
+                      isSelected: ref.read(boardHeaderTabProvider) == 'portraits'
+                  ).translateOnPhotoHover,
+                  const Spacer(),
+                  ContrastTab(
+                      widgetKey: const Key('street'),
+                      tabKey: 'street',
+                      text: FlutterI18n.translate(context, 'street'),
+                      onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
+                      isSelected: ref.read(boardHeaderTabProvider) == 'street'
+                  ).translateOnPhotoHover,
+                  const Spacer(),
+                  ContrastTab(
+                      widgetKey: const Key('other'),
+                      tabKey: 'other',
+                      text: FlutterI18n.translate(context, 'other'),
+                      onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
+                      isSelected: ref.read(boardHeaderTabProvider) == 'other'
+                  ).translateOnPhotoHover,
+                  const Spacer(),
+                ],
+              ),
             ),
           ),
         ],

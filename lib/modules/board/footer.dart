@@ -1,3 +1,4 @@
+import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shader/widget.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Renders the footer of the board page
@@ -24,90 +26,103 @@ class BoardPageFooter extends HookConsumerWidget {
   const BoardPageFooter({super.key, required this.onUserAction});
 
   /// Renders the mobile layout
-  Widget _renderMobileLayout(BuildContext context, WidgetRef ref, String currentTab) => Stack(
-    children: [
-      Align(
-        alignment: Alignment.bottomCenter,
-        child: ShadowWidget(
-          offset: const Offset(0, -2),
-          blurRadius: 2,
-          child: Container(
-            height: boardPadding,
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 1,
-                  offset: const Offset(0, 1),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: StyledTooltip(
-                    text: FlutterI18n.translate(context, 'Photographs'),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () => ref.read(boardFooterTabProvider.notifier).switchTab('photos'),
-                        child: Container(
-                            height: boardPadding,
-                            padding: EdgeInsets.all(currentTab == 'photos' ? 11.0 : 13.0),
-                            decoration: BoxDecoration(
-                              color: currentTab == 'photos' ? Colors.black: Colors.white,
-                            ),
-                            child: IconRenderer(
-                              asset: 'photo.svg',
-                              color: currentTab == 'photos' ? Colors.white: Colors.black,
-                              height: 50,
-                            ).translateOnPhotoHover
-                        ),
-                      ),
-                    ),
+  Widget _renderMobileLayout(BuildContext context, WidgetRef ref, String currentTab) {
+    final photographTab = IconRenderer(
+      asset: 'photo.svg',
+      color: currentTab == 'photos' ? Colors.white: Colors.black,
+      height: 50,
+    ).translateOnPhotoHover;
+    final videoTab = IconRenderer(
+        asset: 'video.svg',
+        color: currentTab == 'videos' ? Colors.white: Colors.black,
+        height: 50
+    ).translateOnPhotoHover;
+
+    return Stack(
+      children: [
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: ShadowWidget(
+            offset: const Offset(0, -2),
+            blurRadius: 2,
+            child: Container(
+              height: boardPadding,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.5),
+                    spreadRadius: 1,
+                    blurRadius: 1,
+                    offset: const Offset(0, 1),
                   ),
-                ),
-                const SizedBox(width: 120),
-                Expanded(
-                  child: StyledTooltip(
-                    text: FlutterI18n.translate(context, 'Videos'),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () {
-                          ref.read(boardHeaderTabProvider.notifier).switchTab('all');
-                          ref.read(boardFooterTabProvider.notifier).switchTab('videos');
-                        },
-                        child: Container(
-                          height: boardPadding,
-                          padding: EdgeInsets.all(currentTab == 'videos' ? 11.0: 13.0),
-                          decoration: BoxDecoration(
-                            color: currentTab == 'videos' ? Colors.black: Colors.white,
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: StyledTooltip(
+                      text: FlutterI18n.translate(context, 'Photographs'),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () => ref.read(boardFooterTabProvider.notifier).switchTab('photos'),
+                          child: Container(
+                              height: boardPadding,
+                              padding: EdgeInsets.all(currentTab == 'photos' ? 11.0 : 13.0),
+                              decoration: BoxDecoration(
+                                color: currentTab == 'photos' ? Colors.black: Colors.white,
+                              ),
+                              child: currentTab == 'photos' ? Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade400,
+                                  highlightColor: Colors.white,
+                                  child: photographTab
+                              ) : photographTab
                           ),
-                          child: IconRenderer(
-                              asset: 'video.svg',
-                              color: currentTab == 'videos' ? Colors.white: Colors.black,
-                              height: 50
-                          ).translateOnPhotoHover,
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 120),
+                  Expanded(
+                    child: StyledTooltip(
+                      text: FlutterI18n.translate(context, 'Videos'),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            ref.read(boardHeaderTabProvider.notifier).switchTab('all');
+                            ref.read(boardFooterTabProvider.notifier).switchTab('videos');
+                          },
+                          child: Container(
+                            height: boardPadding,
+                            padding: EdgeInsets.all(currentTab == 'videos' ? 11.0: 13.0),
+                            decoration: BoxDecoration(
+                              color: currentTab == 'videos' ? Colors.black: Colors.white,
+                            ),
+                            child: currentTab == 'videos' ? Shimmer.fromColors(
+                                baseColor: Colors.grey.shade400,
+                                highlightColor: Colors.white,
+                                child: videoTab
+                            ) : videoTab
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      Align(
-        alignment: Alignment.bottomCenter,
-        child: _HomeSection(onUserAction: onUserAction).translateOnPhotoHover
-      ),
-    ],
-  );
+        Align(
+            alignment: Alignment.bottomCenter,
+            child: _HomeSection(onUserAction: onUserAction).translateOnPhotoHover
+        ),
+      ],
+    );
+  }
 
   /// Renders the desktop layout
   Widget _renderDesktopLayout(BuildContext context, WidgetRef ref, String currentTab) => Stack(
@@ -126,7 +141,7 @@ class BoardPageFooter extends HookConsumerWidget {
                 IconRenderer(
                     asset: 'background_landscape.svg',
                     fit: BoxFit.cover,
-                    color: Colors.black.withOpacity(0.05)
+                    color: Colors.black.withOpacity(0.1)
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -142,32 +157,39 @@ class BoardPageFooter extends HookConsumerWidget {
                 ),
                 Align(
                   alignment: Alignment.center,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Spacer(),
-                      ContrastTab(
-                          widgetKey: const Key('photos'),
-                          tabKey: 'photos',
-                          text: FlutterI18n.translate(context, 'photos'),
-                          onClick: (String tab) => ref.read(boardFooterTabProvider.notifier).switchTab(tab),
-                          isSelected: currentTab == 'photos'
-                      ).translateOnPhotoHover,
-                      const Spacer(),
-                      const SizedBox(width: 160),
-                      const Spacer(),
-                      ContrastTab(
-                          widgetKey: const Key('videos'),
-                          tabKey: 'videos',
-                          text: FlutterI18n.translate(context, 'videos'),
-                          onClick: (String tab) {
-                            ref.read(boardHeaderTabProvider.notifier).switchTab('all');
-                            ref.read(boardFooterTabProvider.notifier).switchTab(tab);
-                            },
-                          isSelected: currentTab == 'videos'
-                      ).translateOnPhotoHover,
-                      const Spacer(),
-                    ],
+                  child: BlurryContainer(
+                    blur: 1.4,
+                    elevation: 0,
+                    color: Colors.transparent,
+                    padding: const EdgeInsets.all(0),
+                    borderRadius: const BorderRadius.all(Radius.circular(0)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Spacer(),
+                        ContrastTab(
+                            widgetKey: const Key('photos'),
+                            tabKey: 'photos',
+                            text: FlutterI18n.translate(context, 'photos'),
+                            onClick: (String tab) => ref.read(boardFooterTabProvider.notifier).switchTab(tab),
+                            isSelected: currentTab == 'photos'
+                        ).translateOnPhotoHover,
+                        const Spacer(),
+                        const SizedBox(width: 160),
+                        const Spacer(),
+                        ContrastTab(
+                            widgetKey: const Key('videos'),
+                            tabKey: 'videos',
+                            text: FlutterI18n.translate(context, 'videos'),
+                            onClick: (String tab) {
+                              ref.read(boardHeaderTabProvider.notifier).switchTab('all');
+                              ref.read(boardFooterTabProvider.notifier).switchTab(tab);
+                              },
+                            isSelected: currentTab == 'videos'
+                        ).translateOnPhotoHover,
+                        const Spacer(),
+                      ],
+                    ),
                   ),
                 ),
               ],

@@ -24,17 +24,25 @@ class DataViewNotifier<T> extends StateNotifier<List<T>> {
 
   /// Fetches the next page of data
   Future<void> fetchNextPage(Future<PagedList<T>> Function(int, String) fetchPage) async {
-    final String selectedFilter = ref.read(boardHeaderTabProvider);
-    final nextPageItems = await fetchPage(_currentPage, selectedFilter);
-    state = [...state, ...nextPageItems];
-    _currentPage++;
+    try {
+      final String selectedFilter = ref.read(boardHeaderTabProvider);
+      final nextPageItems = await fetchPage(_currentPage, selectedFilter);
+      state = [...state, ...nextPageItems];
+      _currentPage++;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   /// Clears the fetched data, fetches and resets the current page
-  void clearAndFetchedData(Future<PagedList<T>> Function(int, String) fetchPage) async {
+  Future<void> clearAndFetchedData(Future<PagedList<T>> Function(int, String) fetchPage) async {
     state.clear();
     _currentPage = 1;
-    await fetchNextPage(fetchPage);
+    try {
+      await fetchNextPage(fetchPage);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   /// Adds an item

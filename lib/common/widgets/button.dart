@@ -207,6 +207,7 @@ class MenuButton extends HookConsumerWidget {
         shouldAnimate = true;
       }
     });
+
     return StyledTooltip(
       text: tooltip,
       pointingPosition: AxisDirection.left,
@@ -226,7 +227,8 @@ class MenuButton extends HookConsumerWidget {
                     child: IconRenderer(
                       asset: iconPath,
                       color: selected ? Colors.white : Colors.black,
-                    ).rotate(12, from: 0).animate(trigger: shouldAnimate, duration: const Duration(milliseconds: 500)).resetAll(),
+                      shouldShimmer: selected,
+                    ).rotate(12, from: 0).animate(trigger: shouldAnimate, duration: const Duration(milliseconds: 500)).resetAll()
                   )
               )
           )

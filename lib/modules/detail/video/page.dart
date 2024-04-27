@@ -73,21 +73,11 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
           showFullscreenButton: true, showControls: true),
     );
     commentKey = const Key('comment_video');
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-    ]);
   }
 
   @override
   void dispose() {
     _controller.close();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-    ]);
     super.dispose();
   }
 
@@ -311,6 +301,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       focusNode: useFocusNode(),
       onKeyEvent: (event) {
         if (event is KeyUpEvent && event.logicalKey == LogicalKeyboardKey.escape) {
+          ref.read(overlayVisibilityProvider(commentKey).notifier).setOverlayVisibility(null);
           Modular.to.navigate('/');
         }
       },
