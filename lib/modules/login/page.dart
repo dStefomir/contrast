@@ -8,8 +8,8 @@ import 'package:contrast/modules/login/provider.dart';
 import 'package:contrast/modules/login/service.dart';
 import 'package:contrast/security/session.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Renders the login page
@@ -50,7 +50,7 @@ class LoginPage extends HookConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.only(top: 50),
                 child: Text(
-                    FlutterI18n.translate(context, 'L O G I N'),
+                    translate('L O G I N'),
                     style: const TextStyle(fontSize: 40)
                 ),
               ),
@@ -66,12 +66,12 @@ class LoginPage extends HookConsumerWidget {
                         width: 400,
                         child: SimpleInput(
                           widgetKey: const Key('user'),
-                          labelText: FlutterI18n.translate(context, 'User'),
+                          labelText: translate('User'),
                           onChange: (text) => ref.read(userNameProvider.notifier).setUserName(text),
                           prefixIcon: Icons.person,
                           validator: (value) {
                             if (value != null && value.isEmpty) {
-                              return FlutterI18n.translate(context, 'This field is mandatory');
+                              return translate('This field is mandatory');
                             }
                             return null;
                             },
@@ -83,13 +83,13 @@ class LoginPage extends HookConsumerWidget {
                     child: SizedBox(width: 400,
                         child: SimpleInput(
                           widgetKey: const Key('password'),
-                          labelText: FlutterI18n.translate(context, 'Password'),
+                          labelText: translate('Password'),
                           onChange: (text) => ref.read(userPasswordProvider.notifier).setUserPassword(text),
                           prefixIcon: Icons.password,
                           password: true,
                           validator: (value) {
                             if (value != null && value.isEmpty) {
-                              return FlutterI18n.translate(context, 'This field is mandatory');
+                              return translate('This field is mandatory');
                             }
                             return null;
                             },
@@ -113,13 +113,13 @@ class LoginPage extends HookConsumerWidget {
                           session.eMail = userName;
                           session.token = value;
                           session.isGuest = false;
-                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Logged in successfully'));
+                          showSuccessTextOnSnackBar(context, translate('Logged in successfully'));
                           Modular.to.navigate('/', arguments: session);
                         }).onError((error, stackTrace) {
-                          showErrorTextOnSnackBar(context, FlutterI18n.translate(context, 'Wrong user or password'));
+                          showErrorTextOnSnackBar(context, translate('Wrong user or password'));
                         });
                       }},
-                    child: Text(FlutterI18n.translate(context, 'Log In')),
+                    child: Text(translate('Log In')),
                   ).translateOnPhotoHover,
                 ],
               ),
@@ -130,7 +130,7 @@ class LoginPage extends HookConsumerWidget {
                   onClick: () => Modular.to.navigate("/"),
                   color: Colors.white,
                   borderColor: Colors.black,
-                  tooltip: FlutterI18n.translate(context, 'Close'),
+                  tooltip: translate('Close'),
                   icon: 'close.svg'
               ),
             ),

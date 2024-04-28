@@ -7,7 +7,7 @@ import 'package:contrast/model/video_data.dart';
 import 'package:contrast/modules/board/overlay/delete/provider.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 /// Dialog height
 const double dialogHeight = 350;
@@ -55,7 +55,7 @@ class DeleteDialog<T> extends HookConsumerWidget {
                       child: Row(
                           children: [
                             StyledText(
-                                text: FlutterI18n.translate(context, 'Warning'),
+                                text: translate('Warning'),
                                 weight: FontWeight.bold
                             ),
                             const Spacer(),
@@ -67,7 +67,7 @@ class DeleteDialog<T> extends HookConsumerWidget {
                                     ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
                                   }
                                 },
-                                tooltip: FlutterI18n.translate(context, 'Close'),
+                                tooltip: translate('Close'),
                                 color: Colors.white,
                                 borderColor: Colors.black,
                                 icon: 'close.svg'
@@ -89,7 +89,7 @@ class DeleteDialog<T> extends HookConsumerWidget {
                           child: Column(
                             children: [
                               StyledText(
-                                text: _isImage() ? FlutterI18n.translate(context, 'Delete this photo') : FlutterI18n.translate(context, 'Delete this video'),
+                                text: _isImage() ? translate('Delete this photo') : translate('Delete this video'),
                                 clip: false,
                               ),
                               StyledText(
@@ -112,7 +112,7 @@ class DeleteDialog<T> extends HookConsumerWidget {
                                     textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
                                 ),
                                 child: Text(
-                                    FlutterI18n.translate(context, 'Yes')
+                                    translate('Yes')
                                 ),
                                 onPressed: () => _onDelete(ref)
                             ),
@@ -128,7 +128,7 @@ class DeleteDialog<T> extends HookConsumerWidget {
                                     textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.black))
                                 ),
                                 child: Text(
-                                    FlutterI18n.translate(context, 'No')
+                                    translate('No')
                                 ),
                                 onPressed: () {
                                   if(_isImage()) {

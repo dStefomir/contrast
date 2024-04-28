@@ -1,3 +1,4 @@
+import 'package:contrast/modules/about/page.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/detail/photograph/view/page.dart';
 import 'package:contrast/modules/detail/video/page.dart';
@@ -11,6 +12,7 @@ const String _boardPageRoute = '/';
 const String _loginPageRoute = '/login';
 const String _photographDetailsPageRoute = '/photos/details';
 const String _videoDetailsPageRoute = '/videos/details';
+const String _aboutPageRoute = '/about';
 
 /// Represents the main module of the app
 class MainModule extends Module {
@@ -68,6 +70,18 @@ class MainModule extends Module {
             render: () => VideoDetailPage(
                 path: r.args.queryParams['path'] ?? '',
                 id: int.parse('${r.args.queryParams['id']}'),
+                analytics: _analytics,
+                observer: _observer
+            )
+        )
+    );
+    r.child(
+        _aboutPageRoute,
+        transition: TransitionType.scale,
+        duration: const Duration(milliseconds: 800),
+        child: (_) => CorePage(
+            pageName: 'About',
+            render: () => AboutPage(
                 analytics: _analytics,
                 observer: _observer
             )

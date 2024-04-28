@@ -11,8 +11,8 @@ import 'package:contrast/modules/detail/photograph/overlay/trip_planning.dart';
 import 'package:contrast/security/session.dart';
 import 'package:contrast/utils/date.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import "package:universal_html/html.dart" as html;
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -226,9 +226,9 @@ class PhotographDetailsView extends HookConsumerWidget {
                                   height: 25,
                                   onClick: () => ref.read(commentsServiceProvider).approvePhotographComment(item.id!).then((value) {
                                     ref.read(imageCommentsDataViewProvider.notifier).updateItem(item, value);
-                                    showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment approved'));
+                                    showSuccessTextOnSnackBar(context, translate('Comment approved'));
                                   }),
-                                  tooltip: FlutterI18n.translate(context, 'Approve comment'),
+                                  tooltip: translate('Approve comment'),
                                   color: Colors.white.withOpacity(0.3),
                                   borderColor: Colors.white,
                                   icon: 'check.svg'
@@ -240,13 +240,13 @@ class PhotographDetailsView extends HookConsumerWidget {
                                   onClick: () => Session().isLoggedIn() ?
                                   ref.read(commentsServiceProvider).deletePhotographCommentAsAdmin(item.id!).then((value) {
                                     ref.read(imageCommentsDataViewProvider.notifier).removeItem(index);
-                                    showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
+                                    showSuccessTextOnSnackBar(context, translate('Comment deleted'));
                                   }) :
                                   ref.read(commentsServiceProvider).deletePhotographComment(item.id!, deviceId!).then((value) {
                                     ref.read(imageCommentsDataViewProvider.notifier).removeItem(index);
-                                    showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
+                                    showSuccessTextOnSnackBar(context, translate('Comment deleted'));
                                   }),
-                                  tooltip: FlutterI18n.translate(context, 'Delete comment'),
+                                  tooltip: translate('Delete comment'),
                                   color: Colors.white.withOpacity(0.3),
                                   borderColor: Colors.white,
                                   icon: 'delete.svg'
@@ -345,7 +345,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         child: DefaultButton(
             onClick: () => _goToNextPhotograph(ref, pageController, currentPhotographIndex),
             color: Colors.white,
-            tooltip: FlutterI18n.translate(context, 'Next photograph'),
+            tooltip: translate('Next photograph'),
             borderColor: Colors.black,
             icon: 'navigate_next.svg'
         )
@@ -360,7 +360,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         child: DefaultButton(
             onClick: () => _goToPreviousPhotograph(ref, pageController, currentPhotographIndex),
             color: Colors.white,
-            tooltip: FlutterI18n.translate(context, 'Previous photograph'),
+            tooltip: translate('Previous photograph'),
             borderColor: Colors.black,
             icon: 'navigate_before.svg'
         )
@@ -379,7 +379,7 @@ class PhotographDetailsView extends HookConsumerWidget {
               Modular.to.navigate('/');
               },
             color: Colors.white,
-            tooltip: FlutterI18n.translate(context, 'Close'),
+            tooltip: translate('Close'),
             borderColor: Colors.black,
             icon: 'close.svg'
         )
@@ -401,7 +401,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                 ref.read(musicTriggerProvider.notifier).setPlay(false);
               }
             },
-            tooltip: ref.watch(musicTriggerProvider) ? FlutterI18n.translate(context, 'Stop music') : FlutterI18n.translate(context, 'Play music'),
+            tooltip: ref.watch(musicTriggerProvider) ? translate('Stop music') : translate('Play music'),
             color: Colors.white,
             borderColor: Colors.black,
             icon: ref.watch(musicTriggerProvider) ? 'volume_up.svg' : 'volume_off.svg'
@@ -419,11 +419,11 @@ class PhotographDetailsView extends HookConsumerWidget {
                       text: 'https://www.dstefomir.eu/#/photos/details?id=${images[currentPhotographyIndex].id}&category=$category')
               ).then((value) => showSuccessTextOnSnackBar(
                   context,
-                  FlutterI18n.translate(context, 'Copied to clipboard')
+                  translate('Copied to clipboard')
               ));
               ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
               },
-            tooltip: FlutterI18n.translate(context, 'Share'),
+            tooltip: translate('Share'),
             color: Colors.white,
             borderColor: Colors.black,
             icon: 'share.svg'
@@ -441,7 +441,7 @@ class PhotographDetailsView extends HookConsumerWidget {
               onClick: () => ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(true),
               color: Colors.white,
               borderColor: Colors.black,
-              tooltip: FlutterI18n.translate(context, 'Comments'),
+              tooltip: translate('Comments'),
               icon: 'comment.svg'
           )
       ),
@@ -468,7 +468,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                 onClick: () => ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(true),
                 color: Colors.white,
                 borderColor: Colors.black,
-                tooltip: FlutterI18n.translate(context, 'Trip planning'),
+                tooltip: translate('Trip planning'),
                 icon: 'route.svg'
             )
         ),
@@ -506,7 +506,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                   },
                 color: Colors.white,
                 borderColor: Colors.black,
-                tooltip: iconAsset == 'map.svg' ? FlutterI18n.translate(context, 'Shot location') : FlutterI18n.translate(context, 'Photograph'),
+                tooltip: iconAsset == 'map.svg' ? translate('Shot location') : translate('Photograph'),
                 icon: iconAsset
             )
         ),

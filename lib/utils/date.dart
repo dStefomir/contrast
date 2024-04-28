@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:intl/intl.dart';
 /// Formatting a date
 String formatDateUi(DateTime? date) => date == null ? '' : DateFormat('dd.MM.yyyy').format(date);
@@ -17,11 +17,11 @@ String formatTimeDifference(BuildContext context, DateTime? date) {
   String timeDifferenceText = '';
   if (days > 0) {
     if(days == 1) {
-      return timeDifferenceText += '${FlutterI18n.translate(context, 'Before')} $days ${FlutterI18n.translate(context, 'day')}';
+      return timeDifferenceText += '${translate('Before')} $days ${translate('day')}';
     }
 
-    return timeDifferenceText += '${FlutterI18n.translate(context, 'Before')} $days ${FlutterI18n.translate(context, 'days')}';
+    return timeDifferenceText += '${translate('Before')} $days ${translate('days')}';
   } else {
-    return timeDifferenceText = FlutterI18n.translate(context, 'Today');
+    return timeDifferenceText = translate('Today');
   }
 }

@@ -6,10 +6,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 const String webKey = 'BLgFNQuws2vnlVfNuYDe1N2E2DnCQA0H5LxYSc2YBscxJhb_jfouU4f-hryoyYmftLgWKQDG1Fsl1us4ylwRhSA';
 
@@ -22,13 +22,6 @@ Future<void> _subscribeToTopic(String? token) async {
 }
 
 void main() async {
-  final FlutterI18nDelegate flutterI18nDelegate = FlutterI18nDelegate(
-    translationLoader: FileTranslationLoader(
-      useCountryCode: false,
-      fallbackFile: 'en',
-      basePath: 'assets/i18n',
-    ),
-  );
   WidgetsFlutterBinding.ensureInitialized();
   /// Initialize the firebase app
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -56,12 +49,15 @@ void main() async {
   if(!kIsWeb) {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
+  var delegate = await LocalizationDelegate.create(
+      fallbackLocale: 'en_US',
+      supportedLocales: ['en_US', 'bg']);
 
   runApp(
       ModularApp(
           module: MainModule(),
           child: ProviderScope(
-              child: MyApp(flutterI18nDelegate: flutterI18nDelegate,)
+              child: LocalizedApp(delegate, const MyApp())
           )
       )
   );
@@ -80,9 +76,7 @@ const Color buttonBackgroundColor = Colors.white;
 /// Application itself holding the theming and the app`s delegates
 class MyApp extends StatefulWidget {
 
-  final FlutterI18nDelegate flutterI18nDelegate;
-
-  const MyApp({required this.flutterI18nDelegate, Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -114,55 +108,56 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context) => MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      title: "Contrast",
-      routerConfig: Modular.routerConfig,
-      scrollBehavior: NoThumbScrollBehavior().copyWith(scrollbars: false),
-      localizationsDelegates: [
-        widget.flutterI18nDelegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
-      ],
-      supportedLocales: const [
-        Locale('bg', 'BG'),
-        Locale('en', 'US'),
-      ],
-      theme: ThemeData(
-        fontFamily: 'Slovic',
-        brightness: Brightness.light,
-        inputDecorationTheme: const InputDecorationTheme(
-            isDense: true,
-            contentPadding: EdgeInsets.all(10),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(0)),
-              borderSide: BorderSide(color: inputFieldBorderColor),
-            ),
-            errorBorder: OutlineInputBorder(
+  Widget build(BuildContext context) {
+    final localizationDelegate = LocalizedApp.of(context).delegate;
+
+    return MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: "Contrast",
+        routerConfig: Modular.routerConfig,
+        scrollBehavior: NoThumbScrollBehavior().copyWith(scrollbars: false),
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          localizationDelegate
+        ],
+        supportedLocales: localizationDelegate.supportedLocales,
+        locale: localizationDelegate.currentLocale,
+        theme: ThemeData(
+          fontFamily: 'Slovic',
+          brightness: Brightness.light,
+          inputDecorationTheme: const InputDecorationTheme(
+              isDense: true,
+              contentPadding: EdgeInsets.all(10),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(0)),
+                borderSide: BorderSide(color: inputFieldBorderColor),
+              ),
+              errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
+                  borderSide: BorderSide(color: inputFieldErrorBorderColor)
+              ),
+              disabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(0)),
-                borderSide: BorderSide(color: inputFieldErrorBorderColor)
-            ),
-            disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(0)),
-              borderSide: BorderSide(color: inputFieldDisabledBorderColor),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(0)),
-              borderSide: BorderSide(color: inputFieldFocusedBorderColor),
-            ),
-            filled: true,
-            fillColor: inputFieldBackgroundColor,
-            hintStyle: TextStyle(color: inputFieldHintTextColor),
-            floatingLabelBehavior: FloatingLabelBehavior.never
-        ),
-        iconTheme: const IconThemeData(color: buttonIconSvgColor),
-        buttonTheme: const ButtonThemeData(
-            height: 50,
-            minWidth: 0,
-            buttonColor: buttonBackgroundColor,
-            textTheme: ButtonTextTheme.primary
-        ),
-      )
-  );
+                borderSide: BorderSide(color: inputFieldDisabledBorderColor),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(0)),
+                borderSide: BorderSide(color: inputFieldFocusedBorderColor),
+              ),
+              filled: true,
+              fillColor: inputFieldBackgroundColor,
+              hintStyle: TextStyle(color: inputFieldHintTextColor),
+              floatingLabelBehavior: FloatingLabelBehavior.never
+          ),
+          iconTheme: const IconThemeData(color: buttonIconSvgColor),
+          buttonTheme: const ButtonThemeData(
+              height: 50,
+              minWidth: 0,
+              buttonColor: buttonBackgroundColor,
+              textTheme: ButtonTextTheme.primary
+          ),
+        )
+    );
+  }
 }

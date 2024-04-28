@@ -9,7 +9,7 @@ import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Renders the header of the board page
@@ -51,7 +51,7 @@ class BoardPageFilter extends ConsumerWidget {
                       color: Colors.black.withOpacity(0.1)
                   ),
                   BlurryContainer(
-                    blur: 1.8,
+                    blur: 1.1,
                     elevation: 0,
                     color: Colors.transparent,
                     padding: const EdgeInsets.all(0),
@@ -64,7 +64,7 @@ class BoardPageFilter extends ConsumerWidget {
                           RotatedBox(
                             quarterTurns: 3,
                             child: StyledText(
-                                text: FlutterI18n.translate(context, 'CONTRASTUS'),
+                                text: translate('CONTRASTUS'),
                                 padding: 5,
                                 fontSize: 15,
                                 weight: FontWeight.bold,
@@ -77,7 +77,7 @@ class BoardPageFilter extends ConsumerWidget {
                           MenuButton(
                               widgetKey: const Key('all'),
                               iconPath: 'all.svg',
-                              tooltip: FlutterI18n.translate(context, 'All'),
+                              tooltip: translate('All'),
                               disabled: ref.watch(boardFooterTabProvider) == 'videos',
                               selected: ref.watch(boardHeaderTabProvider) == 'all',
                               size: boardPadding,
@@ -86,7 +86,7 @@ class BoardPageFilter extends ConsumerWidget {
                           MenuButton(
                               widgetKey: const Key('landscape'),
                               iconPath: 'landscape.svg',
-                              tooltip: FlutterI18n.translate(context, 'Landscape'),
+                              tooltip: translate('Landscape'),
                               disabled: ref.watch(boardFooterTabProvider) == 'videos',
                               selected: ref.watch(boardHeaderTabProvider) == 'landscape',
                               size: boardPadding,
@@ -95,7 +95,7 @@ class BoardPageFilter extends ConsumerWidget {
                           MenuButton(
                               widgetKey: const Key('portraits'),
                               iconPath: 'portraits.svg',
-                              tooltip: FlutterI18n.translate(context, 'Portraits'),
+                              tooltip: translate('Portraits'),
                               disabled: ref.watch(boardFooterTabProvider) == 'videos',
                               selected: ref.watch(boardHeaderTabProvider) == 'portraits',
                               size: boardPadding,
@@ -104,7 +104,7 @@ class BoardPageFilter extends ConsumerWidget {
                           MenuButton(
                               widgetKey: const Key('street'),
                               iconPath: 'street.svg',
-                              tooltip: FlutterI18n.translate(context, 'Street'),
+                              tooltip: translate('Street'),
                               disabled: ref.watch(boardFooterTabProvider) == 'videos',
                               selected: ref.watch(boardHeaderTabProvider) == 'street',
                               size: boardPadding,
@@ -113,7 +113,7 @@ class BoardPageFilter extends ConsumerWidget {
                           MenuButton(
                               widgetKey: const Key('other'),
                               iconPath: 'dog.svg',
-                              tooltip: FlutterI18n.translate(context, 'Other'),
+                              tooltip: translate('Other'),
                               disabled: ref.watch(boardFooterTabProvider) == 'videos',
                               selected: ref.watch(boardHeaderTabProvider) == 'other',
                               size: boardPadding,
@@ -160,6 +160,7 @@ class BoardPageFilter extends ConsumerWidget {
           Align(
             alignment: Alignment.center,
             child: BlurryContainer(
+              height: boardPadding,
               blur: 1.4,
               elevation: 0,
               color: Colors.transparent,
@@ -172,7 +173,7 @@ class BoardPageFilter extends ConsumerWidget {
                   ContrastTab(
                       widgetKey: const Key('all'),
                       tabKey: 'all',
-                      text: FlutterI18n.translate(context, 'all'),
+                      text: translate('all'),
                       onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                       isSelected: ref.watch(boardHeaderTabProvider) == 'all'
                   ).translateOnPhotoHover,
@@ -180,7 +181,7 @@ class BoardPageFilter extends ConsumerWidget {
                   ContrastTab(
                       widgetKey: const Key('landscape'),
                       tabKey: 'landscape',
-                      text: FlutterI18n.translate(context, 'landscape'),
+                      text: translate('landscape'),
                       onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                       isSelected: ref.read(boardHeaderTabProvider) == 'landscape'
                   ).translateOnPhotoHover,
@@ -188,7 +189,7 @@ class BoardPageFilter extends ConsumerWidget {
                   ContrastTab(
                       widgetKey: const Key('portraits'),
                       tabKey: 'portraits',
-                      text: FlutterI18n.translate(context, 'portraits'),
+                      text: translate('portraits'),
                       onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                       isSelected: ref.read(boardHeaderTabProvider) == 'portraits'
                   ).translateOnPhotoHover,
@@ -196,7 +197,7 @@ class BoardPageFilter extends ConsumerWidget {
                   ContrastTab(
                       widgetKey: const Key('street'),
                       tabKey: 'street',
-                      text: FlutterI18n.translate(context, 'street'),
+                      text: translate('street'),
                       onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                       isSelected: ref.read(boardHeaderTabProvider) == 'street'
                   ).translateOnPhotoHover,
@@ -204,7 +205,7 @@ class BoardPageFilter extends ConsumerWidget {
                   ContrastTab(
                       widgetKey: const Key('other'),
                       tabKey: 'other',
-                      text: FlutterI18n.translate(context, 'other'),
+                      text: translate('other'),
                       onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                       isSelected: ref.read(boardHeaderTabProvider) == 'other'
                   ).translateOnPhotoHover,

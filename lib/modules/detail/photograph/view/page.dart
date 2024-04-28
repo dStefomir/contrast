@@ -6,6 +6,7 @@ import 'package:contrast/common/widgets/map/provider.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/detail/photograph/provider.dart';
 import 'package:contrast/modules/detail/photograph/view/details.dart';
+import 'package:contrast/utils/overlay.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -92,30 +93,36 @@ class _PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
           Modular.to.navigate('/');
         }
       },
-      child: BackgroundPage(
-        color: Colors.black,
-        child: dataProvider.when(
-            data: (data) {
-              final int photoIndex = data.isNotEmpty ? data.indexWhere((element) => element.id == widget.id) : -1;
-              // Photograph geo providers has to be initialized with with geo data if there is any.
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (data.isNotEmpty && data[photoIndex].lat != null) {
-                  ref.read(mapLatProvider.notifier).setCurrentLat(data[photoIndex].lat!);
-                }
-                if (data.isNotEmpty && data[photoIndex].lng != null) {
-                  ref.read(mapLngProvider.notifier).setCurrentLng(data[photoIndex].lng!);
-                }
-              });
+      child: GestureDetector(
+        onTap: () {
+          closeOverlayIfOpened(ref, 'comment_photograph');
+          closeOverlayIfOpened(ref, 'trip_planning_photograph');
+        },
+        child: BackgroundPage(
+          color: Colors.black,
+          child: dataProvider.when(
+              data: (data) {
+                final int photoIndex = data.isNotEmpty ? data.indexWhere((element) => element.id == widget.id) : -1;
+                // Photograph geo providers has to be initialized with with geo data if there is any.
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (data.isNotEmpty && data[photoIndex].lat != null) {
+                    ref.read(mapLatProvider.notifier).setCurrentLat(data[photoIndex].lat!);
+                  }
+                  if (data.isNotEmpty && data[photoIndex].lng != null) {
+                    ref.read(mapLngProvider.notifier).setCurrentLng(data[photoIndex].lng!);
+                  }
+                });
 
-              return PhotographDetailsView(
-                  images: data,
-                  photoIndex: photoIndex,
-                  category: widget.category,
-                  audio: player
-              );
-            },
-            error: (error, stackTrace) => renderLoadingIndicator(),
-            loading: () => renderLoadingIndicator()
+                return PhotographDetailsView(
+                    images: data,
+                    photoIndex: photoIndex,
+                    category: widget.category,
+                    audio: player
+                );
+              },
+              error: (error, stackTrace) => renderLoadingIndicator(),
+              loading: () => renderLoadingIndicator()
+          ),
         ),
       ),
     );

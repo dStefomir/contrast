@@ -16,8 +16,8 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -134,7 +134,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                       child: Row(
                         children: [
                           StyledText(
-                            text: FlutterI18n.translate(context, 'Comments'),
+                            text: translate('Comments'),
                             weight: FontWeight.bold,
                             padding: 0,
                           ),
@@ -144,7 +144,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                                 ref.read(overlayVisibilityProvider(widgetKey).notifier).setOverlayVisibility(false);
                                 FocusManager.instance.primaryFocus?.unfocus();
                                 },
-                              tooltip: FlutterI18n.translate(context, 'Close'),
+                              tooltip: translate('Close'),
                               color: Colors.white.withOpacity(0.3),
                               borderColor: Colors.black,
                               icon: 'close.svg'
@@ -155,7 +155,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                       child: StyledText(
-                          text: FlutterI18n.translate(context, isAdmin ? 'Approve pending comments' : 'You can post only one comment per day'),
+                          text: translate(isAdmin ? 'Approve pending comments' : 'You can post only one comment per day'),
                           color: Colors.black87,
                           fontSize: 10,
                           padding: 0,
@@ -173,7 +173,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                   controller: userNameController,
                   focusNode: deviceNameFocusNode,
                   enabled: !isAdmin,
-                  labelText: FlutterI18n.translate(context, 'From who'),
+                  labelText: translate('From who'),
                   onChange: (e) => e,
                   suffixWidget: Center(
                     widthFactor: 1.5,
@@ -199,7 +199,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                             e.toLowerCase().contains('stefkod'
                             )
                     )) {
-                      return FlutterI18n.translate(context, 'This name cannot be used');
+                      return translate('This name cannot be used');
                     }
 
                     return null;
@@ -215,7 +215,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                         child: IconRenderer(asset: 'background_landscape.svg', height: dialogHeight / 5, color: Colors.black.withOpacity(0.03), fit: BoxFit.contain),
                       ),
                       apiData.isEmpty ? Center(
-                        child: StyledText(text: FlutterI18n.translate(context, 'Nothing here so far')),
+                        child: StyledText(text: translate('Nothing here so far')),
                       ) : ListView.builder(
                           key: const Key('CommentDialogList'),
                           itemCount: apiData.length,
@@ -229,13 +229,13 @@ class CommentDialog<T> extends HookConsumerWidget {
                   controller: commentController,
                   focusNode: commentFocusNode,
                   onChange: (e) => e,
-                  labelText: FlutterI18n.translate(context, 'Comment'),
+                  labelText: translate('Comment'),
                   validator: (e) {
                     if (e != null && e.isEmpty) {
-                      return FlutterI18n.translate(context, 'This field is mandatory');
+                      return translate('This field is mandatory');
                     }
                     if(e != null && e.length > 1000) {
-                      return FlutterI18n.translate(context, 'The comment is more than 1000 characters');
+                      return translate('The comment is more than 1000 characters');
                     }
 
                     return null;
@@ -264,10 +264,10 @@ class CommentDialog<T> extends HookConsumerWidget {
                                 commentController.text = '';
                                 ratingController.value = 0;
                                 loading.value = false;
-                                showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, value.approved! ? 'Comment posted' : 'Comment review is pending'));
+                                showSuccessTextOnSnackBar(context, translate(value.approved! ? 'Comment posted' : 'Comment review is pending'));
                               }).onError((error, stackTrace) {
                                 loading.value = false;
-                                showErrorTextOnSnackBar(context, FlutterI18n.translate(context, 'Only one comment per day is allowed'));
+                                showErrorTextOnSnackBar(context, translate('Only one comment per day is allowed'));
                               });
                             } else {
                               ref.read(commentsServiceProvider).postVideoComment(deviceId ?? 'noId', deviceName, parentItemId, comment, rating, isAdmin).then((value) {
@@ -277,14 +277,14 @@ class CommentDialog<T> extends HookConsumerWidget {
                                 commentController.text = '';
                                 ratingController.value = 0;
                                 loading.value = false;
-                                showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, value.approved! ? 'Comment posted' : 'Comment review is pending'));
+                                showSuccessTextOnSnackBar(context, translate(value.approved! ? 'Comment posted' : 'Comment review is pending'));
                               }).onError((error, stackTrace) {
                                 loading.value = false;
-                                showErrorTextOnSnackBar(context, FlutterI18n.translate(context, 'Only one comment per day is allowed'));
+                                showErrorTextOnSnackBar(context, translate('Only one comment per day is allowed'));
                               });
                             }
                           }},
-                        tooltip: FlutterI18n.translate(context, 'Submit'),
+                        tooltip: translate('Submit'),
                         color: Colors.white.withOpacity(0.3),
                         borderColor: Colors.black,
                         icon: 'navigate_next.svg'

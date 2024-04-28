@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:contrast/modules/board/overlay/share/share.dart';
+import 'package:contrast/utils/overlay.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import "package:universal_html/html.dart" as html;
 import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/shadow.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
@@ -159,7 +160,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                   child: Container(
                     color: Colors.white,
                     child: StyledText(
-                      text: FlutterI18n.translate(context, 'Upload Video'),
+                      text: translate('Upload Video'),
                       padding: 5,
                       fontSize: 12,
                     ),
@@ -183,7 +184,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                   child: Container(
                     color: Colors.white,
                     child: StyledText(
-                      text: FlutterI18n.translate(context, 'Upload Photograph'),
+                      text: translate('Upload Photograph'),
                       padding: 5,
                       fontSize: 12,
                     ),
@@ -232,76 +233,27 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
           exit(0);
         }
       },
-      child: BackgroundPage(
-          child: KeyboardListener(
-            focusNode: useFocusNode(),
-            onKeyEvent: _handleKeyEvent,
-            child: Stack(
-                children: [
-                  Align(
-                      alignment: Alignment.center,
-                      child: FadeAnimation(
-                          start: 1,
-                          end: 0,
-                          whenTo: (controller) {
-                            final String currentTab = ref.watch(boardFooterTabProvider);
-                            final String currentFilter = ref.watch(boardHeaderTabProvider);
-                            useValueChanged(currentTab, (_, __) async {
-                              controller.reset();
-                              controller.forward();
-                            });
-                            useValueChanged(currentFilter, (_, __) async {
-                              controller.reset();
-                              controller.forward();
-                            });
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.only(left: titlePadding),
-                            child: StyledText(
-                              text: FlutterI18n.translate(
-                                  context,
-                                  (useMobileLayoutOriented(context) && ref.read(boardFooterTabProvider) == 'photos')
-                                      ? ref.read(boardHeaderTabProvider)
-                                      : 'CONTRASTUS'
-                              ),
-                              color: Colors.black,
-                              useShadow: false,
-                              weight: FontWeight.bold,
-                              letterSpacing: 10,
-                              fontSize: useMobileLayoutOriented(context) ? 30 : 60,
-                            ),
-                          )
-                      )
-                  ),
-                  Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: !useMobileLayoutOriented(context)
-                            ? EdgeInsets.only(top: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding)
-                            : EdgeInsets.only(top: 0.2, left: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding),
-                        child: ref.read(boardFooterTabProvider) == 'photos'
-                            ? SlideTransitionAnimation(
-                            getStart: () => _calculateBoardStartAnimation(ref),
-                            getEnd: () => const Offset(0, 0),
-                            whenTo: (controller) {
-                              final String currentTab = ref.watch(
-                                  boardFooterTabProvider);
-                              final String currentFilter = ref.watch(
-                                  boardHeaderTabProvider);
-                              useValueChanged(currentTab, (_, __) async {
-                                controller.reset();
-                                controller.forward();
-                              });
-                              useValueChanged(currentFilter, (_, __) async {
-                                controller.reset();
-                                controller.forward();
-                              });
-                            },
-                            duration: const Duration(milliseconds: 800),
-                            child: PhotographBoardPage(onUserAction: _onAction))
-                            : SlideTransitionAnimation(
-                            getStart: () => _calculateBoardStartAnimation(ref),
-                            getEnd: () => const Offset(0, 0),
+      child: GestureDetector(
+        onTap: () {
+          closeOverlayIfOpened(ref, 'qr_code');
+          closeOverlayIfOpened(ref, 'delete_image');
+          closeOverlayIfOpened(ref, 'upload_image');
+          closeOverlayIfOpened(ref, 'edit_image');
+          closeOverlayIfOpened(ref, 'upload_video');
+          closeOverlayIfOpened(ref, 'edit_video');
+          closeOverlayIfOpened(ref, 'share');
+        },
+        child: BackgroundPage(
+            child: KeyboardListener(
+              focusNode: useFocusNode(),
+              onKeyEvent: _handleKeyEvent,
+              child: Stack(
+                  children: [
+                    Align(
+                        alignment: Alignment.center,
+                        child: FadeAnimation(
+                            start: 1,
+                            end: 0,
                             whenTo: (controller) {
                               final String currentTab = ref.watch(boardFooterTabProvider);
                               final String currentFilter = ref.watch(boardHeaderTabProvider);
@@ -314,266 +266,325 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                                 controller.forward();
                               });
                             },
-                            duration: const Duration(milliseconds: 800),
-                            child: VideoBoardPage(onUserAction: _onAction)
-                        ),
-                      )
-                  ),
-                  Align(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: titlePadding),
+                              child: StyledText(
+                                text: translate(
+                                    (useMobileLayoutOriented(context) && ref.read(boardFooterTabProvider) == 'photos')
+                                        ? ref.read(boardHeaderTabProvider)
+                                        : 'CONTRASTUS'
+                                ),
+                                color: Colors.black,
+                                useShadow: false,
+                                weight: FontWeight.bold,
+                                letterSpacing: 10,
+                                fontSize: useMobileLayoutOriented(context) ? 30 : 60,
+                              ),
+                            )
+                        )
+                    ),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: !useMobileLayoutOriented(context)
+                              ? EdgeInsets.only(top: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding)
+                              : EdgeInsets.only(top: 0.2, left: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding),
+                          child: ref.read(boardFooterTabProvider) == 'photos'
+                              ? SlideTransitionAnimation(
+                              getStart: () => _calculateBoardStartAnimation(ref),
+                              getEnd: () => const Offset(0, 0),
+                              whenTo: (controller) {
+                                final String currentTab = ref.watch(
+                                    boardFooterTabProvider);
+                                final String currentFilter = ref.watch(
+                                    boardHeaderTabProvider);
+                                useValueChanged(currentTab, (_, __) async {
+                                  controller.reset();
+                                  controller.forward();
+                                });
+                                useValueChanged(currentFilter, (_, __) async {
+                                  controller.reset();
+                                  controller.forward();
+                                });
+                              },
+                              duration: const Duration(milliseconds: 800),
+                              child: PhotographBoardPage(onUserAction: _onAction))
+                              : SlideTransitionAnimation(
+                              getStart: () => _calculateBoardStartAnimation(ref),
+                              getEnd: () => const Offset(0, 0),
+                              whenTo: (controller) {
+                                final String currentTab = ref.watch(boardFooterTabProvider);
+                                final String currentFilter = ref.watch(boardHeaderTabProvider);
+                                useValueChanged(currentTab, (_, __) async {
+                                  controller.reset();
+                                  controller.forward();
+                                });
+                                useValueChanged(currentFilter, (_, __) async {
+                                  controller.reset();
+                                  controller.forward();
+                                });
+                              },
+                              duration: const Duration(milliseconds: 800),
+                              child: VideoBoardPage(onUserAction: _onAction)
+                          ),
+                        )
+                    ),
+                    Align(
+                        alignment: Alignment.bottomCenter,
+                        child: SlideTransitionAnimation(
+                            getStart: () => const Offset(0.0, 1),
+                            getEnd: () => Offset.zero,
+                            duration: const Duration(milliseconds: 1200),
+                            child: BoardPageFooter(onUserAction: _onAction,)
+                        )
+                    ),
+                    Align(
+                        alignment: useMobileLayoutOriented(context)
+                            ? Alignment.topLeft
+                            : Alignment.topCenter,
+                        child: SlideTransitionAnimation(
+                            duration: const Duration(milliseconds: 1200),
+                            getStart: () =>
+                            ref.watch(boardFooterTabProvider) == 'photos'
+                                ? const Offset(0, -10)
+                                : Offset(0.0, ref.watch(boardFooterTabProvider) == 'videos' ? 0 : -10),
+                            getEnd: () =>
+                            ref.watch(boardFooterTabProvider) == 'photos'
+                                ? Offset.zero
+                                : Offset(0, ref.watch(boardFooterTabProvider) == 'videos' ? -10 : 10),
+                            whenTo: (controller) {
+                              final String currentTab = ref.watch(boardFooterTabProvider);
+                              useValueChanged(currentTab, (_, __) async {
+                                controller.reset();
+                                controller.forward();
+                              });
+                            },
+                            child: BoardPageFilter(onUserAction: _onAction)
+                        )
+                    ),
+                    Visibility(
+                        visible: Session().isLoggedIn(),
+                        child: Align(
+                            alignment: useMobileLayoutOriented(context)
+                                ? Alignment.bottomCenter
+                                : Alignment.bottomRight,
+                            child: _buildFloatingActionButtons(context, ref)
+                        )
+                    ),
+                    Visibility(
+                      visible: (shouldShowQrCodeDialog != null && shouldShowQrCodeDialog) ||
+                          (shouldShowDeletePhotographDialog != null && shouldShowDeletePhotographDialog) ||
+                          (shouldShowDeleteVideoDialog != null && shouldShowDeleteVideoDialog) ||
+                          (shouldShowUploadPhotographDialog != null && shouldShowUploadPhotographDialog) ||
+                          (shouldShowEditPhotographDialog != null && shouldShowEditPhotographDialog) ||
+                          (shouldShowUploadVideoDialog != null && shouldShowUploadVideoDialog) ||
+                          (shouldShowEditVideoDialog != null && shouldShowEditVideoDialog) ||
+                          (shouldShowShareDialog != null && shouldShowShareDialog),
+                      child: const Blurrable(strength: 10),
+                    ),
+                    if (shouldShowDeletePhotographDialog != null) Align(
                       alignment: Alignment.bottomCenter,
                       child: SlideTransitionAnimation(
-                          getStart: () => const Offset(0.0, 1),
-                          getEnd: () => Offset.zero,
-                          duration: const Duration(milliseconds: 1200),
-                          child: BoardPageFooter(onUserAction: _onAction,)
-                      )
-                  ),
-                  Align(
-                      alignment: useMobileLayoutOriented(context)
-                          ? Alignment.topLeft
-                          : Alignment.topCenter,
+                        duration: const Duration(milliseconds: 1000),
+                        getStart: () => shouldShowDeletePhotographDialog ? const Offset(0, 1) : const Offset(0, 0),
+                        getEnd: () => shouldShowDeletePhotographDialog ? const Offset(0, 0) : const Offset(0, 10),
+                        whenTo: (controller) {
+                          useValueChanged(shouldShowDeletePhotographDialog, (_, __) async {
+                            controller.reset();
+                            controller.forward();
+                          });
+                        },
+                        onCompleted: () {
+                          if(!shouldShowDeletePhotographDialog) {
+                            ref.read(deleteImageProvider.notifier).setDeleteImage(null);
+                          }
+                        },
+                        child: DeleteDialog<ImageData>(
+                          data: ref.read(deleteImageProvider),
+                          onSubmit: (image) {
+                            if (image != null) {
+                              ref.read(photographServiceFetchProvider.notifier).removeItem(
+                                  ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == image.id)
+                              );
+                              ref.read(deleteImageProvider.notifier).setDeleteImage(null);
+                              ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
+                              showSuccessTextOnSnackBar(context, translate('Photograph was successfully deleted'));
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                    if (shouldShowDeleteVideoDialog != null) Align(
+                      alignment: Alignment.bottomCenter,
                       child: SlideTransitionAnimation(
-                          duration: const Duration(milliseconds: 1200),
-                          getStart: () =>
-                          ref.watch(boardFooterTabProvider) == 'photos'
-                              ? const Offset(0, -10)
-                              : Offset(0.0, ref.watch(boardFooterTabProvider) == 'videos' ? 0 : -10),
-                          getEnd: () =>
-                          ref.watch(boardFooterTabProvider) == 'photos'
-                              ? Offset.zero
-                              : Offset(0, ref.watch(boardFooterTabProvider) == 'videos' ? -10 : 10),
+                        duration: const Duration(milliseconds: 1000),
+                        getStart: () => shouldShowDeleteVideoDialog ? const Offset(0, 1) : const Offset(0, 0),
+                        getEnd: () => shouldShowDeleteVideoDialog ? const Offset(0, 0) : const Offset(0, 10),
+                        whenTo: (controller) {
+                          useValueChanged(shouldShowDeleteVideoDialog, (_, __) async {
+                            controller.reset();
+                            controller.forward();
+                          });
+                        },
+                        onCompleted: () {
+                          if(!shouldShowDeleteVideoDialog) {
+                            ref.read(deleteImageProvider.notifier).setDeleteImage(null);
+                          }
+                        },
+                        child: DeleteDialog<VideoData>(
+                          data: ref.read(deleteVideoProvider),
+                          onSubmit: (video) {
+                            if (video != null) {
+                              ref.read(videoServiceFetchProvider.notifier).removeItem(
+                                  ref.read(videoServiceFetchProvider).firstWhere((element) => element.id == video.id)
+                              );
+                              ref.read(deleteVideoProvider.notifier).setDeleteVideo(null);
+                              ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
+                              showSuccessTextOnSnackBar(context, translate('Video was successfully deleted'));
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                    if (shouldShowEditPhotographDialog != null) Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SlideTransitionAnimation(
+                        duration: const Duration(milliseconds: 1000),
+                        getStart: () => shouldShowEditPhotographDialog ? const Offset(0, 1) : const Offset(0, 0),
+                        getEnd: () => shouldShowEditPhotographDialog ? const Offset(0, 0) : const Offset(0, 10),
+                        whenTo: (controller) {
+                          useValueChanged(shouldShowEditPhotographDialog, (_, __) async {
+                            controller.reset();
+                            controller.forward();
+                          });
+                        },
+                        onCompleted: () {
+                          if(!shouldShowEditPhotographDialog) {
+                            ref.read(photographEditProvider.notifier).setEditImage(null);
+                          }
+                        },
+                        child: UploadImageDialog(
+                          data: ref.read(photographEditProvider),
+                          onSubmit: (image) {
+                            final ImageMetaData meta = ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == element.image.id).metadata;
+                            ref.read(photographServiceFetchProvider.notifier).removeItem(
+                                ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == image.image.id)
+                            );
+                            ref.read(photographServiceFetchProvider.notifier).addItem(ImageBoardWrapper(image: image.image, metadata: meta));
+                            ref.read(photographEditProvider.notifier).setEditImage(null);
+                            ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(false);
+                            showSuccessTextOnSnackBar(context, translate('Photograph was successfully edited'));
+                          },
+                        ),
+                      ),
+                    ),
+                    if (shouldShowUploadPhotographDialog != null) Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SlideTransitionAnimation(
+                        duration: const Duration(milliseconds: 1000),
+                        getStart: () => shouldShowUploadPhotographDialog ? const Offset(0, 1) : const Offset(0, 0),
+                        getEnd: () => shouldShowUploadPhotographDialog ? const Offset(0, 0) : const Offset(0, 10),
+                        whenTo: (controller) {
+                          useValueChanged(shouldShowUploadPhotographDialog, (_, __) async {
+                            controller.reset();
+                            controller.forward();
+                          });
+                        },
+                        child: UploadImageDialog(
+                          onSubmit: (image) {
+                            ref.read(photographServiceFetchProvider.notifier).addItem(image);
+                            ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
+                            showSuccessTextOnSnackBar(context, translate('Photograph was successfully uploaded'));
+                          },
+                        ),
+                      ),
+                    ),
+                    if (shouldShowUploadVideoDialog != null) Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SlideTransitionAnimation(
+                        duration: const Duration(milliseconds: 1000),
+                        getStart: () => shouldShowUploadVideoDialog ? const Offset(0, 1) : const Offset(0, 0),
+                        getEnd: () => shouldShowUploadVideoDialog ? const Offset(0, 0) : const Offset(0, 10),
+                        whenTo: (controller) {
+                          useValueChanged(shouldShowUploadVideoDialog, (_, __) async {
+                            controller.reset();
+                            controller.forward();
+                          });
+                        },
+                        child: UploadVideoDialog(
+                          onSubmit: (video) {
+                            ref.read(videoServiceFetchProvider.notifier).addItem(video);
+                            ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(false);
+                            showSuccessTextOnSnackBar(context, translate('Video was successfully uploaded'));
+                          },
+                        ),
+                      ),
+                    ),
+                    if (shouldShowEditVideoDialog != null) Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SlideTransitionAnimation(
+                        duration: const Duration(milliseconds: 1000),
+                        getStart: () => shouldShowEditVideoDialog ? const Offset(0, 1) : const Offset(0, 0),
+                        getEnd: () => shouldShowEditVideoDialog ? const Offset(0, 0) : const Offset(0, 10),
+                        whenTo: (controller) {
+                          useValueChanged(shouldShowEditVideoDialog, (_, __) async {
+                            controller.reset();
+                            controller.forward();
+                          });
+                        },
+                        onCompleted: () {
+                          if(!shouldShowEditVideoDialog) {
+                            ref.read(videoEditProvider.notifier).setEditVideo(null);
+                          }
+                        },
+                        child: UploadVideoDialog(
+                          data: ref.read(videoEditProvider),
+                          onSubmit: (video) {
+                            ref.read(videoServiceFetchProvider.notifier).removeItem(
+                                ref.read(videoServiceFetchProvider).firstWhere((element) => element.id == video.id)
+                            );
+                            ref.read(videoServiceFetchProvider.notifier).addItem(video);
+                            ref.read(videoEditProvider.notifier).setEditVideo(null);
+                            ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(false);
+                            showSuccessTextOnSnackBar(context, translate('Video was successfully edited'));
+                          },
+                        ),
+                      ),
+                    ),
+                    if (shouldShowQrCodeDialog != null) Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SlideTransitionAnimation(
+                          duration: const Duration(milliseconds: 1000),
+                          getStart: () => shouldShowQrCodeDialog ? const Offset(0, 1) : const Offset(0, 0),
+                          getEnd: () => shouldShowQrCodeDialog ? const Offset(0, 0) : const Offset(0, 10),
                           whenTo: (controller) {
-                            final String currentTab = ref.watch(boardFooterTabProvider);
-                            useValueChanged(currentTab, (_, __) async {
+                            useValueChanged(shouldShowQrCodeDialog, (_, __) async {
                               controller.reset();
                               controller.forward();
                             });
                           },
-                          child: BoardPageFilter(onUserAction: _onAction)
-                      )
-                  ),
-                  Visibility(
-                      visible: Session().isLoggedIn(),
-                      child: Align(
-                          alignment: useMobileLayoutOriented(context)
-                              ? Alignment.bottomCenter
-                              : Alignment.bottomRight,
-                          child: _buildFloatingActionButtons(context, ref)
-                      )
-                  ),
-                  Visibility(
-                    visible: (shouldShowQrCodeDialog != null && shouldShowQrCodeDialog) ||
-                        (shouldShowDeletePhotographDialog != null && shouldShowDeletePhotographDialog) ||
-                        (shouldShowDeleteVideoDialog != null && shouldShowDeleteVideoDialog) ||
-                        (shouldShowUploadPhotographDialog != null && shouldShowUploadPhotographDialog) ||
-                        (shouldShowEditPhotographDialog != null && shouldShowEditPhotographDialog) ||
-                        (shouldShowUploadVideoDialog != null && shouldShowUploadVideoDialog) ||
-                        (shouldShowEditVideoDialog != null && shouldShowEditVideoDialog) ||
-                        (shouldShowShareDialog != null && shouldShowShareDialog),
-                    child: const Blurrable(strength: 10),
-                  ),
-                  if (shouldShowDeletePhotographDialog != null) Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SlideTransitionAnimation(
-                      duration: const Duration(milliseconds: 1000),
-                      getStart: () => shouldShowDeletePhotographDialog ? const Offset(0, 1) : const Offset(0, 0),
-                      getEnd: () => shouldShowDeletePhotographDialog ? const Offset(0, 0) : const Offset(0, 10),
-                      whenTo: (controller) {
-                        useValueChanged(shouldShowDeletePhotographDialog, (_, __) async {
-                          controller.reset();
-                          controller.forward();
-                        });
-                      },
-                      onCompleted: () {
-                        if(!shouldShowDeletePhotographDialog) {
-                          ref.read(deleteImageProvider.notifier).setDeleteImage(null);
-                        }
-                      },
-                      child: DeleteDialog<ImageData>(
-                        data: ref.read(deleteImageProvider),
-                        onSubmit: (image) {
-                          if (image != null) {
-                            ref.read(photographServiceFetchProvider.notifier).removeItem(
-                                ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == image.id)
-                            );
-                            ref.read(deleteImageProvider.notifier).setDeleteImage(null);
-                            ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
-                            showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Photograph was successfully deleted'));
-                          }
-                        },
+                          child: const QrCodeDialog()
                       ),
                     ),
-                  ),
-                  if (shouldShowDeleteVideoDialog != null) Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SlideTransitionAnimation(
-                      duration: const Duration(milliseconds: 1000),
-                      getStart: () => shouldShowDeleteVideoDialog ? const Offset(0, 1) : const Offset(0, 0),
-                      getEnd: () => shouldShowDeleteVideoDialog ? const Offset(0, 0) : const Offset(0, 10),
-                      whenTo: (controller) {
-                        useValueChanged(shouldShowDeleteVideoDialog, (_, __) async {
-                          controller.reset();
-                          controller.forward();
-                        });
-                      },
-                      onCompleted: () {
-                        if(!shouldShowDeleteVideoDialog) {
-                          ref.read(deleteImageProvider.notifier).setDeleteImage(null);
-                        }
-                      },
-                      child: DeleteDialog<VideoData>(
-                        data: ref.read(deleteVideoProvider),
-                        onSubmit: (video) {
-                          if (video != null) {
-                            ref.read(videoServiceFetchProvider.notifier).removeItem(
-                                ref.read(videoServiceFetchProvider).firstWhere((element) => element.id == video.id)
-                            );
-                            ref.read(deleteVideoProvider.notifier).setDeleteVideo(null);
-                            ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
-                            showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Video was successfully deleted'));
-                          }
-                        },
+                    if (shouldShowShareDialog != null) Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SlideTransitionAnimation(
+                          duration: const Duration(milliseconds: 1000),
+                          getStart: () => shouldShowShareDialog ? const Offset(0, 1) : const Offset(0, 0),
+                          getEnd: () => shouldShowShareDialog ? const Offset(0, 0) : const Offset(0, 10),
+                          whenTo: (controller) {
+                            useValueChanged(shouldShowShareDialog, (_, __) async {
+                              controller.reset();
+                              controller.forward();
+                            });
+                          },
+                          child: const ShareDialog()
                       ),
-                    ),
-                  ),
-                  if (shouldShowEditPhotographDialog != null) Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SlideTransitionAnimation(
-                      duration: const Duration(milliseconds: 1000),
-                      getStart: () => shouldShowEditPhotographDialog ? const Offset(0, 1) : const Offset(0, 0),
-                      getEnd: () => shouldShowEditPhotographDialog ? const Offset(0, 0) : const Offset(0, 10),
-                      whenTo: (controller) {
-                        useValueChanged(shouldShowEditPhotographDialog, (_, __) async {
-                          controller.reset();
-                          controller.forward();
-                        });
-                      },
-                      onCompleted: () {
-                        if(!shouldShowEditPhotographDialog) {
-                          ref.read(photographEditProvider.notifier).setEditImage(null);
-                        }
-                      },
-                      child: UploadImageDialog(
-                        data: ref.read(photographEditProvider),
-                        onSubmit: (image) {
-                          final ImageMetaData meta = ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == element.image.id).metadata;
-                          ref.read(photographServiceFetchProvider.notifier).removeItem(
-                              ref.read(photographServiceFetchProvider).firstWhere((element) => element.image.id == image.image.id)
-                          );
-                          ref.read(photographServiceFetchProvider.notifier).addItem(ImageBoardWrapper(image: image.image, metadata: meta));
-                          ref.read(photographEditProvider.notifier).setEditImage(null);
-                          ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(false);
-                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Photograph was successfully edited'));
-                        },
-                      ),
-                    ),
-                  ),
-                  if (shouldShowUploadPhotographDialog != null) Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SlideTransitionAnimation(
-                      duration: const Duration(milliseconds: 1000),
-                      getStart: () => shouldShowUploadPhotographDialog ? const Offset(0, 1) : const Offset(0, 0),
-                      getEnd: () => shouldShowUploadPhotographDialog ? const Offset(0, 0) : const Offset(0, 10),
-                      whenTo: (controller) {
-                        useValueChanged(shouldShowUploadPhotographDialog, (_, __) async {
-                          controller.reset();
-                          controller.forward();
-                        });
-                      },
-                      child: UploadImageDialog(
-                        onSubmit: (image) {
-                          ref.read(photographServiceFetchProvider.notifier).addItem(image);
-                          ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
-                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Photograph was successfully uploaded'));
-                        },
-                      ),
-                    ),
-                  ),
-                  if (shouldShowUploadVideoDialog != null) Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SlideTransitionAnimation(
-                      duration: const Duration(milliseconds: 1000),
-                      getStart: () => shouldShowUploadVideoDialog ? const Offset(0, 1) : const Offset(0, 0),
-                      getEnd: () => shouldShowUploadVideoDialog ? const Offset(0, 0) : const Offset(0, 10),
-                      whenTo: (controller) {
-                        useValueChanged(shouldShowUploadVideoDialog, (_, __) async {
-                          controller.reset();
-                          controller.forward();
-                        });
-                      },
-                      child: UploadVideoDialog(
-                        onSubmit: (video) {
-                          ref.read(videoServiceFetchProvider.notifier).addItem(video);
-                          ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(false);
-                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Video was successfully uploaded'));
-                        },
-                      ),
-                    ),
-                  ),
-                  if (shouldShowEditVideoDialog != null) Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SlideTransitionAnimation(
-                      duration: const Duration(milliseconds: 1000),
-                      getStart: () => shouldShowEditVideoDialog ? const Offset(0, 1) : const Offset(0, 0),
-                      getEnd: () => shouldShowEditVideoDialog ? const Offset(0, 0) : const Offset(0, 10),
-                      whenTo: (controller) {
-                        useValueChanged(shouldShowEditVideoDialog, (_, __) async {
-                          controller.reset();
-                          controller.forward();
-                        });
-                      },
-                      onCompleted: () {
-                        if(!shouldShowEditVideoDialog) {
-                          ref.read(videoEditProvider.notifier).setEditVideo(null);
-                        }
-                      },
-                      child: UploadVideoDialog(
-                        data: ref.read(videoEditProvider),
-                        onSubmit: (video) {
-                          ref.read(videoServiceFetchProvider.notifier).removeItem(
-                              ref.read(videoServiceFetchProvider).firstWhere((element) => element.id == video.id)
-                          );
-                          ref.read(videoServiceFetchProvider.notifier).addItem(video);
-                          ref.read(videoEditProvider.notifier).setEditVideo(null);
-                          ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(false);
-                          showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Video was successfully edited'));
-                        },
-                      ),
-                    ),
-                  ),
-                  if (shouldShowQrCodeDialog != null) Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SlideTransitionAnimation(
-                        duration: const Duration(milliseconds: 1000),
-                        getStart: () => shouldShowQrCodeDialog ? const Offset(0, 1) : const Offset(0, 0),
-                        getEnd: () => shouldShowQrCodeDialog ? const Offset(0, 0) : const Offset(0, 10),
-                        whenTo: (controller) {
-                          useValueChanged(shouldShowQrCodeDialog, (_, __) async {
-                            controller.reset();
-                            controller.forward();
-                          });
-                        },
-                        child: const QrCodeDialog()
-                    ),
-                  ),
-                  if (shouldShowShareDialog != null) Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SlideTransitionAnimation(
-                        duration: const Duration(milliseconds: 1000),
-                        getStart: () => shouldShowShareDialog ? const Offset(0, 1) : const Offset(0, 0),
-                        getEnd: () => shouldShowShareDialog ? const Offset(0, 0) : const Offset(0, 10),
-                        whenTo: (controller) {
-                          useValueChanged(shouldShowShareDialog, (_, __) async {
-                            controller.reset();
-                            controller.forward();
-                          });
-                        },
-                        child: const ShareDialog()
-                    ),
-                  )
-                ]
-            ),
-          )
+                    )
+                  ]
+              ),
+            )
+        ),
       ),
     );
   }

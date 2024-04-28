@@ -14,14 +14,15 @@ import 'package:contrast/modules/detail/overlay/provider.dart';
 import 'package:contrast/modules/detail/overlay/service.dart';
 import 'package:contrast/security/session.dart';
 import 'package:contrast/utils/date.dart';
+import 'package:contrast/utils/overlay.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -103,7 +104,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
           },
           color: Colors.white,
           borderColor: Colors.black,
-          tooltip: FlutterI18n.translate(context, 'Comments'),
+          tooltip: translate('Comments'),
           icon: 'comment.svg'
       );
 
@@ -117,11 +118,11 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                 ClipboardData(text: 'https://www.youtube.com/watch?v=${widget.path}')
             ).then((value) => showSuccessTextOnSnackBar(
                 context,
-                FlutterI18n.translate(context, 'Copied to clipboard'
+                translate('Copied to clipboard'
                 )
             ));},
           color: Colors.white,
-          tooltip: FlutterI18n.translate(context, 'Share'),
+          tooltip: translate('Share'),
           borderColor: Colors.black,
           icon: 'share.svg'
       );
@@ -134,7 +135,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
             Modular.to.navigate('/');
             },
           color: Colors.white,
-          tooltip: FlutterI18n.translate(context, 'Close'),
+          tooltip: translate('Close'),
           borderColor: Colors.black,
           icon: 'close.svg'
       );
@@ -223,9 +224,9 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                   height: 25,
                                   onClick: () => ref.read(commentsServiceProvider).approveVideoComment(item.id!).then((value) {
                                     ref.read(videoCommentsDataViewProvider.notifier).updateItem(item, value);
-                                    showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment approved'));
+                                    showSuccessTextOnSnackBar(context, translate('Comment approved'));
                                   }),
-                                  tooltip: FlutterI18n.translate(context, 'Approve comment'),
+                                  tooltip: translate('Approve comment'),
                                   color: Colors.white.withOpacity(0.3),
                                   borderColor: Colors.white,
                                   icon: 'check.svg'
@@ -237,13 +238,13 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                   onClick: () => Session().isLoggedIn() ?
                                   ref.read(commentsServiceProvider).deleteVideoCommentAsAdmin(item.id!).then((value) {
                                     ref.read(videoCommentsDataViewProvider.notifier).removeItem(index);
-                                    showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
+                                    showSuccessTextOnSnackBar(context, translate('Comment deleted'));
                                   }) :
                                   ref.read(commentsServiceProvider).deleteVideoComment(item.id!, deviceId!).then((value) {
                                     ref.read(videoCommentsDataViewProvider.notifier).removeItem(index);
-                                    showSuccessTextOnSnackBar(context, FlutterI18n.translate(context, 'Comment deleted'));
+                                    showSuccessTextOnSnackBar(context, translate('Comment deleted'));
                                   }),
-                                  tooltip: FlutterI18n.translate(context, 'Delete comment'),
+                                  tooltip: translate('Delete comment'),
                                   color: Colors.white.withOpacity(0.3),
                                   borderColor: Colors.black,
                                   icon: 'delete.svg'
@@ -314,38 +315,41 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
             Modular.to.navigate('/');
           }
         },
-        child: BackgroundPage(
-            color: Colors.black,
-            child: OrientationBuilder(
-              builder: (BuildContext context, Orientation orientation) => Stack(
-                alignment: Alignment.center,
-                children: [
-                  IconRenderer(
-                      asset: 'background_portrait.svg',
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                      color: Colors.white.withOpacity(0.05)
-                  ),
-                  if (!shouldHideOverlay(shouldShowCommentsDialog)) Padding(
-                    padding: EdgeInsets.only(top: kIsWeb && orientation == Orientation.landscape ? 60 : 0),
-                    child: YoutubePlayerScaffold(
-                        key: const Key('VideoDetailsYoutubeScaffold'),
-                        aspectRatio: 16 / 9,
-                        backgroundColor: Colors.transparent,
-                        controller: _controller,
-                        builder: (context, player) => player
+        child: GestureDetector(
+          onTap: () => closeOverlayIfOpened(ref, 'comment_video'),
+          child: BackgroundPage(
+              color: Colors.black,
+              child: OrientationBuilder(
+                builder: (BuildContext context, Orientation orientation) => Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    IconRenderer(
+                        asset: 'background_portrait.svg',
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                        color: Colors.white.withOpacity(0.05)
                     ),
-                  ),
-                  if (!(!kIsWeb && orientation == Orientation.landscape)) Align(
-                      alignment: Alignment.topLeft,
-                      child: Row(children: _renderActions())
-                  ),
-                  if((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(strength: 10),
-                  if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null) _renderCommentsOverlay(shouldShowCommentsDialog)
-                ],
-              ),
-            )
+                    if (!shouldHideOverlay(shouldShowCommentsDialog)) Padding(
+                      padding: EdgeInsets.only(top: kIsWeb && orientation == Orientation.landscape ? 60 : 0),
+                      child: YoutubePlayerScaffold(
+                          key: const Key('VideoDetailsYoutubeScaffold'),
+                          aspectRatio: 16 / 9,
+                          backgroundColor: Colors.transparent,
+                          controller: _controller,
+                          builder: (context, player) => player
+                      ),
+                    ),
+                    if (!(!kIsWeb && orientation == Orientation.landscape)) Align(
+                        alignment: Alignment.topLeft,
+                        child: Row(children: _renderActions())
+                    ),
+                    if((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null && shouldShowCommentsDialog) const Blurrable(strength: 10),
+                    if ((!kIsWeb || Session().isLoggedIn()) && shouldShowCommentsDialog != null) _renderCommentsOverlay(shouldShowCommentsDialog)
+                  ],
+                ),
+              )
+          ),
         ),
       )
     );

@@ -11,8 +11,9 @@ import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -63,7 +64,7 @@ class BoardPageFooter extends HookConsumerWidget {
                 children: [
                   Expanded(
                     child: StyledTooltip(
-                      text: FlutterI18n.translate(context, 'Photographs'),
+                      text: translate('Photographs'),
                       child: Material(
                         color: Colors.transparent,
                         child: InkWell(
@@ -87,7 +88,7 @@ class BoardPageFooter extends HookConsumerWidget {
                   const SizedBox(width: 120),
                   Expanded(
                     child: StyledTooltip(
-                      text: FlutterI18n.translate(context, 'Videos'),
+                      text: translate('Videos'),
                       child: Material(
                         color: Colors.transparent,
                         child: InkWell(
@@ -158,6 +159,7 @@ class BoardPageFooter extends HookConsumerWidget {
                 Align(
                   alignment: Alignment.center,
                   child: BlurryContainer(
+                    height: boardPadding,
                     blur: 1.4,
                     elevation: 0,
                     color: Colors.transparent,
@@ -170,7 +172,7 @@ class BoardPageFooter extends HookConsumerWidget {
                         ContrastTab(
                             widgetKey: const Key('photos'),
                             tabKey: 'photos',
-                            text: FlutterI18n.translate(context, 'photos'),
+                            text: translate('photos'),
                             onClick: (String tab) => ref.read(boardFooterTabProvider.notifier).switchTab(tab),
                             isSelected: currentTab == 'photos'
                         ).translateOnPhotoHover,
@@ -180,7 +182,7 @@ class BoardPageFooter extends HookConsumerWidget {
                         ContrastTab(
                             widgetKey: const Key('videos'),
                             tabKey: 'videos',
-                            text: FlutterI18n.translate(context, 'videos'),
+                            text: translate('videos'),
                             onClick: (String tab) {
                               ref.read(boardHeaderTabProvider.notifier).switchTab('all');
                               ref.read(boardFooterTabProvider.notifier).switchTab(tab);
@@ -232,7 +234,7 @@ class _HomeSection extends HookConsumerWidget {
           child: ShaderWidget(
               asset: 'background.glsl',
               child: StyledTooltip(
-                text: FlutterI18n.translate(context, 'Menu'),
+                text: translate('Menu'),
                 child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: SpeedDial(
@@ -259,7 +261,7 @@ class _HomeSection extends HookConsumerWidget {
                                 child: Container(
                                   color: Colors.white,
                                   child: StyledText(
-                                    text: FlutterI18n.translate(context, 'Instagram'),
+                                    text: translate('About me'),
                                     padding: 5,
                                     fontSize: 12,
                                   ),
@@ -267,18 +269,13 @@ class _HomeSection extends HookConsumerWidget {
                               ),
                             ),
                             child: const IconRenderer(
-                              asset: 'instagram.svg',
+                              asset: 'about.svg',
                               color: Colors.black,
                               height: 20,
                             ),
                             shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
                             elevation: 1,
-                            onTap: () async {
-                              final Uri url = Uri.parse('https://www.instagram.com/dstefomir/');
-                              if (await canLaunchUrl(url)) {
-                                await launchUrl(url);
-                              }
-                            }
+                            onTap: () => Modular.to.pushNamed('/about')
                         ),
                         SpeedDialChild(
                             foregroundColor: Colors.black,
@@ -293,7 +290,7 @@ class _HomeSection extends HookConsumerWidget {
                                   color: Colors.white,
                                   child: StyledText(
                                     key: const Key('AboutMeSpeedDialShareText'),
-                                    text: FlutterI18n.translate(context, 'Share'),
+                                    text: translate('Share'),
                                     padding: 5,
                                     fontSize: 12,
                                   ),
@@ -324,7 +321,7 @@ class _HomeSection extends HookConsumerWidget {
                                 child: Container(
                                   color: Colors.white,
                                   child: StyledText(
-                                    text: FlutterI18n.translate(context, 'Qr code'),
+                                    text: translate('Qr code'),
                                     padding: 5,
                                     fontSize: 12,
                                   ),

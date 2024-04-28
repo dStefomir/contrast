@@ -8,7 +8,7 @@ import 'package:contrast/model/video_data.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/board/video/overlay/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 /// Dialog height
 const double dialogHeight = 450;
@@ -34,7 +34,7 @@ class UploadVideoDialog extends HookConsumerWidget {
             foregroundColor: MaterialStateProperty.all(Colors.white),
             textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
         ),
-        child: Text(FlutterI18n.translate(context, 'Submit')),
+        child: Text(translate('Submit')),
         onPressed: () async {
           final form = _formKey.currentState;
           if (!isLoading && (form != null && form.validate())) {
@@ -68,7 +68,7 @@ class UploadVideoDialog extends HookConsumerWidget {
     SimpleInput(
       widgetKey: const Key('video comment'),
       controllerText: data?.comment,
-      labelText: FlutterI18n.translate(context, 'Video comment'),
+      labelText: translate('Video comment'),
       prefixIcon: Icons.comment,
       onChange: (text) => ref.read(commentProvider.notifier).setComment(text),
       maxLines: 4,
@@ -83,15 +83,15 @@ class UploadVideoDialog extends HookConsumerWidget {
       SimpleInput(
         widgetKey: const Key('video url'),
         controllerText: data?.path,
-        labelText: FlutterI18n.translate(context, 'Youtube url'),
+        labelText: translate('Youtube url'),
         onChange: (text) => ref.read(videoUrlProvider.notifier).setUrl(text),
         prefixIcon: Icons.video_collection,
         validator: (value) {
           if (value != null && value.isEmpty) {
-            return FlutterI18n.translate(context, 'This field is mandatory');
+            return translate('This field is mandatory');
           }
           if(value != null && value.isNotEmpty && value.length < 11) {
-            return FlutterI18n.translate(context, 'Invalid youtube prefix');
+            return translate('Invalid youtube prefix');
           }
           return null;
           },
@@ -109,7 +109,7 @@ class UploadVideoDialog extends HookConsumerWidget {
         child: Row(
             children: [
               StyledText(
-                  text: data != null ? FlutterI18n.translate(context, 'Edit Video') : FlutterI18n.translate(context, 'Upload Video'),
+                  text: data != null ? translate('Edit Video') : translate('Upload Video'),
                   weight: FontWeight.bold
               ),
               const Spacer(),
@@ -121,7 +121,7 @@ class UploadVideoDialog extends HookConsumerWidget {
                       ref.read(overlayVisibilityProvider(const Key("upload_video")).notifier).setOverlayVisibility(false);
                     }
                   },
-                  tooltip: FlutterI18n.translate(context, 'Close'),
+                  tooltip: translate('Close'),
                   color: Colors.white,
                   borderColor: Colors.black,
                   icon: 'close.svg'

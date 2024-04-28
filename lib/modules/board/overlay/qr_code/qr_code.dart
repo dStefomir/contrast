@@ -7,7 +7,7 @@ import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -38,13 +38,13 @@ class QrCodeDialog extends HookConsumerWidget {
                       Row(
                           children: [
                             StyledText(
-                                text: FlutterI18n.translate(context, 'Share Contrastus'),
+                                text: translate('Share Contrastus'),
                                 weight: FontWeight.bold
                             ),
                             const Spacer(),
                             DefaultButton(
                                 onClick: () => ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false),
-                                tooltip: FlutterI18n.translate(context, 'Close'),
+                                tooltip: translate('Close'),
                                 color: Colors.white,
                                 borderColor: Colors.black,
                                 icon: 'close.svg'
@@ -77,7 +77,7 @@ class QrCodeDialog extends HookConsumerWidget {
                       child: Column(
                         children: [
                           StyledText(
-                              text: '"${FlutterI18n.translate(context, 'The future belongs to those who believe in the beauty of their dreams')}",',
+                              text: '"${translate('The future belongs to those who believe in the beauty of their dreams')}",',
                               fontSize: 10,
                               clip: false,
                               color: Colors.black87,
@@ -86,7 +86,7 @@ class QrCodeDialog extends HookConsumerWidget {
                           Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: StyledText(
-                                text: FlutterI18n.translate(context, 'Eleanor Roosevelt'),
+                                text: translate('Eleanor Roosevelt'),
                                 fontSize: 10,
                                 clip: false,
                                 color: Colors.black87,

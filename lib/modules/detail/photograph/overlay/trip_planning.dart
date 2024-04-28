@@ -7,7 +7,7 @@ import 'package:contrast/model/image_data.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/detail/photograph/overlay/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 /// Dialog height
 const double dialogHeight = 500;
@@ -42,13 +42,13 @@ class TripPlanningOverlay extends HookConsumerWidget {
                       child: Row(
                           children: [
                             StyledText(
-                                text: FlutterI18n.translate(context, 'Trip planning'),
+                                text: translate('Trip planning'),
                                 weight: FontWeight.bold
                             ),
                             const Spacer(),
                             DefaultButton(
                                 onClick: () => ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(false),
-                                tooltip: FlutterI18n.translate(context, 'Close'),
+                                tooltip: translate('Close'),
                                 color: Colors.white,
                                 borderColor: Colors.black,
                                 icon: 'close.svg'
@@ -59,7 +59,7 @@ class TripPlanningOverlay extends HookConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 25.0),
                       child: StyledText(
-                          text: FlutterI18n.translate(context, 'Plan a trip to this photographic location'),
+                          text: translate('Plan a trip to this photographic location'),
                           align: TextAlign.start,
                           fontSize: 10,
                           clip: false,
@@ -96,8 +96,8 @@ class TripPlanningOverlay extends HookConsumerWidget {
                                 ref.read(startPeriodProvider.notifier).setPeriod(null);
                                 ref.read(endPeriodProvider.notifier).setPeriod(null);
                                 final Event event = Event(
-                                  title: FlutterI18n.translate(context, 'Photographic location'),
-                                  description: "${FlutterI18n.translate(context, 'You have planned a trip to a photographic location')}.\n\n${FlutterI18n.translate(context, 'Photograph')} - https://www.dstefomir.eu/#/photos/details?id=${image.id}&category=all\n\n${FlutterI18n.translate(context, 'Location')} - https://www.google.com/maps/@${image.lat},${image.lng},20.45z?entry=ttu",
+                                  title: translate('Photographic location'),
+                                  description: "${translate('You have planned a trip to a photographic location')}.\n\n${translate('Photograph')} - https://www.dstefomir.eu/#/photos/details?id=${image.id}&category=all\n\n${translate('Location')} - https://www.google.com/maps/@${image.lat},${image.lng},20.45z?entry=ttu",
                                   location: '${image.lat}, ${image.lng}',
                                   startDate: startPeriod,
                                   endDate: endPeriod,
@@ -110,7 +110,7 @@ class TripPlanningOverlay extends HookConsumerWidget {
                                 await Add2Calendar.addEvent2Cal(event);
                               },
                               child: Text(
-                                  FlutterI18n.translate(context, 'Plan')
+                                  translate('Plan')
                               )
                           ),
                         ],

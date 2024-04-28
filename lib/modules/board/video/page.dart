@@ -10,7 +10,6 @@ import 'package:contrast/security/session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
@@ -19,6 +18,7 @@ import 'package:hyper_effects/hyper_effects.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:parallax_animation/parallax_animation.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_translate/flutter_translate.dart' as translation;
 
 /// Renders the video board page
 class VideoBoardPage extends HookConsumerWidget {
@@ -41,7 +41,7 @@ class VideoBoardPage extends HookConsumerWidget {
           onPressed: () => onUserAction(ref, () => Modular.to.pushNamed('videos/details?path=${video.path}&id=${video.id}')),
           menuItems: <FocusedMenuItem>[
             FocusedMenuItem(
-                title: Text(FlutterI18n.translate(context, 'Edit Video')),
+                title: Text(translation.translate('Edit Video')),
                 trailingIcon: const Icon(Icons.edit),
                 onPressed: () => onUserAction(ref, () {
                   ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(true);
@@ -49,7 +49,7 @@ class VideoBoardPage extends HookConsumerWidget {
                 })
             ),
             FocusedMenuItem(
-                title: Text(FlutterI18n.translate(context, 'Delete Video')),
+                title: Text(translation.translate('Delete Video')),
                 trailingIcon: const Icon(Icons.delete),
                 onPressed: () => onUserAction(ref, () {
                   ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(true);

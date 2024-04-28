@@ -4,7 +4,7 @@ import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -31,13 +31,13 @@ class ShareDialog extends HookConsumerWidget {
                 child: Row(
                     children: [
                       StyledText(
-                          text: FlutterI18n.translate(context, 'Share Contrastus'),
+                          text: translate('Share Contrastus'),
                           weight: FontWeight.bold
                       ),
                       const Spacer(),
                       DefaultButton(
                           onClick: () => ref.read(overlayVisibilityProvider(const Key('share')).notifier).setOverlayVisibility(false),
-                          tooltip: FlutterI18n.translate(context, 'Close'),
+                          tooltip: translate('Close'),
                           color: Colors.white,
                           borderColor: Colors.black,
                           icon: 'close.svg'
@@ -57,7 +57,7 @@ class ShareDialog extends HookConsumerWidget {
                         padding: const EdgeInsets.only(top: 15),
                         child: DefaultButton(
                             shape: BoxShape.circle,
-                            tooltip: FlutterI18n.translate(context, 'Website'),
+                            tooltip: translate('Website'),
                             onClick: () async {
                               final Uri url = Uri.parse('https://www.dstefomir.eu');
                               if (await canLaunchUrl(url)) {
@@ -75,7 +75,7 @@ class ShareDialog extends HookConsumerWidget {
                         children: [
                           DefaultButton(
                               shape: BoxShape.circle,
-                              tooltip: FlutterI18n.translate(context, 'Google Play Store'),
+                              tooltip: translate('Google Play Store'),
                               onClick: () async {
                                 final Uri url = Uri.parse('https://play.google.com/store/apps/details?id=eu.bsdsoft.contrast');
                                 if (await canLaunchUrl(url)) {
@@ -91,7 +91,7 @@ class ShareDialog extends HookConsumerWidget {
                           const SizedBox(width: 20),
                           DefaultButton(
                               shape: BoxShape.circle,
-                              tooltip: FlutterI18n.translate(context, 'Apple App Store'),
+                              tooltip: translate('Apple App Store'),
                               onClick: () async {
                                 final Uri url = Uri.parse('https://apps.apple.com/bg/app/contrastus/id6466247842');
                                 if (await canLaunchUrl(url)) {

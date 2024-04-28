@@ -13,7 +13,7 @@ import 'package:contrast/modules/board/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_size_getter/file_input.dart';
 import 'package:image_size_getter/image_size_getter.dart';
@@ -91,7 +91,7 @@ class UploadImageDialog extends HookConsumerWidget {
                 textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
             ),
             child: Text(
-                FlutterI18n.translate(context, 'Submit')
+                translate('Submit')
             ),
             onPressed: () {
               final form = _formKey.currentState;
@@ -127,7 +127,7 @@ class UploadImageDialog extends HookConsumerWidget {
     ) :
     SimpleInput(
       widgetKey: const Key('photograph comment'),
-      labelText: FlutterI18n.translate(context, 'Photograph comment'),
+      labelText: translate('Photograph comment'),
       controllerText: data?.comment,
       onChange: (text) => ref.read(commentProvider.notifier).setComment(text),
       prefixIcon: Icons.comment,
@@ -141,7 +141,7 @@ class UploadImageDialog extends HookConsumerWidget {
       Expanded(
           child: SimpleInput(
             widgetKey: const Key('photograph latitude'),
-            labelText: FlutterI18n.translate(context, 'Latitude'),
+            labelText: translate('Latitude'),
             controllerText: data?.lat?.toString(),
             onChange: (text) => ref.read(geoLatProvider(data?.lat).notifier).setLat(text),
             prefixIcon: Icons.location_on,
@@ -150,7 +150,7 @@ class UploadImageDialog extends HookConsumerWidget {
                 try {
                   double.parse(value);
                 } catch (e) {
-                  return FlutterI18n.translate(context, 'Invalid latitude');
+                  return translate('Invalid latitude');
                 }
               }
               return null;
@@ -161,7 +161,7 @@ class UploadImageDialog extends HookConsumerWidget {
       Expanded(
           child: SimpleInput(
             widgetKey: const Key('photograph longitude'),
-            labelText: FlutterI18n.translate(context, 'Longitude'),
+            labelText: translate('Longitude'),
             controllerText: data?.lng?.toString(),
             onChange: (text) => ref.read(geoLngProvider(data?.lng).notifier).setLng(text),
             prefixIcon: Icons.location_on,
@@ -170,7 +170,7 @@ class UploadImageDialog extends HookConsumerWidget {
                 try {
                   double.parse(value);
                 } catch (e) {
-                  return FlutterI18n.translate(context, 'Invalid longitude');
+                  return translate('Invalid longitude');
                 }
               }
               return null;
@@ -193,19 +193,19 @@ class UploadImageDialog extends HookConsumerWidget {
           itemBuilder: (_) => <PopupMenuItem<String>>[
             PopupMenuItem<String>(
                 value: 'landscape',
-                child: Text(FlutterI18n.translate(context, 'L A N D S C A P E'), style: const TextStyle(fontSize: 20))
+                child: Text(translate('L A N D S C A P E'), style: const TextStyle(fontSize: 20))
             ),
             PopupMenuItem<String>(
                 value: 'portraits',
-                child: Text(FlutterI18n.translate(context, 'P O R T R A I T S'), style: const TextStyle(fontSize: 20))
+                child: Text(translate('P O R T R A I T S'), style: const TextStyle(fontSize: 20))
             ),
             PopupMenuItem<String>(
                 value: 'street',
-                child: Text(FlutterI18n.translate(context, 'S T R E E T'), style: const TextStyle(fontSize: 20))
+                child: Text(translate('S T R E E T'), style: const TextStyle(fontSize: 20))
             ),
             PopupMenuItem<String>(
                 value: 'other',
-                child: Text(FlutterI18n.translate(context, 'O T H E R'), style: const TextStyle(fontSize: 20))
+                child: Text(translate('O T H E R'), style: const TextStyle(fontSize: 20))
             ),
           ],
           child: Text(
@@ -234,7 +234,7 @@ class UploadImageDialog extends HookConsumerWidget {
     return Column(
       children: [
         StyledTooltip(
-          text: FlutterI18n.translate(context, 'Photograph'),
+          text: translate('Photograph'),
           pointingPosition: AxisDirection.right,
           child: Material(
             color: Colors.transparent,
@@ -256,7 +256,7 @@ class UploadImageDialog extends HookConsumerWidget {
             ),
           ),
         ),
-        StyledText(text: FlutterI18n.translate(context, 'Select an image'))
+        StyledText(text: translate('Select an image'))
       ],
     );
   }
@@ -296,7 +296,7 @@ class UploadImageDialog extends HookConsumerWidget {
         child: Row(
             children: [
               StyledText(
-                  text: data != null ? FlutterI18n.translate(context, 'Edit Photograph') : FlutterI18n.translate(context, 'Upload Photograph'),
+                  text: data != null ? translate('Edit Photograph') : translate('Upload Photograph'),
                   weight: FontWeight.bold
               ),
               const Spacer(),
@@ -308,7 +308,7 @@ class UploadImageDialog extends HookConsumerWidget {
                       ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
                     }
                   },
-                  tooltip: FlutterI18n.translate(context, 'Close'),
+                  tooltip: translate('Close'),
                   color: Colors.white,
                   borderColor: Colors.black,
                   icon: 'close.svg'
