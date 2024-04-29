@@ -93,7 +93,7 @@ class StyledText extends StatelessWidget {
       ],
       totalRepeatCount: 1,
       pause: const Duration(milliseconds: 1000),
-      displayFullTextOnTap: false,
+      displayFullTextOnTap: true,
       stopPauseOnTap: false,
     ): Text(
         text,

@@ -1,6 +1,5 @@
-import 'package:contrast/common/widgets/animation.dart';
-import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/data/provider.dart';
+import 'package:contrast/common/widgets/glass.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/paged_list.dart';
 import 'package:flutter/foundation.dart';
@@ -96,22 +95,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
       }
     }
   }
-
-  /// Render glass effect widget
-  Widget _renderGlass({required double width, required double height}) => ClipRect(
-    child: Container(
-        decoration: BoxDecoration(
-            border: Border.all(width: 5, color: Colors.black)
-        ),
-        child: Blurrable(
-            strength: 5,
-            child: SizedBox(
-              width: width,
-              height: height,
-            )
-        )
-    ),
-  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -218,25 +201,10 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
               )
           ),
         ),
-        if (whenShouldAnimateGlass != null) Align(
-            alignment: Alignment.centerLeft,
-            child: SlideTransitionAnimation(
-                getStart: () => const Offset(0, 0),
-                getEnd: () => const Offset(-10, 0),
-                duration: const Duration(milliseconds: 10000),
-                whenTo: whenShouldAnimateGlass,
-                child: _renderGlass(width: widgetMaxWidth / 2, height: widgetMaxHeight)
-            )
-        ),
-        if (whenShouldAnimateGlass != null) Align(
-            alignment: Alignment.centerRight,
-            child: SlideTransitionAnimation(
-                getStart: () => const Offset(0, 0),
-                getEnd: () => const Offset(10, 0),
-                duration: const Duration(milliseconds: 10000),
-                whenTo: whenShouldAnimateGlass,
-                child: _renderGlass(width: widgetMaxWidth / 2, height: widgetMaxHeight)
-            )
+        GlassWidget(
+          whenShouldAnimateGlass: whenShouldAnimateGlass,
+          width: widgetMaxWidth,
+          height: widgetMaxHeight,
         )
       ],
     ) : listEmptyChild;

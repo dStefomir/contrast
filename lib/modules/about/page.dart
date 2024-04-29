@@ -1,12 +1,14 @@
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/button.dart';
+import 'package:contrast/common/widgets/glass.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/page.dart';
 import 'package:contrast/common/widgets/snack.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -63,14 +65,21 @@ class _AboutPageState extends ConsumerState<AboutPage> {
           padding: const EdgeInsets.only(top: 5.0),
           child: DefaultButton(
               onClick: () async {
+                String? encodeQueryParameters(Map<String, String> params) {
+                  return params.entries.map((MapEntry<String, String> e) =>
+                  '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}').join('&');
+                }
+
                 final Uri emailLaunchUri = Uri(
                   scheme: 'mailto',
                   path: 'dStefomir@gmail.com',
-                  queryParameters: {'subject': 'Contrastus'},
+                  query: encodeQueryParameters(<String, String>{
+                    'subject': 'Contrastus',
+                  }),
                 );
-                if (await canLaunchUrl(emailLaunchUri)) {
+                try {
                   await launchUrl(emailLaunchUri);
-                } else {
+                } catch (e) {
                   showErrorTextOnSnackBar(context, translate('Error Mail'));
                 }
               },
@@ -110,6 +119,8 @@ class _AboutPageState extends ConsumerState<AboutPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isGlassAnimated = useState(false);
+
     return BackgroundPage(
         color: Colors.black,
         child: OrientationBuilder(
@@ -121,58 +132,55 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,
-                ).opacity(0.6, from: 1)
+                ).opacity(0.4, from: 1)
                     .animate(
                     duration: const Duration(milliseconds: 1800),
                     trigger: true,
                     startImmediately: true
                 ),
-                BlurryContainer(
+                GlassWidget(
+                  whenShouldAnimateGlass: (controller) {},
+                  onFinish: () => isGlassAnimated.value = true,
+                  width: MediaQuery.of(context).size.width,
                   height: double.infinity,
-                  width: double.infinity,
-                  blur: 3,
-                  elevation: 0,
-                  color: Colors.transparent,
-                  padding: const EdgeInsets.all(0),
-                  borderRadius: const BorderRadius.all(Radius.circular(0)),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Align(
-                          alignment: Alignment.topLeft,
-                          child: Row(
+                  shouldOpenGlass: false,
+                  duration: const Duration(seconds: 2),
+                ),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Row(
+                          children: [
+                            _renderBackButton(context),
+                            _renderMailButton(context),
+                            _renderInstagramButton(context)
+                          ],
+                        )
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: MediaQuery.of(context).size.shortestSide / 5),
+                        child: SingleChildScrollView(
+                          child: Column(
                             children: [
-                              _renderBackButton(context),
-                              _renderMailButton(context),
-                              _renderInstagramButton(context)
+                              if (isGlassAnimated.value) StyledText(
+                                text: translate("About description"),
+                                color: Colors.white,
+                                align: TextAlign.start,
+                                clip: false,
+                                fontSize: 15,
+                                useShadow: true,
+                                typewriter: true,
+                              )
                             ],
-                          )
-                      ),
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: orientation == Orientation.portrait ?
-                          MediaQuery.of(context).size.height / 15 :
-                          MediaQuery.of(context).size.height / 6),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                StyledText(
-                                  text: translate("About description"),
-                                  color: Colors.white,
-                                  align: TextAlign.start,
-                                  clip: false,
-                                  fontSize: 15,
-                                  useShadow: true,
-                                  typewriter: true,
-                                )
-                              ],
-                            ),
                           ),
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 )
               ],
             )
