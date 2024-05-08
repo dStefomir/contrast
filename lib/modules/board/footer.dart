@@ -16,7 +16,6 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 /// Renders the footer of the board page
 class BoardPageFooter extends HookConsumerWidget {
@@ -242,7 +241,6 @@ class _HomeSection extends HookConsumerWidget {
                       backgroundColor: Colors.transparent,
                       foregroundColor: Colors.white,
                       animatedIconTheme: const IconThemeData(size: 50),
-                      shape: const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
                       direction: SpeedDialDirection.up,
                       animationDuration: const Duration(milliseconds: 500),
                       elevation: 10,

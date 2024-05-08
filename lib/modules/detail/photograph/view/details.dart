@@ -132,7 +132,7 @@ class PhotographDetailsView extends HookConsumerWidget {
       } else if (event.logicalKey == LogicalKeyboardKey.escape) {
         ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
         ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
-        Modular.to.navigate('/');
+        Modular.to.navigate('/board');
       } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
         _handlePhotographDetailsAction(ref, scrollController, scrollController.position.maxScrollExtent);
       } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
@@ -376,7 +376,7 @@ class PhotographDetailsView extends HookConsumerWidget {
             onClick: () {
               ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
               ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
-              Modular.to.navigate('/');
+              Modular.to.navigate('/board');
               },
             color: Colors.white,
             tooltip: translate('Close'),

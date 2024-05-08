@@ -13,27 +13,27 @@ PODS:
     - DKImagePickerController/Core
     - DKPhotoGallery
   - DKImagePickerController/Resource (4.3.8)
-  - DKPhotoGallery (0.0.17):
-    - DKPhotoGallery/Core (= 0.0.17)
-    - DKPhotoGallery/Model (= 0.0.17)
-    - DKPhotoGallery/Preview (= 0.0.17)
-    - DKPhotoGallery/Resource (= 0.0.17)
+  - DKPhotoGallery (0.0.18):
+    - DKPhotoGallery/Core (= 0.0.18)
+    - DKPhotoGallery/Model (= 0.0.18)
+    - DKPhotoGallery/Preview (= 0.0.18)
+    - DKPhotoGallery/Resource (= 0.0.18)
     - SDWebImage
     - SwiftyGif
-  - DKPhotoGallery/Core (0.0.17):
+  - DKPhotoGallery/Core (0.0.18):
     - DKPhotoGallery/Model
     - DKPhotoGallery/Preview
     - SDWebImage
     - SwiftyGif
-  - DKPhotoGallery/Model (0.0.17):
+  - DKPhotoGallery/Model (0.0.18):
     - SDWebImage
     - SwiftyGif
-  - DKPhotoGallery/Preview (0.0.17):
+  - DKPhotoGallery/Preview (0.0.18):
     - DKPhotoGallery/Model
     - DKPhotoGallery/Resource
     - SDWebImage
     - SwiftyGif
-  - DKPhotoGallery/Resource (0.0.17):
+  - DKPhotoGallery/Resource (0.0.18):
     - SDWebImage
     - SwiftyGif
   - file_picker (0.0.1):
@@ -235,7 +235,7 @@ SPEC CHECKSUMS:
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
   DKImagePickerController: a7836546cfdfe014171694f643a7d575bc8ace7f
-  DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
+  DKPhotoGallery: acbd8a3bab19cf6e5fe64a853fc07bfbd247a8f6
   file_picker: 09aa5ec1ab24135ccd7a1621c46c84134bfd6655
   Firebase: 91fefd38712feb9186ea8996af6cbdef41473442
   firebase_analytics: 573fd0677abf22d32e2820865fc5190b6cdbfa1b

@@ -3,12 +3,14 @@ import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/detail/photograph/view/page.dart';
 import 'package:contrast/modules/detail/video/page.dart';
 import 'package:contrast/modules/login/page.dart';
+import 'package:contrast/modules/splash/page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'core/page.dart';
 
-const String _boardPageRoute = '/';
+const String _splashPageRoute = '/';
+const String _boardPageRoute = '/board';
 const String _loginPageRoute = '/login';
 const String _photographDetailsPageRoute = '/photos/details';
 const String _videoDetailsPageRoute = '/videos/details';
@@ -27,8 +29,18 @@ class MainModule extends Module {
   @override
   void routes(r) {
     r.child(
-        _boardPageRoute,
+        _splashPageRoute,
         transition: TransitionType.fadeIn,
+        duration: const Duration(milliseconds: 800),
+        child: (_) => CorePage(
+            pageName: 'Splash',
+            shouldWarnForCookies: false,
+            render: () => const SplashPage()
+        )
+    );
+    r.child(
+        _boardPageRoute,
+        transition: TransitionType.scale,
         duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
             pageName: 'Board',

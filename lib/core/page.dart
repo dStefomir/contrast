@@ -12,6 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CorePage extends HookConsumerWidget {
   /// Specifies the page path
   final String pageName;
+  /// Should the page warn for coockies or not
+  final bool shouldWarnForCookies;
   /// Should resize when keyboard pops
   final bool resizeToAvoidBottomInset;
   /// Renders the holding page
@@ -21,6 +23,7 @@ class CorePage extends HookConsumerWidget {
     Key? key,
     required this.pageName,
     required this.render,
+    this.shouldWarnForCookies = true,
     this.resizeToAvoidBottomInset = true,
   }) : super(key: key);
 
@@ -62,7 +65,7 @@ class CorePage extends HookConsumerWidget {
               ),
             )
           ];
-          if (snapshot.hasData && kIsWeb && _shouldShowCookie(snapshot.requireData, ref)) {
+          if (snapshot.hasData && kIsWeb && _shouldShowCookie(snapshot.requireData, ref) && shouldWarnForCookies) {
             children.add(
                 CookieWarningDialog(onSubmit: () => _onCookieSubmit(snapshot.requireData, ref))
             );
