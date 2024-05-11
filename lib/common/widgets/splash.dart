@@ -1,6 +1,7 @@
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hyper_effects/hyper_effects.dart';
 import 'package:shimmer/shimmer.dart';
@@ -13,25 +14,46 @@ class SplashWidget extends HookConsumerWidget {
   const SplashWidget({required this.onSplashEnd, super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => BackgroundPage(
-      color: Colors.black,
-      child: Stack(
-        fit: StackFit.expand,
-        alignment: Alignment.center,
-        children: [
-          Shimmer.fromColors(
-            baseColor: Colors.white,
-            highlightColor: Colors.white.withOpacity(0.8),
-            period: const Duration(milliseconds: 2500),
-            child: const IconRenderer(asset: 'logo.svg')
-                .scaleIn(start: 0, end: 2)
-                .oneShot(
-                duration: const Duration(seconds: 3),
-                curve: Curves.fastOutSlowIn,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final shouldAnimateLetters = useState(false);
+    final dx = MediaQuery.of(context).size.width / 4;
+
+    return BackgroundPage(
+        color: Colors.black,
+        child: Stack(
+          fit: StackFit.expand,
+          alignment: Alignment.center,
+          children: [
+            Shimmer.fromColors(
+                baseColor: Colors.white,
+                highlightColor: Colors.white.withOpacity(0.8),
+                period: const Duration(milliseconds: 2500),
+                child: const IconRenderer(asset: 'logo_d.svg')
+            ).slideOut(Offset(dx * -1, 0))
+            .animate(
+                trigger: shouldAnimateLetters.value,
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.fastEaseInToSlowEaseOut,
                 onEnd: onSplashEnd
-            )
-          )
-        ],
-      )
-  );
+            ),
+            Shimmer.fromColors(
+                baseColor: Colors.white,
+                highlightColor: Colors.white.withOpacity(0.8),
+                period: const Duration(milliseconds: 2500),
+                child: const IconRenderer(asset: 'logo_s.svg')
+            ).slideOut(Offset(dx, 0))
+                .animate(
+                trigger: shouldAnimateLetters.value,
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.fastEaseInToSlowEaseOut
+            ),
+          ],
+        ).scaleIn(start: 0, end: 2)
+            .oneShot(
+            duration: const Duration(seconds: 1),
+            curve: Curves.fastOutSlowIn,
+            onEnd: () => shouldAnimateLetters.value = true
+        )
+    );
+  }
 }

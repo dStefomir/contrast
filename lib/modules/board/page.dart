@@ -225,7 +225,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
       }
     });
 
-    return shouldSownSplashScreen.value
+    return shouldSownSplashScreen.value && (!kIsWeb || !useMobileLayoutOriented(context))
         ? SplashWidget(onSplashEnd: () => shouldSownSplashScreen.value = false)
         : PopScope(
       canPop: false,
