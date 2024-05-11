@@ -3,14 +3,12 @@ import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/detail/photograph/view/page.dart';
 import 'package:contrast/modules/detail/video/page.dart';
 import 'package:contrast/modules/login/page.dart';
-import 'package:contrast/modules/splash/page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'core/page.dart';
 
-const String _splashPageRoute = '/';
-const String _boardPageRoute = '/board';
+const String _boardPageRoute = '/';
 const String _loginPageRoute = '/login';
 const String _photographDetailsPageRoute = '/photos/details';
 const String _videoDetailsPageRoute = '/videos/details';
@@ -28,16 +26,6 @@ class MainModule extends Module {
   // Provide all the routes for the module
   @override
   void routes(r) {
-    r.child(
-        _splashPageRoute,
-        transition: TransitionType.fadeIn,
-        duration: const Duration(milliseconds: 800),
-        child: (_) => CorePage(
-            pageName: 'Splash',
-            shouldWarnForCookies: false,
-            render: () => const SplashPage()
-        )
-    );
     r.child(
         _boardPageRoute,
         transition: TransitionType.scale,
@@ -65,12 +53,18 @@ class MainModule extends Module {
         duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
             pageName: 'Photograph details',
-            render: () => PhotographDetailPage(
-                id: int.parse(r.args.queryParams['id']!),
-                category: r.args.queryParams['category']!,
-                analytics: _analytics,
-                observer: _observer
-            )
+            render: () {
+              /// Handles a bug when navigating with the back button of the browser
+              if (r.args.queryParams['id'] == null || r.args.queryParams['category'] == null) {
+                Modular.to.navigate('/');
+              }
+              return PhotographDetailPage(
+                  id: int.parse(r.args.queryParams['id']!),
+                  category: r.args.queryParams['category']!,
+                  analytics: _analytics,
+                  observer: _observer
+              );
+            }
         )
     );
     r.child(
@@ -79,12 +73,18 @@ class MainModule extends Module {
         duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
             pageName: 'Video details',
-            render: () => VideoDetailPage(
-                path: r.args.queryParams['path'] ?? '',
-                id: int.parse('${r.args.queryParams['id']}'),
-                analytics: _analytics,
-                observer: _observer
-            )
+            render: () {
+              /// Handles a bug when navigating with the back button of the browser
+              if (r.args.queryParams['path'] == null || r.args.queryParams['id'] == null) {
+                Modular.to.navigate('/');
+              }
+              return VideoDetailPage(
+                  path: r.args.queryParams['path'] ?? '',
+                  id: int.parse('${r.args.queryParams['id']}'),
+                  analytics: _analytics,
+                  observer: _observer
+              );
+            }
         )
     );
     r.child(

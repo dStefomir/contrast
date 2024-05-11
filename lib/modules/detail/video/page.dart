@@ -132,7 +132,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       DefaultButton(
           onClick: () {
             ref.read(overlayVisibilityProvider(commentKey).notifier).setOverlayVisibility(null);
-            Modular.to.navigate('/board');
+            Modular.to.navigate('/');
             },
           color: Colors.white,
           tooltip: translate('Close'),
@@ -303,7 +303,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       onKeyEvent: (event) {
         if (event is KeyUpEvent && event.logicalKey == LogicalKeyboardKey.escape) {
           ref.read(overlayVisibilityProvider(commentKey).notifier).setOverlayVisibility(null);
-          Modular.to.navigate('/board');
+          Modular.to.navigate('/');
         }
       },
       child: PopScope(
@@ -312,7 +312,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
           if(ref.read(overlayVisibilityProvider(const Key('comment_video'))) != null) {
             ref.read(overlayVisibilityProvider(const Key('comment_video')).notifier).setOverlayVisibility(null);
           } else if (!kIsWeb && Platform.isAndroid) {
-            Modular.to.navigate('/board');
+            Modular.to.navigate('/');
           }
         },
         child: GestureDetector(

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:contrast/common/widgets/splash.dart';
 import 'package:contrast/modules/board/overlay/share/share.dart';
 import 'package:contrast/utils/overlay.dart';
 import 'package:flutter/foundation.dart';
@@ -202,6 +203,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    final shouldSownSplashScreen = useState(true);
     final bool? shouldShowQrCodeDialog = ref.watch(overlayVisibilityProvider(const Key('qr_code')));
     final bool? shouldShowDeletePhotographDialog = ref.watch(overlayVisibilityProvider(const Key('delete_image')));
     final bool? shouldShowDeleteVideoDialog = ref.watch(overlayVisibilityProvider(const Key('delete_video')));
@@ -223,7 +225,9 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
       }
     });
 
-    return PopScope(
+    return shouldSownSplashScreen.value
+        ? SplashWidget(onSplashEnd: () => shouldSownSplashScreen.value = false)
+        : PopScope(
       canPop: false,
       onPopInvoked: (invoked) {
         if (_checkOverlaysState(ref)) {
