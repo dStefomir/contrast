@@ -36,7 +36,7 @@ class ContrastMap extends HookConsumerWidget {
       options: MapOptions(
           initialCenter: LatLng(lat, lng),
           initialZoom: mapDefaultZoom,
-          interactionOptions: InteractionOptions(enableScrollWheel: true, flags: mapInteraction),
+          interactionOptions: InteractionOptions(flags: mapInteraction),
           maxZoom: mapMaxZoom,
       ),
       children: [
