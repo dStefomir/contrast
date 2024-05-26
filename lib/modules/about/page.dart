@@ -46,7 +46,7 @@ class _AboutPageState extends ConsumerState<AboutPage> {
       Padding(
         padding: const EdgeInsets.only(top: 5.0),
         child: DefaultButton(
-            onClick: () => Modular.to.pushNamed('/'),
+            onClick: () => Modular.to.navigate('/'),
             color: Colors.white,
             tooltip: translate('Close'),
             borderColor: Colors.black,

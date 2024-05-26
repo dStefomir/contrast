@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
-import 'package:parallax_animation/parallax_animation.dart';
+import 'package:scrollable_inertia/scrollable_inertia.dart';
 
 /// Renders an grid view which fetches data from an api
 class RestfulAnimatedDataView<T> extends HookConsumerWidget {
@@ -195,9 +195,11 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                     }
                   }
                 } : null,
-                child: !kIsWeb ? ParallaxArea(
-                  child: customScrollView,
-                ) : customScrollView,
+                child: !kIsWeb ? InertiaListener(
+                    child: MotionBlur(
+                      child: customScrollView
+                    )
+                ) : customScrollView
               )
           ),
         ),

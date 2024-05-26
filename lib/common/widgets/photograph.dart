@@ -206,8 +206,6 @@ class ContrastPhotographMeta extends HookConsumerWidget {
   final ImageBoardWrapper wrapper;
   /// Constraints of the parent page
   final BoxConstraints constraints;
-  /// Creates a parallax widget for a child widget
-  final Widget Function(Widget)? parallax;
   /// What happens when clicked on the widget
   final Function onClick;
   /// What happens when the user clicks the redirect button
@@ -220,7 +218,6 @@ class ContrastPhotographMeta extends HookConsumerWidget {
     required this.wrapper,
     required this.constraints,
     required this.onClick,
-    this.parallax,
     this.fetch,
     this.onRedirect,
     this.borderColor = Colors.black
@@ -240,28 +237,16 @@ class ContrastPhotographMeta extends HookConsumerWidget {
                     scaleFactor: 10,
                   ),
                   isHovering,
-                  noParallax: true
               )
           )
       );
 
   /// Renders a photograph
-  Widget _renderPhoto(BuildContext context, Widget? metadata, bool isHovering, {bool noParallax = false}) =>
+  Widget _renderPhoto(BuildContext context, Widget? metadata, bool isHovering) =>
       Stack(
         alignment: Alignment.center,
         children: [
-          (noParallax == false && parallax != null) ? parallax!(ContrastPhotograph(
-            widgetKey: Key("${widgetKey.toString()}_photograph"),
-            fetch: fetch,
-            constraints: constraints,
-            quality: FilterQuality.low,
-            borderColor: Colors.transparent,
-            image: wrapper.image,
-            borderWidth: 1.5,
-            compressed: true,
-            height: double.infinity,
-            width: double.infinity,
-          )) : ContrastPhotograph(
+          ContrastPhotograph(
             widgetKey: Key("${widgetKey.toString()}_photograph"),
             fetch: fetch,
             constraints: constraints,
@@ -332,7 +317,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.black, width: 1.5)
                 ),
-                child: _renderPhoto(context, null, isHovering, noParallax: false)
+                child: _renderPhoto(context, null, isHovering)
             )
         ),
       ),

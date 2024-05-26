@@ -128,7 +128,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
     useValueChanged(currentFilter, (_, __) async {
       if(currentTab == 'photos') {
         dx = 0;
-        dy = -3;
+        dy = 3;
       }
     });
 

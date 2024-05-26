@@ -17,7 +17,6 @@ import 'package:focused_menu/modals.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hyper_effects/hyper_effects.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-import 'package:parallax_animation/parallax_animation.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_translate/flutter_translate.dart' as translation;
 
@@ -101,21 +100,10 @@ class PhotographBoardPage extends HookConsumerWidget {
           )
       );
     }
-    final isMobile = currentOrientation == Orientation.portrait;
 
     return ContrastPhotographMeta(
         widgetKey: Key('${wrapper.image.id}'),
         fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
-        parallax: !kIsWeb ? (child) => ParallaxWidget(
-            key: Key('${wrapper.image.id}_photo_parallax_widget'),
-            overflowWidthFactor: 1.27,
-            overflowHeightFactor: 1.27,
-            fixedVertical: !isMobile,
-            fixedHorizontal: isMobile,
-            alignment: isMobile ? Alignment.topCenter : Alignment.centerLeft,
-            background: child,
-            child: const SizedBox(width: double.infinity, height: double.infinity,)
-        ) : null,
         wrapper: wrapper,
         constraints: constraints,
         borderColor: Colors.transparent,
@@ -127,19 +115,31 @@ class PhotographBoardPage extends HookConsumerWidget {
           }
         }) : null
     ).scrollTransition(
-            (context, widget, event) => widget.blur(
-              switch (event.phase) {
-                ScrollPhase.identity => 0,
-                ScrollPhase.topLeading => 10,
-                ScrollPhase.bottomTrailing => 10,
-              },
-            ).scale(
-              switch (event.phase) {
-                ScrollPhase.identity => 1,
-                ScrollPhase.topLeading => 0.1,
-                ScrollPhase.bottomTrailing => 0.1,
-              },
-            ),
+            (context, widget, event) {
+              if (!kIsWeb) {
+                return widget.scale(
+                  switch (event.phase) {
+                    ScrollPhase.identity => 1,
+                    ScrollPhase.topLeading => 0.1,
+                    ScrollPhase.bottomTrailing => 0.1,
+                  },
+                );
+              }
+
+              return widget.blur(
+                switch (event.phase) {
+                  ScrollPhase.identity => 0,
+                  ScrollPhase.topLeading => 10,
+                  ScrollPhase.bottomTrailing => 10,
+                },
+              ).scale(
+                switch (event.phase) {
+                  ScrollPhase.identity => 1,
+                  ScrollPhase.topLeading => 0.1,
+                  ScrollPhase.bottomTrailing => 0.1,
+                },
+              );
+            }
     );
   }
 
