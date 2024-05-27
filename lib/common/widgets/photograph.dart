@@ -166,7 +166,6 @@ class ContrastPhotograph extends StatelessWidget {
         loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
         enableMemoryCache: true,
         cacheRawData: true,
-        cacheKey: "${widgetKey.toString()}_cache_key_${platform}_isMobile_$isMobile",
         clearMemoryCacheIfFailed: true,
         clearMemoryCacheWhenDispose: false,
         imageCacheName: kIsWeb ? "${widgetKey.toString()}_cache_name_${platform}_isMobile_$isMobile" : null,
