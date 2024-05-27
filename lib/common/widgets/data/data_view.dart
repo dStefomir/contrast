@@ -135,7 +135,11 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
           addAutomaticKeepAlives: true,
           addRepaintBoundaries: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
-          itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
+          itemBuilder: (c, i) => InertiaSpacing(
+              curve: Curves.fastEaseInToSlowEaseOut,
+              duration: const Duration(milliseconds: 800),
+              child: itemBuilder(c, i, apiData.length, apiData[i])
+          ),
           itemCount: apiData.length,
         ),
       ]
@@ -195,11 +199,11 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                     }
                   }
                 } : null,
-                child: !kIsWeb ? InertiaListener(
+                child: InertiaListener(
                     child: MotionBlur(
                       child: customScrollView
                     )
-                ) : customScrollView
+                )
               )
           ),
         ),

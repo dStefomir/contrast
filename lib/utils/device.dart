@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Determines if the app should load a mobile or other type of layout based on calculated pixels and orientation
@@ -34,13 +33,8 @@ double getScaledPixels(BuildContext context, double pixels) {
 
 /// Gets the running platform based on the layout of the device
 String getRunningPlatform(BuildContext context) {
-  if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android) {
-    /// This is to check if the mobile device is a foldable device or not
-    if (useMobileLayout(context)) {
-      return 'MOBILE';
-    } else {
-      return 'DESKTOP';
-    }
+  if (useMobileLayout(context)) {
+    return 'MOBILE';
   }
 
   return 'DESKTOP';

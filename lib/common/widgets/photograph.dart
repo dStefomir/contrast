@@ -3,7 +3,6 @@ import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/hover_provider.dart';
 import 'package:contrast/common/widgets/icon.dart';
-import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/overlay.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
@@ -133,13 +132,6 @@ class ContrastPhotograph extends StatelessWidget {
         );
       }
       return photograph;
-    } else if(state.extendedImageLoadState == LoadState.loading) {
-      return LoadingIndicator(
-          color: Colors.grey,
-          stroke: 2,
-          width: constraints.maxWidth / 8,
-          height: constraints.maxHeight / 8
-      );
     }
 
     return photograph;
@@ -147,8 +139,6 @@ class ContrastPhotograph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String platform = getRunningPlatform(context);
-    final bool isMobile = useMobileLayoutOriented(context);
     Widget photo;
 
     if (data == null) {
@@ -162,13 +152,8 @@ class ContrastPhotograph extends StatelessWidget {
             ? BoxFit.fitWidth
             : BoxFit.fitHeight
             : BoxFit.contain),
-        cache: true,
+        cache: false,
         loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
-        enableMemoryCache: true,
-        cacheRawData: true,
-        clearMemoryCacheIfFailed: true,
-        clearMemoryCacheWhenDispose: false,
-        imageCacheName: kIsWeb ? "${widgetKey.toString()}_cache_name_${platform}_isMobile_$isMobile" : null,
         filterQuality: quality,
         isAntiAlias: !kIsWeb,
       );
@@ -182,10 +167,8 @@ class ContrastPhotograph extends StatelessWidget {
         loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
         enableLoadState: !compressed,
         fit: fit ?? BoxFit.contain,
-        enableMemoryCache: true,
-        cacheRawData: true,
-        clearMemoryCacheIfFailed: true,
-        clearMemoryCacheWhenDispose: false,
+        enableMemoryCache: false,
+        cacheRawData: false,
         filterQuality: quality,
         isAntiAlias: !kIsWeb,
       );
