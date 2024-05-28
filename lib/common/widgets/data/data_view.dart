@@ -11,6 +11,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:scrollable_inertia/scrollable_inertia.dart';
 
+/// Used for defining the non blurry zone
+const _nonBlurryZone = 100.0;
+/// Used for defining the blurry zone
+const _blurryZone = 5.0;
+/// Offset for triggering the lazy load
+const _lazyLoadTriggerOffset = 200;
+
 /// Renders an grid view which fetches data from an api
 class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   /// Service provider for the data view
@@ -96,10 +103,24 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     }
   }
 
+  /// Handles the motion blur scrolling of the data view
+  _handleMotionBlurDeadZone({required ScrollController controller, required ValueNotifier<double> deadZone}) {
+    if (controller.hasClients) {
+      /// The top items are been shown
+      if (controller.offset <= _nonBlurryZone) {
+        deadZone.value = _nonBlurryZone;
+        /// The last items are been shown
+      } else if (controller.position.pixels >= controller.position.maxScrollExtent) {
+        deadZone.value = _nonBlurryZone;
+        /// All other items
+      } else {
+        deadZone.value = _blurryZone;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    /// Controller for the data view
-    final ScrollController controller = useScrollController();
     /// Data view List of items
     final apiData = ref.watch(serviceProvider);
     /// Check the selected filter for changes
@@ -108,6 +129,10 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     final double widgetMaxHeight = MediaQuery.of(context).size.height;
     /// Represents the max width of the widget
     final double widgetMaxWidth = MediaQuery.of(context).size.width;
+    /// Controller for the data view
+    final ScrollController controller = useScrollController();
+    final motionBlurDeadZone = useValueNotifier(_nonBlurryZone);
+    controller.addListener(() => _handleMotionBlurDeadZone(controller: controller, deadZone: motionBlurDeadZone));
     /// Fetches from the back-end
     fetchData() => ref.read(serviceProvider.notifier)
         .clearAndFetchedData(loadPage)
@@ -181,7 +206,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
         ),
         LazyLoadScrollView(
           onEndOfPage: () => ref.read(serviceProvider.notifier).fetchNextPage(loadPage),
-          scrollOffset: 200,
+          scrollOffset: _lazyLoadTriggerOffset,
           scrollDirection: axis,
           child: KeyboardListener(
               autofocus: true,
@@ -198,6 +223,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                 } : null,
                 child: InertiaListener(
                     child: MotionBlur(
+                      deadZone: useValueListenable<double>(motionBlurDeadZone),
                       child: customScrollView
                     )
                 )

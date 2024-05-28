@@ -61,7 +61,9 @@ class CorePage extends HookConsumerWidget {
                 bottom: Platform.isAndroid,
                 left: false,
                 right: false,
-                child: render(),
+                child: ClipPath(
+                    child: render()
+                ),
               ),
             )
           ];
