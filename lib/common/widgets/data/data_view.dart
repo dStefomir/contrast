@@ -123,6 +123,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     final customScrollView = CustomScrollView(
       controller: controller,
       scrollDirection: axis,
+      physics: const BouncingScrollPhysics(),
       scrollBehavior: ScrollConfiguration.of(context).copyWith(
         dragDevices: {
           PointerDeviceKind.touch,
@@ -135,11 +136,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
           addAutomaticKeepAlives: true,
           addRepaintBoundaries: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
-          itemBuilder: (c, i) => InertiaSpacing(
-              curve: Curves.fastEaseInToSlowEaseOut,
-              duration: const Duration(milliseconds: 800),
-              child: itemBuilder(c, i, apiData.length, apiData[i])
-          ),
+          itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
           itemCount: apiData.length,
         ),
       ]
