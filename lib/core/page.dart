@@ -61,7 +61,7 @@ class CorePage extends HookConsumerWidget {
           final mobileChildPage = BackgroundPage(
             color: Colors.black54,
             child: SafeArea(
-              bottom: kIsWeb ? false : Platform.isAndroid,
+              bottom: !kIsWeb && Platform.isAndroid,
               left: false,
               right: false,
               child: ClipPath(
@@ -73,7 +73,7 @@ class CorePage extends HookConsumerWidget {
             kIsWeb ? render() : onPageDismissed != null ? DismissiblePage(
               onDismissed: () => onPageDismissed!(ref),
               direction: DismissiblePageDismissDirection.multi,
-              isFullScreen: false,
+              isFullScreen: true,
                 child: mobileChildPage,
             ) : mobileChildPage
           ];
