@@ -648,25 +648,7 @@ class PhotographDetailsView extends HookConsumerWidget {
               color: Colors.white.withOpacity(0.05)
           ),
           _renderLoadingIndicator(),
-          if (image != null) getRunningPlatform(context) == 'MOBILE' ?
-          GestureDetector(
-              onVerticalDragUpdate: (details) {
-                const sensitivity = 2000.0;
-                final deltaY = details.delta.dy * sensitivity;
-                if (deltaY > 0) {
-                  /// If the view is to the photograph and the scrolls up - pop up the page.
-                  /// If not - scroll to the map
-                  if(scrollController.position.pixels == 0) {
-                    Modular.to.pop();
-                  } else {
-                    _handlePhotographDetailsAction(ref, scrollController, 0);
-                  }
-                } else {
-                  _handlePhotographDetailsAction(ref, scrollController, scrollController.position.maxScrollExtent);
-                }},
-              child: _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight)
-          ) :
-          _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
+          if (image != null) _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
           if (image != null) _renderDetailsBtn(ref, context, scrollController, image),
           if (!kIsWeb && image != null) _renderTripPlanningBtn(ref, context, image),
           if (image != null && !kIsWeb || Session().isLoggedIn()) _renderCommentsBtn(ref, context),

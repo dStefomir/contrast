@@ -161,7 +161,17 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
           addAutomaticKeepAlives: true,
           addRepaintBoundaries: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
-          itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
+          itemBuilder: (c, i) {
+            if (kIsWeb) {
+
+              return itemBuilder(c, i, apiData.length, apiData[i]);
+            }
+
+            return InertiaSpacing(
+                maxStretch: 10,
+                child: itemBuilder(c, i, apiData.length, apiData[i])
+            );
+          },
           itemCount: apiData.length,
         ),
       ]

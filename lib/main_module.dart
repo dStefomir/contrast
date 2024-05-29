@@ -1,9 +1,11 @@
 import 'package:contrast/modules/about/page.dart';
 import 'package:contrast/modules/board/page.dart';
+import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/detail/photograph/view/page.dart';
 import 'package:contrast/modules/detail/video/page.dart';
 import 'package:contrast/modules/login/page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'core/page.dart';
@@ -43,6 +45,7 @@ class MainModule extends Module {
         transition: TransitionType.downToUp,
         duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
+            onPageDismissed: (_) => Modular.to.navigate(_boardPageRoute),
             pageName: 'Login',
             render: () => LoginPage()
         )
@@ -52,6 +55,11 @@ class MainModule extends Module {
         transition: TransitionType.scale,
         duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
+            onPageDismissed: (ref) {
+              ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
+              ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
+              Modular.to.navigate(_boardPageRoute);
+            },
             pageName: 'Photograph details',
             render: () {
               /// Handles a bug when navigating with the back button of the browser
@@ -72,6 +80,10 @@ class MainModule extends Module {
         transition: TransitionType.scale,
         duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
+            onPageDismissed: (ref) {
+              ref.read(overlayVisibilityProvider(const Key('comment_video')).notifier).setOverlayVisibility(null);
+              Modular.to.navigate(_boardPageRoute);
+            },
             pageName: 'Video details',
             render: () {
               /// Handles a bug when navigating with the back button of the browser
@@ -92,6 +104,7 @@ class MainModule extends Module {
         transition: TransitionType.scale,
         duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
+            onPageDismissed: (_) => Modular.to.navigate(_boardPageRoute),
             pageName: 'About',
             render: () => AboutPage(
                 analytics: _analytics,
