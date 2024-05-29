@@ -61,7 +61,7 @@ class CorePage extends HookConsumerWidget {
           final mobileChildPage = BackgroundPage(
             color: Colors.black54,
             child: SafeArea(
-              bottom: Platform.isAndroid,
+              bottom: kIsWeb ? false : Platform.isAndroid,
               left: false,
               right: false,
               child: ClipPath(
