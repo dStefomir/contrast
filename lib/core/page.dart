@@ -72,7 +72,7 @@ class CorePage extends HookConsumerWidget {
           final List<Widget> children = [
             kIsWeb ? render() : onPageDismissed != null ? DismissiblePage(
               onDismissed: () => onPageDismissed!(ref),
-              direction: DismissiblePageDismissDirection.multi,
+              direction: DismissiblePageDismissDirection.vertical,
               isFullScreen: true,
                 child: mobileChildPage,
             ) : mobileChildPage
