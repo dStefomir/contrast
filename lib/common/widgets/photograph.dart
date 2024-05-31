@@ -1,3 +1,4 @@
+import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/button.dart';
@@ -14,6 +15,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hyper_effects/hyper_effects.dart';
 
 /// Photograph displaying widget
 class ContrastPhotograph extends StatelessWidget {
@@ -208,18 +210,20 @@ class ContrastPhotographMeta extends HookConsumerWidget {
   /// Shows the popup overlay
   OverlayEntry _createPopupDialog(BuildContext context, bool isHovering) =>
       OverlayEntry(
-          builder: (_) => AnimatedDialog(
-              width: constraints.maxWidth + 150,
-              height: constraints.maxHeight + 150,
-              child: _renderPhoto(
-                  context,
-                  ImageMetaDataDetails(
-                    constraints: constraints,
-                    metadata: wrapper.metadata,
-                    scaleFactor: 10,
-                  ),
-                  isHovering,
-              )
+          builder: (_) => BlurryContainer(
+            child: AnimatedDialog(
+                width: constraints.maxWidth + 150,
+                height: constraints.maxHeight + 150,
+                child: _renderPhoto(
+                    context,
+                    ImageMetaDataDetails(
+                      constraints: constraints,
+                      metadata: wrapper.metadata,
+                      scaleFactor: 10,
+                    ),
+                    isHovering,
+                )
+            ),
           )
       );
 
@@ -240,7 +244,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
             compressed: true,
             height: double.infinity,
             width: double.infinity,
-          ),
+          ).scale(isHovering ? 1.02 : 1).animate(trigger: isHovering, curve: Curves.fastLinearToSlowEaseIn, duration: const Duration(milliseconds: 300)),
           if (metadata != null) metadata,
           if(isHovering) ImageMetaDataDetails(
             constraints: constraints,
@@ -350,6 +354,8 @@ class ImageMetaDataDetails extends StatelessWidget {
           color: Colors.white,
           useShadow: true,
           fontSize: metaFontSize,
+          typewriter: true,
+          typewriterCursor: false,
           padding: 5,
         ),
         if(!row)const Spacer(),

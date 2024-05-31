@@ -36,6 +36,8 @@ class StyledText extends StatelessWidget {
   final bool shouldShimmer;
   /// Should the text be animated as typewriter
   final bool typewriter;
+  /// Should the typewriter animated text has a cursor
+  final bool typewriterCursor;
 
   const StyledText({
     Key? key,
@@ -54,7 +56,8 @@ class StyledText extends StatelessWidget {
     this.shadow,
     this.family,
     this.shouldShimmer = false,
-    this.typewriter = false
+    this.typewriter = false,
+    this.typewriterCursor = true,
   }) : super(key: key);
 
   /// Renders the widget
@@ -88,6 +91,7 @@ class StyledText extends StatelessWidget {
         TypewriterAnimatedText(
           text,
           textStyle: style,
+          cursor: typewriterCursor ? '_' : '',
           speed: const Duration(milliseconds: 100),
         ),
       ],

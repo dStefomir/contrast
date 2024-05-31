@@ -1,6 +1,8 @@
+import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/hover_provider.dart';
+import 'package:contrast/common/widgets/overlay.dart';
 import 'package:contrast/common/widgets/photograph.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/model/image_data.dart';
@@ -17,8 +19,6 @@ class ContrastVideo extends HookConsumerWidget {
   final String videoPath;
   /// Constraints of the parent page
   final BoxConstraints constraints;
-  /// Creates a parallax widget for a child widget
-  final Widget Function(Widget)? parallax;
   /// What happens when the widgets is clicked
   final Function onClick;
   /// What happens when the user clicks the redirect button
@@ -31,7 +31,6 @@ class ContrastVideo extends HookConsumerWidget {
     required this.videoPath,
     required this.constraints,
     required this.onClick,
-    this.parallax,
     this.onRedirect,
     this.disabled = false,
   }) : super(key: widgetKey);
@@ -56,38 +55,28 @@ class ContrastVideo extends HookConsumerWidget {
     return widgets;
   }
 
-  /// Renders the video widget
-  Widget _renderVideoWidget(BuildContext context, WidgetRef ref, PhotographBoardService serviceProvider, bool isHovering) => Stack(
-    alignment: Alignment.center,
-    children: [
-      parallax != null ? parallax!(
-          Padding(
-            padding: const EdgeInsets.only(top: 20, bottom: 25),
-            child: ContrastPhotograph(
-              widgetKey: Key('${widgetKey.toString()}_photograph'),
-              fetch: (path) => serviceProvider.getCompressedPhotograph(context, videoPath, true),
-              constraints: constraints,
-              image: ImageData(path: videoPath),
-              quality: FilterQuality.high,
-              borderColor: Colors.transparent,
-              fit: BoxFit.contain,
-              compressed: false,
-              isThumbnail: true,
-              height: double.infinity,
+  /// Shows the popup overlay
+  OverlayEntry _createPopupDialog(BuildContext context, PhotographBoardService serviceProvider) =>
+      OverlayEntry(
+          builder: (_) => BlurryContainer(
+            child: AnimatedDialog(
+                width: constraints.maxWidth + 150,
+                height: constraints.maxHeight + 150,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    _renderVideoThumbnail(context, serviceProvider),
+                  ],
+                ),
             ),
           )
-      ) : ContrastPhotograph(
-        widgetKey: Key('${widgetKey.toString()}_photograph'),
-        fetch: (path) => serviceProvider.getCompressedPhotograph(context, videoPath, true),
-        constraints: constraints,
-        image: ImageData(path: videoPath),
-        quality: FilterQuality.high,
-        borderColor: Colors.transparent,
-        fit: BoxFit.contain,
-        compressed: false,
-        isThumbnail: true,
-        height: double.infinity,
-      ),
+      );
+
+  /// Renders the video widget
+  Widget _renderVideoWidget(BuildContext context, PhotographBoardService serviceProvider, bool isHovering) => Stack(
+    alignment: Alignment.center,
+    children: [
+      _renderVideoThumbnail(context, serviceProvider),
       Align(
         alignment: Alignment.topCenter,
         child: Padding(
@@ -152,10 +141,25 @@ class ContrastVideo extends HookConsumerWidget {
     ],
   );
 
+  /// Renders the video thumbnail
+  Widget _renderVideoThumbnail(BuildContext context, PhotographBoardService serviceProvider) => ContrastPhotograph(
+    widgetKey: Key('${widgetKey.toString()}_photograph'),
+    fetch: (path) => serviceProvider.getCompressedPhotograph(context, videoPath, true),
+    constraints: constraints,
+    image: ImageData(path: videoPath),
+    quality: FilterQuality.high,
+    borderColor: Colors.transparent,
+    fit: BoxFit.contain,
+    compressed: false,
+    isThumbnail: true,
+    height: double.infinity,
+  );
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isHovering = ref.watch(hoverProvider(widgetKey));
     final serviceProvider = ref.read(photographyBoardServiceProvider);
+    OverlayEntry? popupDialog;
 
     return Material(
         color: Colors.transparent,
@@ -165,11 +169,29 @@ class ContrastVideo extends HookConsumerWidget {
           onTap: () {},
           child: GestureDetector(
               onTap: () => onClick(),
-              onLongPress: () => ref.read(hoverProvider(widgetKey).notifier).onHover(true),
-              onLongPressEnd: (details) => ref.read(hoverProvider(widgetKey).notifier).onHover(false),
-              child: _renderVideoWidget(context, ref, serviceProvider, isHovering)
+              onLongPressStart: (_) {
+                if (!isHovering && (useMobileLayoutOriented(context) && useMobileLayout(context))) {
+                  if (popupDialog == null) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      popupDialog = _createPopupDialog(context, serviceProvider);
+                      Overlay.of(context).insert(popupDialog!);
+                    });
+                  }
+                } else if (!isHovering && !(useMobileLayoutOriented(context) && useMobileLayout(context))) {
+                  ref.read(hoverProvider(widgetKey).notifier).onHover(true);
+                }
+              },
+              onLongPressEnd: (details) {
+                if ((useMobileLayoutOriented(context) && useMobileLayout(context))) {
+                  popupDialog?.remove();
+                  popupDialog = null;
+                } else {
+                  ref.read(hoverProvider(widgetKey).notifier).onHover(false);
+                }
+              },
+              child: _renderVideoWidget(context, serviceProvider, isHovering)
           )
-        ) : _renderVideoWidget(context, ref, serviceProvider, isHovering)
+        ) : _renderVideoWidget(context, serviceProvider, isHovering)
     );
   }
 }
