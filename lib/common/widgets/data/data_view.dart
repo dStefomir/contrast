@@ -134,14 +134,13 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     final motionBlurDeadZone = useValueNotifier(_nonBlurryZone);
     controller.addListener(() => _handleMotionBlurDeadZone(controller: controller, deadZone: motionBlurDeadZone));
     /// Fetches from the back-end
-    fetchData() => ref.read(serviceProvider.notifier)
-        .clearAndFetchedData(loadPage)
-        .onError((error, stackTrace) => Future.delayed(const Duration(seconds: 3), () => fetchData())
-    );
+    fetchData(Future fetch) => fetch.onError((error, stacktrace) async {
+      await Future.delayed(const Duration(seconds: 3), () => fetchData(fetch));
+    });
     /// Fetch the first page when the widget is first built.
     /// If the selected filter is changed clear the data.
     useEffect(() {
-      fetchData();
+      fetchData(ref.read(serviceProvider.notifier).clearAndFetchedData(loadPage));
       return null;
     }, [selectedFilter]);
     
@@ -208,7 +207,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
           ),
         ),
         LazyLoadScrollView(
-          onEndOfPage: () => ref.read(serviceProvider.notifier).fetchNextPage(loadPage),
+          onEndOfPage: () => fetchData(ref.read(serviceProvider.notifier).fetchNextPage(loadPage)),
           scrollOffset: _lazyLoadTriggerOffset,
           scrollDirection: axis,
           child: KeyboardListener(
