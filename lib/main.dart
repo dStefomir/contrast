@@ -63,15 +63,14 @@ void main() async {
   );
 }
 
-const Color inputFieldBackgroundColor = Colors.white;
-const Color inputFieldBorderColor = Colors.black;
-const Color inputFieldDisabledBorderColor = Colors.grey;
-const Color inputFieldFocusedBorderColor = Colors.black;
-const Color inputFieldErrorBorderColor = Colors.red;
-const Color inputFieldTextColor = Colors.black;
-const Color inputFieldHintTextColor = Colors.grey;
-const Color buttonIconSvgColor = Colors.black;
-const Color buttonBackgroundColor = Colors.white;
+const Color _inputFieldBackgroundColor = Colors.white;
+const Color _inputFieldBorderColor = Colors.black;
+const Color _inputFieldDisabledBorderColor = Colors.grey;
+const Color _inputFieldFocusedBorderColor = Colors.black;
+const Color _inputFieldErrorBorderColor = Colors.red;
+const Color _inputFieldHintTextColor = Colors.grey;
+const Color _buttonIconSvgColor = Colors.black;
+const Color _buttonBackgroundColor = Colors.white;
 
 /// Application itself holding the theming and the app`s delegates
 class MyApp extends StatefulWidget {
@@ -131,30 +130,30 @@ class _MyAppState extends State<MyApp> {
               contentPadding: EdgeInsets.all(10),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(0)),
-                borderSide: BorderSide(color: inputFieldBorderColor),
+                borderSide: BorderSide(color: _inputFieldBorderColor),
               ),
               errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(0)),
-                  borderSide: BorderSide(color: inputFieldErrorBorderColor)
+                  borderSide: BorderSide(color: _inputFieldErrorBorderColor)
               ),
               disabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(0)),
-                borderSide: BorderSide(color: inputFieldDisabledBorderColor),
+                borderSide: BorderSide(color: _inputFieldDisabledBorderColor),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(0)),
-                borderSide: BorderSide(color: inputFieldFocusedBorderColor),
+                borderSide: BorderSide(color: _inputFieldFocusedBorderColor),
               ),
               filled: true,
-              fillColor: inputFieldBackgroundColor,
-              hintStyle: TextStyle(color: inputFieldHintTextColor),
+              fillColor: _inputFieldBackgroundColor,
+              hintStyle: TextStyle(color: _inputFieldHintTextColor),
               floatingLabelBehavior: FloatingLabelBehavior.never
           ),
-          iconTheme: const IconThemeData(color: buttonIconSvgColor),
+          iconTheme: const IconThemeData(color: _buttonIconSvgColor),
           buttonTheme: const ButtonThemeData(
               height: 50,
               minWidth: 0,
-              buttonColor: buttonBackgroundColor,
+              buttonColor: _buttonBackgroundColor,
               textTheme: ButtonTextTheme.primary
           ),
         )

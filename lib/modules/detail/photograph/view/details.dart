@@ -502,7 +502,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                       scrollController.offset == 0 ? scrollController.position.maxScrollExtent : 0
                   );
                   ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
-                  ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(false);
+                  ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
                   },
                 color: Colors.white,
                 borderColor: Colors.black,
