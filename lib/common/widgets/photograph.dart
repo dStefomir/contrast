@@ -244,7 +244,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
             compressed: true,
             height: double.infinity,
             width: double.infinity,
-          ).scale(isHovering ? 1.02 : 1).animate(trigger: isHovering, curve: Curves.fastLinearToSlowEaseIn, duration: const Duration(milliseconds: 300)),
+          ),
           if (metadata != null) metadata,
           if(isHovering) ImageMetaDataDetails(
             constraints: constraints,
