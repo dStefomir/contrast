@@ -292,7 +292,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                         child: Padding(
                           padding: !useMobileLayoutOriented(context)
                               ? EdgeInsets.only(top: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding)
-                              : EdgeInsets.only(top: 0.2, left: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding),
+                              : EdgeInsets.only(left: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding),
                           child: ref.read(boardFooterTabProvider) == 'photos'
                               ? SlideTransitionAnimation(
                               getStart: () => _calculateBoardStartAnimation(ref),

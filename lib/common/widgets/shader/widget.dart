@@ -7,11 +7,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 /// Renders a shader widget
 class ShaderWidget extends StatefulHookConsumerWidget {
   /// Child widget
-  final Widget child;
+  final Widget? child;
   /// Asset for the shader
   final String asset;
+  /// Size of the widget in pixels
+  final double? size;
 
-  const ShaderWidget({super.key, required this.asset, this.child = const SizedBox.shrink()});
+  const ShaderWidget({super.key, required this.asset, this.size, this.child});
 
   @override
   ConsumerState createState() => _ShaderWidgetState();
@@ -20,48 +22,51 @@ class ShaderWidget extends StatefulHookConsumerWidget {
 class _ShaderWidgetState extends ConsumerState<ShaderWidget> with SingleTickerProviderStateMixin {
 
   /// Ticker object
-  Ticker? ticker;
+  Ticker? _ticker;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) =>
-        ticker ??= createTicker((elapsed) =>
-            ref.read(shaderProvider.notifier).setTicker()
-        )..start()
+    _ticker ??= createTicker((elapsed) =>
+        ref.read(shaderProvider.notifier).setTicker()
+    )..start()
     );
   }
 
   @override
   void dispose() {
     super.dispose();
-    ticker?.stop();
-    ticker?.dispose();
+    _ticker?.stop();
+    _ticker?.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    final shader = ShaderBuilder(
+            (_, shader, __) {
+          final time = ref.watch(shaderProvider);
+          shader.setFloat(0, time);
+
+          return AnimatedSampler(
+                (image, size, canvas) {
+                  shader.setFloat(1, widget.size ?? size.width);
+                  shader.setFloat(2, widget.size ?? MediaQuery.of(context).padding.top);
+                  canvas.drawPaint(Paint()..shader = shader..filterQuality = FilterQuality.low..isAntiAlias = false);
+            },
+            child: widget.child ?? const SizedBox.shrink(),
+          );
+        },
+        assetKey: 'shaders/${widget.asset}'
+    );
+
+    return widget.child != null ? Stack(
       alignment: Alignment.center,
       fit: StackFit.passthrough,
       children: [
-        ShaderBuilder(
-                (_, shader, __) {
-                  final time = ref.watch(shaderProvider);
-                  return AnimatedSampler(
-                        (image, size, canvas) {
-                          shader.setFloat(0, time);
-                          shader.setFloat(1, 120);
-                          shader.setFloat(2, 120);
-                          canvas.drawPaint(Paint()..shader = shader);
-                          },
-                    child: widget.child,
-                  );
-                  },
-            assetKey: 'shaders/${widget.asset}'
-        ),
-        widget.child
+        shader,
+        widget.child!
       ],
-    );
+    ) : shader;
   }
 }

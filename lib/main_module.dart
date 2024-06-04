@@ -34,9 +34,10 @@ class MainModule extends Module {
         duration: const Duration(milliseconds: 800),
         child: (_) => CorePage(
             pageName: 'Board',
+            shouldHaveShaderOnTop: true,
             render: () => BoardPage(
                 analytics: _analytics,
-                observer: _observer
+                observer: _observer,
             )
         )
     );

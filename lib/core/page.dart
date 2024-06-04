@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:contrast/common/widgets/page.dart';
+import 'package:contrast/common/widgets/border.dart';
+import 'package:contrast/common/widgets/shader/widget.dart';
 import 'package:contrast/core/provider.dart';
 import 'package:contrast/modules/login/overlay/cookie.dart';
 import 'package:dismissible_page/dismissible_page.dart';
@@ -15,6 +16,8 @@ class CorePage extends HookConsumerWidget {
   final String pageName;
   /// Should the page warn for coockies or not
   final bool shouldWarnForCookies;
+  /// Should the page have a shader in the status bar
+  final bool shouldHaveShaderOnTop;
   /// Should resize when keyboard pops
   final bool resizeToAvoidBottomInset;
   /// Renders the holding page
@@ -27,6 +30,7 @@ class CorePage extends HookConsumerWidget {
     required this.pageName,
     required this.render,
     this.shouldWarnForCookies = true,
+    this.shouldHaveShaderOnTop = false,
     this.resizeToAvoidBottomInset = true,
     this.onPageDismissed
   }) : super(key: key);
@@ -54,39 +58,50 @@ class CorePage extends HookConsumerWidget {
   }
 
   /// Renders the default page widget
-  Widget _renderDefaultPage(BuildContext context, WidgetRef ref) => MainScaffold(
-    body: FutureBuilder<SharedPreferences>(
-        future: SharedPreferences.getInstance(),
-        builder: (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
-          final mobileChildPage = BackgroundPage(
-            color: Colors.black54,
-            child: SafeArea(
+  Widget _renderDefaultPage(BuildContext context, WidgetRef ref) {
+    return MainScaffold(
+      body: FutureBuilder<SharedPreferences>(
+          future: SharedPreferences.getInstance(),
+          builder: (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
+            final mobileChildPage = SafeArea(
               bottom: !kIsWeb && Platform.isAndroid,
               left: false,
               right: false,
-              child: ClipPath(
-                  child: render()
+              child: BorderWidget(
+                width: 2,
+                onlyTop: true,
+                child: ClipPath(
+                    child: render()
+                ),
               ),
-            ),
-          );
-          final List<Widget> children = [
-            kIsWeb ? render() : onPageDismissed != null ? DismissiblePage(
-              onDismissed: () => onPageDismissed!(ref),
-              direction: DismissiblePageDismissDirection.vertical,
-              isFullScreen: true,
-                child: mobileChildPage,
-            ) : mobileChildPage
-          ];
-          if (snapshot.hasData && kIsWeb && _shouldShowCookie(snapshot.requireData, ref) && shouldWarnForCookies) {
-            children.add(
-                CookieWarningDialog(onSubmit: () => _onCookieSubmit(snapshot.requireData, ref))
             );
-          }
+            final animatedMobileChildPage = ShaderWidget(
+              asset: 'background.glsl',
+              child: mobileChildPage,
+            );
+            final List<Widget> children = [
+              kIsWeb ? render() : onPageDismissed != null ? DismissiblePage(
+                onDismissed: () => onPageDismissed!(ref),
+                direction: DismissiblePageDismissDirection.vertical,
+                isFullScreen: true,
+                child: shouldHaveShaderOnTop
+                    ? animatedMobileChildPage
+                    : ColoredBox(color: Colors.black, child: mobileChildPage),
+              ) : shouldHaveShaderOnTop
+                  ? animatedMobileChildPage
+                  : ColoredBox(color: Colors.black, child: mobileChildPage),
+            ];
+            if (snapshot.hasData && kIsWeb && _shouldShowCookie(snapshot.requireData, ref) && shouldWarnForCookies) {
+              children.add(
+                  CookieWarningDialog(onSubmit: () => _onCookieSubmit(snapshot.requireData, ref))
+              );
+            }
 
-          return Stack(children: children);
-        }),
-    resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-  );
+            return Stack(children: children);
+          }),
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => _renderDefaultPage(context, ref);

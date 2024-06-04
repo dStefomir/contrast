@@ -10,6 +10,7 @@ import 'package:contrast/common/widgets/tooltip.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -224,129 +225,144 @@ class _HomeSection extends HookConsumerWidget {
   const _HomeSection({required this.onUserAction});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => CustomPaint(
-    painter: HouseShadowPainter(),
-    child: ClipPath(
-      clipper: HouseShape(),
-      child: SizedBox(
-          width: 120,
-          child: ShaderWidget(
-              asset: 'background.glsl',
-              child: StyledTooltip(
-                text: translate('Menu'),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: SpeedDial(
-                      animatedIcon: AnimatedIcons.menu_home,
-                      backgroundColor: Colors.transparent,
-                      foregroundColor: Colors.white,
-                      animatedIconTheme: const IconThemeData(size: 50),
-                      direction: SpeedDialDirection.up,
-                      animationDuration: const Duration(milliseconds: 500),
-                      elevation: 10,
-                      spacing: 5,
-                      spaceBetweenChildren: 10,
-                      children: [
-                        SpeedDialChild(
-                            foregroundColor: Colors.black,
-                            labelBackgroundColor: Colors.white,
-                            labelWidget: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: ShadowWidget(
-                                offset: const Offset(0, 0),
-                                blurRadius: 1,
-                                shadowSize: 0.1,
-                                child: Container(
-                                  color: Colors.white,
-                                  child: StyledText(
-                                    text: translate('About me'),
-                                    padding: 5,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            child: const IconRenderer(
-                              asset: 'about.svg',
-                              color: Colors.black,
-                              height: 20,
-                            ),
-                            shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
-                            elevation: 1,
-                            onTap: () => Modular.to.pushNamed('/about')
+  Widget build(BuildContext context, WidgetRef ref) {
+    final menuBtn = StyledTooltip(
+      text: translate('Menu'),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: SpeedDial(
+            animatedIcon: AnimatedIcons.menu_home,
+            backgroundColor: Colors.transparent,
+            foregroundColor: Colors.white,
+            animatedIconTheme: const IconThemeData(size: 50),
+            direction: SpeedDialDirection.up,
+            animationDuration: const Duration(milliseconds: 500),
+            elevation: 10,
+            spacing: 5,
+            spaceBetweenChildren: 10,
+            children: [
+              SpeedDialChild(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.white,
+                  labelBackgroundColor: Colors.white,
+                  labelWidget: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ShadowWidget(
+                      offset: const Offset(0, 0),
+                      blurRadius: 1,
+                      shadowSize: 0.1,
+                      child: Container(
+                        color: Colors.white,
+                        child: StyledText(
+                          text: translate('About me'),
+                          padding: 5,
+                          fontSize: 12,
                         ),
-                        SpeedDialChild(
-                            foregroundColor: Colors.black,
-                            labelBackgroundColor: Colors.white,
-                            labelWidget: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: ShadowWidget(
-                                offset: const Offset(0, 0),
-                                blurRadius: 1,
-                                shadowSize: 0.1,
-                                child: Container(
-                                  color: Colors.white,
-                                  child: StyledText(
-                                    key: const Key('AboutMeSpeedDialShareText'),
-                                    text: translate('Share'),
-                                    padding: 5,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            child: const IconRenderer(
-                              asset: 'share.svg',
-                              color: Colors.black,
-                              height: 20,
-                            ),
-                            shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
-                            elevation: 1,
-                            onTap: () => onUserAction(
-                                ref,
-                                    () => ref.read(overlayVisibilityProvider(const Key('share')).notifier).setOverlayVisibility(true)
-                            )
+                      ),
+                    ),
+                  ),
+                  child: const IconRenderer(
+                    asset: 'about.svg',
+                    color: Colors.black,
+                    height: 20,
+                  ),
+                  shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+                  elevation: 1,
+                  onTap: () => Modular.to.pushNamed('/about')
+              ),
+              SpeedDialChild(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.white,
+                  labelBackgroundColor: Colors.white,
+                  labelWidget: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ShadowWidget(
+                      offset: const Offset(0, 0),
+                      blurRadius: 1,
+                      shadowSize: 0.1,
+                      child: Container(
+                        color: Colors.white,
+                        child: StyledText(
+                          key: const Key('AboutMeSpeedDialShareText'),
+                          text: translate('Share'),
+                          padding: 5,
+                          fontSize: 12,
                         ),
-                        SpeedDialChild(
-                            foregroundColor: Colors.black,
-                            labelBackgroundColor: Colors.white,
-                            labelWidget: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: ShadowWidget(
-                                offset: const Offset(0, 0),
-                                blurRadius: 1,
-                                shadowSize: 0.1,
-                                child: Container(
-                                  color: Colors.white,
-                                  child: StyledText(
-                                    text: translate('Qr code'),
-                                    padding: 5,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            child: const IconRenderer(
-                              asset: 'qr_code.svg',
-                              color: Colors.black,
-                              height: 20,
-                            ),
-                            shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
-                            elevation: 1,
-                            onTap: () {
-                              if(ref.read(overlayVisibilityProvider(const Key('qr_code'))) == true) {
-                                ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
-                              } else {
-                                ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(true);
-                              }
-                            }
-                        )
-                      ]
-                  ).translateOnPhotoHover,
-                ),
+                      ),
+                    ),
+                  ),
+                  child: const IconRenderer(
+                    asset: 'share.svg',
+                    color: Colors.black,
+                    height: 20,
+                  ),
+                  shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+                  elevation: 1,
+                  onTap: () => onUserAction(
+                      ref,
+                          () => ref.read(overlayVisibilityProvider(const Key('share')).notifier).setOverlayVisibility(true)
+                  )
+              ),
+              SpeedDialChild(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.white,
+                  labelBackgroundColor: Colors.white,
+                  labelWidget: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ShadowWidget(
+                      offset: const Offset(0, 0),
+                      blurRadius: 1,
+                      shadowSize: 0.1,
+                      child: Container(
+                        color: Colors.white,
+                        child: StyledText(
+                          text: translate('Qr code'),
+                          padding: 5,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                  child: const IconRenderer(
+                    asset: 'qr_code.svg',
+                    color: Colors.black,
+                    height: 20,
+                  ),
+                  shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+                  elevation: 1,
+                  onTap: () {
+                    if(ref.read(overlayVisibilityProvider(const Key('qr_code'))) == true) {
+                      ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
+                    } else {
+                      ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(true);
+                    }
+                  }
               )
-          )
+            ]
+        ).translateOnPhotoHover,
       ),
-    ),
-  );
+    );
+
+    return CustomPaint(
+      painter: HouseShadowPainter(),
+      child: ClipPath(
+        clipper: HouseShape(),
+        child: !kIsWeb ? Container(
+            width: 120,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                    'assets/images/icon.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: menuBtn
+        ) : ShaderWidget(
+          asset: 'background.glsl',
+          size: 120,
+          child: menuBtn
+        ),
+      ),
+    );
+  }
 }

@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -52,6 +53,8 @@ void main() async {
   var delegate = await LocalizationDelegate.create(
       fallbackLocale: 'en_US',
       supportedLocales: ['en_US', 'bg']);
+  // Set the status bar text color to white
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
   runApp(
       ModularApp(

@@ -12,7 +12,7 @@ import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:scrollable_inertia/scrollable_inertia.dart';
 
 /// Max blur applied to the data view
-const _maxBlur = 55.0;
+const _maxBlur = 25.0;
 /// Used for defining the non blurry zone
 const _nonBlurryZone = 100.0;
 /// Used for defining the blurry zone
@@ -32,8 +32,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   final int itemsPerRow;
   /// Height of the dim effect
   final double dimHeight;
-  /// Padding to be applied to the data view
-  final double externalPadding;
   /// Renders each row of the list view
   final Widget Function(BuildContext context, int index, int dataLenght, T item) itemBuilder;
   /// What happens when the left arrow key is pressed
@@ -56,7 +54,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     this.whenShouldAnimateGlass,
     this.itemsPerRow = 4,
     this.dimHeight = 0,
-    this.externalPadding = 0
   }) : super(key: key);
 
   /// Handles the keyboard key up and down for scrolling
