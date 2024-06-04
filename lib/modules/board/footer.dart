@@ -357,10 +357,13 @@ class _HomeSection extends HookConsumerWidget {
               ),
             ),
             child: menuBtn
-        ) : ShaderWidget(
-          asset: 'background.glsl',
-          size: 120,
-          child: menuBtn
+        ) : SizedBox(
+          width: 120,
+          child: ShaderWidget(
+            asset: 'background.glsl',
+            size: 120,
+            child: menuBtn
+          ),
         ),
       ),
     );
