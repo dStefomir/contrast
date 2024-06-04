@@ -11,10 +11,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:scrollable_inertia/scrollable_inertia.dart';
 
+/// Max blur applied to the data view
+const _maxBlur = 55.0;
 /// Used for defining the non blurry zone
 const _nonBlurryZone = 100.0;
 /// Used for defining the blurry zone
-const _blurryZone = 5.0;
+const _blurryZone = 15.0;
 /// Offset for triggering the lazy load
 const _lazyLoadTriggerOffset = 200;
 
@@ -225,6 +227,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                 } : null,
                 child: InertiaListener(
                     child: MotionBlur(
+                      maxBlur: _maxBlur,
                       deadZone: useValueListenable<double>(motionBlurDeadZone),
                       child: customScrollView
                     )

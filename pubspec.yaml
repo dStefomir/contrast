@@ -36,10 +36,9 @@ dependencies:
     sdk: flutter
 
   # Modular library
-  flutter_modular: ^6.3.3
+  flutter_modular: ^6.3.4
   # Translations
-  flutter_translate:
-    path: flutter_translate
+  flutter_translate: ^4.1.0
   # in memory file creation
   file: ^7.0.0
   flutter_riverpod: ^2.5.1
@@ -64,7 +63,7 @@ dependencies:
   # using http request
   http: ^1.2.1
   # image render library
-  extended_image: ^8.2.0
+  extended_image: ^8.2.1
   # zoom image library
   photo_view: ^0.15.0
   # lazy loading widget
@@ -80,7 +79,7 @@ dependencies:
   # shared prefs library
   shared_preferences: ^2.2.3
   # Open street maps library
-  flutter_map: ^6.1.0
+  flutter_map: ^7.0.0
   # Tooltip library
   just_the_tooltip: ^0.0.12
   # Rating library
@@ -92,7 +91,7 @@ dependencies:
   # dismissible pages library
   dismissible_page: ^1.0.2
   # date picker library
-  syncfusion_flutter_datepicker: ^25.2.3
+  syncfusion_flutter_datepicker: ^25.2.6
   # list motion blur library
   scrollable_inertia: ^0.0.1+1
   # effects library
@@ -106,9 +105,9 @@ dependencies:
   # shimmering library
   shimmer: ^3.0.0
   # Firebase libraries
-  firebase_core: ^2.31.0
-  firebase_analytics: ^10.10.5
-  firebase_messaging: ^14.9.2
+  firebase_core: ^2.32.0
+  firebase_analytics: ^10.10.7
+  firebase_messaging: ^14.9.4
   # Shader library
   flutter_shaders: ^0.1.2
   # The following adds the Cupertino Icons font to your application.
