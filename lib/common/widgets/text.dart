@@ -38,6 +38,8 @@ class StyledText extends StatelessWidget {
   final bool typewriter;
   /// Should the typewriter animated text has a cursor
   final bool typewriterCursor;
+  /// What happens when the user clicks on the typewriter text
+  final void Function()? onTypewriterTap;
 
   const StyledText({
     Key? key,
@@ -58,6 +60,7 @@ class StyledText extends StatelessWidget {
     this.shouldShimmer = false,
     this.typewriter = false,
     this.typewriterCursor = true,
+    this.onTypewriterTap
   }) : super(key: key);
 
   /// Renders the widget
@@ -99,6 +102,7 @@ class StyledText extends StatelessWidget {
       pause: const Duration(milliseconds: 1000),
       displayFullTextOnTap: true,
       stopPauseOnTap: false,
+      onTap: onTypewriterTap,
     ): Text(
         text,
         textAlign: align,

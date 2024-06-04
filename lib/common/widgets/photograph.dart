@@ -15,7 +15,6 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:hyper_effects/hyper_effects.dart';
 
 /// Photograph displaying widget
 class ContrastPhotograph extends StatelessWidget {
@@ -191,7 +190,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
   /// Constraints of the parent page
   final BoxConstraints constraints;
   /// What happens when clicked on the widget
-  final Function onClick;
+  final void Function() onClick;
   /// What happens when the user clicks the redirect button
   final Function? onRedirect;
   /// Color of the border of the photograph
@@ -220,6 +219,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
                       constraints: constraints,
                       metadata: wrapper.metadata,
                       scaleFactor: 10,
+                      onTap: onClick,
                     ),
                     isHovering,
                 )
@@ -249,6 +249,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
           if(isHovering) ImageMetaDataDetails(
             constraints: constraints,
             metadata: wrapper.metadata,
+            onTap: onClick,
             scaleFactor: 16,
           ).translateOnPhotoHover,
           if (isHovering && onRedirect != null && getRunningPlatform(context) == 'DESKTOP')
@@ -321,10 +322,13 @@ class ImageMetaDataDetails extends StatelessWidget {
   final double scaleFactor;
   /// Should be rendered in a row not
   final bool row;
+  /// What happens when the user clicks the text
+  final void Function() onTap;
 
   const ImageMetaDataDetails({
     required this.constraints,
     required this.metadata,
+    required this.onTap,
     this.scaleFactor = 20,
     this.row = false,
     super.key
@@ -355,6 +359,7 @@ class ImageMetaDataDetails extends StatelessWidget {
           useShadow: true,
           fontSize: metaFontSize,
           typewriter: true,
+          onTypewriterTap: onTap,
           typewriterCursor: false,
           padding: 5,
         ),
