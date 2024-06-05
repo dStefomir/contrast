@@ -3,6 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+/// Value which is responsible for the animation speed
+const _animationSpeed = 100;
 /// Renders a shader widget
 class ShaderWidget extends HookConsumerWidget {
   /// Child widget
@@ -26,13 +28,13 @@ class ShaderWidget extends HookConsumerWidget {
           animation: controller,
           builder: (_, child) => AnimatedSampler(
                   (image, size, canvas) {
-                shader.setFloat(0, controller.value * 100);
+                shader.setFloat(0, controller.value * _animationSpeed);
                 shader.setFloat(1, widgetSize ?? size.width);
                 shader.setFloat(2, widgetSize ?? MediaQuery.of(context).padding.top);
                 if (scale != null) {
                   canvas.scale(scale!());
                 }
-                final paint = Paint()..shader = shader;
+                final paint = Paint()..shader = shader..isAntiAlias = false..filterQuality = FilterQuality.low;
                 canvas.drawPaint(paint);
               },
               child: child ?? const SizedBox.shrink()

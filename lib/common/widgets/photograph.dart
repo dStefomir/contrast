@@ -1,6 +1,5 @@
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:contrast/common/extentions/zoom.dart';
-import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/hover_provider.dart';
 import 'package:contrast/common/widgets/icon.dart';
@@ -17,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Photograph displaying widget
-class ContrastPhotograph extends StatelessWidget {
+class ContrastPhotograph extends HookConsumerWidget {
   /// Widget key
   final Key widgetKey;
   /// Photograph fetch function
@@ -67,96 +66,27 @@ class ContrastPhotograph extends StatelessWidget {
     this.isThumbnail = false,
   }) : super(key: widgetKey);
 
-  /// Renders a widget based on the photograph state
-  Widget _renderPhotographState(BuildContext context, ExtendedImageState state) {
-    double shadowWidth = 0;
-    double shadowHeight = 0;
-    double paddingTop = 0;
-    double paddingBottom = 0;
-    double paddingLeft = 0;
-    double paddingRight = 0;
-
-    if (isThumbnail) {
-      shadowWidth = constraints.maxWidth;
-      shadowHeight = constraints.maxHeight / 1.54;
-    } else {
-      if (image!.isLandscape!) {
-        paddingRight = 1.52;
-        paddingLeft = 1.52;
-        shadowWidth = constraints.maxWidth - (paddingRight + paddingLeft);
-        shadowHeight = constraints.maxHeight / 1.52 - 2;
-      } else {
-        paddingTop = 1.52;
-        paddingBottom = 1.52;
-        shadowWidth = constraints.maxWidth / 1.52 - 2;
-        shadowHeight = constraints.maxHeight - (paddingTop + paddingBottom);
-      }
-    }
-
-    final Widget photograph = Stack(
-      alignment: Alignment.center,
-      children: [
-        if (isThumbnail) ShadowWidget(
-            offset: const Offset(0, 0),
-            blurRadius: isThumbnail ? 10: 3,
-            child: SizedBox(
-              width: shadowWidth,
-              height: shadowHeight,
-            )
-        ),
-        AspectRatio(
-          aspectRatio: isThumbnail ? 3 / 2 : image!.isLandscape! ? 3 / 2.5 : 2.5 / 3,
-          child: ExtendedRawImage(
-            image: state.extendedImageInfo?.image,
-            width: width,
-            height: !isThumbnail ? height : double.infinity,
-            fit: fit ?? (compressed
-                ? image?.isLandscape != null && image!.isLandscape!
-                ? BoxFit.fitWidth
-                : BoxFit.fitHeight
-                : BoxFit.contain),
-            isAntiAlias: !kIsWeb,
-            filterQuality: quality,
-          ),
-        ),
-      ],
-    );
-
-    if(state.extendedImageLoadState == LoadState.completed) {
-      if(!kIsWeb) {
-        return FadeAnimation(
-            key: Key('${widgetKey.toString()}_rawImage'),
-            start: 0,
-            end: 1,
-            duration: const Duration(milliseconds: 400),
-            child: photograph
-        );
-      }
-      return photograph;
-    }
-
-    return photograph;
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     Widget photo;
 
     if (data == null) {
-      photo = ExtendedImage.network(fetch!(image!.path!),
-        width: width,
-        height: !isThumbnail ? height : double.infinity,
-        border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
-        enableLoadState: !compressed,
-        fit: fit ?? (compressed
-            ? image?.isLandscape != null && image!.isLandscape!
-            ? BoxFit.fitWidth
-            : BoxFit.fitHeight
-            : BoxFit.contain),
-        cache: false,
-        loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
-        filterQuality: quality,
-        isAntiAlias: !kIsWeb,
+      photo = AspectRatio(
+        aspectRatio: isThumbnail ? 3 / 2 : image!.isLandscape! ? 3 / 2.5 : 2.5 / 3,
+        child: ExtendedImage.network(fetch!(image!.path!),
+          width: width,
+          height: !isThumbnail ? height : double.infinity,
+          border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
+          enableLoadState: false,
+          fit: fit ?? (compressed
+              ? image?.isLandscape != null && image!.isLandscape!
+              ? BoxFit.fitWidth
+              : BoxFit.fitHeight
+              : BoxFit.contain),
+          cache: false,
+          filterQuality: quality,
+          isAntiAlias: !kIsWeb,
+        ),
       );
     } else {
       photo = ExtendedImage.memory(
@@ -165,8 +95,7 @@ class ContrastPhotograph extends StatelessWidget {
         height: height,
         scale: 0.6,
         border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
-        loadStateChanged: (ExtendedImageState state) => _renderPhotographState(context, state),
-        enableLoadState: !compressed,
+        enableLoadState: false,
         fit: fit ?? BoxFit.contain,
         enableMemoryCache: false,
         cacheRawData: false,
