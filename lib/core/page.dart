@@ -77,6 +77,7 @@ class CorePage extends HookConsumerWidget {
             );
             final animatedMobileChildPage = ShaderWidget(
               asset: 'background.glsl',
+              scale: () => MediaQuery.of(context).size.width / 30,
               child: mobileChildPage,
             );
             final List<Widget> children = [

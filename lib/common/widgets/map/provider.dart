@@ -1,21 +1,4 @@
-import 'package:flutter_map/flutter_map.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-/// Provider for map location
-final mapControllerProvider = StateNotifierProvider<MapControllerNotifier, MapController>((ref) {
-  final MapController controller = MapController();
-  return MapControllerNotifier(ref: ref, controller: controller);
-});
-/// Notifier for map location
-class MapControllerNotifier extends StateNotifier<MapController> {
-  /// Reference
-  final Ref ref;
-
-  /// Map controller
-  final MapController controller;
-
-  MapControllerNotifier({required this.ref, required this.controller}) : super(controller);
-}
 
 /// Provider for current lng of the map
 final mapLngProvider = StateNotifierProvider<MapLngNotifier, double>((ref) => MapLngNotifier(ref: ref));

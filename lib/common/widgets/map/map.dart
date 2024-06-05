@@ -13,31 +13,50 @@ const double mapDefaultZoom = 13.0;
 /// Max allowed zoom of the map
 const double mapMaxZoom = 17.0;
 /// Renders a map
-class ContrastMap extends HookConsumerWidget {
+class ContrastMap extends StatefulHookConsumerWidget {
   /// Flag for handling the map interaction
   final int mapInteraction;
 
   const ContrastMap({super.key, this.mapInteraction = InteractiveFlag.all});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final MapController controller = ref.read(mapControllerProvider);
+  ConsumerState createState() => _ContrastMapState();
+}
+
+class _ContrastMapState extends ConsumerState<ContrastMap> {
+
+  late MapController _mapController;
+
+  @override
+  void initState() {
+    _mapController = MapController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _mapController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final double lat = ref.watch(mapLatProvider);
     final double lng = ref.watch(mapLngProvider);
     useValueChanged(lat, (_, __) async {
-      controller.move(LatLng(lat, lng), 13);
+      _mapController.move(LatLng(lat, lng), 13);
     });
     useValueChanged(lng, (_, __) async {
-      controller.move(LatLng(lat, lng), 13);
+      _mapController.move(LatLng(lat, lng), 13);
     });
 
     return FlutterMap(
-      mapController: controller,
+      mapController: _mapController,
       options: MapOptions(
-          initialCenter: LatLng(lat, lng),
-          initialZoom: mapDefaultZoom,
-          interactionOptions: InteractionOptions(flags: mapInteraction),
-          maxZoom: mapMaxZoom,
+        initialCenter: LatLng(lat, lng),
+        initialZoom: mapDefaultZoom,
+        interactionOptions: InteractionOptions(flags: widget.mapInteraction),
+        maxZoom: mapMaxZoom,
       ),
       children: [
         TileLayer(

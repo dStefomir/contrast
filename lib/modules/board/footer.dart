@@ -361,7 +361,7 @@ class _HomeSection extends HookConsumerWidget {
           width: 120,
           child: ShaderWidget(
             asset: 'background.glsl',
-            size: 120,
+            widgetSize: 120,
             child: menuBtn
           ),
         ),

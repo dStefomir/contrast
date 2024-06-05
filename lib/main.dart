@@ -49,12 +49,12 @@ void main() async {
   });
   if(!kIsWeb) {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    // Set the status bar text color to white
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   }
   var delegate = await LocalizationDelegate.create(
       fallbackLocale: 'en_US',
       supportedLocales: ['en_US', 'bg']);
-  // Set the status bar text color to white
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
   runApp(
       ModularApp(
