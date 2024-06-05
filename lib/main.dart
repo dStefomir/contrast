@@ -74,6 +74,7 @@ const Color _inputFieldErrorBorderColor = Colors.red;
 const Color _inputFieldHintTextColor = Colors.grey;
 const Color _buttonIconSvgColor = Colors.black;
 const Color _buttonBackgroundColor = Colors.white;
+const Color _loadingIndicatorColor = Colors.black;
 
 /// Application itself holding the theming and the app`s delegates
 class MyApp extends StatefulWidget {
@@ -152,6 +153,7 @@ class _MyAppState extends State<MyApp> {
               hintStyle: TextStyle(color: _inputFieldHintTextColor),
               floatingLabelBehavior: FloatingLabelBehavior.never
           ),
+          progressIndicatorTheme: const ProgressIndicatorThemeData(color: _loadingIndicatorColor),
           iconTheme: const IconThemeData(color: _buttonIconSvgColor),
           buttonTheme: const ButtonThemeData(
               height: 50,

@@ -106,7 +106,7 @@ class PhotographBoardPage extends HookConsumerWidget {
         fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
         wrapper: wrapper,
         constraints: constraints,
-        borderColor: Colors.transparent,
+        borderColor: Colors.black,
         onClick: () => onUserAction(ref, () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$currentCategory')),
         onRedirect: kIsWeb ? () => onUserAction(ref, () async {
           final Uri url = Uri.parse('https://www.dstefomir.eu/#/photos/details?id=${wrapper.image.id}&category=$currentCategory');

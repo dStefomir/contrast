@@ -62,7 +62,7 @@ class ContrastPhotograph extends HookConsumerWidget {
     this.width,
     this.height,
     this.data,
-    this.borderWidth = 1.5,
+    this.borderWidth = 2.5,
     this.isThumbnail = false,
   }) : super(key: widgetKey);
 
@@ -71,22 +71,19 @@ class ContrastPhotograph extends HookConsumerWidget {
     Widget photo;
 
     if (data == null) {
-      photo = AspectRatio(
-        aspectRatio: isThumbnail ? 3 / 2 : image!.isLandscape! ? 3 / 2.5 : 2.5 / 3,
-        child: ExtendedImage.network(fetch!(image!.path!),
-          width: width,
-          height: !isThumbnail ? height : double.infinity,
-          border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
-          enableLoadState: false,
-          fit: fit ?? (compressed
-              ? image?.isLandscape != null && image!.isLandscape!
-              ? BoxFit.fitWidth
-              : BoxFit.fitHeight
-              : BoxFit.contain),
-          cache: false,
-          filterQuality: quality,
-          isAntiAlias: !kIsWeb,
-        ),
+      photo = ExtendedImage.network(fetch!(image!.path!),
+        width: width,
+        height: !isThumbnail ? height : double.infinity,
+        border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
+        enableLoadState: true,
+        fit: fit ?? (compressed
+            ? image?.isLandscape != null && image!.isLandscape!
+            ? BoxFit.fitWidth
+            : BoxFit.fitHeight
+            : BoxFit.contain),
+        cache: false,
+        filterQuality: quality,
+        isAntiAlias: !kIsWeb,
       );
     } else {
       photo = ExtendedImage.memory(
@@ -165,14 +162,11 @@ class ContrastPhotographMeta extends HookConsumerWidget {
             widgetKey: Key("${widgetKey.toString()}_photograph"),
             fetch: fetch,
             constraints: constraints,
-            fit: BoxFit.cover,
             quality: FilterQuality.low,
             borderColor: borderColor,
             image: wrapper.image,
-            borderWidth: 1.5,
             compressed: true,
             height: double.infinity,
-            width: double.infinity,
           ),
           if (metadata != null) metadata,
           if(isHovering) ImageMetaDataDetails(
@@ -229,12 +223,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
                 ref.read(hoverProvider(widgetKey).notifier).onHover(false);
               }
             },
-            child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 1.5)
-                ),
-                child: _renderPhoto(context, null, isHovering)
-            )
+            child: _renderPhoto(context, null, isHovering)
         ),
       ),
     );
