@@ -14,6 +14,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
 
 /// Photograph displaying widget
 class ContrastPhotograph extends HookConsumerWidget {
@@ -62,7 +63,7 @@ class ContrastPhotograph extends HookConsumerWidget {
     this.width,
     this.height,
     this.data,
-    this.borderWidth = 2.5,
+    this.borderWidth = 2,
     this.isThumbnail = false,
   }) : super(key: widgetKey);
 
@@ -98,6 +99,27 @@ class ContrastPhotograph extends HookConsumerWidget {
         cacheRawData: false,
         filterQuality: quality,
         isAntiAlias: !kIsWeb,
+      );
+    }
+
+    if (!kIsWeb) {
+      return ShadowWidget(
+        blurRadius: 4,
+        offset: const Offset(5, 5),
+        child: AspectRatio(
+            aspectRatio: isThumbnail ? 3 / 2 : image!.isLandscape! ? 3 / 2 : 2 / 3,
+            child: Stack(
+              children: [
+                photo,
+                Shimmer.fromColors(
+                    baseColor: Colors.transparent,
+                    highlightColor: Colors.white.withOpacity(0.1),
+                    period: const Duration(seconds: 5),
+                    child: photo
+                )
+              ],
+            )
+        ),
       );
     }
 
@@ -164,12 +186,14 @@ class ContrastPhotographMeta extends HookConsumerWidget {
             constraints: constraints,
             quality: FilterQuality.low,
             borderColor: borderColor,
+            borderWidth: kIsWeb ? 2 : 5.5,
             image: wrapper.image,
             compressed: true,
+            width: double.infinity,
             height: double.infinity,
           ),
           if (metadata != null) metadata,
-          if(isHovering) ImageMetaDataDetails(
+          if (isHovering) ImageMetaDataDetails(
             constraints: constraints,
             metadata: wrapper.metadata,
             onTap: onClick,

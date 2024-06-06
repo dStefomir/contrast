@@ -141,6 +141,7 @@ class PhotographBoardPage extends HookConsumerWidget {
         serviceProvider: photographServiceFetchProvider,
         loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
         itemsPerRow: _calculateRestfulViewItemsPerRows(context),
+        padding: kIsWeb ? 0 : 5,
         axis: _getRestfulViewAxis(context, orientation),
         dimHeight: halfHeightSize,
         itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper) =>
