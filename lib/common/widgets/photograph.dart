@@ -102,7 +102,7 @@ class ContrastPhotograph extends HookConsumerWidget {
       );
     }
 
-    if (!kIsWeb) {
+    if (!kIsWeb && !isThumbnail) {
       return ShadowWidget(
         blurRadius: 4,
         offset: const Offset(5, 5),
@@ -114,7 +114,7 @@ class ContrastPhotograph extends HookConsumerWidget {
                 Shimmer.fromColors(
                     baseColor: Colors.transparent,
                     highlightColor: Colors.white.withOpacity(0.1),
-                    period: const Duration(seconds: 5),
+                    period: const Duration(seconds: 20),
                     child: photo
                 )
               ],
@@ -166,6 +166,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
                     ImageMetaDataDetails(
                       constraints: constraints,
                       metadata: wrapper.metadata,
+                      isLandscape: wrapper.image.isLandscape!,
                       scaleFactor: 10,
                       onTap: onClick,
                     ),
@@ -196,6 +197,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
           if (isHovering) ImageMetaDataDetails(
             constraints: constraints,
             metadata: wrapper.metadata,
+            isLandscape: wrapper.image.isLandscape!,
             onTap: onClick,
             scaleFactor: 16,
           ).translateOnPhotoHover,
@@ -226,7 +228,7 @@ class ContrastPhotographMeta extends HookConsumerWidget {
         child: GestureDetector(
             onTap: () => onClick(),
             onLongPressStart: (details) {
-              if (!isHovering && (useMobileLayoutOriented(context) && useMobileLayout(context))) {
+              if (!isHovering && useMobileLayout(context)) {
                 if (popupDialog == null) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     popupDialog = _createPopupDialog(context, isHovering);
@@ -238,11 +240,9 @@ class ContrastPhotographMeta extends HookConsumerWidget {
               }
             },
             onLongPressEnd: (details) {
-              if ((useMobileLayoutOriented(context) && useMobileLayout(context))) {
-                if (popupDialog != null) {
-                  popupDialog!.remove();
-                  popupDialog = null;
-                }
+              if (useMobileLayout(context)) {
+                popupDialog!.remove();
+                popupDialog = null;
               } else {
                 ref.read(hoverProvider(widgetKey).notifier).onHover(false);
               }
@@ -262,6 +262,8 @@ class ImageMetaDataDetails extends StatelessWidget {
   final ImageMetaData metadata;
   /// Text scale factor
   final double scaleFactor;
+  /// Is the image landscape or not
+  final bool isLandscape;
   /// Should be rendered in a row not
   final bool row;
   /// What happens when the user clicks the text
@@ -271,13 +273,14 @@ class ImageMetaDataDetails extends StatelessWidget {
     required this.constraints,
     required this.metadata,
     required this.onTap,
+    required this.isLandscape,
     this.scaleFactor = 20,
     this.row = false,
     super.key
   });
 
   /// Renders a photograph meta row
-  Row _renderMetaRow(String? text, String icon) {
+  Row _renderMetaRow(BuildContext context, String? text, String icon) {
     final double metaIconSize = constraints.maxWidth / scaleFactor;
     final double metaFontSize = constraints.maxWidth / scaleFactor;
 
@@ -305,7 +308,6 @@ class ImageMetaDataDetails extends StatelessWidget {
           typewriterCursor: false,
           padding: 5,
         ),
-        if(!row)const Spacer(),
       ],
     );
   }
@@ -313,39 +315,41 @@ class ImageMetaDataDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> widgets = [
-      if(row) const Spacer(),
+      if (row) const Spacer(),
       Visibility(
         visible: metadata.camera != null,
-        child: _renderMetaRow(metadata.camera ?? '', 'camera.svg'),
+        child: _renderMetaRow(context, metadata.camera ?? '', 'camera.svg'),
       ),
-      if(row) const Spacer(),
+      if (row) const Spacer(),
       Visibility(
         visible: metadata.fStop != null,
-        child: _renderMetaRow(metadata.fStop ?? '', 'apperature.svg'),
+        child: _renderMetaRow(context, metadata.fStop ?? '', 'apperature.svg'),
       ),
-      if(row) const Spacer(),
+      if (row) const Spacer(),
       Visibility(
         visible: metadata.exposureTime != null,
-        child: _renderMetaRow(metadata.exposureTime ?? '', 'shutter_speed.svg'),
+        child: _renderMetaRow(context, metadata.exposureTime ?? '', 'shutter_speed.svg'),
       ),
-      if(row) const Spacer(),
+      if (row) const Spacer(),
       Visibility(
         visible: metadata.lens != null,
         child: _renderMetaRow(
+          context,
           metadata.lens ?? '',
           'lens.svg',
         ),
       ),
-      if(row) const Spacer(),
+      if (row) const Spacer(),
       Visibility(
         visible: metadata.dataOfCapture != null,
         child: _renderMetaRow(
+          context,
           formatDateUi(
               metadata.dataOfCapture),
           'date.svg',
         ),
       ),
-      if(row) const Spacer(),
+      if (row) const Spacer(),
     ];
 
     return Padding(
@@ -353,7 +357,7 @@ class ImageMetaDataDetails extends StatelessWidget {
           left: constraints.maxWidth / 30, top: constraints.maxWidth / 30),
       child: row
           ? Row(children: widgets)
-          : Column(mainAxisAlignment: MainAxisAlignment.start, children: widgets),
+          : Column(children: widgets),
     );
   }
 }
