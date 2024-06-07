@@ -30,8 +30,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   final int itemsPerRow;
   /// Height of the dim effect
   final double dimHeight;
-  /// Padding added to the data view
-  final double padding;
   /// Renders each row of the list view
   final Widget Function(BuildContext context, int index, int dataLenght, T item) itemBuilder;
   /// What happens when the left arrow key is pressed
@@ -54,7 +52,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     this.whenShouldAnimateGlass,
     this.itemsPerRow = 4,
     this.dimHeight = 0,
-    this.padding = 0
   }) : super(key: key);
 
   /// Handles the keyboard key up and down for scrolling
@@ -126,9 +123,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
       return null;
     }, [selectedFilter]);
     
-    final customScrollView = Padding(
-      padding: EdgeInsets.only(left: padding * 1.5, right: padding, top: padding, bottom: padding),
-      child: CustomScrollView(
+    final customScrollView = CustomScrollView(
         controller: controller,
         scrollDirection: axis,
         physics: const BouncingScrollPhysics(),
@@ -151,7 +146,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
             itemCount: apiData.length,
           ),
         ]
-      ),
     );
 
     return apiData.isNotEmpty ? Stack(

@@ -80,7 +80,8 @@ class CorePage extends HookConsumerWidget {
               ) : Container(
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Colors.black, Colors.white],
+                      colors: [Colors.black, Colors.grey],
+                      stops: [0.4, 1],
                       begin: Alignment.topLeft,
                       end: Alignment.topRight
                     )

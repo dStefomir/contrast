@@ -104,22 +104,26 @@ class ContrastPhotograph extends HookConsumerWidget {
     }
 
     if (!kIsWeb && !isThumbnail) {
-      return ShadowWidget(
-        blurRadius: 4,
-        offset: const Offset(5, 5),
-        child: AspectRatio(
-            aspectRatio: isThumbnail || image!.isLandscape! ? 3 / 2 : 2 / 3,
-            child: Stack(
-              children: [
-                photo,
-                Shimmer.fromColors(
-                    baseColor: Colors.transparent,
-                    highlightColor: Colors.white.withOpacity(0.1),
-                    period: const Duration(seconds: 20),
-                    child: photo
-                )
-              ],
-            )
+      return Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: ShadowWidget(
+          blurRadius: 2,
+          offset: const Offset(1.5, 1.5),
+          shadowColor: Colors.black38,
+          child: AspectRatio(
+              aspectRatio: isThumbnail || image!.isLandscape! ? 3 / 2 : 2 / 3,
+              child: Stack(
+                children: [
+                  photo,
+                  Shimmer.fromColors(
+                      baseColor: Colors.transparent,
+                      highlightColor: Colors.white.withOpacity(0.15),
+                      period: const Duration(seconds: 10),
+                      child: photo
+                  )
+                ],
+              )
+          ),
         ),
       );
     }
@@ -217,7 +221,7 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
             fetch: widget.fetch,
             constraints: widget.constraints,
             quality: FilterQuality.low,
-            borderColor: Colors.transparent,
+            borderColor: kIsWeb ? Colors.transparent : widget.borderColor,
             fit: kIsWeb ? BoxFit.cover : null,
             borderWidth: kIsWeb ? 0 : 5.5,
             image: widget.wrapper.image,
