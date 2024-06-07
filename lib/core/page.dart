@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:contrast/common/widgets/border.dart';
-import 'package:contrast/common/widgets/shader/widget.dart';
 import 'package:contrast/core/provider.dart';
 import 'package:contrast/modules/login/overlay/cookie.dart';
 import 'package:dismissible_page/dismissible_page.dart';
@@ -16,8 +15,6 @@ class CorePage extends HookConsumerWidget {
   final String pageName;
   /// Should the page warn for coockies or not
   final bool shouldWarnForCookies;
-  /// Should the page have a shader in the status bar
-  final bool shouldHaveShaderOnTop;
   /// Should resize when keyboard pops
   final bool resizeToAvoidBottomInset;
   /// Renders the holding page
@@ -30,7 +27,6 @@ class CorePage extends HookConsumerWidget {
     required this.pageName,
     required this.render,
     this.shouldWarnForCookies = true,
-    this.shouldHaveShaderOnTop = false,
     this.resizeToAvoidBottomInset = true,
     this.onPageDismissed
   }) : super(key: key);
@@ -75,22 +71,22 @@ class CorePage extends HookConsumerWidget {
                 ),
               ),
             );
-            final animatedMobileChildPage = ShaderWidget(
-              asset: 'background.glsl',
-              scale: () => MediaQuery.of(context).size.width / 30,
-              child: mobileChildPage,
-            );
             final List<Widget> children = [
               kIsWeb ? render() : onPageDismissed != null ? DismissiblePage(
                 onDismissed: () => onPageDismissed!(ref),
                 direction: DismissiblePageDismissDirection.vertical,
                 isFullScreen: true,
-                child: shouldHaveShaderOnTop
-                    ? animatedMobileChildPage
-                    : ColoredBox(color: Colors.black, child: mobileChildPage),
-              ) : shouldHaveShaderOnTop
-                  ? animatedMobileChildPage
-                  : ColoredBox(color: Colors.black, child: mobileChildPage),
+                child: ColoredBox(color: Colors.black, child: mobileChildPage),
+              ) : Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.black, Colors.white],
+                      begin: Alignment.topLeft,
+                      end: Alignment.topRight
+                    )
+                  ),
+                  child: mobileChildPage
+              ),
             ];
             if (snapshot.hasData && kIsWeb && _shouldShowCookie(snapshot.requireData, ref) && shouldWarnForCookies) {
               children.add(

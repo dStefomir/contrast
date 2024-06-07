@@ -1,5 +1,6 @@
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:contrast/common/extentions/zoom.dart';
+import 'package:contrast/common/widgets/border.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/hover_provider.dart';
 import 'package:contrast/common/widgets/icon.dart';
@@ -107,7 +108,7 @@ class ContrastPhotograph extends HookConsumerWidget {
         blurRadius: 4,
         offset: const Offset(5, 5),
         child: AspectRatio(
-            aspectRatio: isThumbnail ? 3 / 2 : image!.isLandscape! ? 3 / 2 : 2 / 3,
+            aspectRatio: isThumbnail || image!.isLandscape! ? 3 / 2 : 2 / 3,
             child: Stack(
               children: [
                 photo,
@@ -123,24 +124,46 @@ class ContrastPhotograph extends HookConsumerWidget {
       );
     }
 
-    return photo;
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        AspectRatio(
+          aspectRatio: isThumbnail ? 3 / 2 : image!.isLandscape! ? 3 / 2.5 : 2.5 / 3,
+          child: photo
+        ),
+        if (!isThumbnail) BorderWidget(
+            width: 2,
+            onlyTop: false,
+            child: SizedBox(
+                width: width,
+                height: height
+            )
+        ),
+      ],
+    );
   }
 }
 
 /// Image widget which shows a photo and its meta data
-class ContrastPhotographMeta extends HookConsumerWidget {
+class ContrastPhotographMeta extends StatefulHookConsumerWidget {
   /// Widget key
   final Key widgetKey;
+
   /// Photograph fetch function
   final String Function(String)? fetch;
+
   /// Image wrapper object
   final ImageBoardWrapper wrapper;
+
   /// Constraints of the parent page
   final BoxConstraints constraints;
+
   /// What happens when clicked on the widget
   final void Function() onClick;
+
   /// What happens when the user clicks the redirect button
   final Function? onRedirect;
+
   /// Color of the border of the photograph
   final Color borderColor;
 
@@ -154,21 +177,29 @@ class ContrastPhotographMeta extends HookConsumerWidget {
     this.borderColor = Colors.black
   }) : super(key: widgetKey);
 
+  @override
+  ConsumerState createState() => _ContrastPhotographMetaState();
+}
+
+class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta> {
+  /// Overlay with photograph meta data
+  OverlayEntry? popupDialog;
+
   /// Shows the popup overlay
   OverlayEntry _createPopupDialog(BuildContext context, bool isHovering) =>
       OverlayEntry(
           builder: (_) => BlurryContainer(
             child: AnimatedDialog(
-                width: constraints.maxWidth + 150,
-                height: constraints.maxHeight + 150,
+                width: widget.constraints.maxWidth + 150,
+                height: widget.constraints.maxHeight + 150,
                 child: _renderPhoto(
                     context,
                     ImageMetaDataDetails(
-                      constraints: constraints,
-                      metadata: wrapper.metadata,
-                      isLandscape: wrapper.image.isLandscape!,
+                      constraints: widget.constraints,
+                      metadata: widget.wrapper.metadata,
+                      isLandscape: widget.wrapper.image.isLandscape!,
                       scaleFactor: 10,
-                      onTap: onClick,
+                      onTap: widget.onClick,
                     ),
                     isHovering,
                 )
@@ -182,69 +213,65 @@ class ContrastPhotographMeta extends HookConsumerWidget {
         alignment: Alignment.center,
         children: [
           ContrastPhotograph(
-            widgetKey: Key("${widgetKey.toString()}_photograph"),
-            fetch: fetch,
-            constraints: constraints,
+            widgetKey: Key("${widget.widgetKey.toString()}_photograph"),
+            fetch: widget.fetch,
+            constraints: widget.constraints,
             quality: FilterQuality.low,
-            borderColor: borderColor,
-            borderWidth: kIsWeb ? 2 : 5.5,
-            image: wrapper.image,
+            borderColor: Colors.transparent,
+            fit: kIsWeb ? BoxFit.cover : null,
+            borderWidth: kIsWeb ? 0 : 5.5,
+            image: widget.wrapper.image,
             compressed: true,
             width: double.infinity,
             height: double.infinity,
           ),
           if (metadata != null) metadata,
           if (isHovering) ImageMetaDataDetails(
-            constraints: constraints,
-            metadata: wrapper.metadata,
-            isLandscape: wrapper.image.isLandscape!,
-            onTap: onClick,
+            constraints: widget.constraints,
+            metadata: widget.wrapper.metadata,
+            isLandscape: widget.wrapper.image.isLandscape!,
+            onTap: widget.onClick,
             scaleFactor: 16,
           ).translateOnPhotoHover,
-          if (isHovering && onRedirect != null && getRunningPlatform(context) == 'DESKTOP')
+          if (isHovering && widget.onRedirect != null && getRunningPlatform(context) == 'DESKTOP')
             Align(
                 alignment: Alignment.topRight,
                 child: RedirectButton(
-                  widgetKey: Key("${widgetKey.toString()}_photograph_redirect"),
-                  constraints: constraints,
-                  onRedirect: onRedirect!,
-                  height: constraints.maxHeight / 7,
+                  widgetKey: Key("${widget.widgetKey.toString()}_photograph_redirect"),
+                  constraints: widget.constraints,
+                  onRedirect: widget.onRedirect!,
+                  height: widget.constraints.maxHeight / 7,
                 )
             ),
         ],
       );
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final bool isHovering = ref.watch(hoverProvider(widgetKey));
-    OverlayEntry? popupDialog;
+  Widget build(BuildContext context) {
+    final bool isHovering = ref.watch(hoverProvider(widget.widgetKey));
 
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: () {},
-        onHover: (hover) => ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
+        onHover: (hover) => ref.read(hoverProvider(widget.widgetKey).notifier).onHover(hover),
         hoverColor: Colors.black,
         child: GestureDetector(
-            onTap: () => onClick(),
+            onTap: () => widget.onClick(),
             onLongPressStart: (details) {
-              if (!isHovering && useMobileLayout(context)) {
+              if (!isHovering && !kIsWeb) {
                 if (popupDialog == null) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     popupDialog = _createPopupDialog(context, isHovering);
                     Overlay.of(context).insert(popupDialog!);
                   });
                 }
-              } else if (!isHovering && !(useMobileLayoutOriented(context) && useMobileLayout(context))) {
-                ref.read(hoverProvider(widgetKey).notifier).onHover(true);
               }
             },
             onLongPressEnd: (details) {
-              if (useMobileLayout(context)) {
-                popupDialog!.remove();
+              if (!kIsWeb) {
+                popupDialog?.remove();
                 popupDialog = null;
-              } else {
-                ref.read(hoverProvider(widgetKey).notifier).onHover(false);
               }
             },
             child: _renderPhoto(context, null, isHovering)

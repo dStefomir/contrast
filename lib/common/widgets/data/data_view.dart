@@ -13,8 +13,6 @@ import 'package:scrollable_inertia/scrollable_inertia.dart';
 
 /// Max blur applied to the data view
 const _maxBlur = 25.0;
-/// Used for defining the non blurry zone
-const _nonBlurryZone = 100.0;
 /// Used for defining the blurry zone
 const _blurryZone = 15.0;
 /// Offset for triggering the lazy load
@@ -105,22 +103,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     }
   }
 
-  /// Handles the motion blur scrolling of the data view
-  _handleMotionBlurDeadZone({required ScrollController controller, required ValueNotifier<double> deadZone}) {
-    if (controller.hasClients) {
-      /// The top items are been shown
-      if (controller.offset <= _nonBlurryZone) {
-        deadZone.value = _nonBlurryZone;
-        /// The last items are been shown
-      } else if (controller.position.pixels >= controller.position.maxScrollExtent) {
-        deadZone.value = _nonBlurryZone;
-        /// All other items
-      } else {
-        deadZone.value = _blurryZone;
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     /// Data view List of items
@@ -133,8 +115,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     final double widgetMaxWidth = MediaQuery.of(context).size.width;
     /// Controller for the data view
     final ScrollController controller = useScrollController();
-    final motionBlurDeadZone = useValueNotifier(_nonBlurryZone);
-    controller.addListener(() => _handleMotionBlurDeadZone(controller: controller, deadZone: motionBlurDeadZone));
     /// Fetches from the back-end
     fetchData(Future fetch) => fetch.onError((error, stacktrace) async {
       await Future.delayed(const Duration(seconds: 3), () => fetchData(fetch));
@@ -231,7 +211,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                 child: InertiaListener(
                     child: MotionBlur(
                       maxBlur: _maxBlur,
-                      deadZone: useValueListenable<double>(motionBlurDeadZone),
+                      deadZone: _blurryZone,
                       child: customScrollView
                     )
                 )

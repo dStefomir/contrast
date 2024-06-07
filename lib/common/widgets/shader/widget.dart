@@ -4,7 +4,7 @@ import 'package:flutter_shaders/flutter_shaders.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Value which is responsible for the animation speed
-const _animationSpeed = 100;
+const _animationSpeed = 500;
 /// Renders a shader widget
 class ShaderWidget extends HookConsumerWidget {
   /// Child widget

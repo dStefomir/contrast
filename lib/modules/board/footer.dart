@@ -10,7 +10,6 @@ import 'package:contrast/common/widgets/tooltip.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -347,17 +346,7 @@ class _HomeSection extends HookConsumerWidget {
       painter: HouseShadowPainter(),
       child: ClipPath(
         clipper: HouseShape(),
-        child: !kIsWeb ? Container(
-            width: 120,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                    'assets/images/icon.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: menuBtn
-        ) : SizedBox(
+        child: SizedBox(
           width: 120,
           child: ShaderWidget(
             asset: 'background.glsl',

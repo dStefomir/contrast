@@ -23,8 +23,8 @@ class BoardPageFilter extends ConsumerWidget {
   /// Render mobile layout
   Widget _renderMobileLayout(BuildContext context, WidgetRef ref) => LayoutBuilder(builder: (context, constraints) =>
       ShadowWidget(
-        blurRadius: 1,
-        offset: const Offset(2, 2),
+        blurRadius: 3,
+        offset: const Offset(0.5, 2),
         child: Container(
           width: boardPadding,
           height: constraints.maxHeight - boardPadding - 0.2,
