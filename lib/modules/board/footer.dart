@@ -330,7 +330,7 @@ class _HomeSection extends HookConsumerWidget {
                   shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
                   elevation: 1,
                   onTap: () {
-                    if(ref.read(overlayVisibilityProvider(const Key('qr_code'))) == true) {
+                    if (ref.read(overlayVisibilityProvider(const Key('qr_code'))) == true) {
                       ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false);
                     } else {
                       ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(true);
@@ -349,8 +349,9 @@ class _HomeSection extends HookConsumerWidget {
         child: SizedBox(
           width: 120,
           child: ShaderWidget(
-            asset: 'background.glsl',
-            widgetSize: 120,
+            asset: 'background.frag',
+            width: 120,
+            height: 100,
             child: menuBtn
           ),
         ),

@@ -1,56 +1,68 @@
+import 'package:contrast/common/widgets/shader/provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-/// Value which is responsible for the animation speed
-const _animationSpeed = 500;
 /// Renders a shader widget
-class ShaderWidget extends HookConsumerWidget {
+class ShaderWidget extends StatefulHookConsumerWidget {
   /// Child widget
-  final Widget? child;
+  final Widget child;
   /// Asset for the shader
   final String asset;
-  /// Size of the widget in pixels
-  final double? widgetSize;
-  /// Sets a scaling for the shader
-  final double Function()? scale;
+  /// Width of the shader
+  final double width;
+  /// Height of the shader
+  final double height;
 
-  const ShaderWidget({super.key, required this.asset, this.widgetSize, this.scale, this.child});
+  const ShaderWidget({super.key, required this.asset, required this.width, required this.height, this.child = const SizedBox.shrink()});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final controller = useAnimationController()..repeat(period: const Duration(hours: 1));
-    final shader = ShaderBuilder(
-      assetKey: 'shaders/$asset',
-          (context, shader, child) {
-        return AnimatedBuilder(
-          animation: controller,
-          builder: (_, child) => AnimatedSampler(
-                  (image, size, canvas) {
-                shader.setFloat(0, controller.value * _animationSpeed);
-                shader.setFloat(1, widgetSize ?? size.width);
-                shader.setFloat(2, widgetSize ?? MediaQuery.of(context).padding.top);
-                if (scale != null) {
-                  canvas.scale(scale!());
-                }
-                final paint = Paint()..shader = shader..isAntiAlias = false..filterQuality = FilterQuality.low;
-                canvas.drawPaint(paint);
-              },
-              child: child ?? const SizedBox.shrink()
-          ),
-          child: widgetSize != null ? SizedBox(width: widgetSize ?? 120, height: 100,) : Container(),
-        );
-      },
-    );
+  ConsumerState createState() => _ShaderWidgetState();
+}
 
-    return child != null ? Stack(
+class _ShaderWidgetState extends ConsumerState<ShaderWidget> with SingleTickerProviderStateMixin {
+
+  /// Ticker object
+  Ticker? ticker;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+    ticker ??= createTicker((elapsed) =>
+        ref.read(shaderProvider.notifier).setTicker()
+    )..start()
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    ticker?.stop();
+    ticker?.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
       alignment: Alignment.center,
       fit: StackFit.passthrough,
       children: [
-        shader,
-        child!
+        ShaderBuilder((_, shader, __) {
+          final time = ref.watch(shaderProvider);
+          return AnimatedSampler(
+                  (image, size, canvas) {
+                    shader.setFloat(0, time);
+                    shader.setFloat(1, widget.width);
+                    shader.setFloat(2, widget.height);
+                    canvas.drawPaint(Paint()..shader = shader);
+                    },
+              child: widget.child
+          );}, assetKey: 'shaders/${widget.asset}'
+        ),
+        widget.child
       ],
-    ) : shader;
+    );
   }
 }

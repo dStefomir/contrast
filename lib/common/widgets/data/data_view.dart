@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/common/widgets/glass.dart';
 import 'package:contrast/common/widgets/icon.dart';
@@ -15,8 +17,6 @@ import 'package:scrollable_inertia/scrollable_inertia.dart';
 
 /// Max blur applied to the data view
 const _maxBlur = 25.0;
-/// Used for defining the blurry zone
-const _blurryZone = 10.0;
 /// Offset for triggering the lazy load
 const _lazyLoadTriggerOffset = 200;
 
@@ -144,10 +144,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
             addAutomaticKeepAlives: true,
             addRepaintBoundaries: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
-            itemBuilder: (c, i) => InertiaSpacing(
-                maxStretch: 10,
-                child: itemBuilder(c, i, apiData.length, apiData[i])
-            ),
+            itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
             itemCount: apiData.length,
           ),
         ]
@@ -218,7 +215,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                 child: InertiaListener(
                     child: MotionBlur(
                       maxBlur: _maxBlur,
-                      deadZone: _blurryZone,
+                      deadZone: kIsWeb || Platform.isIOS ? 10 : 20,
                       child: customScrollView
                     )
                 )

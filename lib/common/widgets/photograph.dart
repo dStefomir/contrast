@@ -15,7 +15,6 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:shimmer/shimmer.dart';
 
 /// Photograph displaying widget
 class ContrastPhotograph extends HookConsumerWidget {
@@ -112,17 +111,7 @@ class ContrastPhotograph extends HookConsumerWidget {
           shadowColor: Colors.black38,
           child: AspectRatio(
               aspectRatio: isThumbnail || image!.isLandscape! ? 3 / 2 : 2 / 3,
-              child: Stack(
-                children: [
-                  photo,
-                  Shimmer.fromColors(
-                      baseColor: Colors.transparent,
-                      highlightColor: Colors.white.withOpacity(0.15),
-                      period: const Duration(seconds: 10),
-                      child: photo
-                  )
-                ],
-              )
+              child: photo
           ),
         ),
       );
@@ -253,35 +242,36 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
   @override
   Widget build(BuildContext context) {
     final bool isHovering = ref.watch(hoverProvider(widget.widgetKey));
-
-    return Material(
+    final photoWidget = _renderPhoto(context, null, isHovering);
+    renderWebWidget(Widget child) => Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: () {},
         onHover: (hover) => ref.read(hoverProvider(widget.widgetKey).notifier).onHover(hover),
-        hoverColor: Colors.black,
-        child: GestureDetector(
-            onTap: () => widget.onClick(),
-            onLongPressStart: (details) {
-              if (!isHovering && !kIsWeb) {
-                if (popupDialog == null) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    popupDialog = _createPopupDialog(context, isHovering);
-                    Overlay.of(context).insert(popupDialog!);
-                  });
-                }
-              }
-            },
-            onLongPressEnd: (details) {
-              if (!kIsWeb) {
-                popupDialog?.remove();
-                popupDialog = null;
-              }
-            },
-            child: _renderPhoto(context, null, isHovering)
-        ),
+        hoverColor: Colors.black
       ),
     );
+    renderMobileWidget(Widget child) => GestureDetector(
+      onTap: () => widget.onClick(),
+      onLongPressStart: (details) {
+        if (!isHovering && !kIsWeb) {
+          if (popupDialog == null) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              popupDialog = _createPopupDialog(context, isHovering);
+              Overlay.of(context).insert(popupDialog!);
+            });
+          }
+        }
+      },
+      onLongPressEnd: (details) {
+        if (!kIsWeb) {
+          popupDialog?.remove();
+          popupDialog = null;
+        }
+      },
+      child: child
+    );
+    return kIsWeb ? renderWebWidget(photoWidget) : renderMobileWidget(photoWidget);
   }
 }
 

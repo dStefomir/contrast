@@ -10,5 +10,5 @@ class ShaderNotifier extends StateNotifier<double> {
   ShaderNotifier({required this.ref}) : super(0.1);
 
   /// Ticks
-  void setTicker() => state = state + 0.03;
+  void setTicker() => state = state + 0.005;
 }

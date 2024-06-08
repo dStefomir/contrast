@@ -7,7 +7,7 @@ uniform vec2 iResolution;
 out vec4 fragColor;
 
 #define PI              3.141592654
-#define TAU             (2.0*PI)
+#define TAU             (0.2*PI)
 #define RESOLUTION      iResolution
 #define TIME            iTime
 #define ROT(a)          mat2(cos(a), sin(a), -sin(a), cos(a))
