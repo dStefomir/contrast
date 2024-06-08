@@ -248,7 +248,8 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
       child: InkWell(
         onTap: () {},
         onHover: (hover) => ref.read(hoverProvider(widget.widgetKey).notifier).onHover(hover),
-        hoverColor: Colors.black
+        hoverColor: Colors.black,
+        child: child,
       ),
     );
     renderMobileWidget(Widget child) => GestureDetector(
