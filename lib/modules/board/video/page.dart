@@ -124,6 +124,7 @@ class VideoBoardPage extends HookConsumerWidget {
         itemsPerRow: orientation == Orientation.portrait ? 3 : 2,
         axis: orientation == Orientation.portrait ? Axis.vertical : Axis.horizontal,
         dimHeight: halfHeightSize,
+        shouldHaveBackground: !kIsWeb,
         itemBuilder: (BuildContext context, int index, int dataLength, VideoData wrapper) =>
             LayoutBuilder(key: const Key('VideoDataViewBuilder'), builder: (context, constraints) =>
                 _renderVideo(context, ref, wrapper, constraints, orientation)

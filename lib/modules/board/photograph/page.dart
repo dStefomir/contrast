@@ -143,6 +143,7 @@ class PhotographBoardPage extends HookConsumerWidget {
         itemsPerRow: _calculateRestfulViewItemsPerRows(context),
         axis: _getRestfulViewAxis(context, orientation),
         dimHeight: halfHeightSize,
+        shouldHaveBackground: !kIsWeb,
         itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper) =>
             LayoutBuilder(
                 key: const Key('PhotographDataViewBuilder'),
