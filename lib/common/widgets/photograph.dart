@@ -246,7 +246,7 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
     renderWebWidget(Widget child) => Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () {},
+        onTap: () => widget.onClick(),
         onHover: (hover) => ref.read(hoverProvider(widget.widgetKey).notifier).onHover(hover),
         hoverColor: Colors.black,
         child: child,
