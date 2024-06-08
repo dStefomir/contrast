@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:contrast/common/widgets/border.dart';
+import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/core/provider.dart';
 import 'package:contrast/modules/login/overlay/cookie.dart';
 import 'package:dismissible_page/dismissible_page.dart';
@@ -63,9 +63,10 @@ class CorePage extends HookConsumerWidget {
               bottom: !kIsWeb && Platform.isAndroid,
               left: false,
               right: false,
-              child: BorderWidget(
-                width: 2,
-                onlyTop: true,
+              child: ShadowWidget(
+                blurRadius: 3,
+                offset: const Offset(0, 2),
+                shadowColor: Colors.black,
                 child: ClipPath(
                     child: render()
                 ),

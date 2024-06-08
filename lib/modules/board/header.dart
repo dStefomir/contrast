@@ -25,6 +25,7 @@ class BoardPageFilter extends ConsumerWidget {
       ShadowWidget(
         blurRadius: 3,
         offset: const Offset(0.5, 2),
+        shadowColor: Colors.black,
         child: Container(
           width: boardPadding,
           height: constraints.maxHeight - boardPadding - 0.2,
