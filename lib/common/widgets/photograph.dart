@@ -243,19 +243,10 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
   Widget build(BuildContext context) {
     final bool isHovering = ref.watch(hoverProvider(widget.widgetKey));
     final photoWidget = _renderPhoto(context, null, isHovering);
-    renderWebWidget(Widget child) => Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () => widget.onClick(),
-        onHover: (hover) => ref.read(hoverProvider(widget.widgetKey).notifier).onHover(hover),
-        hoverColor: Colors.black,
-        child: child,
-      ),
-    );
     renderMobileWidget(Widget child) => GestureDetector(
       onTap: () => widget.onClick(),
       onLongPressStart: (details) {
-        if (!isHovering && !kIsWeb) {
+        if (!isHovering) {
           if (popupDialog == null) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               popupDialog = _createPopupDialog(context, isHovering);
@@ -265,12 +256,21 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
         }
       },
       onLongPressEnd: (details) {
-        if (!kIsWeb) {
+        if (!isHovering) {
           popupDialog?.remove();
           popupDialog = null;
         }
       },
       child: child
+    );
+    renderWebWidget(Widget child) => Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => widget.onClick(),
+        onHover: (hover) => ref.read(hoverProvider(widget.widgetKey).notifier).onHover(hover),
+        hoverColor: Colors.black,
+        child: renderMobileWidget(child),
+      ),
     );
     return kIsWeb ? renderWebWidget(photoWidget) : renderMobileWidget(photoWidget);
   }

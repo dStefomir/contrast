@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:universal_html/html.dart" as html;
 
 /// Determines if the app should load a mobile or other type of layout based on calculated pixels and orientation
 bool useMobileLayoutOriented(BuildContext context, {int shortestSideLimit = 670}) {
@@ -28,6 +29,10 @@ double getScaledPixels(BuildContext context, double pixels) {
 
 /// Gets the running platform based on the layout of the device
 String getRunningPlatform(BuildContext context) {
+  final userAgent = html.window.navigator.userAgent.toLowerCase();
+  if (userAgent.contains('mobi')) {
+    return 'MOBILE';
+  }
   if (useMobileLayoutOriented(context)) {
     return 'MOBILE';
   }
