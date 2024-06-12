@@ -147,8 +147,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
         ),
         slivers: [
           SliverGrid.builder(
-            addAutomaticKeepAlives: true,
-            addRepaintBoundaries: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
             itemBuilder: (c, i) {
               if (paddingLeft != null && axis == Axis.vertical && i % 3 == 0) {

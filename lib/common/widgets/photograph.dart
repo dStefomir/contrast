@@ -76,7 +76,7 @@ class ContrastPhotograph extends HookConsumerWidget {
         width: width,
         height: !isThumbnail ? height : double.infinity,
         border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
-        enableLoadState: true,
+        enableLoadState: false,
         fit: fit ?? (compressed
             ? image?.isLandscape != null && image!.isLandscape!
             ? BoxFit.fitWidth
@@ -141,22 +141,16 @@ class ContrastPhotograph extends HookConsumerWidget {
 class ContrastPhotographMeta extends StatefulHookConsumerWidget {
   /// Widget key
   final Key widgetKey;
-
   /// Photograph fetch function
   final String Function(String)? fetch;
-
   /// Image wrapper object
   final ImageBoardWrapper wrapper;
-
   /// Constraints of the parent page
   final BoxConstraints constraints;
-
   /// What happens when clicked on the widget
   final void Function() onClick;
-
   /// What happens when the user clicks the redirect button
   final Function? onRedirect;
-
   /// Color of the border of the photograph
   final Color borderColor;
 
@@ -195,13 +189,14 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
                       onTap: widget.onClick,
                     ),
                     isHovering,
+                    false
                 )
             ),
           )
       );
 
   /// Renders a photograph
-  Widget _renderPhoto(BuildContext context, Widget? metadata, bool isHovering) =>
+  Widget _renderPhoto(BuildContext context, Widget? metadata, bool isHovering, bool shouldHaveBorder) =>
       Stack(
         alignment: Alignment.center,
         children: [
@@ -212,7 +207,7 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
             quality: FilterQuality.low,
             borderColor: kIsWeb ? Colors.transparent : widget.borderColor,
             fit: kIsWeb ? BoxFit.cover : null,
-            borderWidth: kIsWeb ? 0 : 5.5,
+            borderWidth: kIsWeb || !shouldHaveBorder ? 0 : 5.5,
             image: widget.wrapper.image,
             compressed: true,
             width: double.infinity,
@@ -242,7 +237,7 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
   @override
   Widget build(BuildContext context) {
     final bool isHovering = ref.watch(hoverProvider(widget.widgetKey));
-    final photoWidget = _renderPhoto(context, null, isHovering);
+    final photoWidget = _renderPhoto(context, null, isHovering, true);
     renderMobileWidget(Widget child) => GestureDetector(
       onTap: () => widget.onClick(),
       onLongPressStart: (details) {

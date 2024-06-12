@@ -125,7 +125,7 @@ class ContrastVideo extends HookConsumerWidget {
           ),
         ).translateOnVideoHover,
       ),
-      if (!disabled && isHovering && onRedirect != null && getRunningPlatform(context) == 'DESKTOP')
+      if (!disabled && isHovering && onRedirect != null)
         Align(
             alignment: Alignment.topRight,
             child: Padding(
