@@ -32,6 +32,10 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   final int itemsPerRow;
   /// Height of the dim effect
   final double dimHeight;
+  /// Right padding added to the data view items
+  final double? paddingRight;
+  /// Left padding added to the data view items
+  final double? paddingLeft;
   /// Should the data view has a background or not
   final bool shouldHaveBackground;
   /// Renders each row of the list view
@@ -57,6 +61,8 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     this.shouldHaveBackground = false,
     this.itemsPerRow = 4,
     this.dimHeight = 0,
+    this.paddingRight,
+    this.paddingLeft
   }) : super(key: key);
 
   /// Handles the keyboard key up and down for scrolling
@@ -144,7 +150,22 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
             addAutomaticKeepAlives: true,
             addRepaintBoundaries: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: itemsPerRow),
-            itemBuilder: (c, i) => itemBuilder(c, i, apiData.length, apiData[i]),
+            itemBuilder: (c, i) {
+              if (paddingLeft != null && axis == Axis.vertical && i % 3 == 0) {
+                return Padding(
+                  padding: EdgeInsets.only(left: paddingLeft!),
+                  child: itemBuilder(c, i, apiData.length, apiData[i]),
+                );
+              }
+              if (paddingRight != null && axis == Axis.vertical && i % 3 == 2) {
+                return Padding(
+                  padding: EdgeInsets.only(right: paddingRight!),
+                  child: itemBuilder(c, i, apiData.length, apiData[i]),
+                );
+              }
+
+              return itemBuilder(c, i, apiData.length, apiData[i]);
+            },
             itemCount: apiData.length,
           ),
         ]
