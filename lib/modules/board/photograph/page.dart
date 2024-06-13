@@ -143,8 +143,8 @@ class PhotographBoardPage extends HookConsumerWidget {
         itemsPerRow: _calculateRestfulViewItemsPerRows(context),
         axis: _getRestfulViewAxis(context, orientation),
         dimHeight: halfHeightSize,
-        paddingLeft: 4,
-        paddingRight: 2,
+        paddingLeft: !kIsWeb ? 4 : null,
+        paddingRight: !kIsWeb ? 2 : null,
         shouldHaveBackground: !kIsWeb,
         itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper) =>
             LayoutBuilder(
