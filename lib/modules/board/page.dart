@@ -60,7 +60,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
       widget.analytics.logAppOpen();
       widget.analytics.logEvent(
           name: 'board_page',
-          parameters: <String, dynamic>{
+          parameters: <String, String> {
             'layout': useMobileLayoutOriented(context) ? 'mobile' : 'desktop'
           });
     });
@@ -292,7 +292,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                         child: Padding(
                           padding: !useMobileLayoutOriented(context)
                               ? EdgeInsets.only(top: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding)
-                              : EdgeInsets.only(left: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding),
+                              : const EdgeInsets.only(left: 0, bottom: boardPadding),
                           child: ref.read(boardFooterTabProvider) == 'photos'
                               ? SlideTransitionAnimation(
                               getStart: () => _calculateBoardStartAnimation(ref),
@@ -312,7 +312,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                                 });
                               },
                               duration: const Duration(milliseconds: 800),
-                              child: PhotographBoardPage(onUserAction: _onAction))
+                              child: PhotographBoardPage(onUserAction: _onAction, padding: useMobileLayout(context) ? boardPadding : 0,))
                               : SlideTransitionAnimation(
                               getStart: () => _calculateBoardStartAnimation(ref),
                               getEnd: () => const Offset(0, 0),

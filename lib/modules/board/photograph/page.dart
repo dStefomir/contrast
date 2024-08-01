@@ -24,8 +24,10 @@ import 'package:flutter_translate/flutter_translate.dart' as translation;
 class PhotographBoardPage extends HookConsumerWidget {
   /// What happens when the user performs an action
   final Function(WidgetRef ref, Function? action) onUserAction;
+  /// Padding of the data view items
+  final double padding;
 
-  const PhotographBoardPage({super.key, required this.onUserAction});
+  const PhotographBoardPage({super.key, required this.onUserAction, required this.padding});
 
   /// Calculates the number of items per row for the grid view
   int _calculateRestfulViewItemsPerRows(BuildContext context) {
@@ -143,6 +145,7 @@ class PhotographBoardPage extends HookConsumerWidget {
         itemsPerRow: _calculateRestfulViewItemsPerRows(context),
         axis: _getRestfulViewAxis(context, orientation),
         dimHeight: halfHeightSize,
+        padding: EdgeInsets.only(left: padding),
         paddingLeft: !kIsWeb ? 4 : null,
         paddingRight: !kIsWeb ? 2 : null,
         shouldHaveBackground: !kIsWeb,

@@ -46,7 +46,7 @@ class _PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.analytics.logEvent(
           name: 'photo_details',
-          parameters: <String, dynamic>{
+          parameters: <String, int>{
             'id': widget.id,
           });
     });

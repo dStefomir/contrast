@@ -4,6 +4,7 @@ import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/common/widgets/glass.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/modules/board/provider.dart';
+import 'package:contrast/utils/device.dart';
 import 'package:contrast/utils/paged_list.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -32,6 +33,8 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   final int itemsPerRow;
   /// Height of the dim effect
   final double dimHeight;
+  /// Padding for the data view
+  final EdgeInsets? padding;
   /// Right padding added to the data view items
   final double? paddingRight;
   /// Left padding added to the data view items
@@ -61,6 +64,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
     this.shouldHaveBackground = false,
     this.itemsPerRow = 4,
     this.dimHeight = 0,
+    this.padding,
     this.paddingRight,
     this.paddingLeft
   }) : super(key: key);
@@ -161,6 +165,12 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                   child: itemBuilder(c, i, apiData.length, apiData[i]),
                 );
               }
+              if(useMobileLayout(context) && axis == Axis.horizontal) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  child: itemBuilder(c, i, apiData.length, apiData[i])
+                );
+              }
 
               return itemBuilder(c, i, apiData.length, apiData[i]);
             },
@@ -235,7 +245,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                     child: MotionBlur(
                       maxBlur: _maxBlur,
                       deadZone: kIsWeb || Platform.isIOS ? 10 : 20,
-                      child: customScrollView
+                      child: padding != null ? Padding(padding: padding!, child: customScrollView,) : customScrollView
                     )
                 )
               )

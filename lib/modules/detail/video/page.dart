@@ -63,7 +63,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.analytics.logEvent(
           name: 'video_details',
-          parameters: <String, dynamic>{
+          parameters: <String, String>{
             'id': widget.path,
           });
     });
