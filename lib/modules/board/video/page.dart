@@ -84,31 +84,19 @@ class VideoBoardPage extends HookConsumerWidget {
           }
         }) : null
     ).scrollTransition(
-            (context, widget, event) {
-          if (!kIsWeb) {
-            return widget.scale(
+            (context, widget, event) => widget.blur(
+              switch (event.phase) {
+                ScrollPhase.identity => 0,
+                ScrollPhase.topLeading => 10,
+                ScrollPhase.bottomTrailing => 10,
+              },
+            ).scale(
               switch (event.phase) {
                 ScrollPhase.identity => 1,
                 ScrollPhase.topLeading => 0.1,
                 ScrollPhase.bottomTrailing => 0.1,
               },
-            );
-          }
-
-          return widget.blur(
-            switch (event.phase) {
-              ScrollPhase.identity => 0,
-              ScrollPhase.topLeading => 10,
-              ScrollPhase.bottomTrailing => 10,
-            },
-          ).scale(
-            switch (event.phase) {
-              ScrollPhase.identity => 1,
-              ScrollPhase.topLeading => 0.1,
-              ScrollPhase.bottomTrailing => 0.1,
-            },
-          );
-        }
+            )
     );
   }
 

@@ -203,7 +203,7 @@ class MenuButton extends HookConsumerWidget {
     bool shouldAnimate = false;
     useValueChanged(ref.watch(boardHeaderTabProvider), (_, __) async {
       if (ref.read(boardHeaderTabProvider) == iconPath.substring(0, iconPath.indexOf('.')) ||
-          ref.read(boardHeaderTabProvider) == 'other' && iconPath.substring(0, iconPath.indexOf('.')) == 'dog') {
+          (ref.read(boardHeaderTabProvider) == 'other' && iconPath.substring(0, iconPath.indexOf('.')) == 'dog')) {
         shouldAnimate = true;
       }
     });
@@ -228,7 +228,7 @@ class MenuButton extends HookConsumerWidget {
                       asset: iconPath,
                       color: selected ? Colors.white : Colors.black,
                       shouldShimmer: selected,
-                    ).rotate(12, from: 0).animate(trigger: shouldAnimate, duration: const Duration(milliseconds: 500)).resetAll()
+                    ).rotate(12, from: 0).animate(trigger: shouldAnimate, playIf: () => shouldAnimate, duration: const Duration(milliseconds: 500)).resetAll()
                   )
               )
           )

@@ -69,6 +69,8 @@ class ContrastPhotograph extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final String platform = getRunningPlatform(context);
+    final bool isMobile = useMobileLayoutOriented(context);
     Widget photo;
 
     if (data == null) {
@@ -82,7 +84,12 @@ class ContrastPhotograph extends HookConsumerWidget {
             ? BoxFit.fitWidth
             : BoxFit.fitHeight
             : BoxFit.contain),
-        cache: false,
+        cache: true,
+        enableMemoryCache: true,
+        cacheRawData: true,
+        clearMemoryCacheIfFailed: true,
+        clearMemoryCacheWhenDispose: false,
+        imageCacheName: kIsWeb ? "${widgetKey.toString()}_cache_name_${platform}_isMobile_$isMobile" : null,
         filterQuality: quality,
         isAntiAlias: !kIsWeb,
       );
@@ -190,9 +197,9 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
             fetch: widget.fetch,
             constraints: widget.constraints,
             quality: FilterQuality.low,
-            borderColor: Colors.transparent,
+            borderColor: widget.borderColor,
             fit: BoxFit.cover,
-            borderWidth: kIsWeb || !shouldHaveBorder ? 0 : 2.5,
+            borderWidth: kIsWeb || !shouldHaveBorder ? 0 : 0.5,
             image: widget.wrapper.image,
             compressed: true,
             width: double.infinity,
