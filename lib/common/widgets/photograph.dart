@@ -102,21 +102,6 @@ class ContrastPhotograph extends HookConsumerWidget {
       );
     }
 
-    if (!kIsWeb && !isThumbnail) {
-      return Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: ShadowWidget(
-          blurRadius: 2,
-          offset: const Offset(1.5, 1.5),
-          shadowColor: Colors.black38,
-          child: AspectRatio(
-              aspectRatio: isThumbnail || image!.isLandscape! ? 3 / 2 : 2 / 3,
-              child: photo
-          ),
-        ),
-      );
-    }
-
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -205,9 +190,9 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
             fetch: widget.fetch,
             constraints: widget.constraints,
             quality: FilterQuality.low,
-            borderColor: kIsWeb ? Colors.transparent : widget.borderColor,
-            fit: kIsWeb ? BoxFit.cover : null,
-            borderWidth: kIsWeb || !shouldHaveBorder ? 0 : 5.5,
+            borderColor: Colors.transparent,
+            fit: BoxFit.cover,
+            borderWidth: kIsWeb || !shouldHaveBorder ? 0 : 2.5,
             image: widget.wrapper.image,
             compressed: true,
             width: double.infinity,

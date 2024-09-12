@@ -4,7 +4,6 @@ import 'package:contrast/common/widgets/data/provider.dart';
 import 'package:contrast/common/widgets/glass.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/modules/board/provider.dart';
-import 'package:contrast/utils/device.dart';
 import 'package:contrast/utils/paged_list.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -165,12 +164,6 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
                   child: itemBuilder(c, i, apiData.length, apiData[i]),
                 );
               }
-              if(useMobileLayout(context) && axis == Axis.horizontal) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: itemBuilder(c, i, apiData.length, apiData[i])
-                );
-              }
 
               return itemBuilder(c, i, apiData.length, apiData[i]);
             },
@@ -190,7 +183,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
             color: Colors.black38,
           ).blurOut(blur: 4).oneShot(),
         ),
-        Align(
+        if (MediaQuery.of(context).orientation == Orientation.landscape) Align(
           alignment: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
           child: Container(
             height: axis == Axis.vertical ? dimHeight : null,
