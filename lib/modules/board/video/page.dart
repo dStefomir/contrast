@@ -84,7 +84,7 @@ class VideoBoardPage extends HookConsumerWidget {
           }
         }) : null
     ).scrollTransition(
-            (context, widget, event) => widget.blur(
+            (context, widget, event) => widget.scaleOut(start: 0.9, end: 1).animate(trigger: event.screenOffsetFraction > 1, startImmediately: true).blur(
               switch (event.phase) {
                 ScrollPhase.identity => 0,
                 ScrollPhase.topLeading => 10,
@@ -113,7 +113,7 @@ class VideoBoardPage extends HookConsumerWidget {
         axis: orientation == Orientation.portrait ? Axis.vertical : Axis.horizontal,
         dimHeight: halfHeightSize,
         shouldHaveBackground: false,
-        itemBuilder: (BuildContext context, int index, int dataLength, VideoData wrapper) =>
+        itemBuilder: (BuildContext context, int index, int dataLength, VideoData wrapper, bool isLeft, bool isRight) =>
             LayoutBuilder(key: const Key('VideoDataViewBuilder'), builder: (context, constraints) =>
                 _renderVideo(context, ref, wrapper, constraints, orientation)
             ),

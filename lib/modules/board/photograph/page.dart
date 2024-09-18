@@ -61,7 +61,7 @@ class PhotographBoardPage extends HookConsumerWidget {
   }
 
   /// Renders a photograph
-  Widget _renderPhoto(WidgetRef ref, BuildContext context, ImageBoardWrapper wrapper, BoxConstraints constraints, Orientation currentOrientation) {
+  Widget _renderPhoto(WidgetRef ref, BuildContext context, ImageBoardWrapper wrapper, BoxConstraints constraints, Orientation currentOrientation, bool isLeft, bool isRight) {
     final serviceProvider = ref.read(photographyBoardServiceProvider);
     final currentCategory = ref.read(boardHeaderTabProvider);
 
@@ -108,26 +108,23 @@ class PhotographBoardPage extends HookConsumerWidget {
         fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
         wrapper: wrapper,
         constraints: constraints,
-        borderColor: Colors.black,
+        borderColor: Colors.black26,
         onClick: () => onUserAction(ref, () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$currentCategory')),
-        onRedirect: kIsWeb ? () => onUserAction(ref, () async {
-          final Uri url = Uri.parse('https://www.dstefomir.eu/#/photos/details?id=${wrapper.image.id}&category=$currentCategory');
-          if (await canLaunchUrl(url)) {
-            await launchUrl(url);
-          }
-        }) : null
     ).scrollTransition(
-          (context, widget, event) => widget.blur(
-        switch (event.phase) {
-          ScrollPhase.identity => 0,
-          ScrollPhase.topLeading => 10,
-          ScrollPhase.bottomTrailing => 10,
-        },
+          (context, widget, event) => widget
+              .scaleOut(start: 0.9, end: 1)
+              .animate(trigger: event.screenOffsetFraction > 1, startImmediately: true)
+              .blur(
+            switch (event.phase) {
+              ScrollPhase.identity => 0,
+              ScrollPhase.topLeading => 5,
+              ScrollPhase.bottomTrailing => 5,
+            },
       ).scale(
         switch (event.phase) {
           ScrollPhase.identity => 1,
-          ScrollPhase.topLeading => 0.1,
-          ScrollPhase.bottomTrailing => 0.1,
+          ScrollPhase.topLeading => 0.5,
+          ScrollPhase.bottomTrailing => 0.5,
         },
       ),
     );
@@ -149,10 +146,10 @@ class PhotographBoardPage extends HookConsumerWidget {
             ? const EdgeInsets.only(left: 0)
             : EdgeInsets.only(left: padding),
         shouldHaveBackground: false,
-        itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper) =>
+        itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper, bool isLeft, bool isRight) =>
             LayoutBuilder(
                 key: const Key('PhotographDataViewBuilder'),
-                builder: (context, constraints) => _renderPhoto(ref, context, wrapper, constraints, orientation)
+                builder: (context, constraints) => _renderPhoto(ref, context, wrapper, constraints, orientation, isLeft, isRight)
             ),
         onRightKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('videos'),
         whenShouldAnimateGlass: (controller) {

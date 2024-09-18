@@ -41,7 +41,7 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
   /// Should the data view has a background or not
   final bool shouldHaveBackground;
   /// Renders each row of the list view
-  final Widget Function(BuildContext context, int index, int dataLenght, T item) itemBuilder;
+  final Widget Function(BuildContext context, int index, int dataLenght, T item, bool isLeft, bool isRight) itemBuilder;
   /// What happens when the left arrow key is pressed
   final void Function()? onLeftKeyPressed;
   /// What happens when the right arrow key is pressed
@@ -155,17 +155,17 @@ class RestfulAnimatedDataView<T> extends HookConsumerWidget {
               if (paddingLeft != null && axis == Axis.vertical && i % 3 == 0) {
                 return Padding(
                   padding: EdgeInsets.only(left: paddingLeft!),
-                  child: itemBuilder(c, i, apiData.length, apiData[i]),
+                  child: itemBuilder(c, i, apiData.length, apiData[i], true, false),
                 );
               }
               if (paddingRight != null && axis == Axis.vertical && i % 3 == 2) {
                 return Padding(
                   padding: EdgeInsets.only(right: paddingRight!),
-                  child: itemBuilder(c, i, apiData.length, apiData[i]),
+                  child: itemBuilder(c, i, apiData.length, apiData[i], false, true),
                 );
               }
 
-              return itemBuilder(c, i, apiData.length, apiData[i]);
+              return itemBuilder(c, i, apiData.length, apiData[i], false, false);
             },
             itemCount: apiData.length,
           ),
