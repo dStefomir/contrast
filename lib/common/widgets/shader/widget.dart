@@ -21,7 +21,7 @@ class ShaderWidget extends StatefulHookConsumerWidget {
   ConsumerState createState() => _ShaderWidgetState();
 }
 
-class _ShaderWidgetState extends ConsumerState<ShaderWidget> with SingleTickerProviderStateMixin {
+class _ShaderWidgetState extends ConsumerState<ShaderWidget> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
 
   /// Ticker object
   Ticker? ticker;
@@ -43,8 +43,14 @@ class _ShaderWidgetState extends ConsumerState<ShaderWidget> with SingleTickerPr
     ticker?.dispose();
   }
 
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Stack(
       alignment: Alignment.center,
       fit: StackFit.passthrough,

@@ -308,7 +308,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       },
       child: PopScope(
         canPop: false,
-        onPopInvoked: (canPop) {
+        onPopInvokedWithResult: (_, __) {
           if(ref.read(overlayVisibilityProvider(const Key('comment_video'))) != null) {
             ref.read(overlayVisibilityProvider(const Key('comment_video')).notifier).setOverlayVisibility(null);
           } else if (!kIsWeb && Platform.isAndroid) {

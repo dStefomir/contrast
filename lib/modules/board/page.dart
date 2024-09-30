@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:contrast/common/widgets/carousel.dart';
 import 'package:contrast/common/widgets/splash.dart';
 import 'package:contrast/modules/board/overlay/share/share.dart';
 import 'package:contrast/utils/overlay.dart';
@@ -107,7 +108,11 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
   void _handleKeyEvent(KeyEvent event) {
       if (event is KeyUpEvent && event.logicalKey == LogicalKeyboardKey.escape) {
         _onAction(ref, null);
-    }
+    } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+        ref.watch(boardFooterTabProvider.notifier).switchTab('photos');
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+        ref.watch(boardFooterTabProvider.notifier).switchTab('videos');
+      }
   }
 
   /// Calculates the offset for the starting animation of the board animation
@@ -212,7 +217,9 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
     final bool? shouldShowUploadVideoDialog = ref.watch(overlayVisibilityProvider(const Key('upload_video')));
     final bool? shouldShowEditVideoDialog = ref.watch(overlayVisibilityProvider(const Key('edit_video')));
     final bool? shouldShowShareDialog = ref.watch(overlayVisibilityProvider(const Key('share')));
-    
+    final MediaQueryData mediaQuery = MediaQuery.of(context);
+    final Axis axis = mediaQuery.orientation == Orientation.portrait ? Axis.vertical : Axis.horizontal;
+    final double halfHeightSize = mediaQuery.size.height / 2;
     double titlePadding = 0;
     /// In mobile view we need to calculate a padding so that the title
     /// can be in the center of the screen because of the left drawer
@@ -225,11 +232,107 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
       }
     });
 
+    /// Renders the content of the photograph and video board
+    Widget renderBoards() {
+      Widget boards;
+      if (kIsWeb) {
+        boards = ref.read(boardFooterTabProvider) == 'photos'
+            ? SlideTransitionAnimation(
+            getStart: () => _calculateBoardStartAnimation(ref),
+            getEnd: () => const Offset(0, 0),
+            whenTo: (controller) {
+              final String currentTab = ref.watch(
+                  boardFooterTabProvider);
+              final String currentFilter = ref.watch(
+                  boardHeaderTabProvider);
+              useValueChanged(currentTab, (_, __) async {
+                controller.reset();
+                controller.forward();
+              });
+              useValueChanged(currentFilter, (_, __) async {
+                controller.reset();
+                controller.forward();
+              });
+            },
+            duration: const Duration(milliseconds: 800),
+            child: PhotographBoardPage(
+              orientation: mediaQuery.orientation,
+              onUserAction: _onAction,
+              padding: useMobileLayout(context) ? boardPadding : 0,))
+            : SlideTransitionAnimation(
+            getStart: () => _calculateBoardStartAnimation(ref),
+            getEnd: () => const Offset(0, 0),
+            whenTo: (controller) {
+              final String currentTab = ref.watch(boardFooterTabProvider);
+              final String currentFilter = ref.watch(boardHeaderTabProvider);
+              useValueChanged(currentTab, (_, __) async {
+                controller.reset();
+                controller.forward();
+              });
+              useValueChanged(currentFilter, (_, __) async {
+                controller.reset();
+                controller.forward();
+              });
+            },
+            duration: const Duration(milliseconds: 800),
+            child: VideoBoardPage(
+                orientation: mediaQuery.orientation,
+                onUserAction: _onAction
+            )
+        );
+      } else {
+        boards = AnimatedCarousel(
+            onPageChanged: (index) {
+              if (index == 0) {
+                ref.read(boardFooterTabProvider.notifier).switchTab('photos');
+              } else {
+                ref.read(boardHeaderTabProvider.notifier).switchTab('all');
+                ref.read(boardFooterTabProvider.notifier).switchTab('videos');
+              }
+            },
+            goToPage: (controller) {
+              final bool isNavigationFromTab = controller.hasClients && controller.page! % 1 == 0;
+              if (isNavigationFromTab) {
+                final String tab = ref.watch(boardFooterTabProvider);
+                const Duration animationDuration = Duration(milliseconds: 600);
+                const Curve animationType = Curves.decelerate;
+                if (tab == 'photos') {
+                  controller.animateToPage(0, duration: animationDuration, curve: animationType);
+                  return;
+                }
+                controller.animateToPage(1, duration: animationDuration, curve: animationType);
+              }
+            },
+            axis: axis == Axis.vertical ? Axis.horizontal : Axis.vertical,
+            children: [
+              PhotographBoardPage(
+                orientation: mediaQuery.orientation,
+                onUserAction: _onAction,
+                padding: useMobileLayout(context) ? boardPadding : 0,
+              ),
+              VideoBoardPage(
+                  orientation: mediaQuery.orientation,
+                  onUserAction: _onAction
+              )
+            ]
+        );
+      }
+      return Align(
+          alignment: Alignment.center,
+          child: Padding(
+              padding: !useMobileLayoutOriented(context)
+                  ? const EdgeInsets.only(top: boardPadding, bottom: boardPadding)
+                  : const EdgeInsets.only(left: 0, bottom: boardPadding),
+              child: boards
+          )
+      );
+    }
+
     return shouldSownSplashScreen.value
         ? SplashWidget(onSplashEnd: () => shouldSownSplashScreen.value = false)
         : PopScope(
       canPop: false,
-      onPopInvoked: (invoked) {
+      onPopInvokedWithResult: (_, __) {
         if (_checkOverlaysState(ref)) {
           _onAction(ref, null);
         } else if (!kIsWeb && Platform.isAndroid) {
@@ -253,18 +356,54 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
               onKeyEvent: _handleKeyEvent,
               child: Stack(
                   children: [
+                    if (MediaQuery.of(context).orientation == Orientation.landscape) Align(
+                      alignment: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
+                      child: Container(
+                        height: axis == Axis.vertical ? halfHeightSize : null,
+                        width: axis == Axis.vertical ? null : halfHeightSize,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
+                            end: axis == Axis.vertical ? Alignment.bottomCenter : Alignment.centerRight,
+                            colors: [
+                              Colors.black.withOpacity(0.8),
+                              Colors.transparent,
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: axis == Axis.vertical ? Alignment.bottomCenter : Alignment.centerRight,
+                      child: Container(
+                        height: axis == Axis.vertical ? halfHeightSize : null,
+                        width: axis == Axis.vertical ? null : halfHeightSize,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
+                            end: axis == Axis.vertical ? Alignment.bottomCenter : Alignment.centerRight,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.8),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                     Align(
                         alignment: Alignment.center,
                         child: FadeAnimation(
                             start: 1,
                             end: 0,
                             whenTo: (controller) {
-                              final String currentTab = ref.watch(boardFooterTabProvider);
                               final String currentFilter = ref.watch(boardHeaderTabProvider);
-                              useValueChanged(currentTab, (_, __) async {
-                                controller.reset();
-                                controller.forward();
-                              });
+                              if (kIsWeb) {
+                                final String currentTab = ref.watch(boardFooterTabProvider);
+                                useValueChanged(currentTab, (_, __) async {
+                                  controller.reset();
+                                  controller.forward();
+                                });
+                              }
                               useValueChanged(currentFilter, (_, __) async {
                                 controller.reset();
                                 controller.forward();
@@ -287,52 +426,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                             )
                         )
                     ),
-                    Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: !useMobileLayoutOriented(context)
-                              ? EdgeInsets.only(top: ref.read<String>(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding)
-                              : const EdgeInsets.only(left: 0, bottom: boardPadding),
-                          child: ref.read(boardFooterTabProvider) == 'photos'
-                              ? SlideTransitionAnimation(
-                              getStart: () => _calculateBoardStartAnimation(ref),
-                              getEnd: () => const Offset(0, 0),
-                              whenTo: (controller) {
-                                final String currentTab = ref.watch(
-                                    boardFooterTabProvider);
-                                final String currentFilter = ref.watch(
-                                    boardHeaderTabProvider);
-                                useValueChanged(currentTab, (_, __) async {
-                                  controller.reset();
-                                  controller.forward();
-                                });
-                                useValueChanged(currentFilter, (_, __) async {
-                                  controller.reset();
-                                  controller.forward();
-                                });
-                              },
-                              duration: const Duration(milliseconds: 800),
-                              child: PhotographBoardPage(onUserAction: _onAction, padding: useMobileLayout(context) ? boardPadding : 0,))
-                              : SlideTransitionAnimation(
-                              getStart: () => _calculateBoardStartAnimation(ref),
-                              getEnd: () => const Offset(0, 0),
-                              whenTo: (controller) {
-                                final String currentTab = ref.watch(boardFooterTabProvider);
-                                final String currentFilter = ref.watch(boardHeaderTabProvider);
-                                useValueChanged(currentTab, (_, __) async {
-                                  controller.reset();
-                                  controller.forward();
-                                });
-                                useValueChanged(currentFilter, (_, __) async {
-                                  controller.reset();
-                                  controller.forward();
-                                });
-                              },
-                              duration: const Duration(milliseconds: 800),
-                              child: VideoBoardPage(onUserAction: _onAction)
-                          ),
-                        )
-                    ),
+                    renderBoards(),
                     Align(
                         alignment: Alignment.bottomCenter,
                         child: SlideTransitionAnimation(

@@ -10,24 +10,23 @@ import 'package:contrast/security/session.dart';
 import 'package:contrast/utils/device.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hyper_effects/hyper_effects.dart';
-import 'package:loading_indicator/loading_indicator.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_translate/flutter_translate.dart' as translation;
 
 /// Renders the photographs board page
 class PhotographBoardPage extends HookConsumerWidget {
+  /// Current orientation
+  final Orientation orientation;
   /// What happens when the user performs an action
   final Function(WidgetRef ref, Function? action) onUserAction;
   /// Padding of the data view items
   final double padding;
 
-  const PhotographBoardPage({super.key, required this.onUserAction, required this.padding});
+  const PhotographBoardPage({super.key, required this.orientation, required this.onUserAction, required this.padding});
 
   /// Calculates the number of items per row for the grid view
   int _calculateRestfulViewItemsPerRows(BuildContext context) {
@@ -131,44 +130,19 @@ class PhotographBoardPage extends HookConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final orientation = MediaQuery.of(context).orientation;
-    final double halfHeightSize = MediaQuery.of(context).size.height / 2;
-
-    return RestfulAnimatedDataView<ImageBoardWrapper>(
-        key: const Key('PhotographDataView'),
-        serviceProvider: photographServiceFetchProvider,
-        loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
-        itemsPerRow: _calculateRestfulViewItemsPerRows(context),
-        axis: _getRestfulViewAxis(context, orientation),
-        dimHeight: halfHeightSize,
-        padding: _getRestfulViewAxis(context, orientation) == Axis.horizontal
-            ? const EdgeInsets.only(left: 0)
-            : EdgeInsets.only(left: padding),
-        shouldHaveBackground: false,
-        itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper, bool isLeft, bool isRight) =>
-            LayoutBuilder(
-                key: const Key('PhotographDataViewBuilder'),
-                builder: (context, constraints) => _renderPhoto(ref, context, wrapper, constraints, orientation, isLeft, isRight)
-            ),
-        onRightKeyPressed: () => ref.watch(boardFooterTabProvider.notifier).switchTab('videos'),
-        whenShouldAnimateGlass: (controller) {
-          final String currentTab = ref.watch(boardFooterTabProvider);
-          useValueChanged(currentTab, (_, __) async {
-            controller.reset();
-            controller.forward();
-          });
-        },
-        listEmptyChild: Center(
-          child: SizedBox(
-            height: halfHeightSize,
-            child: const LoadingIndicator(
-                indicatorType: Indicator.triangleSkewSpin,
-                colors: [Colors.black],
-                strokeWidth: 2,
-            ),
-          ),
-        )
-    );
-  }
+  Widget build(BuildContext context, WidgetRef ref) => RestfulAnimatedDataView<ImageBoardWrapper>(
+    key: const Key('PhotographDataView'),
+    serviceProvider: photographServiceFetchProvider,
+    loadPage: ref.read(photographyBoardServiceProvider).getImageBoard,
+    itemsPerRow: _calculateRestfulViewItemsPerRows(context),
+    axis: _getRestfulViewAxis(context, orientation),
+    padding: _getRestfulViewAxis(context, orientation) == Axis.horizontal
+        ? const EdgeInsets.only(left: 0)
+        : EdgeInsets.only(left: padding),
+    itemBuilder: (BuildContext context, int index, int dataLength, ImageBoardWrapper wrapper, bool isLeft, bool isRight) =>
+        LayoutBuilder(
+            key: const Key('PhotographDataViewBuilder'),
+            builder: (context, constraints) => _renderPhoto(ref, context, wrapper, constraints, orientation, isLeft, isRight)
+        ),
+  );
 }
