@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:contrast/common/widgets/carousel.dart';
+import 'package:contrast/common/widgets/glass.dart';
 import 'package:contrast/common/widgets/splash.dart';
 import 'package:contrast/modules/board/overlay/share/share.dart';
 import 'package:contrast/utils/overlay.dart';
@@ -427,6 +428,11 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                         )
                     ),
                     renderBoards(),
+                    if (kIsWeb) GlassWidget(
+                      whenShouldAnimateGlass: null,
+                      width: mediaQuery.size.width,
+                      height: mediaQuery.size.height,
+                    ),
                     Align(
                         alignment: Alignment.bottomCenter,
                         child: SlideTransitionAnimation(
