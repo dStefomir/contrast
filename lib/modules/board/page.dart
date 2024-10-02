@@ -283,6 +283,22 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
         );
       } else {
         boards = AnimatedCarousel(
+            animation: (child) => SlideTransitionAnimation(
+                getStart: () => const Offset(0, 3),
+                getEnd: () => const Offset(0, 0),
+                whenTo: (controller) {
+                  final String currentFilter = ref.watch(boardHeaderTabProvider);
+                  useValueChanged(currentFilter, (_, __) async {
+                    final currentTab = ref.read(boardFooterTabProvider);
+                    if (currentTab == 'photos') {
+                      controller.reset();
+                      controller.forward();
+                    }
+                  });
+                },
+                duration: const Duration(milliseconds: 800),
+                child: child
+            ),
             onPageChanged: (index) {
               if (index == 0) {
                 ref.read(boardFooterTabProvider.notifier).switchTab('photos');
