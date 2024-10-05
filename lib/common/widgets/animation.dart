@@ -9,7 +9,7 @@ class FadeAnimation extends HookConsumerWidget {
   /// When the animation should be executed
   final Function(AnimationController)? whenTo;
   /// Gets triggered when animation is completed
-  final Function()? onCompleted;
+  final void Function()? onCompleted;
   /// From where the animation should start
   final double start;
   /// From where the animation should end
