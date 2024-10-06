@@ -1,6 +1,5 @@
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:contrast/common/extentions/zoom.dart';
-import 'package:contrast/common/widgets/border.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/hover_provider.dart';
 import 'package:contrast/common/widgets/icon.dart';
@@ -75,6 +74,7 @@ class ContrastPhotograph extends HookConsumerWidget {
 
     if (data == null) {
       photo = ExtendedImage.network(fetch!(image!.path!),
+        key: widgetKey,
         width: width,
         height: !isThumbnail ? height : double.infinity,
         border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
@@ -96,6 +96,7 @@ class ContrastPhotograph extends HookConsumerWidget {
     } else {
       photo = ExtendedImage.memory(
         data!,
+        key: widgetKey,
         width: width,
         height: height,
         scale: 0.6,
@@ -108,23 +109,10 @@ class ContrastPhotograph extends HookConsumerWidget {
         isAntiAlias: !kIsWeb,
       );
     }
-
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        AspectRatio(
-          aspectRatio: isThumbnail ? 3 / 2 : image!.isLandscape! ? 3 / 2.5 : 2.5 / 3,
-          child: photo
-        ),
-        if (!isThumbnail) BorderWidget(
-            width: 2,
-            onlyTop: false,
-            child: SizedBox(
-                width: width,
-                height: height
-            )
-        ),
-      ],
+    return AspectRatio(
+      key: Key("${widgetKey.toString()}_aspect_ration_parent"),
+      aspectRatio: isThumbnail ? 3 / 2 : image!.isLandscape! ? 2.3 / 2 : 2 / 2.3,
+        child: photo
     );
   }
 }
@@ -190,6 +178,7 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
   /// Renders a photograph
   Widget _renderPhoto(BuildContext context, Widget? metadata, bool isHovering, bool shouldHaveBorder) =>
       Stack(
+        key: Key("${widget.widgetKey.toString()}_stack_photograph"),
         alignment: Alignment.center,
         children: [
           ContrastPhotograph(
@@ -199,7 +188,7 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
             quality: FilterQuality.low,
             borderColor: widget.borderColor,
             fit: BoxFit.cover,
-            borderWidth: kIsWeb || !shouldHaveBorder ? 0 : 0.5,
+            borderWidth: !shouldHaveBorder ? 0 : 2.5,
             image: widget.wrapper.image,
             compressed: true,
             width: double.infinity,

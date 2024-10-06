@@ -107,7 +107,7 @@ class PhotographBoardPage extends HookConsumerWidget {
         fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
         wrapper: wrapper,
         constraints: constraints,
-        borderColor: Colors.black26,
+        borderColor: Colors.black,
         onClick: () => onUserAction(ref, () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$currentCategory')),
     ).scrollTransition(
           (context, widget, event) => widget
