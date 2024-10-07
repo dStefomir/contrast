@@ -177,42 +177,45 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
 
   /// Renders a photograph
   Widget _renderPhoto(BuildContext context, Widget? metadata, bool isHovering, bool shouldHaveBorder) =>
-      Stack(
-        key: Key("${widget.widgetKey.toString()}_stack_photograph"),
-        alignment: Alignment.center,
-        children: [
-          ContrastPhotograph(
-            widgetKey: Key("${widget.widgetKey.toString()}_photograph"),
-            fetch: widget.fetch,
-            constraints: widget.constraints,
-            quality: FilterQuality.low,
-            borderColor: widget.borderColor,
-            fit: BoxFit.cover,
-            borderWidth: !shouldHaveBorder ? 0 : 2.5,
-            image: widget.wrapper.image,
-            compressed: true,
-            width: double.infinity,
-            height: double.infinity,
-          ),
-          if (metadata != null) metadata,
-          if (isHovering) ImageMetaDataDetails(
-            constraints: widget.constraints,
-            metadata: widget.wrapper.metadata,
-            isLandscape: widget.wrapper.image.isLandscape!,
-            onTap: widget.onClick,
-            scaleFactor: 16,
-          ).translateOnPhotoHover,
-          if (isHovering && widget.onRedirect != null && getRunningPlatform(context) == 'DESKTOP')
-            Align(
-                alignment: Alignment.topRight,
-                child: RedirectButton(
-                  widgetKey: Key("${widget.widgetKey.toString()}_photograph_redirect"),
-                  constraints: widget.constraints,
-                  onRedirect: widget.onRedirect!,
-                  height: widget.constraints.maxHeight / 7,
-                )
+      Padding(
+        padding: const EdgeInsets.all(0.5),
+        child: Stack(
+          key: Key("${widget.widgetKey.toString()}_stack_photograph"),
+          alignment: Alignment.center,
+          children: [
+            ContrastPhotograph(
+              widgetKey: Key("${widget.widgetKey.toString()}_photograph"),
+              fetch: widget.fetch,
+              constraints: widget.constraints,
+              quality: FilterQuality.low,
+              borderColor: widget.borderColor,
+              fit: BoxFit.cover,
+              borderWidth: !shouldHaveBorder ? 0 : 2.5,
+              image: widget.wrapper.image,
+              compressed: true,
+              width: double.infinity,
+              height: double.infinity,
             ),
-        ],
+            if (metadata != null) metadata,
+            if (isHovering) ImageMetaDataDetails(
+              constraints: widget.constraints,
+              metadata: widget.wrapper.metadata,
+              isLandscape: widget.wrapper.image.isLandscape!,
+              onTap: widget.onClick,
+              scaleFactor: 16,
+            ).translateOnPhotoHover,
+            if (isHovering && widget.onRedirect != null && getRunningPlatform(context) == 'DESKTOP')
+              Align(
+                  alignment: Alignment.topRight,
+                  child: RedirectButton(
+                    widgetKey: Key("${widget.widgetKey.toString()}_photograph_redirect"),
+                    constraints: widget.constraints,
+                    onRedirect: widget.onRedirect!,
+                    height: widget.constraints.maxHeight / 7,
+                  )
+              ),
+          ],
+        ),
       );
 
   @override
