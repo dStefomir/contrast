@@ -1,4 +1,3 @@
-import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/glass.dart';
@@ -136,7 +135,7 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                     .animate(
                     duration: const Duration(milliseconds: 1800),
                     trigger: true,
-                    startImmediately: true
+                    startState: AnimationStartState.playImmediately
                 ),
                 GlassWidget(
                   whenShouldAnimateGlass: (controller) {},

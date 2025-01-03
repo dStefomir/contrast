@@ -112,7 +112,7 @@ class PhotographBoardPage extends HookConsumerWidget {
     ).scrollTransition(
           (context, widget, event) => widget
               .scaleOut(start: 0.9, end: 1)
-              .animate(trigger: event.screenOffsetFraction > 1, startImmediately: true)
+              .animate(trigger: event.screenOffsetFraction > 1, startState: AnimationStartState.playImmediately)
               .blur(
             switch (event.phase) {
               ScrollPhase.identity => 0,

@@ -85,7 +85,6 @@ class ContrastPhotograph extends HookConsumerWidget {
             : BoxFit.fitHeight
             : BoxFit.contain),
         cache: true,
-        enableMemoryCache: true,
         cacheRawData: true,
         clearMemoryCacheIfFailed: true,
         clearMemoryCacheWhenDispose: false,
@@ -103,7 +102,6 @@ class ContrastPhotograph extends HookConsumerWidget {
         border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
         enableLoadState: false,
         fit: fit ?? BoxFit.contain,
-        enableMemoryCache: false,
         cacheRawData: false,
         filterQuality: quality,
         isAntiAlias: !kIsWeb,

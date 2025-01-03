@@ -40,62 +40,62 @@ dependencies:
   # Translations
   flutter_translate: ^4.1.0
   # in memory file creation
-  file: ^7.0.0
-  flutter_riverpod: ^2.5.1
-  hooks_riverpod: ^2.5.1
+  file: ^7.0.1
+  flutter_riverpod: ^2.6.1
+  hooks_riverpod: ^2.6.1
   flutter_hooks: ^0.20.5
   # html cross platform library
   universal_html: ^2.2.4
   # qr code library
   qr_flutter: ^4.1.0
   # url launching library
-  url_launcher: ^6.3.0
+  url_launcher: ^6.3.1
   # handling floating action button
   flutter_speed_dial: ^7.0.0
   # context menu library
   focused_menu: ^1.0.5
   # Svg handler library
-  flutter_svg: ^2.0.10+1
+  flutter_svg: ^2.0.16
   # decode jwt tokens
   jwt_decode: ^0.3.1
   # translation and core library
   intl: ^0.19.0
   # using http request
-  http: ^1.2.1
+  http: ^1.2.2
   # image render library
-  extended_image: ^8.2.1
+  extended_image: ^9.1.0
   # zoom image library
   photo_view: ^0.15.0
   # lazy loading widget
   lazy_load_scrollview: ^1.3.0
   # accessing image size
-  image_size_getter: ^2.1.3
+  image_size_getter: ^2.2.0
   # use native file explorer to pick single or multiple absolute file paths
-  file_picker: ^8.0.5
+  file_picker: ^8.1.7
   # youtube video player
-  youtube_player_iframe: ^5.1.2
+  youtube_player_iframe: ^5.2.1
   # audio player
-  audioplayers: ^6.0.0
+  audioplayers: ^6.1.0
   # shared prefs library
-  shared_preferences: ^2.2.3
+  shared_preferences: ^2.3.5
   # Open street maps library
-  flutter_map: ^7.0.1
+  flutter_map: ^7.0.2
   # Tooltip library
   just_the_tooltip: ^0.0.12
   # Rating library
   flutter_rating_bar: ^4.0.1
   # device info library
-  device_info_plus: ^10.1.0
+  device_info_plus: ^11.2.0
   # add to calendar library
   add_2_calendar: ^3.0.1
   # dismissible pages library
   dismissible_page: ^1.0.2
   # date picker library
-  syncfusion_flutter_datepicker: ^26.1.39
+  syncfusion_flutter_datepicker: ^28.1.37
   # list motion blur library
   scrollable_inertia: ^0.0.1+1
   # effects library
-  hyper_effects: ^0.2.3
+  hyper_effects: ^0.3.0
   # text animation library
   animated_text_kit: ^4.2.2
   # cool indicators library
@@ -105,11 +105,11 @@ dependencies:
   # shimmering library
   shimmer: ^3.0.0
   # Firebase libraries
-  firebase_core: ^3.1.1
-  firebase_analytics: ^11.1.0
-  firebase_messaging: ^15.0.2
+  firebase_core: ^3.9.0
+  firebase_analytics: ^11.3.6
+  firebase_messaging: ^15.1.6
   # Shader library
-  flutter_shaders: ^0.1.2
+  flutter_shaders: ^0.1.3
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6

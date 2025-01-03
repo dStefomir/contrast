@@ -84,7 +84,7 @@ class VideoBoardPage extends HookConsumerWidget {
           }
         }) : null
     ).scrollTransition(
-            (context, widget, event) => widget.scaleOut(start: 0.9, end: 1).animate(trigger: event.screenOffsetFraction > 1, startImmediately: true).blur(
+            (context, widget, event) => widget.scaleOut(start: 0.9, end: 1).animate(trigger: event.screenOffsetFraction > 1, startState: AnimationStartState.playImmediately).blur(
               switch (event.phase) {
                 ScrollPhase.identity => 0,
                 ScrollPhase.topLeading => 10,
