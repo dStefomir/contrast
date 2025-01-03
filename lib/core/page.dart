@@ -55,7 +55,7 @@ class CorePage extends HookConsumerWidget {
 
   /// Renders the default page widget
   Widget _renderDefaultPage(BuildContext context, WidgetRef ref) {
-    return MainScaffold(
+    return _MainScaffold(
       body: FutureBuilder<SharedPreferences>(
           future: SharedPreferences.getInstance(),
           builder: (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
@@ -107,13 +107,13 @@ class CorePage extends HookConsumerWidget {
 }
 
 /// Scaffold wrapper for each page
-class MainScaffold extends StatelessWidget {
+class _MainScaffold extends StatelessWidget {
   /// Represent each page`s content
   final Widget body;
   /// Should resize when keyboard pops
   final bool resizeToAvoidBottomInset;
 
-  const MainScaffold(
+  const _MainScaffold(
       {Key? key, required this.body, this.resizeToAvoidBottomInset = true})
       : super(key: key);
 

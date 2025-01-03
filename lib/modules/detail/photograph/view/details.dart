@@ -640,13 +640,6 @@ class PhotographDetailsView extends HookConsumerWidget {
 
     return Stack(
         children: [
-          IconRenderer(
-              asset: 'background_portrait.svg',
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
-              color: Colors.white.withOpacity(0.05)
-          ),
           _renderLoadingIndicator(),
           if (image != null) _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
           if (image != null) _renderDetailsBtn(ref, context, scrollController, image),

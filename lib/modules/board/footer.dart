@@ -1,7 +1,5 @@
-import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/icon.dart';
-import 'package:contrast/common/widgets/shader/widget.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/shape.dart';
 import 'package:contrast/common/widgets/tab.dart';
@@ -138,11 +136,6 @@ class BoardPageFooter extends HookConsumerWidget {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                IconRenderer(
-                    asset: 'background_landscape.svg',
-                    fit: BoxFit.cover,
-                    color: Colors.black.withOpacity(0.1)
-                ),
                 Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -157,13 +150,10 @@ class BoardPageFooter extends HookConsumerWidget {
                 ),
                 Align(
                   alignment: Alignment.center,
-                  child: BlurryContainer(
+                  child: Container(
                     height: boardPadding,
-                    blur: 1.4,
-                    elevation: 0,
                     color: Colors.transparent,
                     padding: const EdgeInsets.all(0),
-                    borderRadius: const BorderRadius.all(Radius.circular(0)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -348,12 +338,10 @@ class _HomeSection extends HookConsumerWidget {
         clipper: HouseShape(),
         child: SizedBox(
           width: 120,
-          child: ShaderWidget(
-            asset: 'background.frag',
-            width: 120,
-            height: 100,
+          child: Container(
+            color: Colors.black,
             child: menuBtn
-          ),
+          )
         ),
       ),
     );

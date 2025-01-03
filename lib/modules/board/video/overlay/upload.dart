@@ -1,5 +1,4 @@
 import 'package:contrast/common/widgets/button.dart';
-import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/input.dart';
 import 'package:contrast/common/widgets/load.dart';
 import 'package:contrast/common/widgets/shadow.dart';
@@ -29,10 +28,10 @@ class UploadVideoDialog extends HookConsumerWidget {
 
     return OutlinedButton(
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.black),
-            elevation: MaterialStateProperty.all(2),
-            foregroundColor: MaterialStateProperty.all(Colors.white),
-            textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
+            backgroundColor: WidgetStateProperty.all(Colors.black),
+            elevation: WidgetStateProperty.all(2),
+            foregroundColor: WidgetStateProperty.all(Colors.white),
+            textStyle: WidgetStateProperty.all(const TextStyle(color: Colors.white))
         ),
         child: Text(translate('Submit')),
         onPressed: () async {
@@ -147,21 +146,11 @@ class UploadVideoDialog extends HookConsumerWidget {
               child: Column(
                 children: [
                   _renderDialogHeader(context, ref),
-                  Stack(
-                    alignment: Alignment.topCenter,
-                    children: [
-                      IconRenderer(asset: 'background_landscape.svg', height: dialogHeight / 1.4, color: Colors.black.withOpacity(0.05), fit: BoxFit.cover),
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: _renderDialogBody(context, ref),
-                          ),
-                          _renderDialogActions(context, ref)
-                        ],
-                      ),
-                    ],
-                  )
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: _renderDialogBody(context, ref),
+                  ),
+                  _renderDialogActions(context, ref)
                 ],
               ),
             ),

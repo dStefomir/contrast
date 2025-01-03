@@ -1,5 +1,4 @@
 import 'package:contrast/common/widgets/button.dart';
-import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/model/image_data.dart';
@@ -78,72 +77,66 @@ class DeleteDialog<T> extends HookConsumerWidget {
                     const Divider(color: Colors.black,)
                   ],
                 ),
-                Stack(
-                  alignment: Alignment.topCenter,
+                Column(
                   children: [
-                    IconRenderer(asset: 'background_landscape.svg', height: dialogHeight / 1.4, color: Colors.black.withOpacity(0.03), fit: BoxFit.cover),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            children: [
-                              StyledText(
-                                text: _isImage() ? translate('Delete this photo') : translate('Delete this video'),
-                                clip: false,
-                              ),
-                              StyledText(
-                                  text: _isImage() ? (data as ImageData).path! : (data as VideoData).path!,
-                                  clip: false
-                              ),
-                            ],
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          StyledText(
+                            text: _isImage() ? translate('Delete this photo') : translate('Delete this video'),
+                            clip: false,
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            OutlinedButton(
-                                style: ButtonStyle(
-                                    fixedSize: MaterialStateProperty.all(const Size(100, 30)),
-                                    backgroundColor: MaterialStateProperty.all(Colors.black),
-                                    elevation: MaterialStateProperty.all(2),
-                                    foregroundColor: MaterialStateProperty.all(Colors.white),
-                                    textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
-                                ),
-                                child: Text(
-                                    translate('Yes')
-                                ),
-                                onPressed: () => _onDelete(ref)
-                            ),
-                            const SizedBox(
-                                width: 30
-                            ),
-                            OutlinedButton(
-                                style: ButtonStyle(
-                                    fixedSize: MaterialStateProperty.all(const Size(100, 30)),
-                                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                                    elevation: MaterialStateProperty.all(2),
-                                    foregroundColor: MaterialStateProperty.all(Colors.black),
-                                    textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.black))
-                                ),
-                                child: Text(
-                                    translate('No')
-                                ),
-                                onPressed: () {
-                                  if(_isImage()) {
-                                    ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
-                                  } else {
-                                    ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
-                                  }
-                                }
-                            ),
-                          ],
-                        )
-                      ],
+                          StyledText(
+                              text: _isImage() ? (data as ImageData).path! : (data as VideoData).path!,
+                              clip: false
+                          ),
+                        ],
+                      ),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        OutlinedButton(
+                            style: ButtonStyle(
+                                fixedSize: WidgetStateProperty.all(const Size(100, 30)),
+                                backgroundColor: WidgetStateProperty.all(Colors.black),
+                                elevation: WidgetStateProperty.all(2),
+                                foregroundColor: WidgetStateProperty.all(Colors.white),
+                                textStyle: WidgetStateProperty.all(const TextStyle(color: Colors.white))
+                            ),
+                            child: Text(
+                                translate('Yes')
+                            ),
+                            onPressed: () => _onDelete(ref)
+                        ),
+                        const SizedBox(
+                            width: 30
+                        ),
+                        OutlinedButton(
+                            style: ButtonStyle(
+                                fixedSize: WidgetStateProperty.all(const Size(100, 30)),
+                                backgroundColor: WidgetStateProperty.all(Colors.white),
+                                elevation: WidgetStateProperty.all(2),
+                                foregroundColor: WidgetStateProperty.all(Colors.black),
+                                textStyle: WidgetStateProperty.all(const TextStyle(color: Colors.black))
+                            ),
+                            child: Text(
+                                translate('No')
+                            ),
+                            onPressed: () {
+                              if(_isImage()) {
+                                ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
+                              } else {
+                                ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
+                              }
+                            }
+                        ),
+                      ],
+                    )
                   ],
-                )
+                ),
               ],
             ),
           ),

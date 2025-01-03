@@ -323,13 +323,6 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                 builder: (BuildContext context, Orientation orientation) => Stack(
                   alignment: Alignment.center,
                   children: [
-                    IconRenderer(
-                        asset: 'background_portrait.svg',
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
-                        color: Colors.white.withOpacity(0.05)
-                    ),
                     if (!shouldHideOverlay(shouldShowCommentsDialog)) Padding(
                       padding: EdgeInsets.only(top: kIsWeb && orientation == Orientation.landscape ? 60 : 0),
                       child: YoutubePlayerScaffold(

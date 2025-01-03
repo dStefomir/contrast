@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:contrast/common/widgets/button.dart';
-import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/provider.dart';
@@ -59,54 +58,41 @@ class QrCodeDialog extends HookConsumerWidget {
                 )
               ],
             ),
-            Stack(
-              alignment: Alignment.topCenter,
+            Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: dialogHeight / 10),
-                  child: IconRenderer(
-                      asset: 'background_landscape.svg',
-                      fit: BoxFit.cover,
-                      color: Colors.black.withOpacity(0.03)
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    children: [
+                      StyledText(
+                          text: '"${translate('The future belongs to those who believe in the beauty of their dreams')}",',
+                          fontSize: 10,
+                          clip: false,
+                          color: Colors.black87,
+                          padding: 0
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: StyledText(
+                            text: translate('Eleanor Roosevelt'),
+                            fontSize: 10,
+                            clip: false,
+                            color: Colors.black87,
+                            weight: FontWeight.bold,
+                            padding: 0
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        children: [
-                          StyledText(
-                              text: '"${translate('The future belongs to those who believe in the beauty of their dreams')}",',
-                              fontSize: 10,
-                              clip: false,
-                              color: Colors.black87,
-                              padding: 0
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: StyledText(
-                                text: translate('Eleanor Roosevelt'),
-                                fontSize: 10,
-                                clip: false,
-                                color: Colors.black87,
-                                weight: FontWeight.bold,
-                                padding: 0
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 10, top: 10),
-                      child: QrImageView(
-                        padding: EdgeInsets.zero,
-                        data: kIsWeb ? 'https://www.dstefomir.eu' : Platform.isAndroid ? 'https://play.google.com/store/apps/details?id=eu.bsdsoft.contrast' : 'https://apps.apple.com/bg/app/contrastus/id6466247842',
-                        version: QrVersions.auto,
-                        size: 350,
-                      ),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 10, top: 10),
+                  child: QrImageView(
+                    padding: EdgeInsets.zero,
+                    data: kIsWeb ? 'https://www.dstefomir.eu' : Platform.isAndroid ? 'https://play.google.com/store/apps/details?id=eu.bsdsoft.contrast' : 'https://apps.apple.com/bg/app/contrastus/id6466247842',
+                    version: QrVersions.auto,
+                    size: 350,
+                  ),
                 ),
               ],
             ),

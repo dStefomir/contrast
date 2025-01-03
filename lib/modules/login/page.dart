@@ -1,6 +1,5 @@
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
-import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/input.dart';
 import 'package:contrast/common/widgets/page.dart';
 import 'package:contrast/common/widgets/snack.dart';
@@ -37,13 +36,6 @@ class LoginPage extends HookConsumerWidget {
                   ],
                 ),
               ),
-            ),
-            IconRenderer(
-              width: double.infinity,
-              height: double.infinity,
-              asset: 'background_portrait.svg',
-              color: Colors.black.withOpacity(0.05),
-              fit: BoxFit.cover,
             ),
             Align(
               alignment: Alignment.topCenter,
@@ -98,10 +90,10 @@ class LoginPage extends HookConsumerWidget {
                   ),
                   OutlinedButton(
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.black),
-                        elevation: MaterialStateProperty.all(2),
-                        foregroundColor: MaterialStateProperty.all(Colors.white),
-                        textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
+                        backgroundColor: WidgetStateProperty.all(Colors.black),
+                        elevation: WidgetStateProperty.all(2),
+                        foregroundColor: WidgetStateProperty.all(Colors.white),
+                        textStyle: WidgetStateProperty.all(const TextStyle(color: Colors.white))
                     ),
                     onPressed: () {
                       final form = formKey.currentState;

@@ -87,27 +87,11 @@ class StyledButton extends HookConsumerWidget {
     final bool isHovering = ref.watch(hoverProvider(widgetKey));
 
     return !onlyIcon
-        ? Stack(
-            children: [
-              Container(
-                  color: isHovering ? Colors.black : Colors.white,
-                  height: iconHeight,
-                  width: iconHeight,
-                  child: IconRenderer(
-                    asset: 'background_portrait.svg',
-                    color: !isHovering
-                        ? Colors.black.withOpacity(0.3)
-                        : Colors.white,
-                    fit: BoxFit.fill,
-                  )
-              ),
-              IconRenderer(
-                asset: iconAsset,
-                color: !isHovering ? Colors.black : Colors.white,
-                height: iconHeight,
-              )
-            ],
-          ).translateOnPhotoHover
+        ? IconRenderer(
+      asset: iconAsset,
+      color: !isHovering ? Colors.black : Colors.white,
+      height: iconHeight,
+    ).translateOnPhotoHover
         : ColoredBox(
       color: backgroundColor,
       child: IconRenderer(

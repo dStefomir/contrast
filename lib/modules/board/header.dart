@@ -1,7 +1,5 @@
-import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/button.dart';
-import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/common/widgets/tab.dart';
 import 'package:contrast/common/widgets/text.dart';
@@ -44,82 +42,70 @@ class BoardPageFilter extends ConsumerWidget {
                     ),
                   ),
                 ),
-                IconRenderer(
-                    asset: 'background_portrait.svg',
-                    fit: BoxFit.cover,
-                    color: Colors.black.withOpacity(0.1)
-                ),
-                BlurryContainer(
-                  blur: 1.1,
-                  elevation: 0,
-                  color: Colors.transparent,
-                  padding: const EdgeInsets.all(0),
-                  borderRadius: const BorderRadius.all(Radius.circular(0)),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        RotatedBox(
-                          quarterTurns: 3,
-                          child: StyledText(
-                              text: translate('CONTRASTUS'),
-                              padding: 5,
-                              fontSize: 15,
-                              weight: FontWeight.bold,
-                              letterSpacing: 15,
-                              useShadow: true,
-                              color: Colors.white.withOpacity(0.6)
-                          ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      RotatedBox(
+                        quarterTurns: 3,
+                        child: StyledText(
+                            text: translate('CONTRASTUS'),
+                            padding: 5,
+                            fontSize: 15,
+                            weight: FontWeight.bold,
+                            letterSpacing: 15,
+                            useShadow: true,
+                            color: Colors.white.withOpacity(0.6)
                         ),
-                        const Spacer(),
-                        MenuButton(
-                            widgetKey: const Key('all'),
-                            iconPath: 'all.svg',
-                            tooltip: translate('All'),
-                            disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                            selected: ref.watch(boardHeaderTabProvider) == 'all',
-                            size: boardPadding,
-                            onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('all'))
-                        ).translateOnPhotoHover,
-                        MenuButton(
-                            widgetKey: const Key('landscape'),
-                            iconPath: 'landscape.svg',
-                            tooltip: translate('Landscape'),
-                            disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                            selected: ref.watch(boardHeaderTabProvider) == 'landscape',
-                            size: boardPadding,
-                            onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('landscape'))
-                        ).translateOnPhotoHover,
-                        MenuButton(
-                            widgetKey: const Key('portraits'),
-                            iconPath: 'portraits.svg',
-                            tooltip: translate('Portraits'),
-                            disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                            selected: ref.watch(boardHeaderTabProvider) == 'portraits',
-                            size: boardPadding,
-                            onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('portraits'))
-                        ).translateOnPhotoHover,
-                        MenuButton(
-                            widgetKey: const Key('street'),
-                            iconPath: 'street.svg',
-                            tooltip: translate('Street'),
-                            disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                            selected: ref.watch(boardHeaderTabProvider) == 'street',
-                            size: boardPadding,
-                            onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('street'))
-                        ).translateOnPhotoHover,
-                        MenuButton(
-                            widgetKey: const Key('other'),
-                            iconPath: 'dog.svg',
-                            tooltip: translate('Other'),
-                            disabled: ref.watch(boardFooterTabProvider) == 'videos',
-                            selected: ref.watch(boardHeaderTabProvider) == 'other',
-                            size: boardPadding,
-                            onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('other'))
-                        ).translateOnPhotoHover,
-                      ],
-                    ),
+                      ),
+                      const Spacer(),
+                      MenuButton(
+                          widgetKey: const Key('all'),
+                          iconPath: 'all.svg',
+                          tooltip: translate('All'),
+                          disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                          selected: ref.watch(boardHeaderTabProvider) == 'all',
+                          size: boardPadding,
+                          onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('all'))
+                      ).translateOnPhotoHover,
+                      MenuButton(
+                          widgetKey: const Key('landscape'),
+                          iconPath: 'landscape.svg',
+                          tooltip: translate('Landscape'),
+                          disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                          selected: ref.watch(boardHeaderTabProvider) == 'landscape',
+                          size: boardPadding,
+                          onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('landscape'))
+                      ).translateOnPhotoHover,
+                      MenuButton(
+                          widgetKey: const Key('portraits'),
+                          iconPath: 'portraits.svg',
+                          tooltip: translate('Portraits'),
+                          disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                          selected: ref.watch(boardHeaderTabProvider) == 'portraits',
+                          size: boardPadding,
+                          onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('portraits'))
+                      ).translateOnPhotoHover,
+                      MenuButton(
+                          widgetKey: const Key('street'),
+                          iconPath: 'street.svg',
+                          tooltip: translate('Street'),
+                          disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                          selected: ref.watch(boardHeaderTabProvider) == 'street',
+                          size: boardPadding,
+                          onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('street'))
+                      ).translateOnPhotoHover,
+                      MenuButton(
+                          widgetKey: const Key('other'),
+                          iconPath: 'dog.svg',
+                          tooltip: translate('Other'),
+                          disabled: ref.watch(boardFooterTabProvider) == 'videos',
+                          selected: ref.watch(boardHeaderTabProvider) == 'other',
+                          size: boardPadding,
+                          onClick: () => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab('other'))
+                      ).translateOnPhotoHover,
+                    ],
                   ),
                 )
               ]
@@ -138,11 +124,6 @@ class BoardPageFilter extends ConsumerWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          IconRenderer(
-              asset: 'background_landscape.svg',
-              fit: BoxFit.cover,
-              color: Colors.black.withOpacity(0.1)
-          ),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -157,13 +138,8 @@ class BoardPageFilter extends ConsumerWidget {
           ),
           Align(
             alignment: Alignment.center,
-            child: BlurryContainer(
+            child: SizedBox(
               height: boardPadding,
-              blur: 1.4,
-              elevation: 0,
-              color: Colors.transparent,
-              padding: const EdgeInsets.all(0),
-              borderRadius: const BorderRadius.all(Radius.circular(0)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
