@@ -27,15 +27,27 @@ class HouseShadowPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final Path shadowPath = Path();
     shadowPath
-      ..moveTo(size.width / 2, -5)
-      ..lineTo(size.width + 3, size.height * 0.331 - 5)
-      ..lineTo(size.width + 3, size.height + 5)
-      ..lineTo(-3, size.height)
-      ..lineTo(-3, size.height * 0.331 - 5)
-      ..close();
+      // ..moveTo(size.width / 2, -5)
+      // ..lineTo(size.width + 3, size.height * 0.331 - 5)
+      // ..lineTo(size.width + 3, size.height + 5)
+      // ..lineTo(-3, size.height)
+      // ..lineTo(-3, size.height * 0.331 - 5)
+      // ..close();
+    ..moveTo(size.width / 2, -2.5)
+    ..lineTo(size.width + 3, (size.height * 0.331) - 2.5)
+    ..lineTo(0, (size.height * 0.331) - 2.5)
+    ..close(); // Connect back to the starting point
 
-    canvas.drawShadow(shadowPath, Colors.black, 2, false);
-    canvas.drawShadow(shadowPath, Colors.black, 3, false);
+    canvas.drawShadow(shadowPath, Colors.black54, 1, false);
+    canvas.drawShadow(shadowPath, Colors.black54, 1, false);
+    canvas.drawShadow(shadowPath, Colors.black54, 2, false);
+    canvas.drawShadow(shadowPath, Colors.black54, 2, false);
+    canvas.drawShadow(shadowPath, Colors.black54, 3, false);
+    canvas.drawShadow(shadowPath, Colors.black54, 3, false);
+    canvas.drawShadow(shadowPath, Colors.black54, 4, false);
+    canvas.drawShadow(shadowPath, Colors.black54, 4, false);
+    canvas.drawShadow(shadowPath, Colors.black54, 5, false);
+    canvas.drawShadow(shadowPath, Colors.black54, 5, false);
   }
 
   @override
