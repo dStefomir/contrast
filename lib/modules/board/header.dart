@@ -56,7 +56,7 @@ class BoardPageFilter extends ConsumerWidget {
                             weight: FontWeight.bold,
                             letterSpacing: 15,
                             useShadow: true,
-                            color: Colors.white.withOpacity(0.6)
+                            color: Colors.white.withValues(alpha: 0.6)
                         ),
                       ),
                       const Spacer(),
@@ -130,8 +130,8 @@ class BoardPageFilter extends ConsumerWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.black.withOpacity(0.2),
-                  Colors.black.withOpacity(0.0),
+                  Colors.black.withValues(alpha: 0.2),
+                  Colors.black.withValues(alpha: 0.0),
                 ],
               ),
             ),

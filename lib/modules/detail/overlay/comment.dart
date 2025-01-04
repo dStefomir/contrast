@@ -144,7 +144,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                                 FocusManager.instance.primaryFocus?.unfocus();
                                 },
                               tooltip: translate('Close'),
-                              color: Colors.white.withOpacity(0.3),
+                              color: Colors.white.withValues(alpha: 0.3),
                               borderColor: Colors.black,
                               icon: 'close.svg'
                           ),
@@ -168,7 +168,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                 ),
                 SimpleInput(
                   widgetKey: const Key('CommentInputDeviceName'),
-                  backgroundColor: Colors.white.withOpacity(0.3),
+                  backgroundColor: Colors.white.withValues(alpha: 0.3),
                   controller: userNameController,
                   focusNode: deviceNameFocusNode,
                   enabled: !isAdmin,
@@ -214,7 +214,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                 ),
                 SimpleInput(
                   widgetKey: const Key('CommentInput'),
-                  backgroundColor: Colors.white.withOpacity(0.3),
+                  backgroundColor: Colors.white.withValues(alpha: 0.3),
                   controller: commentController,
                   focusNode: commentFocusNode,
                   onChange: (e) => e,
@@ -253,10 +253,24 @@ class CommentDialog<T> extends HookConsumerWidget {
                                 commentController.text = '';
                                 ratingController.value = 0;
                                 loading.value = false;
-                                showSuccessTextOnSnackBar(context, translate(value.approved! ? 'Comment posted' : 'Comment review is pending'));
+                                showSuccessTextOnSnackBar(
+                                    context.mounted
+                                        ? context
+                                        : null,
+                                    translate(
+                                        value.approved!
+                                            ? 'Comment posted'
+                                            : 'Comment review is pending'
+                                    )
+                                );
                               }).onError((error, stackTrace) {
                                 loading.value = false;
-                                showErrorTextOnSnackBar(context, translate('Only one comment per day is allowed'));
+                                showErrorTextOnSnackBar(
+                                    context.mounted
+                                        ? context
+                                        : null,
+                                    translate('Only one comment per day is allowed')
+                                );
                               });
                             } else {
                               ref.read(commentsServiceProvider).postVideoComment(deviceId ?? 'noId', deviceName, parentItemId, comment, rating, isAdmin).then((value) {
@@ -266,15 +280,29 @@ class CommentDialog<T> extends HookConsumerWidget {
                                 commentController.text = '';
                                 ratingController.value = 0;
                                 loading.value = false;
-                                showSuccessTextOnSnackBar(context, translate(value.approved! ? 'Comment posted' : 'Comment review is pending'));
+                                showSuccessTextOnSnackBar(
+                                    context.mounted
+                                        ? context
+                                        : null,
+                                    translate(
+                                        value.approved!
+                                            ? 'Comment posted'
+                                            : 'Comment review is pending'
+                                    )
+                                );
                               }).onError((error, stackTrace) {
                                 loading.value = false;
-                                showErrorTextOnSnackBar(context, translate('Only one comment per day is allowed'));
+                                showErrorTextOnSnackBar(
+                                    context.mounted
+                                        ? context
+                                        : null,
+                                    translate('Only one comment per day is allowed')
+                                );
                               });
                             }
                           }},
                         tooltip: translate('Submit'),
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         borderColor: Colors.black,
                         icon: 'navigate_next.svg'
                     ) : const LoadingIndicator(color: Colors.black),

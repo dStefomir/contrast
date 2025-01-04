@@ -34,7 +34,13 @@ class RestfulAnimatedDataView<T> extends StatefulHookConsumerWidget {
   /// Left padding added to the data view items
   final double? paddingLeft;
   /// Renders each row of the list view
-  final Widget Function(BuildContext context, int index, int dataLenght, T item, bool isLeft, bool isRight) itemBuilder;
+  final Widget Function(
+      BuildContext context,
+      int index,
+      int dataLenght,
+      T item,
+      bool isLeft,
+      bool isRight) itemBuilder;
 
   const RestfulAnimatedDataView({
     Key? key,
@@ -146,6 +152,12 @@ class _RestfulAnimatedDataViewState<T> extends ConsumerState<RestfulAnimatedData
           ),
         ]
     );
+    final childWidget = widget.padding != null
+        ? Padding(
+            padding: widget.padding!,
+            child: customScrollView
+          )
+        : customScrollView;
 
     return Stack(
       alignment: Alignment.center,
@@ -167,13 +179,19 @@ class _RestfulAnimatedDataViewState<T> extends ConsumerState<RestfulAnimatedData
                     }
                   }
                 } : null,
-                child: InertiaListener(
-                    child: MotionBlur(
-                      maxBlur: _maxBlur,
-                      deadZone: kIsWeb || Platform.isIOS ? 10 : 20,
-                      child: widget.padding != null ? Padding(padding: widget.padding!, child: customScrollView,) : customScrollView
+                child: kIsWeb
+                    ? widget.padding != null
+                      ? childWidget
+                      : customScrollView
+                    : InertiaListener(
+                        child: MotionBlur(
+                            maxBlur: _maxBlur,
+                            deadZone: Platform.isIOS ? 10 : 20,
+                            child: widget.padding != null
+                                ? childWidget
+                                : customScrollView
+                        )
                     )
-                )
               )
           ),
         )

@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:contrast/common/widgets/animation.dart';
 import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/button.dart';
-import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/page.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/model/video_comments.dart';
@@ -117,7 +116,9 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
             Clipboard.setData(
                 ClipboardData(text: 'https://www.youtube.com/watch?v=${widget.path}')
             ).then((value) => showSuccessTextOnSnackBar(
-                context,
+                context.mounted
+                    ? context
+                    : null,
                 translate('Copied to clipboard'
                 )
             ));},
@@ -224,10 +225,15 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                   height: 25,
                                   onClick: () => ref.read(commentsServiceProvider).approveVideoComment(item.id!).then((value) {
                                     ref.read(videoCommentsDataViewProvider.notifier).updateItem(item, value);
-                                    showSuccessTextOnSnackBar(context, translate('Comment approved'));
+                                    showSuccessTextOnSnackBar(
+                                        context.mounted
+                                            ? context
+                                            : null,
+                                        translate('Comment approved')
+                                    );
                                   }),
                                   tooltip: translate('Approve comment'),
-                                  color: Colors.white.withOpacity(0.3),
+                                  color: Colors.white.withValues(alpha: 0.3),
                                   borderColor: Colors.white,
                                   icon: 'check.svg'
                               ),
@@ -238,14 +244,24 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                   onClick: () => Session().isLoggedIn() ?
                                   ref.read(commentsServiceProvider).deleteVideoCommentAsAdmin(item.id!).then((value) {
                                     ref.read(videoCommentsDataViewProvider.notifier).removeItem(index);
-                                    showSuccessTextOnSnackBar(context, translate('Comment deleted'));
+                                    showSuccessTextOnSnackBar(
+                                        context.mounted
+                                            ? context
+                                            : null,
+                                        translate('Comment deleted')
+                                    );
                                   }) :
                                   ref.read(commentsServiceProvider).deleteVideoComment(item.id!, deviceId!).then((value) {
                                     ref.read(videoCommentsDataViewProvider.notifier).removeItem(index);
-                                    showSuccessTextOnSnackBar(context, translate('Comment deleted'));
+                                    showSuccessTextOnSnackBar(
+                                        context.mounted
+                                            ? context
+                                            : null,
+                                        translate('Comment deleted')
+                                    );
                                   }),
                                   tooltip: translate('Delete comment'),
-                                  color: Colors.white.withOpacity(0.3),
+                                  color: Colors.white.withValues(alpha: 0.3),
                                   borderColor: Colors.black,
                                   icon: 'delete.svg'
                               )
@@ -302,7 +318,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       focusNode: useFocusNode(),
       onKeyEvent: (event) {
         if (event is KeyUpEvent && event.logicalKey == LogicalKeyboardKey.escape) {
-          ref.read(overlayVisibilityProvider(commentKey).notifier).setOverlayVisibility(null);
+          closeOverlayIfOpened(ref, 'comment_video');
           Modular.to.navigate('/');
         }
       },
@@ -310,7 +326,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
         canPop: false,
         onPopInvokedWithResult: (_, __) {
           if(ref.read(overlayVisibilityProvider(const Key('comment_video'))) != null) {
-            ref.read(overlayVisibilityProvider(const Key('comment_video')).notifier).setOverlayVisibility(null);
+            closeOverlayIfOpened(ref, 'comment_video');
           } else if (!kIsWeb && Platform.isAndroid) {
             Modular.to.navigate('/');
           }

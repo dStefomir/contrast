@@ -79,15 +79,15 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
 
   /// What happens when the user performs an action
   void _onAction(WidgetRef ref, Function? action) {
-    ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(null);
-    ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(null);
-    ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(null);
-    ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(null);
+    closeOverlayIfOpened(ref, 'qr_code');
+    closeOverlayIfOpened(ref, 'delete_image');
+    closeOverlayIfOpened(ref, 'upload_image');
+    closeOverlayIfOpened(ref, 'edit_image');
+    closeOverlayIfOpened(ref, 'delete_video');
+    closeOverlayIfOpened(ref, 'upload_video');
+    closeOverlayIfOpened(ref, 'edit_video');
+    closeOverlayIfOpened(ref, 'share');
     ref.read(fileProvider.notifier).setData(null, null, null, null);
-    ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(null);
-    ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(null);
-    ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(null);
-    ref.read(overlayVisibilityProvider(const Key('share')).notifier).setOverlayVisibility(null);
     if(action != null) {
       action();
     }
@@ -363,6 +363,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
           closeOverlayIfOpened(ref, 'delete_image');
           closeOverlayIfOpened(ref, 'upload_image');
           closeOverlayIfOpened(ref, 'edit_image');
+          closeOverlayIfOpened(ref, 'delete_video');
           closeOverlayIfOpened(ref, 'upload_video');
           closeOverlayIfOpened(ref, 'edit_video');
           closeOverlayIfOpened(ref, 'share');
@@ -383,7 +384,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                             begin: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
                             end: axis == Axis.vertical ? Alignment.bottomCenter : Alignment.centerRight,
                             colors: [
-                              Colors.black.withOpacity(0.8),
+                              Colors.black.withValues(alpha: 0.8),
                               Colors.transparent,
                             ],
                           ),
@@ -401,7 +402,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                             end: axis == Axis.vertical ? Alignment.bottomCenter : Alignment.centerRight,
                             colors: [
                               Colors.transparent,
-                              Colors.black.withOpacity(0.8),
+                              Colors.black.withValues(alpha: 0.8),
                             ],
                           ),
                         ),
@@ -500,7 +501,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                           (shouldShowUploadVideoDialog != null && shouldShowUploadVideoDialog) ||
                           (shouldShowEditVideoDialog != null && shouldShowEditVideoDialog) ||
                           (shouldShowShareDialog != null && shouldShowShareDialog),
-                      child: const Blurrable(strength: 10),
+                      child: const Blurrable(strength: 4),
                     ),
                     if (shouldShowDeletePhotographDialog != null) Align(
                       alignment: Alignment.bottomCenter,

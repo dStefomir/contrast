@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/hover_provider.dart';
 import 'package:contrast/common/widgets/icon.dart';
@@ -140,7 +142,7 @@ class NormalButton extends HookConsumerWidget {
       onHover: (hover) =>
           ref.read(hoverProvider(widgetKey).notifier).onHover(hover),
       style: ButtonStyle(
-          backgroundColor: MaterialStatePropertyAll<Color>(
+          backgroundColor: WidgetStatePropertyAll<Color>(
               isHovering ? Colors.black45 : Colors.black
           )
       ),
@@ -212,7 +214,12 @@ class MenuButton extends HookConsumerWidget {
                       asset: iconPath,
                       color: selected ? Colors.white : Colors.black,
                       shouldShimmer: selected,
-                    ).rotate(12, from: 0).animate(trigger: shouldAnimate, playIf: () => shouldAnimate, duration: const Duration(milliseconds: 500)).resetAll()
+                    ).rotate(360 * (pi / 180), from: 0)
+                        .animate(
+                        trigger: shouldAnimate,
+                        playIf: () => shouldAnimate,
+                        duration: const Duration(milliseconds: 500)
+                    ).resetAll()
                   )
               )
           )
@@ -266,6 +273,7 @@ class DefaultButton extends StatelessWidget {
     final button = Padding(
       padding: EdgeInsets.all(padding),
       child: Container(
+        padding: const EdgeInsets.all(3),
         decoration: BoxDecoration(
             color: color,
             shape: shape,

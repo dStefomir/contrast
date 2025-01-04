@@ -31,8 +31,8 @@ class LoginPage extends HookConsumerWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.black.withOpacity(0.0),
-                    Colors.black.withOpacity(0.2),
+                    Colors.black.withValues(alpha: 0.0),
+                    Colors.black.withValues(alpha: 0.2),
                   ],
                 ),
               ),
@@ -105,10 +105,20 @@ class LoginPage extends HookConsumerWidget {
                           session.eMail = userName;
                           session.token = value;
                           session.isGuest = false;
-                          showSuccessTextOnSnackBar(context, translate('Logged in successfully'));
+                          showSuccessTextOnSnackBar(
+                              context.mounted
+                                  ? context
+                                  : null,
+                              translate('Logged in successfully')
+                          );
                           Modular.to.navigate('/', arguments: session);
                         }).onError((error, stackTrace) {
-                          showErrorTextOnSnackBar(context, translate('Wrong user or password'));
+                          showErrorTextOnSnackBar(
+                              context.mounted
+                                  ? context
+                                  : null,
+                              translate('Wrong user or password')
+                          );
                         });
                       }},
                     child: Text(translate('Log In')),

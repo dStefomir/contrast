@@ -226,10 +226,15 @@ class PhotographDetailsView extends HookConsumerWidget {
                                   height: 25,
                                   onClick: () => ref.read(commentsServiceProvider).approvePhotographComment(item.id!).then((value) {
                                     ref.read(imageCommentsDataViewProvider.notifier).updateItem(item, value);
-                                    showSuccessTextOnSnackBar(context, translate('Comment approved'));
+                                    showSuccessTextOnSnackBar(
+                                        context.mounted
+                                            ? context
+                                            : null,
+                                        translate('Comment approved')
+                                    );
                                   }),
                                   tooltip: translate('Approve comment'),
-                                  color: Colors.white.withOpacity(0.3),
+                                  color: Colors.white.withValues(alpha: 0.3),
                                   borderColor: Colors.white,
                                   icon: 'check.svg'
                               ),
@@ -240,14 +245,24 @@ class PhotographDetailsView extends HookConsumerWidget {
                                   onClick: () => Session().isLoggedIn() ?
                                   ref.read(commentsServiceProvider).deletePhotographCommentAsAdmin(item.id!).then((value) {
                                     ref.read(imageCommentsDataViewProvider.notifier).removeItem(index);
-                                    showSuccessTextOnSnackBar(context, translate('Comment deleted'));
+                                    showSuccessTextOnSnackBar(
+                                        context.mounted
+                                            ? context
+                                            : null,
+                                        translate('Comment deleted')
+                                    );
                                   }) :
                                   ref.read(commentsServiceProvider).deletePhotographComment(item.id!, deviceId!).then((value) {
                                     ref.read(imageCommentsDataViewProvider.notifier).removeItem(index);
-                                    showSuccessTextOnSnackBar(context, translate('Comment deleted'));
+                                    showSuccessTextOnSnackBar(
+                                        context.mounted
+                                            ? context
+                                            : null,
+                                        translate('Comment deleted')
+                                    );
                                   }),
                                   tooltip: translate('Delete comment'),
-                                  color: Colors.white.withOpacity(0.3),
+                                  color: Colors.white.withValues(alpha: 0.3),
                                   borderColor: Colors.white,
                                   icon: 'delete.svg'
                               )
@@ -418,7 +433,9 @@ class PhotographDetailsView extends HookConsumerWidget {
                   ClipboardData(
                       text: 'https://www.dstefomir.eu/#/photos/details?id=${images[currentPhotographyIndex].id}&category=$category')
               ).then((value) => showSuccessTextOnSnackBar(
-                  context,
+                  context.mounted
+                      ? context
+                      : null,
                   translate('Copied to clipboard')
               ));
               ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);

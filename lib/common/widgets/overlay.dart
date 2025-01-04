@@ -26,7 +26,7 @@ class AnimatedDialog extends HookConsumerWidget {
     controller.forward();
     
     return Material(
-      color: Colors.black.withOpacity(opacityAnimation.value),
+      color: Colors.black.withValues(alpha: opacityAnimation.value),
       child: Center(
         child: FadeTransition(
           opacity: scaleAnimation,

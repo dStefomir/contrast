@@ -87,7 +87,7 @@ class ContrastPhotograph extends HookConsumerWidget {
         cache: true,
         cacheRawData: true,
         clearMemoryCacheIfFailed: true,
-        clearMemoryCacheWhenDispose: false,
+        clearMemoryCacheWhenDispose: true,
         imageCacheName: kIsWeb ? "${widgetKey.toString()}_cache_name_${platform}_isMobile_$isMobile" : null,
         filterQuality: quality,
         isAntiAlias: !kIsWeb,

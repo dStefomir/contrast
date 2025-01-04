@@ -49,7 +49,7 @@ class BoardPageFooter extends HookConsumerWidget {
                 color: Colors.transparent,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withValues(alpha: 0.5),
                     spreadRadius: 1,
                     blurRadius: 1,
                     offset: const Offset(0, 1),
@@ -142,8 +142,8 @@ class BoardPageFooter extends HookConsumerWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Colors.black.withOpacity(0),
-                        Colors.black.withOpacity(0.2),
+                        Colors.black.withValues(alpha: 0),
+                        Colors.black.withValues(alpha: 0.2),
                       ],
                     ),
                   ),

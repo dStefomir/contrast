@@ -79,7 +79,10 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                 try {
                   await launchUrl(emailLaunchUri);
                 } catch (e) {
-                  showErrorTextOnSnackBar(context, translate('Error Mail'));
+                  showErrorTextOnSnackBar(
+                      mounted ? context : null,
+                      translate('Error Mail')
+                  );
                 }
               },
               color: Colors.white,
@@ -105,7 +108,10 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                 if (await canLaunchUrl(url)) {
                   await launchUrl(url);
                 } else {
-                  showErrorTextOnSnackBar(context, translate('Error Instagram'));
+                  showErrorTextOnSnackBar(
+                      mounted ? context : null,
+                      translate('Error Instagram')
+                  );
                 }
               },
               color: Colors.white,

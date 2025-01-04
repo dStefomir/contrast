@@ -86,10 +86,10 @@ class TripPlanningOverlay extends HookConsumerWidget {
                           ),
                           OutlinedButton(
                               style: ButtonStyle(
-                                  fixedSize: MaterialStateProperty.all(const Size(100, 30)),
-                                  backgroundColor: MaterialStateProperty.all(startPeriod == null || endPeriod == null ? Colors.white : Colors.black),
-                                  elevation: MaterialStateProperty.all(2),
-                                  foregroundColor: MaterialStateProperty.all(startPeriod == null || endPeriod == null ? Colors.grey : Colors.white)
+                                  fixedSize: WidgetStateProperty.all(const Size(100, 30)),
+                                  backgroundColor: WidgetStateProperty.all(startPeriod == null || endPeriod == null ? Colors.white : Colors.black),
+                                  elevation: WidgetStateProperty.all(2),
+                                  foregroundColor: WidgetStateProperty.all(startPeriod == null || endPeriod == null ? Colors.grey : Colors.white)
                               ),
                               onPressed: startPeriod == null || endPeriod == null ? null : () async {
                                 ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);

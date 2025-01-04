@@ -77,7 +77,7 @@ class _PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
         width: halfWidth,
         child: LoadingIndicator(
           indicatorType: Indicator.triangleSkewSpin,
-          colors: [Colors.white.withOpacity(0.2)],
+          colors: [Colors.white.withValues(alpha: 0.2)],
           strokeWidth: 2,
         ),
       ),
@@ -87,8 +87,8 @@ class _PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
       canPop: false,
       onPopInvokedWithResult: (_, __) {
         if(ref.read(overlayVisibilityProvider(const Key('comment_photograph'))) != null || ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph'))) != null) {
-          ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
-          ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
+          closeOverlayIfOpened(ref, 'comment_photograph');
+          closeOverlayIfOpened(ref, 'trip_planning_photograph');
         } else if (!kIsWeb && Platform.isAndroid) {
           Modular.to.navigate('/');
         }

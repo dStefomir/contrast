@@ -26,7 +26,7 @@ class SplashWidget extends HookConsumerWidget {
           children: [
             Shimmer.fromColors(
                 baseColor: Colors.white,
-                highlightColor: Colors.white.withOpacity(0.8),
+                highlightColor: Colors.white.withValues(alpha: 0.8),
                 period: const Duration(milliseconds: 2500),
                 child: const IconRenderer(asset: 'logo_d.svg')
             ).slideOut(Offset(dx * -1, 0))
@@ -38,7 +38,7 @@ class SplashWidget extends HookConsumerWidget {
             ),
             Shimmer.fromColors(
                 baseColor: Colors.white,
-                highlightColor: Colors.white.withOpacity(0.8),
+                highlightColor: Colors.white.withValues(alpha: 0.8),
                 period: const Duration(milliseconds: 2500),
                 child: const IconRenderer(asset: 'logo_s.svg')
             ).slideOut(Offset(dx, 0))
