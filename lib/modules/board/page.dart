@@ -219,7 +219,8 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
     final bool? shouldShowEditVideoDialog = ref.watch(overlayVisibilityProvider(const Key('edit_video')));
     final bool? shouldShowShareDialog = ref.watch(overlayVisibilityProvider(const Key('share')));
     final MediaQueryData mediaQuery = MediaQuery.of(context);
-    final Axis axis = mediaQuery.orientation == Orientation.portrait ? Axis.vertical : Axis.horizontal;
+    final Orientation orientation = mediaQuery.orientation;
+    final Axis axis = orientation == Orientation.portrait ? Axis.vertical : Axis.horizontal;
     final double halfHeightSize = mediaQuery.size.height / 2;
     double titlePadding = 0;
     /// In mobile view we need to calculate a padding so that the title
@@ -257,7 +258,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
             },
             duration: const Duration(milliseconds: 800),
             child: PhotographBoardPage(
-              orientation: mediaQuery.orientation,
+              orientation: orientation,
               onUserAction: _onAction,
               padding: useMobileLayout(context) ? boardPadding : 0,))
             : SlideTransitionAnimation(
@@ -277,7 +278,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
             },
             duration: const Duration(milliseconds: 800),
             child: VideoBoardPage(
-                orientation: mediaQuery.orientation,
+                orientation: orientation,
                 onUserAction: _onAction
             )
         );
@@ -324,12 +325,12 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
             axis: axis == Axis.vertical ? Axis.horizontal : Axis.vertical,
             children: [
               PhotographBoardPage(
-                orientation: mediaQuery.orientation,
+                orientation: orientation,
                 onUserAction: _onAction,
                 padding: useMobileLayout(context) ? boardPadding : 0,
               ),
               VideoBoardPage(
-                  orientation: mediaQuery.orientation,
+                  orientation: orientation,
                   onUserAction: _onAction
               )
             ]
@@ -375,7 +376,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
               onKeyEvent: _handleKeyEvent,
               child: Stack(
                   children: [
-                    if (mediaQuery.orientation == Orientation.landscape) Align(
+                    if (orientation == Orientation.landscape) Align(
                       alignment: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
                       child: Container(
                         height: axis == Axis.vertical ? halfHeightSize : null,

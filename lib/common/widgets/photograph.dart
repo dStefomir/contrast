@@ -86,6 +86,21 @@ class ContrastPhotograph extends HookConsumerWidget {
             : BoxFit.contain),
         cache: true,
         cacheRawData: true,
+        mode: ExtendedImageMode.gesture,
+        enableSlideOutPage: true,
+        initGestureConfigHandler: (state) {
+          return GestureConfig(
+            minScale: 1.0,
+            maxScale: 4.0,
+            animationMinScale: 0.8,
+            animationMaxScale: 4.5,
+            speed: 1.0,
+            inertialSpeed: 100.0,
+            initialScale: 1.0,
+            inPageView: false,
+            initialAlignment: InitialAlignment.center,
+          );
+        },
         clearMemoryCacheIfFailed: true,
         clearMemoryCacheWhenDispose: false,
         imageCacheName: kIsWeb ? "${widgetKey.toString()}_cache_name_${platform}_isMobile_$isMobile" : null,

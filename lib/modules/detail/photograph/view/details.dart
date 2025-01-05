@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:contrast/common/widgets/blur.dart';
+import 'package:contrast/common/widgets/photograph.dart';
 import 'package:contrast/model/image_comments.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/detail/overlay/comment.dart';
@@ -13,6 +14,7 @@ import 'package:contrast/utils/date.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:hyper_effects/hyper_effects.dart';
 import "package:universal_html/html.dart" as html;
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -57,12 +59,17 @@ class PhotographDetailsView extends HookConsumerWidget {
 
   /// Are coordinates valid or not
   bool _isAreCoordinatesValid(double? lat, double? lng) =>
-      ((lat != null && lat != 0) && (lng != null && lng != 0)) && (lat >= -90.0 && lat <= 90.0) && (lng >= -90.0 && lng <= 90.0);
+      ((lat != null && lat != 0)
+          && (lng != null && lng != 0))
+          && (lat >= -90.0 && lat <= 90.0)
+          && (lng >= -90.0 && lng <= 90.0);
 
   /// Sets the photograph detail button asset
   void _setPhotographDetailAsset(WidgetRef ref, ScrollController scrollController) {
     try {
-      ref.read(photographDetailAssetProvider.notifier).setDetailAsset(scrollController.offset == 0 ? 'map.svg' : 'photo_light_weight.svg');
+      ref.read(photographDetailAssetProvider.notifier).setDetailAsset(
+          scrollController.offset == 0 ? 'map.svg' : 'photo_light_weight.svg'
+      );
     } catch (e) {
       ref.read(photographDetailAssetProvider.notifier).setDetailAsset('map.svg');
     }
@@ -93,14 +100,26 @@ class PhotographDetailsView extends HookConsumerWidget {
   /// Switches to the next photograph if there is such
   void _goToNextPhotograph(WidgetRef ref, PageController pageController, int currentPhotographIndex) {
     if (currentPhotographIndex + 1 < images.length) {
-      pageController.animateToPage(currentPhotographIndex + 1, duration: const Duration(milliseconds: 500), curve: Curves.fastEaseInToSlowEaseOut);
-      ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(currentPhotographIndex + 1);
+      pageController.animateToPage(
+          currentPhotographIndex + 1,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastEaseInToSlowEaseOut
+      );
+      ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(
+          currentPhotographIndex + 1
+      );
       ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
       _handlePhotographShotLocation(ref);
-      html.window.history.pushState(null, 'photograph_details', '#/photos/details?id=${images[currentPhotographIndex + 1].id}&category=$category');
+      html.window.history.pushState(
+          null,
+          'photograph_details',
+          '#/photos/details?id=${images[currentPhotographIndex + 1].id}&category=$category'
+      );
     }
     if (currentPhotographIndex >= images.length) {
-      ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(images.length - 1);
+      ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(
+          images.length - 1
+      );
     }
     ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
     ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
@@ -109,11 +128,21 @@ class PhotographDetailsView extends HookConsumerWidget {
   /// Switches to the previous photograph if there is such
   void _goToPreviousPhotograph(WidgetRef ref, PageController pageController, int currentPhotographIndex) {
     if (currentPhotographIndex - 1 >= 0) {
-      pageController.animateToPage(currentPhotographIndex - 1, duration: const Duration(milliseconds: 500), curve: Curves.fastEaseInToSlowEaseOut);
-      ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(currentPhotographIndex - 1);
+      pageController.animateToPage(
+          currentPhotographIndex - 1,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastEaseInToSlowEaseOut
+      );
+      ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(
+          currentPhotographIndex - 1
+      );
       ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
       _handlePhotographShotLocation(ref);
-      html.window.history.pushState(null, 'photograph_details', '#/photos/details?id=${images[currentPhotographIndex - 1].id}&category=$category');
+      html.window.history.pushState(
+          null,
+          'photograph_details',
+          '#/photos/details?id=${images[currentPhotographIndex - 1].id}&category=$category'
+      );
     }
     if (currentPhotographIndex < 0) {
       ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(0);
@@ -556,42 +585,67 @@ class PhotographDetailsView extends HookConsumerWidget {
       autofocus: true,
       focusNode: useFocusNode(),
       onKeyEvent: (event) => _handleKeyEvent(event, ref, scrollController, pageController, currentPhotographIndex),
-      child: PhotoViewGallery.builder(
-          key: const Key('PhotographWidgetGallery'),
-          scrollPhysics: const BouncingScrollPhysics(),
-          allowImplicitScrolling: false,
-          loadingBuilder: (context, chunk) => const SizedBox.shrink(),
-          builder: (BuildContext context, int index) {
-            return PhotoViewGalleryPageOptions(
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          ContrastPhotograph(
+            widgetKey: Key('${image.id}_background'),
+            fetch: (path) => serviceProvider.getPhotograph(path),
+            image: image,
+            quality: FilterQuality.low,
+            borderColor: Colors.transparent,
+            constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width,
+                maxHeight: MediaQuery.of(context).size.height
+            ),
+            fit: BoxFit.fill,
+          ).blur(55, from: 0)
+              .animate(
+              trigger: true,
+              duration: Duration.zero,
+              startState: AnimationStartState.playImmediately
+          ),
+          PhotoViewGallery.builder(
+            key: const Key('PhotographWidgetGallery'),
+            scrollPhysics: const BouncingScrollPhysics(),
+            allowImplicitScrolling: false,
+            backgroundDecoration: const BoxDecoration(
+                color: Colors.transparent,
+            ),
+            loadingBuilder: (context, chunk) => const SizedBox.shrink(),
+            builder: (BuildContext context, int index) {
+              return PhotoViewGalleryPageOptions(
                 imageProvider: ExtendedNetworkImageProvider(
                   serviceProvider.getPhotograph(image.path!),
                   cache: true,
-                  cacheKey: 'image_cache_key${image.id}',
-                  imageCacheName: 'image_cache_name${image.id}',
+                  cacheKey: 'image_cache_key${image.id}_foreground',
+                  imageCacheName: 'image_cache_name${image.id}_foreground',
                   cacheRawData: true,
                 ),
                 filterQuality: FilterQuality.high,
                 minScale: PhotoViewComputedScale.contained,
                 maxScale: PhotoViewComputedScale.covered * 2,
                 heroAttributes: PhotoViewHeroAttributes(tag: image.id!),
-            );
-          },
-          pageController: pageController,
-          onPageChanged: (int page) async {
-            if (kIsWeb) {
-              await scrollController.animateTo(
-                  0,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOutExpo
               );
-            }
-            ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(page);
-            ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
-            _handlePhotographShotLocation(ref);
-            _setPhotographDetailAsset(ref, scrollController);
-          },
-          itemCount: images.length,
-      ),
+            },
+            pageController: pageController,
+            onPageChanged: (int page) async {
+              if (kIsWeb) {
+                await scrollController.animateTo(
+                    0,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOutExpo
+                );
+              }
+              ref.read(photographIndexProvider(photoIndex).notifier).setCurrentPhotographIndex(page);
+              ref.read(photographTitleVisibilityProvider.notifier).setVisibility(true);
+              _handlePhotographShotLocation(ref);
+              _setPhotographDetailAsset(ref, scrollController);
+            },
+            itemCount: images.length,
+          ),
+        ],
+      )
     );
   }
 
@@ -632,16 +686,6 @@ class PhotographDetailsView extends HookConsumerWidget {
           )
       );
 
-  /// Renders the loading indicator for the photograph
-  Widget _renderLoadingIndicator() => Align(
-    alignment: Alignment.bottomCenter,
-    child: LinearProgressIndicator(
-      minHeight: 25,
-      backgroundColor: Colors.grey[300],
-      valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-    ),
-  );
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final PageController pageController = usePageController(initialPage: photoIndex);
@@ -657,7 +701,6 @@ class PhotographDetailsView extends HookConsumerWidget {
 
     return Stack(
         children: [
-          _renderLoadingIndicator(),
           if (image != null) _renderPhotographWidget(context, ref, pageController, scrollController, currentPhotographIndex, image, maxWidth, maxHeight),
           if (image != null) _renderDetailsBtn(ref, context, scrollController, image),
           if (!kIsWeb && image != null) _renderTripPlanningBtn(ref, context, image),
