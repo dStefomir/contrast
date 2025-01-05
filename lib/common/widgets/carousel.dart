@@ -15,6 +15,8 @@ class AnimatedCarousel extends HookConsumerWidget {
   final Widget Function(Widget)? animation;
   /// What happens when
   final void Function(int)? onPageChanged;
+  /// Initial page to be rendered
+  final int? initialPage;
   /// When should the glass animation be shown
   final void Function(AnimationController)? whenShouldAnimateGlass;
   /// When it should programmatically go to another page
@@ -22,7 +24,7 @@ class AnimatedCarousel extends HookConsumerWidget {
   /// Axis of scrolling
   final Axis axis;
 
-  const AnimatedCarousel({required this.children, this.animation, this.onPageChanged, this.whenShouldAnimateGlass, this.goToPage, this.axis = Axis.vertical, super.key});
+  const AnimatedCarousel({required this.children, this.animation, this.onPageChanged, this.whenShouldAnimateGlass, this.goToPage, this.axis = Axis.vertical, this.initialPage, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,7 +34,7 @@ class AnimatedCarousel extends HookConsumerWidget {
     /// Current position of the scroll
     final scrollPosition = useState(0.0);
     /// Controller for the page view
-    final PageController pageController = usePageController();
+    final PageController pageController = usePageController(initialPage: initialPage ?? 0);
     pageController.addListener(() => scrollPosition.value = pageController.page ?? 0);
 
     if (goToPage != null) {
@@ -48,23 +50,7 @@ class AnimatedCarousel extends HookConsumerWidget {
       itemBuilder: (context, index) {
         final widget = children[index];
 
-        // Calculate the scroll offset for scaling
-        double scale = _maxScale;
-        if (pageController.hasClients) {
-          final currentPage = scrollPosition.value;
-
-          // If the index is the current or the next one, adjust the scale
-          if (index == currentPage.floor()) {
-            scale = _maxScale - (currentPage - index) * _scalingDifference;  // Scale down
-          } else if (index == currentPage.floor() + _maxScale) {
-            scale = _scaleFactor + (currentPage - (index - _maxScale)) * _scalingDifference;  // Scale up
-          }
-        }
-
-        return Transform.scale(
-          scale: scale.clamp(_scaleFactor, _maxScale), // Clamp scale between 0.8 and 1.0
-          child: widget,
-        );
+        return widget;
       },
       onPageChanged: onPageChanged,
     );

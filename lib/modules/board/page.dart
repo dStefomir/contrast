@@ -283,6 +283,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
         );
       } else {
         boards = AnimatedCarousel(
+            initialPage: ref.read(boardFooterTabProvider) == 'photos' ? 0 : 1,
             animation: (child) => SlideTransitionAnimation(
                 getStart: () => const Offset(0, 3),
                 getEnd: () => const Offset(0, 0),
@@ -374,7 +375,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
               onKeyEvent: _handleKeyEvent,
               child: Stack(
                   children: [
-                    if (MediaQuery.of(context).orientation == Orientation.landscape) Align(
+                    if (mediaQuery.orientation == Orientation.landscape) Align(
                       alignment: axis == Axis.vertical ? Alignment.topCenter : Alignment.centerLeft,
                       child: Container(
                         height: axis == Axis.vertical ? halfHeightSize : null,
