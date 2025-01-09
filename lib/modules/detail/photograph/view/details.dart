@@ -15,6 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hyper_effects/hyper_effects.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import "package:universal_html/html.dart" as html;
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -612,7 +613,16 @@ class PhotographDetailsView extends HookConsumerWidget {
             backgroundDecoration: const BoxDecoration(
                 color: Colors.transparent,
             ),
-            loadingBuilder: (context, chunk) => const SizedBox.shrink(),
+            loadingBuilder: (context, chunk) => const Center(
+              child: SizedBox(
+                height: 400,
+                child: LoadingIndicator(
+                  indicatorType: Indicator.triangleSkewSpin,
+                  colors: [Colors.white],
+                  strokeWidth: 2,
+                ),
+              ),
+            ),
             builder: (BuildContext context, int index) {
               return PhotoViewGalleryPageOptions(
                 imageProvider: ExtendedNetworkImageProvider(

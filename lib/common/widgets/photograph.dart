@@ -14,6 +14,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hyper_effects/hyper_effects.dart';
 
 /// Photograph displaying widget
 class ContrastPhotograph extends HookConsumerWidget {
@@ -48,6 +49,8 @@ class ContrastPhotograph extends HookConsumerWidget {
   /// Is the image a thumbnail
   final bool isThumbnail;
 
+  final Widget? Function(ExtendedImageState)? loadImageState;
+
   const ContrastPhotograph({
     required this.widgetKey,
     required this.quality,
@@ -64,6 +67,7 @@ class ContrastPhotograph extends HookConsumerWidget {
     this.data,
     this.borderWidth = 2,
     this.isThumbnail = false,
+    this.loadImageState
   }) : super(key: widgetKey);
 
   @override
@@ -78,7 +82,8 @@ class ContrastPhotograph extends HookConsumerWidget {
         width: width,
         height: !isThumbnail ? height : double.infinity,
         border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
-        enableLoadState: false,
+        enableLoadState: loadImageState != null,
+        loadStateChanged: loadImageState,
         fit: fit ?? (compressed
             ? image?.isLandscape != null && image!.isLandscape!
             ? BoxFit.fitWidth
@@ -88,19 +93,6 @@ class ContrastPhotograph extends HookConsumerWidget {
         cacheRawData: true,
         mode: ExtendedImageMode.gesture,
         enableSlideOutPage: true,
-        initGestureConfigHandler: (state) {
-          return GestureConfig(
-            minScale: 1.0,
-            maxScale: 4.0,
-            animationMinScale: 0.8,
-            animationMaxScale: 4.5,
-            speed: 1.0,
-            inertialSpeed: 100.0,
-            initialScale: 1.0,
-            inPageView: false,
-            initialAlignment: InitialAlignment.center,
-          );
-        },
         clearMemoryCacheIfFailed: true,
         clearMemoryCacheWhenDispose: false,
         imageCacheName: kIsWeb ? "${widgetKey.toString()}_cache_name_${platform}_isMobile_$isMobile" : null,
@@ -208,6 +200,20 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
               compressed: true,
               width: double.infinity,
               height: double.infinity,
+              loadImageState: (state) {
+                if (state.extendedImageLoadState == LoadState.completed) {
+                  return ExtendedRawImage(
+                    image: state.extendedImageInfo?.image,
+                    fit: BoxFit.cover,
+                  ).scaleOut(start: 0, end: 1).animate(
+                      trigger: true,
+                      duration: const Duration(milliseconds: 300),
+                      startState: AnimationStartState.playImmediately
+                  );
+                }
+
+                return const SizedBox.shrink();
+              },
             ),
             if (metadata != null) metadata,
             if (isHovering) ImageMetaDataDetails(
