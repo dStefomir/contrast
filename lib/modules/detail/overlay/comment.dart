@@ -93,7 +93,6 @@ class CommentDialog<T> extends HookConsumerWidget {
     /// Is the admin logged in or not
     final bool isAdmin = Session().isLoggedIn();
 
-
     // Fetch the comments of a photo when the dialog is opened.
     useEffect(() {
       if(ref.read(overlayVisibilityProvider(widgetKey)) == true) {

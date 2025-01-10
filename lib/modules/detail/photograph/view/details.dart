@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/photograph.dart';
 import 'package:contrast/model/image_comments.dart';
+import 'package:contrast/modules/board/photograph/service.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/detail/overlay/comment.dart';
 import 'package:contrast/modules/detail/overlay/provider.dart';
@@ -580,7 +581,6 @@ class PhotographDetailsView extends HookConsumerWidget {
       PageController pageController,
       int currentPhotographIndex,
       ImageData image) {
-    final serviceProvider = ref.watch(photographDetailsServiceProvider);
 
     return KeyboardListener(
       autofocus: true,
@@ -591,7 +591,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         children: [
           ContrastPhotograph(
             widgetKey: Key('${image.id}_background'),
-            fetch: (path) => serviceProvider.getPhotograph(path),
+            fetch: (path) => ref.read(photographyBoardServiceProvider).getCompressedPhotograph(context, path, false),
             image: image,
             quality: FilterQuality.low,
             borderColor: Colors.transparent,
@@ -626,7 +626,7 @@ class PhotographDetailsView extends HookConsumerWidget {
             builder: (BuildContext context, int index) {
               return PhotoViewGalleryPageOptions(
                 imageProvider: ExtendedNetworkImageProvider(
-                  serviceProvider.getPhotograph(image.path!),
+                  ref.read(photographDetailsServiceProvider).getPhotograph(image.path!),
                   cache: true,
                   cacheKey: 'image_cache_key${image.id}_foreground',
                   imageCacheName: 'image_cache_name${image.id}_foreground',

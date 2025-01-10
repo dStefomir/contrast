@@ -205,7 +205,7 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
                   return ExtendedRawImage(
                     image: state.extendedImageInfo?.image,
                     fit: BoxFit.cover,
-                  ).scaleOut(start: 0, end: 1).animate(
+                  ).fadeOut(start: 0, end: 1).animate(
                       trigger: true,
                       duration: const Duration(milliseconds: 300),
                       startState: AnimationStartState.playImmediately

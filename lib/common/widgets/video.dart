@@ -8,8 +8,10 @@ import 'package:contrast/common/widgets/shadow.dart';
 import 'package:contrast/model/image_data.dart';
 import 'package:contrast/modules/board/photograph/service.dart';
 import 'package:contrast/utils/device.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hyper_effects/hyper_effects.dart';
 
 /// Widget which shows the thumbnail of video
 class ContrastVideo extends HookConsumerWidget {
@@ -153,6 +155,20 @@ class ContrastVideo extends HookConsumerWidget {
     compressed: false,
     isThumbnail: true,
     height: double.infinity,
+    loadImageState: (state) {
+      if (state.extendedImageLoadState == LoadState.completed) {
+        return ExtendedRawImage(
+          image: state.extendedImageInfo?.image,
+          fit: BoxFit.cover,
+        ).fadeOut(start: 0, end: 1).animate(
+            trigger: true,
+            duration: const Duration(milliseconds: 300),
+            startState: AnimationStartState.playImmediately
+        );
+      }
+
+      return const SizedBox.shrink();
+    },
   );
 
   @override

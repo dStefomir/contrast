@@ -84,34 +84,42 @@ class TripPlanningOverlay extends HookConsumerWidget {
                               ref.read(endPeriodProvider.notifier).setPeriod(end);
                             },
                           ),
-                          OutlinedButton(
-                              style: ButtonStyle(
-                                  fixedSize: WidgetStateProperty.all(const Size(100, 30)),
-                                  backgroundColor: WidgetStateProperty.all(startPeriod == null || endPeriod == null ? Colors.white : Colors.black),
-                                  elevation: WidgetStateProperty.all(2),
-                                  foregroundColor: WidgetStateProperty.all(startPeriod == null || endPeriod == null ? Colors.grey : Colors.white)
+                          const SizedBox(height: 15,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                child: OutlinedButton(
+                                    style: ButtonStyle(
+                                        backgroundColor: WidgetStateProperty.all(startPeriod == null || endPeriod == null ? Colors.white : Colors.black),
+                                        elevation: WidgetStateProperty.all(2),
+                                        foregroundColor: WidgetStateProperty.all(startPeriod == null || endPeriod == null ? Colors.grey : Colors.white)
+                                    ),
+                                    onPressed: startPeriod == null || endPeriod == null ? null : () async {
+                                      ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
+                                      ref.read(startPeriodProvider.notifier).setPeriod(null);
+                                      ref.read(endPeriodProvider.notifier).setPeriod(null);
+                                      final Event event = Event(
+                                        title: translate('Photographic location'),
+                                        description: "${translate('You have planned a trip to a photographic location')}.\n\n${translate('Photograph')} - https://www.dstefomir.eu/#/photos/details?id=${image.id}&category=all\n\n${translate('Location')} - https://www.google.com/maps/@${image.lat},${image.lng},20.45z?entry=ttu",
+                                        location: '${image.lat}, ${image.lng}',
+                                        startDate: startPeriod,
+                                        endDate: endPeriod,
+                                        allDay: true,
+                                        iosParams: const IOSParams(
+                                          reminder: Duration(days: 1),
+                                          url: "https://www.dstefomir.eu",
+                                        ),
+                                      );
+                                      await Add2Calendar.addEvent2Cal(event);
+                                    },
+                                    child: Text(
+                                        translate('Plan')
+                                    )
+                                ),
                               ),
-                              onPressed: startPeriod == null || endPeriod == null ? null : () async {
-                                ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(null);
-                                ref.read(startPeriodProvider.notifier).setPeriod(null);
-                                ref.read(endPeriodProvider.notifier).setPeriod(null);
-                                final Event event = Event(
-                                  title: translate('Photographic location'),
-                                  description: "${translate('You have planned a trip to a photographic location')}.\n\n${translate('Photograph')} - https://www.dstefomir.eu/#/photos/details?id=${image.id}&category=all\n\n${translate('Location')} - https://www.google.com/maps/@${image.lat},${image.lng},20.45z?entry=ttu",
-                                  location: '${image.lat}, ${image.lng}',
-                                  startDate: startPeriod,
-                                  endDate: endPeriod,
-                                  allDay: true,
-                                  iosParams: const IOSParams(
-                                    reminder: Duration(days: 1),
-                                    url: "https://www.dstefomir.eu",
-                                  ),
-                                );
-                                await Add2Calendar.addEvent2Cal(event);
-                              },
-                              child: Text(
-                                  translate('Plan')
-                              )
+                            ],
                           ),
                         ],
                       ),

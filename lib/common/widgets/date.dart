@@ -36,9 +36,13 @@ class DateRangePickerWidget extends StatelessWidget {
       endRangeSelectionColor: Colors.black,
       startRangeSelectionColor: Colors.black,
       todayHighlightColor: Colors.grey,
+      backgroundColor: Colors.transparent,
       selectionMode: DateRangePickerSelectionMode.range,
       enablePastDates: datesInPast,
-      headerStyle: const DateRangePickerHeaderStyle(textStyle: TextStyle(fontWeight: FontWeight.bold)),
+      headerStyle: const DateRangePickerHeaderStyle(
+          textStyle: TextStyle(fontWeight: FontWeight.bold),
+          backgroundColor: Colors.transparent
+      ),
       onSelectionChanged: (DateRangePickerSelectionChangedArgs selection) => onSelect(selection.value.startDate, selection.value.endDate)
   );
 }
