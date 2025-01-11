@@ -94,16 +94,25 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
   }
 
   /// Checks the state of the overlays
-  bool _checkOverlaysState(WidgetRef ref) =>
-      ref.read(overlayVisibilityProvider(const Key('qr_code'))) != null ||
-          ref.read(overlayVisibilityProvider(const Key('delete_image'))) != null ||
-          ref.read(overlayVisibilityProvider(const Key('delete_video'))) != null ||
-          ref.read(overlayVisibilityProvider(const Key('upload_image'))) != null ||
-          ref.read(overlayVisibilityProvider(const Key('edit_image'))) != null ||
-          ref.read(overlayVisibilityProvider(const Key('upload_video'))) != null ||
-          ref.read(overlayVisibilityProvider(const Key('edit_video'))) != null ||
-          ref.read(overlayVisibilityProvider(const Key('edit_video'))) != null ||
-          ref.read(overlayVisibilityProvider(const Key('share'))) != null;
+  bool _checkOverlaysState(WidgetRef ref) {
+    final isQrCodeOpen = ref.read(overlayVisibilityProvider(const Key('qr_code')));
+    final isDeleteImageOpen = ref.read(overlayVisibilityProvider(const Key('delete_image')));
+    final isDeleteVideoOpen = ref.read(overlayVisibilityProvider(const Key('delete_video')));
+    final isUploadImageOpen = ref.read(overlayVisibilityProvider(const Key('upload_image')));
+    final isEditImageOpen = ref.read(overlayVisibilityProvider(const Key('edit_image')));
+    final isUploadVideoOpen = ref.read(overlayVisibilityProvider(const Key('upload_video')));
+    final isEditVideoOpen = ref.read(overlayVisibilityProvider(const Key('edit_video')));
+    final isShareOpen = ref.read(overlayVisibilityProvider(const Key('share')));
+
+    return (isQrCodeOpen != null && isQrCodeOpen) ||
+        (isDeleteImageOpen != null && isDeleteImageOpen) ||
+        (isDeleteVideoOpen != null && isDeleteVideoOpen) ||
+        (isUploadImageOpen != null && isUploadImageOpen) ||
+        (isEditImageOpen != null && isEditImageOpen) ||
+        (isUploadVideoOpen != null && isUploadVideoOpen) ||
+        (isEditVideoOpen != null && isEditVideoOpen) ||
+        (isShareOpen != null && isShareOpen);
+  }
 
   /// Handles the escape key of the keyboard
   void _handleKeyEvent(KeyEvent event) {

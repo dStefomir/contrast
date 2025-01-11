@@ -83,11 +83,13 @@ class _SimpleInputState extends ConsumerState<SimpleInput> {
       focusNode: widget.focusNode,
       enabled: widget.enabled,
       decoration: InputDecoration(
-        prefixIcon: Icon(widget.prefixIcon, color: Colors.black,),
+        prefix: Icon(widget.prefixIcon, color: Colors.black,),
         suffixIcon: widget.suffixWidget,
         labelText: widget.labelText,
         hintText: widget.hint,
-        fillColor: widget.backgroundColor
+        fillColor: widget.backgroundColor,
+        hintStyle: const TextStyle(color: Colors.grey),
+        labelStyle: const TextStyle(color: Colors.grey,),
       ),
       validator: widget.validator
   );

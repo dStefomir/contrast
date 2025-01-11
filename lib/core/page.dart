@@ -5,6 +5,7 @@ import 'package:contrast/core/provider.dart';
 import 'package:contrast/modules/login/overlay/cookie.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -75,7 +76,9 @@ class CorePage extends HookConsumerWidget {
             final List<Widget> children = [
               kIsWeb ? render() : onPageDismissed != null ? DismissiblePage(
                 onDismissed: () => onPageDismissed!(ref),
-                direction: DismissiblePageDismissDirection.vertical,
+                direction: DismissiblePageDismissDirection.down,
+                dragSensitivity: 1,
+                dragStartBehavior: DragStartBehavior.down,
                 isFullScreen: true,
                 child: ColoredBox(color: Colors.black, child: mobileChildPage),
               ) : Container(

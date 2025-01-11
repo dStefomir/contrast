@@ -154,7 +154,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                       child: StyledText(
                           text: translate(isAdmin ? 'Approve pending comments' : 'You can post only one comment per day'),
-                          color: Colors.black87,
+                          color: Colors.grey,
                           fontSize: 10,
                           padding: 0,
                           letterSpacing: 3,
@@ -174,7 +174,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                   labelText: translate('From who'),
                   onChange: (e) => e,
                   suffixWidget: Center(
-                    widthFactor: 1.5,
+                    widthFactor: 1.2,
                     child: RatingBar.builder(
                       initialRating: ratingController.value,
                       minRating: 0,

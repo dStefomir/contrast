@@ -325,7 +325,8 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       child: PopScope(
         canPop: false,
         onPopInvokedWithResult: (_, __) {
-          if(ref.read(overlayVisibilityProvider(const Key('comment_video'))) != null) {
+          final isCommentOpen = ref.read(overlayVisibilityProvider(const Key('comment_video')));
+          if(isCommentOpen != null && isCommentOpen) {
             closeOverlayIfOpened(ref, 'comment_video');
           } else if (!kIsWeb && Platform.isAndroid) {
             Modular.to.navigate('/');

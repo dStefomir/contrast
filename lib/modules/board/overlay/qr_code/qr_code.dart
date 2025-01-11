@@ -68,7 +68,7 @@ class QrCodeDialog extends HookConsumerWidget {
                           text: '"${translate('The future belongs to those who believe in the beauty of their dreams')}",',
                           fontSize: 10,
                           clip: false,
-                          color: Colors.black87,
+                          color: Colors.grey,
                           padding: 0
                       ),
                       Padding(

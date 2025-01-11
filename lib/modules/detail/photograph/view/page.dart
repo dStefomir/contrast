@@ -86,7 +86,9 @@ class _PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (_, __) {
-        if (ref.read(overlayVisibilityProvider(const Key('comment_photograph'))) != null || ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph'))) != null) {
+        final isCommentOpen = ref.read(overlayVisibilityProvider(const Key('comment_photograph')));
+        final isPlanningOpen = ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')));
+        if ((isCommentOpen != null && isCommentOpen) || (isPlanningOpen != null && isPlanningOpen)) {
           closeOverlayIfOpened(ref, 'comment_photograph');
           closeOverlayIfOpened(ref, 'trip_planning_photograph');
         } else if (!kIsWeb && Platform.isAndroid) {

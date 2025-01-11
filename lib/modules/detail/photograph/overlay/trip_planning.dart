@@ -63,7 +63,7 @@ class TripPlanningOverlay extends HookConsumerWidget {
                           align: TextAlign.start,
                           fontSize: 10,
                           clip: false,
-                          color: Colors.black87,
+                          color: Colors.grey,
                           padding: 0
                       ),
                     ),
