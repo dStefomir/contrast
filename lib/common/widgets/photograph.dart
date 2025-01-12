@@ -30,12 +30,6 @@ class ContrastPhotograph extends HookConsumerWidget {
   final BoxFit? fit;
   /// Image data model object
   final ImageData? image;
-  /// Color of the border of the image
-  final Color borderColor;
-  /// Custom border of the photograph
-  final BoxBorder? customBorder;
-  /// Image border width
-  final double borderWidth;
   /// Should display a compressed image or not
   final bool compressed;
   /// Width of the image
@@ -54,18 +48,15 @@ class ContrastPhotograph extends HookConsumerWidget {
   const ContrastPhotograph({
     required this.widgetKey,
     required this.quality,
-    required this.borderColor,
     required this.constraints,
     this.fetch,
     this.shouldPinchZoom = false,
     this.fit,
     this.image,
     this.compressed = true,
-    this.customBorder,
     this.width,
     this.height,
     this.data,
-    this.borderWidth = 2,
     this.isThumbnail = false,
     this.loadImageState
   }) : super(key: widgetKey);
@@ -81,7 +72,6 @@ class ContrastPhotograph extends HookConsumerWidget {
         key: widgetKey,
         width: width,
         height: !isThumbnail ? height : double.infinity,
-        border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
         enableLoadState: loadImageState != null,
         loadStateChanged: loadImageState,
         fit: fit ?? (compressed
@@ -106,7 +96,6 @@ class ContrastPhotograph extends HookConsumerWidget {
         width: width,
         height: height,
         scale: 0.6,
-        border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
         enableLoadState: false,
         fit: fit ?? BoxFit.contain,
         cacheRawData: false,
@@ -173,7 +162,6 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
                       scaleFactor: 10,
                       onTap: widget.onClick,
                     ),
-                    isHovering,
                     false
                 )
             ),
@@ -181,83 +169,83 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
       );
 
   /// Renders a photograph
-  Widget _renderPhoto(BuildContext context, Widget? metadata, bool isHovering, bool shouldHaveBorder) =>
-      Padding(
-        padding: const EdgeInsets.all(0.5),
-        child: Stack(
-          key: Key("${widget.widgetKey.toString()}_stack_photograph"),
-          alignment: Alignment.center,
-          children: [
-            ContrastPhotograph(
-              widgetKey: Key("${widget.widgetKey.toString()}_photograph"),
-              fetch: widget.fetch,
-              constraints: widget.constraints,
-              quality: FilterQuality.low,
-              borderColor: widget.borderColor,
-              fit: BoxFit.cover,
-              borderWidth: !shouldHaveBorder ? 0 : 2.5,
-              image: widget.wrapper.image,
-              compressed: true,
-              width: double.infinity,
-              height: double.infinity,
-              loadImageState: (state) {
-                if (state.extendedImageLoadState == LoadState.completed) {
-                  return ExtendedRawImage(
+  Widget _renderPhoto(BuildContext context, Widget? metadata, bool shouldHaveBorder) {
+    final bool isHovering = ref.watch(hoverProvider(widget.widgetKey));
+    return Padding(
+      padding: const EdgeInsets.all(0.5),
+      child: Stack(
+        key: Key("${widget.widgetKey.toString()}_stack_photograph"),
+        alignment: Alignment.center,
+        children: [
+          ContrastPhotograph(
+            widgetKey: Key("${widget.widgetKey.toString()}_photograph"),
+            fetch: widget.fetch,
+            constraints: widget.constraints,
+            quality: FilterQuality.low,
+            fit: BoxFit.cover,
+            image: widget.wrapper.image,
+            compressed: true,
+            width: double.infinity,
+            height: double.infinity,
+            loadImageState: metadata == null ? (state) {
+              if (state.extendedImageLoadState == LoadState.completed) {
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 2.5)
+                  ),
+                  child: ExtendedRawImage(
                     image: state.extendedImageInfo?.image,
                     fit: BoxFit.cover,
-                  ).fadeOut(start: 0, end: 1).animate(
-                      trigger: true,
-                      duration: const Duration(milliseconds: 300),
-                      startState: AnimationStartState.playImmediately
-                  );
-                }
+                  ),
+                ).scaleOut(start: 0.8, end: 1).animate(
+                    curve: Curves.easeInOut,
+                    trigger: true,
+                    duration: const Duration(milliseconds: 600),
+                    startState: AnimationStartState.playImmediately
+                );
+              }
 
-                return const SizedBox.shrink();
-              },
+              return const SizedBox.shrink();
+            } : null,
+          ),
+          if (metadata != null) metadata,
+          if (isHovering) ImageMetaDataDetails(
+            constraints: widget.constraints,
+            metadata: widget.wrapper.metadata,
+            isLandscape: widget.wrapper.image.isLandscape!,
+            onTap: widget.onClick,
+            scaleFactor: 16,
+          ).translateOnPhotoHover,
+          if (isHovering && widget.onRedirect != null && getRunningPlatform(context) == 'DESKTOP')
+            Align(
+                alignment: Alignment.topRight,
+                child: RedirectButton(
+                  widgetKey: Key("${widget.widgetKey.toString()}_photograph_redirect"),
+                  constraints: widget.constraints,
+                  onRedirect: widget.onRedirect!,
+                  height: widget.constraints.maxHeight / 7,
+                )
             ),
-            if (metadata != null) metadata,
-            if (isHovering) ImageMetaDataDetails(
-              constraints: widget.constraints,
-              metadata: widget.wrapper.metadata,
-              isLandscape: widget.wrapper.image.isLandscape!,
-              onTap: widget.onClick,
-              scaleFactor: 16,
-            ).translateOnPhotoHover,
-            if (isHovering && widget.onRedirect != null && getRunningPlatform(context) == 'DESKTOP')
-              Align(
-                  alignment: Alignment.topRight,
-                  child: RedirectButton(
-                    widgetKey: Key("${widget.widgetKey.toString()}_photograph_redirect"),
-                    constraints: widget.constraints,
-                    onRedirect: widget.onRedirect!,
-                    height: widget.constraints.maxHeight / 7,
-                  )
-              ),
-          ],
-        ),
-      );
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final bool isHovering = ref.watch(hoverProvider(widget.widgetKey));
-    final photoWidget = _renderPhoto(context, null, isHovering, true);
+    final photoWidget = _renderPhoto(context, null, true);
     renderMobileWidget(Widget child) => GestureDetector(
-      onTap: () => widget.onClick(),
+      onTap: widget.onClick,
       onLongPressStart: (details) {
-        if (!isHovering) {
-          if (popupDialog == null) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              popupDialog = _createPopupDialog(context, isHovering);
-              Overlay.of(context).insert(popupDialog!);
-            });
-          }
+        final bool isHovering = ref.watch(hoverProvider(widget.widgetKey));
+        if (!isHovering && popupDialog == null) {
+          popupDialog = _createPopupDialog(context, isHovering);
+          Overlay.of(context).insert(popupDialog!);
         }
       },
       onLongPressEnd: (details) {
-        if (!isHovering) {
-          popupDialog?.remove();
-          popupDialog = null;
-        }
+        popupDialog?.remove();
+        popupDialog = null;
       },
       child: child
     );
