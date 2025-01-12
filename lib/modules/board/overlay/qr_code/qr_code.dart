@@ -22,10 +22,10 @@ class QrCodeDialog extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => ShadowWidget(
     offset: const Offset(0, 0),
     blurRadius: 4,
-    child: Container(
-      color: Colors.white,
-      height: dialogHeight,
-      child: SingleChildScrollView(
+    child: SingleChildScrollView(
+      child: Container(
+        color: Colors.white,
+        height: dialogHeight,
         child: Column(
           children: [
             Row(
@@ -69,8 +69,9 @@ class QrCodeDialog extends HookConsumerWidget {
             const Divider(
                 color: Colors.black
             ),
+            const Spacer(),
             Padding(
-              padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 45),
+              padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 0),
               child: QrImageView(
                 padding: EdgeInsets.zero,
                 data: kIsWeb ? 'https://www.dstefomir.eu' : Platform.isAndroid ? 'https://play.google.com/store/apps/details?id=eu.bsdsoft.contrast' : 'https://apps.apple.com/bg/app/contrastus/id6466247842',
@@ -78,9 +79,10 @@ class QrCodeDialog extends HookConsumerWidget {
                 size: 350,
               ),
             ),
+            const Spacer(),
           ],
         ),
-      )
+      ),
     ),
   );
 }

@@ -12,6 +12,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hyper_effects/hyper_effects.dart';
+import 'package:shimmer/shimmer.dart';
 
 /// Widget which shows the thumbnail of video
 class ContrastVideo extends HookConsumerWidget {
@@ -160,14 +161,20 @@ class ContrastVideo extends HookConsumerWidget {
         return ExtendedRawImage(
           image: state.extendedImageInfo?.image,
           fit: BoxFit.cover,
-        ).scaleOut(start: 0.8, end: 1).animate(
+        ).fadeOut(start: 0, end: 1).animate(
+            curve: Curves.easeInOut,
             trigger: true,
-            duration: const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 600),
             startState: AnimationStartState.playImmediately
         );
       }
 
-      return const SizedBox.shrink();
+      return Shimmer.fromColors(
+          baseColor: Colors.black.withValues(alpha: 0.3),
+          highlightColor: Colors.white,
+          period: const Duration(milliseconds: 800),
+          child: const ColoredBox(color: Colors.black)
+      );
     },
   );
 

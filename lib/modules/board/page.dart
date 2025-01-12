@@ -346,17 +346,18 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
             ]
         );
       }
-      return Align(
+      final widget = Align(
           alignment: Alignment.center,
-          child: boards.pad(
-              !useMobileLayoutOriented(context)
-                ? EdgeInsets.only(top: ref.read(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding)
-                : const EdgeInsets.only(left: 0, bottom: boardPadding)
-          ).animate(
-              trigger: ref.read(boardFooterTabProvider),
-              curve: Curves.easeInOut,
-              duration: const Duration(milliseconds: 600)
-          )
+          child: boards
+      );
+      return useMobileLayoutOriented(context) ? widget : widget.pad(
+          useMobileLayoutOriented(context) == false
+              ? EdgeInsets.only(top: ref.read(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding)
+              : const EdgeInsets.only(left: 0, bottom: boardPadding)
+      ).animate(
+          trigger: ref.read(boardFooterTabProvider),
+          curve: Curves.easeInOut,
+          duration: const Duration(milliseconds: 600)
       );
     }
 
