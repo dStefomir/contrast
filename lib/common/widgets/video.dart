@@ -150,7 +150,7 @@ class ContrastVideo extends HookConsumerWidget {
     constraints: constraints,
     image: ImageData(path: videoPath),
     quality: FilterQuality.high,
-    // borderColor: Colors.transparent,
+    borderColor: Colors.transparent,
     fit: BoxFit.contain,
     compressed: false,
     isThumbnail: true,
@@ -161,9 +161,8 @@ class ContrastVideo extends HookConsumerWidget {
           image: state.extendedImageInfo?.image,
           fit: BoxFit.cover,
         ).scaleOut(start: 0.8, end: 1).animate(
-            curve: Curves.easeInOut,
             trigger: true,
-            duration: const Duration(milliseconds: 600),
+            duration: const Duration(milliseconds: 300),
             startState: AnimationStartState.playImmediately
         );
       }

@@ -94,6 +94,7 @@ class PhotographBoardPage extends HookConsumerWidget {
           child: ContrastPhotograph(
             widgetKey: Key('${wrapper.image.id}'),
             quality: FilterQuality.high,
+            borderColor: Colors.black,
             fetch: (path) => serviceProvider.getCompressedPhotograph(context, path, false),
             constraints: constraints,
             image: wrapper.image,

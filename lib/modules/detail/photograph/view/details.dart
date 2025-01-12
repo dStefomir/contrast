@@ -568,7 +568,7 @@ class PhotographDetailsView extends HookConsumerWidget {
             fetch: (path) => ref.read(photographyBoardServiceProvider).getCompressedPhotograph(context, path, false),
             image: image,
             quality: FilterQuality.low,
-            // borderColor: Colors.transparent,
+            borderColor: Colors.transparent,
             constraints: BoxConstraints(
                 maxWidth: MediaQuery.of(context).size.width,
                 maxHeight: MediaQuery.of(context).size.height

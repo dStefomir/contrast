@@ -30,6 +30,12 @@ class ContrastPhotograph extends HookConsumerWidget {
   final BoxFit? fit;
   /// Image data model object
   final ImageData? image;
+  /// Color of the border of the image
+  final Color borderColor;
+  /// Custom border of the photograph
+  final BoxBorder? customBorder;
+  /// Image border width
+  final double borderWidth;
   /// Should display a compressed image or not
   final bool compressed;
   /// Width of the image
@@ -48,15 +54,18 @@ class ContrastPhotograph extends HookConsumerWidget {
   const ContrastPhotograph({
     required this.widgetKey,
     required this.quality,
+    required this.borderColor,
     required this.constraints,
     this.fetch,
     this.shouldPinchZoom = false,
     this.fit,
     this.image,
     this.compressed = true,
+    this.customBorder,
     this.width,
     this.height,
     this.data,
+    this.borderWidth = 2,
     this.isThumbnail = false,
     this.loadImageState
   }) : super(key: widgetKey);
@@ -72,6 +81,7 @@ class ContrastPhotograph extends HookConsumerWidget {
         key: widgetKey,
         width: width,
         height: !isThumbnail ? height : double.infinity,
+        border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
         enableLoadState: loadImageState != null,
         loadStateChanged: loadImageState,
         fit: fit ?? (compressed
@@ -96,6 +106,7 @@ class ContrastPhotograph extends HookConsumerWidget {
         width: width,
         height: height,
         scale: 0.6,
+        border: customBorder ?? Border.all(color: borderColor, width: borderWidth),
         enableLoadState: false,
         fit: fit ?? BoxFit.contain,
         cacheRawData: false,
@@ -182,21 +193,18 @@ class _ContrastPhotographMetaState extends ConsumerState<ContrastPhotographMeta>
             fetch: widget.fetch,
             constraints: widget.constraints,
             quality: FilterQuality.low,
+            borderColor: widget.borderColor,
             fit: BoxFit.cover,
+            borderWidth: !shouldHaveBorder ? 0 : 2.5,
             image: widget.wrapper.image,
             compressed: true,
             width: double.infinity,
             height: double.infinity,
             loadImageState: metadata == null ? (state) {
               if (state.extendedImageLoadState == LoadState.completed) {
-                return Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 2.5)
-                  ),
-                  child: ExtendedRawImage(
-                    image: state.extendedImageInfo?.image,
-                    fit: BoxFit.cover,
-                  ),
+                return ExtendedRawImage(
+                  image: state.extendedImageInfo?.image,
+                  fit: BoxFit.cover,
                 ).scaleOut(start: 0.8, end: 1).animate(
                     curve: Curves.easeInOut,
                     trigger: true,

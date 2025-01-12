@@ -3,10 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-const _maxScale = 1.0;
-const _scaleFactor = 0.8;
-const _scalingDifference = 0.2;
-
 /// Renders an animated carousel widget
 class AnimatedCarousel extends HookConsumerWidget {
   /// Children widgets to be rendered
