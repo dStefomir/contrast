@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shimmer/shimmer.dart';
 
 /// Svg widget
 class IconRenderer extends StatelessWidget {
@@ -14,8 +13,6 @@ class IconRenderer extends StatelessWidget {
   final double? width;
   /// Height of the svg
   final double? height;
-  /// Should shimmer
-  final bool shouldShimmer;
   /// Render a placeholder
   final Widget Function(BuildContext)? renderPlaceholder;
 
@@ -27,12 +24,12 @@ class IconRenderer extends StatelessWidget {
     this.width,
     this.height,
     this.renderPlaceholder,
-    this.shouldShimmer = false
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final widget = asset.contains('.svg') ? SvgPicture.asset(
+
+    return asset.contains('.svg') ? SvgPicture.asset(
       'assets/$asset',
       width: width,
       height: height,
@@ -47,11 +44,5 @@ class IconRenderer extends StatelessWidget {
       height: height,
       placeholder: const AssetImage('assets/placeholder.png'),
     );
-
-    return shouldShimmer ? Shimmer.fromColors(
-        baseColor: Colors.grey.shade400,
-        highlightColor: Colors.white,
-        child: widget
-    ) : widget;
   }
 }

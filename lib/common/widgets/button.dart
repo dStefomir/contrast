@@ -213,7 +213,6 @@ class MenuButton extends HookConsumerWidget {
                     child: IconRenderer(
                       asset: iconPath,
                       color: selected ? Colors.white : Colors.black,
-                      shouldShimmer: selected,
                     ).rotate(360 * (pi / 180), from: 0)
                         .animate(
                         trigger: shouldAnimate,

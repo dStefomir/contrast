@@ -59,7 +59,6 @@ class ContrastTab extends HookConsumerWidget {
                 color: isSelected ? Colors.white : !isHovering ? Colors.black : Colors.white,
                 weight: isSelected ? FontWeight.bold : FontWeight.normal,
                 useShadow: isSelected ? true : false,
-                shouldShimmer: isSelected,
                 shadow: isSelected
                     ? <Shadow>[
                         Shadow(

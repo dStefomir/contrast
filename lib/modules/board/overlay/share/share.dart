@@ -24,25 +24,45 @@ class ShareDialog extends HookConsumerWidget {
         height: dialogHeight,
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       StyledText(
                           text: translate('Share Contrastus'),
                           weight: FontWeight.bold
                       ),
-                      const Spacer(),
-                      DefaultButton(
-                          onClick: () => ref.read(overlayVisibilityProvider(const Key('share')).notifier).setOverlayVisibility(false),
-                          tooltip: translate('Close'),
-                          color: Colors.white,
-                          borderColor: Colors.black,
-                          icon: 'close.svg'
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15, right: 10),
+                        child: StyledText(
+                            text: translate('Share Contrastus with your friends'),
+                            color: Colors.grey,
+                            fontSize: 10,
+                            padding: 0,
+                            letterSpacing: 3,
+                            clip: false,
+                            align: TextAlign.start,
+                            weight: FontWeight.bold
+                        ),
                       ),
-                    ]
-                ),
+                    ],
+                  ),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: DefaultButton(
+                        onClick: () => ref.read(overlayVisibilityProvider(const Key('share')).notifier).setOverlayVisibility(false),
+                        tooltip: translate('Close'),
+                        color: Colors.white,
+                        borderColor: Colors.black,
+                        icon: 'close.svg'
+                    ),
+                  ),
+                ],
               ),
               const Divider(color: Colors.black),
               Column(

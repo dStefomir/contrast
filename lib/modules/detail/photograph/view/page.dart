@@ -37,8 +37,6 @@ class PhotographDetailPage extends StatefulHookConsumerWidget {
 }
 
 class _PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
-  /// Web audio player
-  late AudioPlayer player;
 
   @override
   void initState() {
@@ -50,21 +48,7 @@ class _PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
             'id': widget.id,
           });
     });
-    player = AudioPlayer();
-    player.onPlayerComplete.listen((_) => _resetMusicWhenEnded());
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    player.dispose();
-    super.dispose();
-  }
-
-  /// Reset the currentTime to 0 and play music again
-  void _resetMusicWhenEnded() async {
-    await player.stop();
-    await player.play(AssetSource('background_music.mp3'));
   }
 
   @override
@@ -119,7 +103,6 @@ class _PhotographDetailPageState extends ConsumerState<PhotographDetailPage> {
                     images: data,
                     photoIndex: photoIndex,
                     category: widget.category,
-                    audio: player
                 );
               },
               error: (error, stackTrace) => renderLoadingIndicator(),

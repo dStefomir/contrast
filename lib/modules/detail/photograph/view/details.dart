@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/photograph.dart';
 import 'package:contrast/model/image_comments.dart';
@@ -48,15 +47,12 @@ class PhotographDetailsView extends HookConsumerWidget {
   final int photoIndex;
   /// Current selected photograph category
   final String category;
-  /// Audio player instance
-  final AudioPlayer audio;
 
   const PhotographDetailsView({
     super.key,
     required this.images,
     required this.photoIndex,
     required this.category,
-    required this.audio
   });
 
   /// Are coordinates valid or not
@@ -432,28 +428,6 @@ class PhotographDetailsView extends HookConsumerWidget {
     ),
   );
 
-  /// Renders the audio button
-  Widget _renderAudioButton(BuildContext context, WidgetRef ref) =>
-      Padding(
-        padding: const EdgeInsets.only(left: 115.0, top: 5.0),
-        child: DefaultButton(
-            onClick: () async {
-              ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
-              if(audio.state != PlayerState.playing) {
-                await audio.play(AssetSource('background_music.mp3'), position: await audio.getCurrentPosition() ?? const Duration(seconds: 0), mode: PlayerMode.lowLatency);
-                ref.read(musicTriggerProvider.notifier).setPlay(true);
-              } else {
-                audio.pause();
-                ref.read(musicTriggerProvider.notifier).setPlay(false);
-              }
-            },
-            tooltip: ref.watch(musicTriggerProvider) ? translate('Stop music') : translate('Play music'),
-            color: Colors.white,
-            borderColor: Colors.black,
-            icon: ref.watch(musicTriggerProvider) ? 'volume_up.svg' : 'volume_off.svg'
-        ),
-      );
-
   /// Renders the share button
   Widget _renderShareButton(BuildContext context, WidgetRef ref, int currentPhotographyIndex) =>
       Padding(
@@ -539,7 +513,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         });
       },
       child: Padding(
-        padding: EdgeInsets.only(left: !kIsWeb ? 170 : !Session().isLoggedIn() ? 170.0 : 225, top: 5.0),
+        padding: EdgeInsets.only(left: !kIsWeb ? 170 : !Session().isLoggedIn() ? 115.0 : 115, top: 5.0),
         child: Align(
             alignment: Alignment.topLeft,
             child: DefaultButton(
@@ -715,7 +689,6 @@ class PhotographDetailsView extends HookConsumerWidget {
           if (image != null) _renderDetailsBtn(ref, context, scrollController, image),
           if (!kIsWeb && image != null) _renderTripPlanningBtn(ref, context, image),
           if (image != null && !kIsWeb || Session().isLoggedIn()) _renderCommentsBtn(ref, context),
-          if (kIsWeb) _renderAudioButton(context, ref),
           if (image != null) _renderShareButton(context, ref, currentPhotographIndex),
           _renderGoBackBtn(context, ref),
           Visibility(

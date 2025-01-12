@@ -13,7 +13,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:shimmer/shimmer.dart';
 
 /// Renders the footer of the board page
 class BoardPageFooter extends HookConsumerWidget {
@@ -72,11 +71,7 @@ class BoardPageFooter extends HookConsumerWidget {
                               decoration: BoxDecoration(
                                 color: currentTab == 'photos' ? Colors.black: Colors.white,
                               ),
-                              child: currentTab == 'photos' ? Shimmer.fromColors(
-                                  baseColor: Colors.grey.shade400,
-                                  highlightColor: Colors.white,
-                                  child: photographTab
-                              ) : photographTab
+                              child: photographTab
                           ),
                         ),
                       ),
@@ -99,11 +94,7 @@ class BoardPageFooter extends HookConsumerWidget {
                             decoration: BoxDecoration(
                               color: currentTab == 'videos' ? Colors.black: Colors.white,
                             ),
-                            child: currentTab == 'videos' ? Shimmer.fromColors(
-                                baseColor: Colors.grey.shade400,
-                                highlightColor: Colors.white,
-                                child: videoTab
-                            ) : videoTab
+                            child: videoTab
                           ),
                         ),
                       ),

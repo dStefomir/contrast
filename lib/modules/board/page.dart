@@ -7,6 +7,7 @@ import 'package:contrast/modules/board/overlay/share/share.dart';
 import 'package:contrast/utils/overlay.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:hyper_effects/hyper_effects.dart';
 import "package:universal_html/html.dart" as html;
 import 'package:contrast/common/widgets/blur.dart';
 import 'package:contrast/common/widgets/shadow.dart';
@@ -347,11 +348,14 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
       }
       return Align(
           alignment: Alignment.center,
-          child: Padding(
-              padding: !useMobileLayoutOriented(context)
-                  ? const EdgeInsets.only(top: boardPadding, bottom: boardPadding)
-                  : const EdgeInsets.only(left: 0, bottom: boardPadding),
-              child: boards
+          child: boards.pad(
+              !useMobileLayoutOriented(context)
+                ? EdgeInsets.only(top: ref.read(boardFooterTabProvider) == 'photos' ? boardPadding : 0, bottom: boardPadding)
+                : const EdgeInsets.only(left: 0, bottom: boardPadding)
+          ).animate(
+              trigger: ref.read(boardFooterTabProvider),
+              curve: Curves.easeInOut,
+              duration: const Duration(milliseconds: 600)
           )
       );
     }

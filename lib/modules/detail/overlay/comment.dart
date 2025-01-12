@@ -124,46 +124,49 @@ class CommentDialog<T> extends HookConsumerWidget {
             height: dialogHeight,
             child: _deviceInfoWidget((deviceId) => Column(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0, left: 10, right: 10),
-                      child: Row(
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           StyledText(
                             text: translate('Comments'),
                             weight: FontWeight.bold,
-                            padding: 0,
                           ),
-                          const Spacer(),
-                          DefaultButton(
-                              onClick: () {
-                                ref.read(overlayVisibilityProvider(widgetKey).notifier).setOverlayVisibility(false);
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                },
-                              tooltip: translate('Close'),
-                              color: Colors.white.withValues(alpha: 0.3),
-                              borderColor: Colors.black,
-                              icon: 'close.svg'
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15, right: 10),
+                            child: StyledText(
+                                text: translate(isAdmin ? 'Approve pending comments' : 'You can post only one comment per day'),
+                                color: Colors.grey,
+                                fontSize: 10,
+                                padding: 0,
+                                letterSpacing: 3,
+                                clip: false,
+                                align: TextAlign.start,
+                                weight: FontWeight.bold
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                      child: StyledText(
-                          text: translate(isAdmin ? 'Approve pending comments' : 'You can post only one comment per day'),
-                          color: Colors.grey,
-                          fontSize: 10,
-                          padding: 0,
-                          letterSpacing: 3,
-                          clip: false,
-                          align: TextAlign.start,
-                          weight: FontWeight.bold
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: DefaultButton(
+                            onClick: () {
+                              ref.read(overlayVisibilityProvider(widgetKey).notifier).setOverlayVisibility(false);
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
+                            tooltip: translate('Close'),
+                            color: Colors.white,
+                            borderColor: Colors.black,
+                            icon: 'close.svg'
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 SimpleInput(
                   widgetKey: const Key('CommentInputDeviceName'),

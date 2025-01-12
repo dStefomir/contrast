@@ -1,6 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 
 /// Styled text widget
 class StyledText extends StatelessWidget {
@@ -32,8 +31,6 @@ class StyledText extends StatelessWidget {
   final List<Shadow>? shadow;
   /// Font family to be used
   final String? family;
-  /// Should shimmer
-  final bool shouldShimmer;
   /// Should the text be animated as typewriter
   final bool typewriter;
   /// Should the typewriter animated text has a cursor
@@ -57,7 +54,6 @@ class StyledText extends StatelessWidget {
     this.align = TextAlign.center,
     this.shadow,
     this.family,
-    this.shouldShimmer = false,
     this.typewriter = false,
     this.typewriterCursor = true,
     this.onTypewriterTap
@@ -112,11 +108,7 @@ class StyledText extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.all(padding),
-      child: shouldShimmer ? Shimmer.fromColors(
-          baseColor: Colors.grey.shade400,
-          highlightColor: Colors.white,
-          child: widget
-      ) : widget,
+      child: widget,
     );
   }
 

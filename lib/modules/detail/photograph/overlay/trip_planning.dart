@@ -33,44 +33,46 @@ class TripPlanningOverlay extends HookConsumerWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Column(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                          children: [
-                            StyledText(
-                                text: translate('Trip planning'),
-                                weight: FontWeight.bold
-                            ),
-                            const Spacer(),
-                            DefaultButton(
-                                onClick: () => ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(false),
-                                tooltip: translate('Close'),
-                                color: Colors.white,
-                                borderColor: Colors.black,
-                                icon: 'close.svg'
-                            ),
-                          ]
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        StyledText(
+                            text: translate('Trip planning'),
+                            weight: FontWeight.bold
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15, right: 10),
+                          child: StyledText(
+                              text: translate('Plan a trip to this photographic location'),
+                              color: Colors.grey,
+                              fontSize: 10,
+                              padding: 0,
+                              letterSpacing: 3,
+                              clip: false,
+                              align: TextAlign.start,
+                              weight: FontWeight.bold
+                          ),
+                        ),
+                      ],
                     ),
+                    const Spacer(),
                     Padding(
-                      padding: const EdgeInsets.only(left: 25.0),
-                      child: StyledText(
-                          text: translate('Plan a trip to this photographic location'),
-                          align: TextAlign.start,
-                          fontSize: 10,
-                          clip: false,
-                          color: Colors.grey,
-                          padding: 0
+                      padding: const EdgeInsets.only(top: 10),
+                      child: DefaultButton(
+                          onClick: () => ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(false),
+                          tooltip: translate('Close'),
+                          color: Colors.white,
+                          borderColor: Colors.black,
+                          icon: 'close.svg'
                       ),
-                    ),
-                    const Divider(
-                        color: Colors.black
                     ),
                   ],
+                ),
+                const Divider(
+                    color: Colors.black
                 ),
                 Column(
                   children: [

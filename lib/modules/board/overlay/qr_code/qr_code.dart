@@ -28,73 +28,55 @@ class QrCodeDialog extends HookConsumerWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            Column(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Stack(
-                    children: [
-                      Row(
-                          children: [
-                            StyledText(
-                                text: translate('Share Contrastus'),
-                                weight: FontWeight.bold
-                            ),
-                            const Spacer(),
-                            DefaultButton(
-                                onClick: () => ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false),
-                                tooltip: translate('Close'),
-                                color: Colors.white,
-                                borderColor: Colors.black,
-                                icon: 'close.svg'
-                            ),
-                          ]
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    StyledText(
+                        text: translate('Share Contrastus'),
+                        weight: FontWeight.bold
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15, right: 10),
+                      child: StyledText(
+                          text: translate('Share Contrastus with your friends'),
+                          color: Colors.grey,
+                          fontSize: 10,
+                          padding: 0,
+                          letterSpacing: 3,
+                          clip: false,
+                          align: TextAlign.start,
+                          weight: FontWeight.bold
                       ),
-                    ],
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: DefaultButton(
+                      onClick: () => ref.read(overlayVisibilityProvider(const Key('qr_code')).notifier).setOverlayVisibility(false),
+                      tooltip: translate('Close'),
+                      color: Colors.white,
+                      borderColor: Colors.black,
+                      icon: 'close.svg'
                   ),
                 ),
-                const Divider(
-                    color: Colors.black
-                )
               ],
             ),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    children: [
-                      StyledText(
-                          text: '"${translate('The future belongs to those who believe in the beauty of their dreams')}",',
-                          fontSize: 10,
-                          clip: false,
-                          color: Colors.grey,
-                          padding: 0
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: StyledText(
-                            text: translate('Eleanor Roosevelt'),
-                            fontSize: 10,
-                            clip: false,
-                            color: Colors.black87,
-                            weight: FontWeight.bold,
-                            padding: 0
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 10, top: 10),
-                  child: QrImageView(
-                    padding: EdgeInsets.zero,
-                    data: kIsWeb ? 'https://www.dstefomir.eu' : Platform.isAndroid ? 'https://play.google.com/store/apps/details?id=eu.bsdsoft.contrast' : 'https://apps.apple.com/bg/app/contrastus/id6466247842',
-                    version: QrVersions.auto,
-                    size: 350,
-                  ),
-                ),
-              ],
+            const Divider(
+                color: Colors.black
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 45),
+              child: QrImageView(
+                padding: EdgeInsets.zero,
+                data: kIsWeb ? 'https://www.dstefomir.eu' : Platform.isAndroid ? 'https://play.google.com/store/apps/details?id=eu.bsdsoft.contrast' : 'https://apps.apple.com/bg/app/contrastus/id6466247842',
+                version: QrVersions.auto,
+                size: 350,
+              ),
             ),
           ],
         ),
