@@ -170,9 +170,9 @@ class ContrastVideo extends HookConsumerWidget {
       }
 
       return Shimmer.fromColors(
-          baseColor: Colors.black.withValues(alpha: 0.3),
-          highlightColor: Colors.white,
-          period: const Duration(milliseconds: 800),
+          baseColor: Colors.black.withValues(alpha: 0.01),
+          highlightColor: Colors.white.withValues(alpha: 0.3),
+          period: const Duration(milliseconds: 1500),
           child: const ColoredBox(color: Colors.black)
       );
     },
