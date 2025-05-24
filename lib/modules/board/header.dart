@@ -6,8 +6,8 @@ import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Renders the header of the board page
@@ -50,7 +50,7 @@ class BoardPageFilter extends ConsumerWidget {
                       RotatedBox(
                         quarterTurns: 3,
                         child: StyledText(
-                            text: translate('CONTRASTUS'),
+                            text: 'CONTRASTUS'.tr(),
                             padding: 5,
                             fontSize: 15,
                             weight: FontWeight.bold,
@@ -63,7 +63,7 @@ class BoardPageFilter extends ConsumerWidget {
                       MenuButton(
                           widgetKey: const Key('all'),
                           iconPath: 'all.svg',
-                          tooltip: translate('All'),
+                          tooltip: 'All'.tr(),
                           disabled: ref.watch(boardFooterTabProvider) == 'videos',
                           selected: ref.watch(boardHeaderTabProvider) == 'all',
                           size: boardPadding,
@@ -72,7 +72,7 @@ class BoardPageFilter extends ConsumerWidget {
                       MenuButton(
                           widgetKey: const Key('landscape'),
                           iconPath: 'landscape.svg',
-                          tooltip: translate('Landscape'),
+                          tooltip: 'Landscape'.tr(),
                           disabled: ref.watch(boardFooterTabProvider) == 'videos',
                           selected: ref.watch(boardHeaderTabProvider) == 'landscape',
                           size: boardPadding,
@@ -81,7 +81,7 @@ class BoardPageFilter extends ConsumerWidget {
                       MenuButton(
                           widgetKey: const Key('portraits'),
                           iconPath: 'portraits.svg',
-                          tooltip: translate('Portraits'),
+                          tooltip: 'Portraits'.tr(),
                           disabled: ref.watch(boardFooterTabProvider) == 'videos',
                           selected: ref.watch(boardHeaderTabProvider) == 'portraits',
                           size: boardPadding,
@@ -90,7 +90,7 @@ class BoardPageFilter extends ConsumerWidget {
                       MenuButton(
                           widgetKey: const Key('street'),
                           iconPath: 'street.svg',
-                          tooltip: translate('Street'),
+                          tooltip: 'Street'.tr(),
                           disabled: ref.watch(boardFooterTabProvider) == 'videos',
                           selected: ref.watch(boardHeaderTabProvider) == 'street',
                           size: boardPadding,
@@ -99,7 +99,7 @@ class BoardPageFilter extends ConsumerWidget {
                       MenuButton(
                           widgetKey: const Key('other'),
                           iconPath: 'dog.svg',
-                          tooltip: translate('Other'),
+                          tooltip: 'Other'.tr(),
                           disabled: ref.watch(boardFooterTabProvider) == 'videos',
                           selected: ref.watch(boardHeaderTabProvider) == 'other',
                           size: boardPadding,
@@ -147,7 +147,7 @@ class BoardPageFilter extends ConsumerWidget {
                   ContrastTab(
                       widgetKey: const Key('all'),
                       tabKey: 'all',
-                      text: translate('all'),
+                      text: 'all'.tr(),
                       onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                       isSelected: ref.watch(boardHeaderTabProvider) == 'all'
                   ).translateOnPhotoHover,
@@ -155,7 +155,7 @@ class BoardPageFilter extends ConsumerWidget {
                   ContrastTab(
                       widgetKey: const Key('landscape'),
                       tabKey: 'landscape',
-                      text: translate('landscape'),
+                      text: 'landscape'.tr(),
                       onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                       isSelected: ref.read(boardHeaderTabProvider) == 'landscape'
                   ).translateOnPhotoHover,
@@ -163,7 +163,7 @@ class BoardPageFilter extends ConsumerWidget {
                   ContrastTab(
                       widgetKey: const Key('portraits'),
                       tabKey: 'portraits',
-                      text: translate('portraits'),
+                      text: 'portraits'.tr(),
                       onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                       isSelected: ref.read(boardHeaderTabProvider) == 'portraits'
                   ).translateOnPhotoHover,
@@ -171,7 +171,7 @@ class BoardPageFilter extends ConsumerWidget {
                   ContrastTab(
                       widgetKey: const Key('street'),
                       tabKey: 'street',
-                      text: translate('street'),
+                      text: 'street'.tr(),
                       onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                       isSelected: ref.read(boardHeaderTabProvider) == 'street'
                   ).translateOnPhotoHover,
@@ -179,7 +179,7 @@ class BoardPageFilter extends ConsumerWidget {
                   ContrastTab(
                       widgetKey: const Key('other'),
                       tabKey: 'other',
-                      text: translate('other'),
+                      text: 'other'.tr(),
                       onClick: (String tab) => onUserAction(ref, () => ref.read(boardHeaderTabProvider.notifier).switchTab(tab)),
                       isSelected: ref.read(boardHeaderTabProvider) == 'other'
                   ).translateOnPhotoHover,

@@ -6,8 +6,8 @@ import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/model/image_data.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/detail/photograph/overlay/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 /// Dialog height
 const double dialogHeight = 500;
@@ -40,13 +40,13 @@ class TripPlanningOverlay extends HookConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         StyledText(
-                            text: translate('Trip planning'),
+                            text: 'Trip planning'.tr(),
                             weight: FontWeight.bold
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 15, right: 10),
                           child: StyledText(
-                              text: translate('Plan a trip to this photographic location'),
+                              text: 'Plan a trip to this photographic location'.tr(),
                               color: Colors.grey,
                               fontSize: 10,
                               padding: 0,
@@ -63,7 +63,7 @@ class TripPlanningOverlay extends HookConsumerWidget {
                       padding: const EdgeInsets.only(top: 10),
                       child: DefaultButton(
                           onClick: () => ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(false),
-                          tooltip: translate('Close'),
+                          tooltip: 'Close'.tr(),
                           color: Colors.white,
                           borderColor: Colors.black,
                           icon: 'close.svg'
@@ -103,8 +103,8 @@ class TripPlanningOverlay extends HookConsumerWidget {
                                       ref.read(startPeriodProvider.notifier).setPeriod(null);
                                       ref.read(endPeriodProvider.notifier).setPeriod(null);
                                       final Event event = Event(
-                                        title: translate('Photographic location'),
-                                        description: "${translate('You have planned a trip to a photographic location')}.\n\n${translate('Photograph')} - https://www.dstefomir.eu/#/photos/details?id=${image.id}&category=all\n\n${translate('Location')} - https://www.google.com/maps/@${image.lat},${image.lng},20.45z?entry=ttu",
+                                        title: 'Photographic location'.tr(),
+                                        description: "${'You have planned a trip to a photographic location'.tr()}.\n\n${'Photograph'.tr()} - https://www.dstefomir.eu/#/photos/details?id=${image.id}&category=all\n\n${'Location'.tr()} - https://www.google.com/maps/@${image.lat},${image.lng},20.45z?entry=ttu",
                                         location: '${image.lat}, ${image.lng}',
                                         startDate: startPeriod,
                                         endDate: endPeriod,
@@ -117,7 +117,7 @@ class TripPlanningOverlay extends HookConsumerWidget {
                                       await Add2Calendar.addEvent2Cal(event);
                                     },
                                     child: Text(
-                                        translate('Plan')
+                                        'Plan'.tr()
                                     )
                                 ),
                               ),

@@ -8,10 +8,10 @@ import 'package:contrast/common/widgets/tooltip.dart';
 import 'package:contrast/modules/board/page.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/utils/device.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Renders the footer of the board page
@@ -60,7 +60,7 @@ class BoardPageFooter extends HookConsumerWidget {
                 children: [
                   Expanded(
                     child: StyledTooltip(
-                      text: translate('Photographs'),
+                      text: 'Photographs'.tr(),
                       child: Material(
                         color: Colors.transparent,
                         child: InkWell(
@@ -80,7 +80,7 @@ class BoardPageFooter extends HookConsumerWidget {
                   const SizedBox(width: 120),
                   Expanded(
                     child: StyledTooltip(
-                      text: translate('Videos'),
+                      text: 'Videos'.tr(),
                       child: Material(
                         color: Colors.transparent,
                         child: InkWell(
@@ -152,7 +152,7 @@ class BoardPageFooter extends HookConsumerWidget {
                         ContrastTab(
                             widgetKey: const Key('photos'),
                             tabKey: 'photos',
-                            text: translate('photos'),
+                            text: 'photos'.tr(),
                             onClick: (String tab) => ref.read(boardFooterTabProvider.notifier).switchTab(tab),
                             isSelected: currentTab == 'photos'
                         ).translateOnPhotoHover,
@@ -162,7 +162,7 @@ class BoardPageFooter extends HookConsumerWidget {
                         ContrastTab(
                             widgetKey: const Key('videos'),
                             tabKey: 'videos',
-                            text: translate('videos'),
+                            text: 'videos'.tr(),
                             onClick: (String tab) {
                               ref.read(boardHeaderTabProvider.notifier).switchTab('all');
                               ref.read(boardFooterTabProvider.notifier).switchTab(tab);
@@ -207,7 +207,7 @@ class _HomeSection extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final menuBtn = StyledTooltip(
-      text: translate('Menu'),
+      text: 'Menu'.tr(),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: SpeedDial(
@@ -234,7 +234,7 @@ class _HomeSection extends HookConsumerWidget {
                       child: Container(
                         color: Colors.white,
                         child: StyledText(
-                          text: translate('About me'),
+                          text: 'About me'.tr(),
                           padding: 5,
                           fontSize: 12,
                         ),
@@ -264,7 +264,7 @@ class _HomeSection extends HookConsumerWidget {
                         color: Colors.white,
                         child: StyledText(
                           key: const Key('AboutMeSpeedDialShareText'),
-                          text: translate('Share'),
+                          text: 'Share'.tr(),
                           padding: 5,
                           fontSize: 12,
                         ),
@@ -296,7 +296,7 @@ class _HomeSection extends HookConsumerWidget {
                       child: Container(
                         color: Colors.white,
                         child: StyledText(
-                          text: translate('Qr code'),
+                          text: 'Qr code'.tr(),
                           padding: 5,
                           fontSize: 12,
                         ),

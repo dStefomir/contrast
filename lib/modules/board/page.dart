@@ -5,8 +5,8 @@ import 'package:contrast/common/widgets/glass.dart';
 import 'package:contrast/common/widgets/splash.dart';
 import 'package:contrast/modules/board/overlay/share/share.dart';
 import 'package:contrast/utils/overlay.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hyper_effects/hyper_effects.dart';
 import "package:universal_html/html.dart" as html;
 import 'package:contrast/common/widgets/blur.dart';
@@ -177,7 +177,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                   child: Container(
                     color: Colors.white,
                     child: StyledText(
-                      text: translate('Upload Video'),
+                      text: 'Upload Video'.tr(),
                       padding: 5,
                       fontSize: 12,
                     ),
@@ -201,7 +201,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                   child: Container(
                     color: Colors.white,
                     child: StyledText(
-                      text: translate('Upload Photograph'),
+                      text: 'Upload Photograph'.tr(),
                       padding: 5,
                       fontSize: 12,
                     ),
@@ -446,11 +446,9 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                             child: Padding(
                               padding: EdgeInsets.only(left: titlePadding),
                               child: StyledText(
-                                text: translate(
-                                    (useMobileLayoutOriented(context) && ref.read(boardFooterTabProvider) == 'photos')
-                                        ? ref.read(boardHeaderTabProvider)
-                                        : 'CONTRASTUS'
-                                ),
+                                text: (useMobileLayoutOriented(context) && ref.read(boardFooterTabProvider) == 'photos')
+                                    ? ref.read(boardHeaderTabProvider).tr()
+                                    : 'CONTRASTUS'.tr(),
                                 color: Colors.black,
                                 useShadow: false,
                                 weight: FontWeight.bold,
@@ -545,7 +543,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                               );
                               ref.read(deleteImageProvider.notifier).setDeleteImage(null);
                               ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(false);
-                              showSuccessTextOnSnackBar(context, translate('Photograph was successfully deleted'));
+                              showSuccessTextOnSnackBar(context, 'Photograph was successfully deleted'.tr());
                             }
                           },
                         ),
@@ -577,7 +575,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                               );
                               ref.read(deleteVideoProvider.notifier).setDeleteVideo(null);
                               ref.read(overlayVisibilityProvider(const Key('delete_video')).notifier).setOverlayVisibility(false);
-                              showSuccessTextOnSnackBar(context, translate('Video was successfully deleted'));
+                              showSuccessTextOnSnackBar(context, 'Video was successfully deleted'.tr());
                             }
                           },
                         ),
@@ -610,7 +608,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                             ref.read(photographServiceFetchProvider.notifier).addItem(ImageBoardWrapper(image: image.image, metadata: meta));
                             ref.read(photographEditProvider.notifier).setEditImage(null);
                             ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(false);
-                            showSuccessTextOnSnackBar(context, translate('Photograph was successfully edited'));
+                            showSuccessTextOnSnackBar(context, 'Photograph was successfully edited'.tr());
                           },
                         ),
                       ),
@@ -631,7 +629,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                           onSubmit: (image) {
                             ref.read(photographServiceFetchProvider.notifier).addItem(image);
                             ref.read(overlayVisibilityProvider(const Key('upload_image')).notifier).setOverlayVisibility(false);
-                            showSuccessTextOnSnackBar(context, translate('Photograph was successfully uploaded'));
+                            showSuccessTextOnSnackBar(context, 'Photograph was successfully uploaded'.tr());
                           },
                         ),
                       ),
@@ -652,7 +650,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                           onSubmit: (video) {
                             ref.read(videoServiceFetchProvider.notifier).addItem(video);
                             ref.read(overlayVisibilityProvider(const Key('upload_video')).notifier).setOverlayVisibility(false);
-                            showSuccessTextOnSnackBar(context, translate('Video was successfully uploaded'));
+                            showSuccessTextOnSnackBar(context, 'Video was successfully uploaded'.tr());
                           },
                         ),
                       ),
@@ -683,7 +681,7 @@ class _BoardPageState extends ConsumerState<BoardPage> with TickerProviderStateM
                             ref.read(videoServiceFetchProvider.notifier).addItem(video);
                             ref.read(videoEditProvider.notifier).setEditVideo(null);
                             ref.read(overlayVisibilityProvider(const Key('edit_video')).notifier).setOverlayVisibility(false);
-                            showSuccessTextOnSnackBar(context, translate('Video was successfully edited'));
+                            showSuccessTextOnSnackBar(context, 'Video was successfully edited'.tr());
                           },
                         ),
                       ),

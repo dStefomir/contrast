@@ -2,13 +2,13 @@ import 'package:contrast/firebase_options.dart';
 import 'package:contrast/main_module.dart';
 import 'package:contrast/security/session.dart';
 import 'package:contrast/utils/scroll_behavior.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -24,6 +24,7 @@ Future<void> _subscribeToTopic(String? token) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   /// Initialize the firebase app
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   /// Request a permission for showing notifications
@@ -52,16 +53,17 @@ void main() async {
     // Set the status bar text color to white
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   }
-  var delegate = await LocalizationDelegate.create(
-      fallbackLocale: 'en_US',
-      supportedLocales: ['en_US', 'bg']);
 
   runApp(
-      ModularApp(
-          module: MainModule(),
-          child: ProviderScope(
-              child: LocalizedApp(delegate, const MyApp())
-          )
+      EasyLocalization(
+        supportedLocales: const [Locale('en'), Locale('de')],
+        path: 'assets/translations',
+        child: ModularApp(
+            module: MainModule(),
+            child: const ProviderScope(
+                child: MyApp()
+            )
+        ),
       )
   );
 }
@@ -112,20 +114,18 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final localizationDelegate = LocalizedApp.of(context).delegate;
-
     return MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: "Contrast",
         routerConfig: Modular.routerConfig,
         scrollBehavior: NoThumbScrollBehavior().copyWith(scrollbars: false),
         localizationsDelegates: [
+          ...context.localizationDelegates,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
-          localizationDelegate
         ],
-        supportedLocales: localizationDelegate.supportedLocales,
-        locale: localizationDelegate.currentLocale,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
         theme: ThemeData(
           fontFamily: 'Slovic',
           brightness: Brightness.light,

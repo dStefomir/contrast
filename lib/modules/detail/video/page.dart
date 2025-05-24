@@ -14,6 +14,7 @@ import 'package:contrast/modules/detail/overlay/service.dart';
 import 'package:contrast/security/session.dart';
 import 'package:contrast/utils/date.dart';
 import 'package:contrast/utils/overlay.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -103,7 +103,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
           },
           color: Colors.white,
           borderColor: Colors.black,
-          tooltip: translate('Comments'),
+          tooltip: 'Comments'.tr(),
           icon: 'comment.svg'
       );
 
@@ -119,11 +119,10 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                 context.mounted
                     ? context
                     : null,
-                translate('Copied to clipboard'
-                )
+                'Copied to clipboard'.tr()
             ));},
           color: Colors.white,
-          tooltip: translate('Share'),
+          tooltip: 'Share'.tr(),
           borderColor: Colors.black,
           icon: 'share.svg'
       );
@@ -136,7 +135,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
             Modular.to.navigate('/');
             },
           color: Colors.white,
-          tooltip: translate('Close'),
+          tooltip: 'Close'.tr(),
           borderColor: Colors.black,
           icon: 'close.svg'
       );
@@ -229,10 +228,10 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                         context.mounted
                                             ? context
                                             : null,
-                                        translate('Comment approved')
+                                        'Comment approved'.tr()
                                     );
                                   }),
-                                  tooltip: translate('Approve comment'),
+                                  tooltip: 'Approve comment'.tr(),
                                   color: Colors.white.withValues(alpha: 0.3),
                                   borderColor: Colors.white,
                                   icon: 'check.svg'
@@ -248,7 +247,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                         context.mounted
                                             ? context
                                             : null,
-                                        translate('Comment deleted')
+                                        'Comment deleted'.tr()
                                     );
                                   }) :
                                   ref.read(commentsServiceProvider).deleteVideoComment(item.id!, deviceId!).then((value) {
@@ -257,10 +256,10 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                         context.mounted
                                             ? context
                                             : null,
-                                        translate('Comment deleted')
+                                        'Comment deleted'.tr()
                                     );
                                   }),
-                                  tooltip: translate('Delete comment'),
+                                  tooltip: 'Delete comment'.tr(),
                                   color: Colors.white.withValues(alpha: 0.3),
                                   borderColor: Colors.black,
                                   icon: 'delete.svg'

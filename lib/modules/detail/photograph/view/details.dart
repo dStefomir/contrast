@@ -11,9 +11,9 @@ import 'package:contrast/modules/detail/overlay/service.dart';
 import 'package:contrast/modules/detail/photograph/overlay/trip_planning.dart';
 import 'package:contrast/security/session.dart';
 import 'package:contrast/utils/date.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hyper_effects/hyper_effects.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import "package:universal_html/html.dart" as html;
@@ -257,10 +257,10 @@ class PhotographDetailsView extends HookConsumerWidget {
                                         context.mounted
                                             ? context
                                             : null,
-                                        translate('Comment approved')
+                                        'Comment approved'.tr()
                                     );
                                   }),
-                                  tooltip: translate('Approve comment'),
+                                  tooltip: 'Approve comment'.tr(),
                                   color: Colors.white.withValues(alpha: 0.3),
                                   borderColor: Colors.white,
                                   icon: 'check.svg'
@@ -276,7 +276,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                                         context.mounted
                                             ? context
                                             : null,
-                                        translate('Comment deleted')
+                                        'Comment deleted'.tr()
                                     );
                                   }) :
                                   ref.read(commentsServiceProvider).deletePhotographComment(item.id!, deviceId!).then((value) {
@@ -285,10 +285,10 @@ class PhotographDetailsView extends HookConsumerWidget {
                                         context.mounted
                                             ? context
                                             : null,
-                                        translate('Comment deleted')
+                                        'Comment deleted'.tr()
                                     );
                                   }),
-                                  tooltip: translate('Delete comment'),
+                                  tooltip: 'Delete comment'.tr(),
                                   color: Colors.white.withValues(alpha: 0.3),
                                   borderColor: Colors.white,
                                   icon: 'delete.svg'
@@ -387,7 +387,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         child: DefaultButton(
             onClick: () => _goToNextPhotograph(ref, pageController, currentPhotographIndex),
             color: Colors.white,
-            tooltip: translate('Next photograph'),
+            tooltip: 'Next photograph'.tr(),
             borderColor: Colors.black,
             icon: 'navigate_next.svg'
         )
@@ -402,7 +402,7 @@ class PhotographDetailsView extends HookConsumerWidget {
         child: DefaultButton(
             onClick: () => _goToPreviousPhotograph(ref, pageController, currentPhotographIndex),
             color: Colors.white,
-            tooltip: translate('Previous photograph'),
+            tooltip: 'Previous photograph'.tr(),
             borderColor: Colors.black,
             icon: 'navigate_before.svg'
         )
@@ -421,7 +421,7 @@ class PhotographDetailsView extends HookConsumerWidget {
               Modular.to.navigate('/');
               },
             color: Colors.white,
-            tooltip: translate('Close'),
+            tooltip: 'Close'.tr(),
             borderColor: Colors.black,
             icon: 'close.svg'
         )
@@ -441,11 +441,11 @@ class PhotographDetailsView extends HookConsumerWidget {
                   context.mounted
                       ? context
                       : null,
-                  translate('Copied to clipboard')
+                  'Copied to clipboard'.tr()
               ));
               ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(null);
               },
-            tooltip: translate('Share'),
+            tooltip: 'Share'.tr(),
             color: Colors.white,
             borderColor: Colors.black,
             icon: 'share.svg'
@@ -463,7 +463,7 @@ class PhotographDetailsView extends HookConsumerWidget {
               onClick: () => ref.read(overlayVisibilityProvider(const Key('comment_photograph')).notifier).setOverlayVisibility(true),
               color: Colors.white,
               borderColor: Colors.black,
-              tooltip: translate('Comments'),
+              tooltip: 'Comments'.tr(),
               icon: 'comment.svg'
           )
       ),
@@ -490,7 +490,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                 onClick: () => ref.read(overlayVisibilityProvider(const Key('trip_planning_photograph')).notifier).setOverlayVisibility(true),
                 color: Colors.white,
                 borderColor: Colors.black,
-                tooltip: translate('Trip planning'),
+                tooltip: 'Trip planning'.tr(),
                 icon: 'route.svg'
             )
         ),
@@ -528,7 +528,7 @@ class PhotographDetailsView extends HookConsumerWidget {
                   },
                 color: Colors.white,
                 borderColor: Colors.black,
-                tooltip: iconAsset == 'map.svg' ? translate('Shot location') : translate('Photograph'),
+                tooltip: iconAsset == 'map.svg' ? 'Shot location'.tr() : 'Photograph'.tr(),
                 icon: iconAsset
             )
         ),

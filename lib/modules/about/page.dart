@@ -5,11 +5,11 @@ import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/page.dart';
 import 'package:contrast/common/widgets/snack.dart';
 import 'package:contrast/common/widgets/text.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hyper_effects/hyper_effects.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -47,7 +47,7 @@ class _AboutPageState extends ConsumerState<AboutPage> {
         child: DefaultButton(
             onClick: () => Modular.to.navigate('/'),
             color: Colors.white,
-            tooltip: translate('Close'),
+            tooltip: 'Close'.tr(),
             borderColor: Colors.black,
             icon: 'close.svg'
         ),
@@ -81,12 +81,12 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                 } catch (e) {
                   showErrorTextOnSnackBar(
                       mounted ? context : null,
-                      translate('Error Mail')
+                      'Error Mail'.tr()
                   );
                 }
               },
               color: Colors.white,
-              tooltip: translate('Mail'),
+              tooltip: 'Mail'.tr(),
               borderColor: Colors.black,
               icon: 'mail.svg'
           ),
@@ -110,12 +110,12 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                 } else {
                   showErrorTextOnSnackBar(
                       mounted ? context : null,
-                      translate('Error Instagram')
+                      'Error Instagram'.tr()
                   );
                 }
               },
               color: Colors.white,
-              tooltip: translate('Instagram'),
+              tooltip: 'Instagram'.tr(),
               borderColor: Colors.black,
               icon: 'instagram.svg'
           ),
@@ -172,7 +172,7 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                           child: Column(
                             children: [
                               if (isGlassAnimated.value) StyledText(
-                                text: translate("About description"),
+                                text: "About description".tr(),
                                 color: Colors.white,
                                 align: TextAlign.start,
                                 clip: false,

@@ -1,8 +1,8 @@
 import 'package:contrast/common/widgets/button.dart';
 import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/utils/device.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 
 /// Renders a cookie submit dialog
 class CookieWarningDialog extends StatelessWidget {
@@ -30,14 +30,14 @@ class CookieWarningDialog extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   StyledText(
-                    text: translate('Cookie Warning'),
+                    text: 'Cookie Warning'.tr(),
                     color: Colors.black,
                     useShadow: false,
                     fontSize: 20,
                     weight: FontWeight.bold,
                   ),
                   StyledText(
-                    text: translate('This website uses cookies to ensure you get the best experience'),
+                    text: 'This website uses cookies to ensure you get the best experience'.tr(),
                     color: Colors.black,
                     useShadow: false,
                     fontSize: 13,
@@ -48,7 +48,7 @@ class CookieWarningDialog extends StatelessWidget {
                   NormalButton(
                       widgetKey: const Key('Submit cookie'),
                       onClick: () => onSubmit(),
-                      text: translate('Alright')
+                      text: 'Alright'.tr()
                   )
                 ],
               ),

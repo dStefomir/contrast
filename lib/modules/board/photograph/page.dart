@@ -8,6 +8,7 @@ import 'package:contrast/modules/board/photograph/service.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/security/session.dart';
 import 'package:contrast/utils/device.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -15,7 +16,6 @@ import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hyper_effects/hyper_effects.dart';
-import 'package:flutter_translate/flutter_translate.dart' as translation;
 
 /// Renders the photographs board page
 class PhotographBoardPage extends HookConsumerWidget {
@@ -76,14 +76,14 @@ class PhotographBoardPage extends HookConsumerWidget {
           onPressed: () => onUserAction(ref, () => Modular.to.pushNamed('photos/details?id=${wrapper.image.id}&category=$currentCategory')),
           menuItems: <FocusedMenuItem>[
             FocusedMenuItem(
-                title: Text(translation.translate('Edit Photograph')),
+                title: Text('Edit Photograph'.tr()),
                 trailingIcon: const Icon(Icons.edit),
                 onPressed: () => onUserAction(ref, () {
                   ref.read(overlayVisibilityProvider(const Key('edit_image')).notifier).setOverlayVisibility(true);
                   ref.read(photographEditProvider.notifier).setEditImage(wrapper.image);
                 })),
             FocusedMenuItem(
-                title: Text(translation.translate('Delete Photograph')),
+                title: Text('Delete Photograph'.tr()),
                 trailingIcon: const Icon(Icons.delete),
                 onPressed: () => onUserAction(ref, () {
                   ref.read(overlayVisibilityProvider(const Key('delete_image')).notifier).setOverlayVisibility(true);

@@ -12,11 +12,11 @@ import 'package:contrast/modules/detail/overlay/provider.dart';
 import 'package:contrast/modules/detail/overlay/service.dart';
 import 'package:contrast/security/session.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -133,13 +133,13 @@ class CommentDialog<T> extends HookConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           StyledText(
-                            text: translate('Comments'),
+                            text: 'Comments'.tr(),
                             weight: FontWeight.bold,
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 15, right: 10),
                             child: StyledText(
-                                text: translate(isAdmin ? 'Approve pending comments' : 'You can post only one comment per day'),
+                                text: isAdmin ? 'Approve pending comments'.tr() : 'You can post only one comment per day'.tr(),
                                 color: Colors.grey,
                                 fontSize: 10,
                                 padding: 0,
@@ -159,7 +159,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                               ref.read(overlayVisibilityProvider(widgetKey).notifier).setOverlayVisibility(false);
                               FocusManager.instance.primaryFocus?.unfocus();
                             },
-                            tooltip: translate('Close'),
+                            tooltip: 'Close'.tr(),
                             color: Colors.white,
                             borderColor: Colors.black,
                             icon: 'close.svg'
@@ -174,7 +174,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                   controller: userNameController,
                   focusNode: deviceNameFocusNode,
                   enabled: !isAdmin,
-                  labelText: translate('From who'),
+                  labelText: 'From who'.tr(),
                   onChange: (e) => e,
                   suffixWidget: Center(
                     widthFactor: 1.2,
@@ -200,7 +200,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                             e.toLowerCase().contains('stefkod'
                             )
                     )) {
-                      return translate('This name cannot be used');
+                      return 'This name cannot be used'.tr();
                     }
 
                     return null;
@@ -208,7 +208,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                 ),
                 Expanded(
                   child: apiData.isEmpty ? Center(
-                    child: StyledText(text: translate('Nothing here so far')),
+                    child: StyledText(text: 'Nothing here so far'.tr()),
                   ) : ListView.builder(
                       key: const Key('CommentDialogList'),
                       itemCount: apiData.length,
@@ -220,13 +220,13 @@ class CommentDialog<T> extends HookConsumerWidget {
                   controller: commentController,
                   focusNode: commentFocusNode,
                   onChange: (e) => e,
-                  labelText: translate('Comment'),
+                  labelText: 'Comment'.tr(),
                   validator: (e) {
                     if (e != null && e.isEmpty) {
-                      return translate('This field is mandatory');
+                      return 'This field is mandatory'.tr();
                     }
                     if(e != null && e.length > 1000) {
-                      return translate('The comment is more than 1000 characters');
+                      return 'The comment is more than 1000 characters'.tr();
                     }
 
                     return null;
@@ -259,11 +259,9 @@ class CommentDialog<T> extends HookConsumerWidget {
                                     context.mounted
                                         ? context
                                         : null,
-                                    translate(
                                         value.approved!
-                                            ? 'Comment posted'
-                                            : 'Comment review is pending'
-                                    )
+                                            ? 'Comment posted'.tr()
+                                            : 'Comment review is pending'.tr()
                                 );
                               }).onError((error, stackTrace) {
                                 loading.value = false;
@@ -271,7 +269,7 @@ class CommentDialog<T> extends HookConsumerWidget {
                                     context.mounted
                                         ? context
                                         : null,
-                                    translate('Only one comment per day is allowed')
+                                    'Only one comment per day is allowed'.tr()
                                 );
                               });
                             } else {
@@ -286,11 +284,9 @@ class CommentDialog<T> extends HookConsumerWidget {
                                     context.mounted
                                         ? context
                                         : null,
-                                    translate(
                                         value.approved!
-                                            ? 'Comment posted'
-                                            : 'Comment review is pending'
-                                    )
+                                            ? 'Comment posted'.tr()
+                                            : 'Comment review is pending'.tr()
                                 );
                               }).onError((error, stackTrace) {
                                 loading.value = false;
@@ -298,12 +294,12 @@ class CommentDialog<T> extends HookConsumerWidget {
                                     context.mounted
                                         ? context
                                         : null,
-                                    translate('Only one comment per day is allowed')
+                                    'Only one comment per day is allowed'.tr()
                                 );
                               });
                             }
                           }},
-                        tooltip: translate('Submit'),
+                        tooltip: 'Submit'.tr(),
                         color: Colors.white.withValues(alpha: 0.3),
                         borderColor: Colors.black,
                         icon: 'navigate_next.svg'

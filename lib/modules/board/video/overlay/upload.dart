@@ -6,8 +6,8 @@ import 'package:contrast/common/widgets/text.dart';
 import 'package:contrast/model/video_data.dart';
 import 'package:contrast/modules/board/provider.dart';
 import 'package:contrast/modules/board/video/overlay/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 /// Dialog height
 const double dialogHeight = 450;
@@ -33,7 +33,7 @@ class UploadVideoDialog extends HookConsumerWidget {
             foregroundColor: WidgetStateProperty.all(Colors.white),
             textStyle: WidgetStateProperty.all(const TextStyle(color: Colors.white))
         ),
-        child: Text(translate('Submit')),
+        child: Text('Submit'.tr()),
         onPressed: () async {
           final form = _formKey.currentState;
           if (!isLoading && (form != null && form.validate())) {
@@ -67,7 +67,7 @@ class UploadVideoDialog extends HookConsumerWidget {
     SimpleInput(
       widgetKey: const Key('video comment'),
       controllerText: data?.comment,
-      labelText: translate('Video comment'),
+      labelText: 'Video comment'.tr(),
       prefixIcon: Icons.comment,
       onChange: (text) => ref.read(commentProvider.notifier).setComment(text),
       maxLines: 4,
@@ -82,15 +82,15 @@ class UploadVideoDialog extends HookConsumerWidget {
       SimpleInput(
         widgetKey: const Key('video url'),
         controllerText: data?.path,
-        labelText: translate('Youtube url'),
+        labelText: 'Youtube url'.tr(),
         onChange: (text) => ref.read(videoUrlProvider.notifier).setUrl(text),
         prefixIcon: Icons.video_collection,
         validator: (value) {
           if (value != null && value.isEmpty) {
-            return translate('This field is mandatory');
+            return 'This field is mandatory'.tr();
           }
           if(value != null && value.isNotEmpty && value.length < 11) {
-            return translate('Invalid youtube prefix');
+            return 'Invalid youtube prefix'.tr();
           }
           return null;
           },
@@ -108,7 +108,7 @@ class UploadVideoDialog extends HookConsumerWidget {
         child: Row(
             children: [
               StyledText(
-                  text: data != null ? translate('Edit Video') : translate('Upload Video'),
+                  text: data != null ? 'Edit Video'.tr() : 'Upload Video'.tr(),
                   weight: FontWeight.bold
               ),
               const Spacer(),
@@ -120,7 +120,7 @@ class UploadVideoDialog extends HookConsumerWidget {
                       ref.read(overlayVisibilityProvider(const Key("upload_video")).notifier).setOverlayVisibility(false);
                     }
                   },
-                  tooltip: translate('Close'),
+                  tooltip: 'Close'.tr(),
                   color: Colors.white,
                   borderColor: Colors.black,
                   icon: 'close.svg'

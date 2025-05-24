@@ -6,9 +6,9 @@ import 'package:contrast/common/widgets/snack.dart';
 import 'package:contrast/modules/login/provider.dart';
 import 'package:contrast/modules/login/service.dart';
 import 'package:contrast/security/session.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// Renders the login page
@@ -42,7 +42,7 @@ class LoginPage extends HookConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.only(top: 50),
                 child: Text(
-                    translate('L O G I N'),
+                    'L O G I N'.tr(),
                     style: const TextStyle(fontSize: 40)
                 ),
               ),
@@ -58,12 +58,12 @@ class LoginPage extends HookConsumerWidget {
                         width: 400,
                         child: SimpleInput(
                           widgetKey: const Key('user'),
-                          labelText: translate('User'),
+                          labelText: 'User'.tr(),
                           onChange: (text) => ref.read(userNameProvider.notifier).setUserName(text),
                           prefixIcon: Icons.person,
                           validator: (value) {
                             if (value != null && value.isEmpty) {
-                              return translate('This field is mandatory');
+                              return 'This field is mandatory'.tr();
                             }
                             return null;
                             },
@@ -75,13 +75,13 @@ class LoginPage extends HookConsumerWidget {
                     child: SizedBox(width: 400,
                         child: SimpleInput(
                           widgetKey: const Key('password'),
-                          labelText: translate('Password'),
+                          labelText: 'Password'.tr(),
                           onChange: (text) => ref.read(userPasswordProvider.notifier).setUserPassword(text),
                           prefixIcon: Icons.password,
                           password: true,
                           validator: (value) {
                             if (value != null && value.isEmpty) {
-                              return translate('This field is mandatory');
+                              return 'This field is mandatory'.tr();
                             }
                             return null;
                             },
@@ -109,7 +109,7 @@ class LoginPage extends HookConsumerWidget {
                               context.mounted
                                   ? context
                                   : null,
-                              translate('Logged in successfully')
+                              'Logged in successfully'.tr()
                           );
                           Modular.to.navigate('/', arguments: session);
                         }).onError((error, stackTrace) {
@@ -117,11 +117,11 @@ class LoginPage extends HookConsumerWidget {
                               context.mounted
                                   ? context
                                   : null,
-                              translate('Wrong user or password')
+                              'Wrong user or password'.tr()
                           );
                         });
                       }},
-                    child: Text(translate('Log In')),
+                    child: Text('Log In'.tr()),
                   ).translateOnPhotoHover,
                 ],
               ),
@@ -132,7 +132,7 @@ class LoginPage extends HookConsumerWidget {
                   onClick: () => Modular.to.navigate("/"),
                   color: Colors.white,
                   borderColor: Colors.black,
-                  tooltip: translate('Close'),
+                  tooltip: 'Close'.tr(),
                   icon: 'close.svg'
               ),
             ),
