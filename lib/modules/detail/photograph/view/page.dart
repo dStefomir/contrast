@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:contrast/common/widgets/page.dart';
 import 'package:contrast/common/widgets/map/provider.dart';
 import 'package:contrast/modules/board/provider.dart';

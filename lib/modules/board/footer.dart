@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:contrast/common/extentions/zoom.dart';
 import 'package:contrast/common/widgets/icon.dart';
 import 'package:contrast/common/widgets/shadow.dart';
@@ -13,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hyper_effects/hyper_effects.dart';
 
 /// Renders the footer of the board page
 class BoardPageFooter extends HookConsumerWidget {
@@ -27,13 +30,21 @@ class BoardPageFooter extends HookConsumerWidget {
     final photographTab = IconRenderer(
       asset: 'photo.svg',
       color: currentTab == 'photos' ? Colors.white: Colors.black,
-      height: 50,
-    ).translateOnPhotoHover;
+    ).rotate(360 * (pi / 180), from: 0)
+    .animate(
+      trigger: currentTab,
+      playIf: () => currentTab == 'photos',
+      duration: const Duration(milliseconds: 500)
+    ).resetAll().translateOnPhotoHover;
     final videoTab = IconRenderer(
         asset: 'video.svg',
         color: currentTab == 'videos' ? Colors.white: Colors.black,
-        height: 50
-    ).translateOnPhotoHover;
+    ).rotate(360 * (pi / 180), from: 0)
+    .animate(
+      trigger: currentTab,
+      playIf: () => currentTab == 'videos',
+      duration: const Duration(milliseconds: 500)
+    ).resetAll().translateOnPhotoHover;
 
     return Stack(
       children: [
@@ -67,12 +78,12 @@ class BoardPageFooter extends HookConsumerWidget {
                           onTap: () => ref.read(boardFooterTabProvider.notifier).switchTab('photos'),
                           child: Container(
                               height: boardPadding,
-                              padding: EdgeInsets.all(currentTab == 'photos' ? 11.0 : 13.0),
+                              padding: const EdgeInsets.all(16.0),
                               decoration: BoxDecoration(
                                 color: currentTab == 'photos' ? Colors.black: Colors.white,
                               ),
                               child: photographTab
-                          ),
+                          )
                         ),
                       ),
                     ),
@@ -90,12 +101,12 @@ class BoardPageFooter extends HookConsumerWidget {
                           },
                           child: Container(
                             height: boardPadding,
-                            padding: EdgeInsets.all(currentTab == 'videos' ? 11.0: 13.0),
+                            padding: const EdgeInsets.all(16.0),
                             decoration: BoxDecoration(
                               color: currentTab == 'videos' ? Colors.black: Colors.white,
                             ),
                             child: videoTab
-                          ),
+                          )
                         ),
                       ),
                     ),
@@ -330,7 +341,9 @@ class _HomeSection extends HookConsumerWidget {
         child: SizedBox(
           width: 120,
           child: Container(
-            color: Colors.black,
+            decoration: const BoxDecoration(
+              image: DecorationImage(image: AssetImage('assets/images/icon.png'), fit: BoxFit.cover),
+            ),
             child: menuBtn
           )
         ),

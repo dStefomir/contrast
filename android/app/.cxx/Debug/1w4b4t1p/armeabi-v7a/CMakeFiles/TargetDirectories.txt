@@ -1,0 +1,2 @@
+/Users/stefomirdimitrov/Work/contrast/contrast_dstefomir/contrast/android/app/.cxx/Debug/1w4b4t1p/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/stefomirdimitrov/Work/contrast/contrast_dstefomir/contrast/android/app/.cxx/Debug/1w4b4t1p/armeabi-v7a/CMakeFiles/rebuild_cache.dir
